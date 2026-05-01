@@ -70,6 +70,10 @@ Your terminal will show something like:
 pip install fastapi uvicorn
 ```
 
+- FastAPI → the web framework
+
+- Uvicorn → the server that runs FastAPI
+
 👉 These are now installed **only inside `venv/`**, not globally.
 
 ---

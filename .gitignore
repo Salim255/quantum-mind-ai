@@ -1,0 +1,135 @@
+# =========================
+
+# 🐍 Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# C extensions
+
+*.so
+
+# =========================
+
+# 📦 Virtual Environments
+
+# =========================
+
+venv/
+.env/
+.venv/
+env/
+ENV/
+
+# =========================
+
+# 🧪 Testing / Coverage
+
+# =========================
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# =========================
+
+# 🧾 Logs
+
+# =========================
+
+*.log
+logs/
+
+# =========================
+
+# 📁 Build / Distribution
+
+# =========================
+
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# =========================
+
+# 📦 Dependency Managers
+
+# =========================
+
+pip-wheel-metadata/
+Pipfile.lock
+poetry.lock
+
+# =========================
+
+# 🧠 IDE / Editors
+
+# =========================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =========================
+
+# 🖥️ OS Files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# 🔐 Environment Variables
+
+# =========================
+
+.env
+.env.*
+*.env
+
+# =========================
+
+# 🚀 FastAPI / Uvicorn
+
+# =========================
+
+*.pid
+*.sock
+
+# =========================
+
+# 📊 Jupyter Notebooks
+
+# =========================
+
+.ipynb_checkpoints/
+
+# =========================
+
+# 🐳 Docker (optional)
+
+# =========================
+
+docker-compose.override.yml
+
+# =========================
+
+# 🔧 Misc
+
+# =========================
+
+*.sqlite3
+*.db
+*.bak
+*.tmp
