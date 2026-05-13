@@ -1,12 +1,12 @@
 import json
-import os
 from groq import Groq
-from app.core.settings import settings
+from app.core.settings import Settings
 
-client = Groq(api_key=settings.GROAI_API_KEY)
 
-print("Groq imported successfully!")
-def groq_llm_call(prompt: str, debug: bool = False) -> dict:
+def get_groq_client(settings: Settings) -> Groq:
+    return Groq(api_key=settings.GROAI_API_KEY)
+
+def groq_llm_call(client: Groq, prompt: str, debug: bool = False) -> dict:
     """
     Calls a Groq model and expects pure JSON in the response.
     """

@@ -1,5 +1,8 @@
-from fastapi import FastAPI
-from app.ai_core.llms.groq_llm import groq_llm_call
+from functools import lru_cache
+from app.core.settings import Settings
+from fastapi import FastAPI, Depends
+from typing import Annotated
+from app.ai_core.llms.groq_llm import groq_llm_call, get_groq_client
 
 app = FastAPI(
     title="QuantumMind AI - Python Core",
@@ -7,12 +10,16 @@ app = FastAPI(
     version="0.1.0"
 )
 
+@lru_cache
+def get_settings():
+    return Settings()
+
 @app.get("/health")
 def health_check():
     return {"status": "ok", "message": "QuantumMind AI backend is running"}
 
 @app.get("/llm/test")
-def test_llm():
+def test_llm(settings: Annotated[Settings, Depends(get_settings)]):
     prompt = """
     Generate a JSON object with:
     - greeting: a friendly message
@@ -20,7 +27,9 @@ def test_llm():
     - model: the model name you are using
     """
 
-    result = groq_llm_call(prompt, debug=True)
+    client = get_groq_client(settings)
+
+    result = groq_llm_call(client, prompt, debug=True)
 
     return {
         "success": True,
