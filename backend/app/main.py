@@ -22,9 +22,10 @@ def health_check():
 def test_llm(settings: Annotated[Settings, Depends(get_settings)]):
     prompt = """
     Generate a JSON object with:
-    - greeting: a friendly message
+    - greeting: a friendly message to my girlfriend her name is Pauline, tell her happy birthday, with nice message, lovely one 
     - status: 'connected'
     - model: the model name you are using
+    - message: your message should go here
     """
 
     client = get_groq_client(settings)
