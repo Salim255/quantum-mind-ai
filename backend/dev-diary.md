@@ -169,4 +169,6 @@ venv/
 Using `venv` is not optional in professional projects —
 it’s the foundation for **clean, reproducible, and maintainable Python apps**.
 
+- pip install PyPDF2
+
 ## DB
