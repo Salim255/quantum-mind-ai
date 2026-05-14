@@ -10,7 +10,7 @@ from app.ai_core.rag.vector_store.store import VECTOR_DB
 # This is your in-memory vector store.
 # Each entry looks like:
 # { "text": "...", "embedding": [...], "source": "lesson" }
-
+from app.ai_core.rag.retriever.reranker import rerank
 
 def search_similar_documents(query: str, top_k: int = 3):
     """
@@ -74,6 +74,8 @@ def search_similar_documents(query: str, top_k: int = 3):
     # --- 6. Extract only the text of the top_k results -----------------------
     top_results = [text for _, text in scored[:top_k]]
 
-    print(f"Top {top_k} results: {top_results}")  # Debug log to confirm retrieved results --- IGNORE ---
+    reranked = rerank(query, top_results)
+    print(f"Top {top_k} results: {reranked}")  # Debug log to confirm retrieved results --- IGNORE ---
     # Return results in a JSON-friendly structure.
-    return {"results": top_results}
+      # 5. Return top_k
+    return {"results": [d["text"] for d in reranked[:top_k]]}
