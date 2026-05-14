@@ -10,7 +10,12 @@ from app.ai_core.rag.vector_store.store import VECTOR_DB
 # This is your in-memory vector store.
 # Each entry looks like:
 # { "text": "...", "embedding": [...], "source": "lesson" }
+
 from app.ai_core.rag.retriever.reranker import rerank
+# This is your cross-encoder reranker.
+# It reads (query, chunk) pairs and scores true semantic relevance.
+# This dramatically improves retrieval accuracy.
+
 
 def search_similar_documents(query: str, top_k: int = 3):
     """
@@ -36,19 +41,23 @@ def search_similar_documents(query: str, top_k: int = 3):
     # We extract only the embedding vector.
     q_emb = np.array(embed_text(text=query, source="user_query")["embedding"])
 
-    #print(f"Query embedding generated: {q_emb}...")  # Debug log to confirm embedding generation (first 5 dimensions) --- IGNORE ---
     # --- 2. Prepare a list to store similarity scores ------------------------
-    # Each entry will be a tuple: (similarity_score, document_text)
-    # Example: (0.87, "The Hadamard gate creates superposition...")
+    # Each entry will be a dictionary:
+    # {
+    #     "score": cosine_similarity_value,
+    #     "text": "...",
+    #     "source": "document"
+    # }
     scored = []
 
-    print(f"Starting semantic search for query: '{len(VECTOR_DB)}'...")  # Debug log to confirm search start --- IGNORE ---
+    print(f"Starting semantic search. VECTOR_DB contains {len(VECTOR_DB)} documents...")
+
     # --- 3. Iterate over every stored document in the vector DB --------------
     for doc in VECTOR_DB:
 
         # Convert the stored embedding to a NumPy array for math operations.
         d_emb = np.array(doc["embedding"])
-        print(f"Comparing with document: {doc}...")  # Debug log to confirm document being compared (first 50 chars) --- IGNORE ---    
+
         # --- 4. Compute cosine similarity ------------------------------------
         # Cosine similarity formula:
         # score = (q ⋅ d) / (||q|| * ||d||)
@@ -63,19 +72,27 @@ def search_similar_documents(query: str, top_k: int = 3):
         # +1 → identical meaning
         score = np.dot(q_emb, d_emb) / (np.linalg.norm(q_emb) * np.linalg.norm(d_emb))
 
-        # Store the score and the document text.
-        scored.append((score, doc["text"]))
+        # Store the score and the document text in a dictionary (NOT a tuple).
+        scored.append({
+            "score": float(score),
+            "text": doc["text"],
+            "source": doc["source"]
+        })
 
+    # --- 5. Sort results by cosine similarity (highest first) ----------------
+    scored.sort(key=lambda x: x["score"], reverse=True)
 
-    # --- 5. Sort results by similarity score (highest first) -----------------
-    scored.sort(reverse=True, key=lambda x: x[0])
+    # Take the top 10 candidates for reranking
+    top_candidates = scored[:10]
 
+    print(f"Top raw cosine candidates: {len(top_candidates)}")
 
-    # --- 6. Extract only the text of the top_k results -----------------------
-    top_results = [text for _, text in scored[:top_k]]
+    # --- 6. Rerank using the cross-encoder -----------------------------------
+    # The reranker reads (query, chunk) pairs and assigns a relevance score.
+    # This step dramatically improves accuracy.
+    reranked = rerank(query, top_candidates)
 
-    reranked = rerank(query, top_results)
-    print(f"Top {top_k} results: {reranked}")  # Debug log to confirm retrieved results --- IGNORE ---
-    # Return results in a JSON-friendly structure.
-      # 5. Return top_k
+    print(f"Top reranked results: {reranked[:top_k]}")
+
+    # --- 7. Return only the text of the top_k results -------------------------
     return {"results": [d["text"] for d in reranked[:top_k]]}
