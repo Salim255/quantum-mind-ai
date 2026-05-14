@@ -15,7 +15,7 @@ from app.ai_core.rag.embeddings.embedder import embed_text
 VECTOR_DB = []
 
 
-def add_document(text: str, source: str = "lesson"):
+def add_document(text: str, source: str = "document") -> dict:
     """
     Add a document to the QuantumMind AI vector store.
 
@@ -29,7 +29,7 @@ def add_document(text: str, source: str = "lesson"):
     source : str
         A tag describing the origin of the content.
         Helps the retriever prioritize and rank results.
-        Defaults to "lesson".
+        Defaults to "document".
 
     Returns
     -------
@@ -64,6 +64,7 @@ def add_document(text: str, source: str = "lesson"):
     # - a cloud vector DB (Pinecone, Weaviate, Qdrant)
     VECTOR_DB.append(document_entry)
 
+    print(f"Document added to vector DB: {VECTOR_DB}...")  # Debug log to confirm document content (first 100 chars)
 
     # --- 4. Return a confirmation -------------------------------------------
     # The agent_core expects a JSON-serializable response.

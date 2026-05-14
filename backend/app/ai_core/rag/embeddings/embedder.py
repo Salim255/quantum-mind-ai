@@ -20,7 +20,7 @@ import numpy as np
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
-def embed_text(text: str) -> dict:
+def embed_text(text: str, source: str = "document") -> dict:
     """
     Convert a text string into a dense embedding vector.
 
@@ -42,4 +42,4 @@ def embed_text(text: str) -> dict:
     embedding = model.encode(text).tolist()
 
     # Return the embedding wrapped in a dict.
-    return {"embedding": embedding}
+    return {"embedding": embedding, "source": source}

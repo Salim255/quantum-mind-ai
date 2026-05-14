@@ -26,6 +26,7 @@ def load_pdf(path: str) -> str:
         for page in reader.pages:
             # Extract text from each page.
             text = page.extract_text()
+           # print(f"Extracted text from page: {text}")  # Debug log to confirm text extraction (first 100 chars)
             if text:
                 pages_text.append(text)
 

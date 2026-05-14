@@ -5,20 +5,21 @@ from fastapi import FastAPI, Depends, File, UploadFile
 from typing import Annotated
 from app.ai_core.llms.groq_llm import groq_llm_call, get_groq_client
 from app.ai_core.rag.loader.ingest import ingest_pdf
-import aiofiles          # Async file I/O library (non-blocking)
-import uuid              # Generates unique filenames
-            # For building file paths
-
-
-app = FastAPI(
-    title="QuantumMind AI - Python Core",
-    description="AI Core for quantum research assistant (RAG, embeddings, vector search, quantum math)",
-    version="0.1.0"
-)
+import aiofiles   # Async file I/O library (non-blocking)
+import uuid       # Generates unique filenames
 
 @lru_cache
 def get_settings():
     return Settings()
+
+app = FastAPI(
+    title="QuantumMind AI - Python Core",
+    description="AI Core for quantum research assistant (RAG, embeddings, vector search, quantum math)",
+    version="0.1.0",
+    root_path=get_settings().API_PREFIX
+)
+
+
 
 @app.get("/health")
 def health_check():
@@ -62,7 +63,7 @@ async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
     temp_filename = f"{uuid.uuid4()}.pdf"
     temp_path = os.path.join("/tmp", temp_filename)
 
-
+  
     # -----------------------------------------------------------------------
     # 2. Save the uploaded file asynchronously
     # -----------------------------------------------------------------------
@@ -71,7 +72,6 @@ async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
     async with aiofiles.open(temp_path, "wb") as out_file:
         # Read the uploaded file content asynchronously
         content = await file.read()
-
         # Write the content asynchronously to the temp file
         await out_file.write(content)
 
@@ -84,6 +84,7 @@ async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
     # - chunking
     # - embedding
     # - storing chunks in VECTOR_DB
+  
     result = ingest_pdf(temp_path)
 
 
@@ -94,6 +95,8 @@ async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
     # - ingestion succeeded
     # - how many chunks were added
     # - what the original filename was
+
+    print(f"Processing file : {temp_path}", result)  # Debug log to confirm file content (first 100 bytes)
     return {
         "status": "ok",
         "chunks_added": result["chunks_added"],

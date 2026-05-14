@@ -2,8 +2,6 @@
 
 from app.ai_core.rag.loader.pdf_loader import load_pdf
 from app.ai_core.rag.loader.chunker import chunk_text
-from app.ai_core.rag.vector_store.store import VECTOR_DB
-from app.ai_core.rag.embeddings.embedder import embed_text
 from app.ai_core.rag.vector_store.add_document import add_document  # your existing function
 
 def ingest_pdf(path: str):
@@ -19,6 +17,7 @@ def ingest_pdf(path: str):
 
     # 3. Add each chunk to the vector DB.
     for chunk in chunks:
-        add_document(chunk, source="document")
+       print(f"Adding chunk to vector DB: {chunk}...")  # Debug log to confirm chunk content (first 100 chars)
+       add_document(chunk, source="document")
 
     return {"status": "ok", "chunks_added": len(chunks)}
