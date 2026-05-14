@@ -2,11 +2,11 @@ import numpy as np
 # NumPy is used for vector math: dot products, norms, cosine similarity.
 # It is the backbone of semantic search operations.
 
-from rag.embeddings.embedder import embed_text
+from app.ai_core.rag.embeddings.embedder import embed_text
 # This is your embedding tool.
 # It converts raw text (queries, lessons, formulas, etc.) into dense vectors.
 
-from rag.vectorstore.store import VECTOR_DB
+from app.ai_core.rag.vector_store.store import VECTOR_DB
 # This is your in-memory vector store.
 # Each entry looks like:
 # { "text": "...", "embedding": [...], "source": "lesson" }

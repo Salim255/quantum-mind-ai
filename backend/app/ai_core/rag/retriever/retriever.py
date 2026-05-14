@@ -17,7 +17,7 @@
 # This makes it easy to debug and perfect for learning how RAG works.
 # ---------------------------------------------------------------------------
 
-from rag.vectorstore.similarity import search
+from app.ai_core.rag.vector_store.similarity import search
 # Import the semantic search function.
 # This function performs cosine similarity over your VECTOR_DB
 # and returns the top‑K most relevant text chunks.

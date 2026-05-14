@@ -1,10 +1,10 @@
 # rag/loader/ingest.py
 
-from rag.loader.pdf_loader import load_pdf
-from rag.loader.chunker import chunk_text
-from rag.vector_store.store import VECTOR_DB
-from rag.embeddings.embedder import embed_text
-from rag.vector_store.add_document import add_document  # your existing function
+from app.ai_core.rag.loader.pdf_loader import load_pdf
+from app.ai_core.rag.loader.chunker import chunk_text
+from app.ai_core.rag.vector_store.store import VECTOR_DB
+from app.ai_core.rag.embeddings.embedder import embed_text
+from app.ai_core.rag.vector_store.add_document import add_document  # your existing function
 
 def ingest_pdf(path: str):
     """
