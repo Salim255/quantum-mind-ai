@@ -17,7 +17,7 @@
 # This makes it easy to debug and perfect for learning how RAG works.
 # ---------------------------------------------------------------------------
 
-from app.ai_core.rag.vector_store.similarity import search
+from backend.app.ai_core.rag.vector_store.search import  search_similar_documents
 # Import the semantic search function.
 # This function performs cosine similarity over your VECTOR_DB
 # and returns the top‑K most relevant text chunks.
@@ -46,8 +46,8 @@ class Retriever:
         """
 
         # Call the semantic search function.
-        # search(query) returns a dictionary:
+        # search_similar_documents(query) returns a dictionary:
         # { "results": ["chunk1", "chunk2", ...] }
         #
         # We extract only the list of text chunks.
-        return search(query)["results"]
+        return  search_similar_documents(query)["results"]

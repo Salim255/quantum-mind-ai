@@ -17,7 +17,6 @@ def ingest_pdf(path: str):
 
     # 3. Add each chunk to the vector DB.
     for chunk in chunks:
-       print(f"Adding chunk to vector DB: {chunk}...")  # Debug log to confirm chunk content (first 100 chars)
        add_document(chunk, source="document")
 
     return {"status": "ok", "chunks_added": len(chunks)}

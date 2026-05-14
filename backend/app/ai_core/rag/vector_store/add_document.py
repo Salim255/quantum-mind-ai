@@ -2,7 +2,7 @@ import numpy as np
 # NumPy is used for handling vectors (embeddings).
 # Even if this function does not manipulate vectors directly,
 # NumPy is essential for similarity search later in the pipeline.
-
+from app.ai_core.rag.vector_store.store import VECTOR_DB
 from app.ai_core.rag.embeddings.embedder import embed_text
 # Import the embedding function.
 # This function converts raw text into a dense vector representation
@@ -12,7 +12,6 @@ from app.ai_core.rag.embeddings.embedder import embed_text
 # In-memory vector database.
 # Each entry will look like:
 # { "text": "...", "embedding": [0.12, -0.44, ...], "source": "lesson" }
-VECTOR_DB = []
 
 
 def add_document(text: str, source: str = "document") -> dict:
@@ -63,8 +62,6 @@ def add_document(text: str, source: str = "document") -> dict:
     # - a persistent DB (PostgreSQL + pgvector)
     # - a cloud vector DB (Pinecone, Weaviate, Qdrant)
     VECTOR_DB.append(document_entry)
-
-    print(f"Document added to vector DB: {VECTOR_DB}...")  # Debug log to confirm document content (first 100 chars)
 
     # --- 4. Return a confirmation -------------------------------------------
     # The agent_core expects a JSON-serializable response.

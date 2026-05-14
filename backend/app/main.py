@@ -1,5 +1,7 @@
 from functools import lru_cache
 import os
+
+from pydantic import BaseModel
 from app.core.settings import Settings
 from fastapi import FastAPI, Depends, File, UploadFile
 from typing import Annotated
@@ -7,6 +9,7 @@ from app.ai_core.llms.groq_llm import groq_llm_call, get_groq_client
 from app.ai_core.rag.loader.ingest import ingest_pdf
 import aiofiles   # Async file I/O library (non-blocking)
 import uuid       # Generates unique filenames
+from app.ai_core.rag.vector_store.search import search_similar_documents
 
 @lru_cache
 def get_settings():
@@ -20,19 +23,27 @@ app = FastAPI(
 )
 
 
+class QueryRequest(BaseModel):
+    query: str
+    top_k: int = 3
 
 @app.get("/health")
 def health_check():
     return {"status": "ok", "message": "QuantumMind AI backend is running"}
 
 @app.post("/rag/query")
-def rag_query(query: str):
+def rag_query(payload: QueryRequest):
     # This is a placeholder for your RAG query endpoint.
     # It will eventually:
     # 1. Embed the query
     # 2. Search VECTOR_DB for relevant chunks
     # 3. Use retrieved chunks as context for an LLM response
-    return {"query": query, "results": []}
+
+    results = search_similar_documents(payload.query, payload.top_k)
+    return {
+        "query": payload.query,
+        "results": results
+    }
 
 @app.post("/ingest/pdf")
 # ---------------------------------------------------------------------------

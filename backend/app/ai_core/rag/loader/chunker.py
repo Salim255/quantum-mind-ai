@@ -1,6 +1,7 @@
 # rag/loader/chunker.py
+import re
 
-def chunk_text(text: str, chunk_size: int = 500):
+def chunk_text(text: str, chunk_size: int = 300, overlap: int = 50):
     """
     Split long text into smaller chunks for better retrieval.
 
@@ -18,20 +19,21 @@ def chunk_text(text: str, chunk_size: int = 500):
         List of text chunks.
     """
 
-    words = text.split()
+    sentences  = re.split(r'(?<=[.!?]) +', text)
     chunks = []
-    current = []
+    current = ""
 
-    for word in words:
-        current.append(word)
+    for sentence in sentences:
+         # If adding this sentence exceeds chunk size → finalize chunk
+        if len(current) + len(sentence) > chunk_size:
+            chunks.append(current.strip())
+            # Start new chunk with overlap
+            current = current[-overlap:] + " " + sentence
+        else:
+            current += " " + sentence
 
-        # If the chunk is too big, finalize it.
-        if len(" ".join(current)) > chunk_size:
-            chunks.append(" ".join(current))
-            current = []
-
-    # Add the last chunk if not empty.
-    if current:
-        chunks.append(" ".join(current))
+    # Add last chunk
+    if current.strip():
+        chunks.append(current.strip())
 
     return chunks
