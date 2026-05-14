@@ -25,6 +25,15 @@ app = FastAPI(
 def health_check():
     return {"status": "ok", "message": "QuantumMind AI backend is running"}
 
+@app.post("/rag/query")
+def rag_query(query: str):
+    # This is a placeholder for your RAG query endpoint.
+    # It will eventually:
+    # 1. Embed the query
+    # 2. Search VECTOR_DB for relevant chunks
+    # 3. Use retrieved chunks as context for an LLM response
+    return {"query": query, "results": []}
+
 @app.post("/ingest/pdf")
 # ---------------------------------------------------------------------------
 # api/routes/ingest.py
