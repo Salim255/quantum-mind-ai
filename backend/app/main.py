@@ -12,6 +12,7 @@ import uuid       # Generates unique filenames
 from app.ai_core.rag.vector_store.search import search_similar_documents
 from app.ai_core.rag.generator.llm_generator import generate_answer
 from app.ai_core.rag.context.context_builder import build_context
+from app.ai_core.rag.generator.answer_normalizer import normalize_final_answer
 
 @lru_cache
 def get_settings():
@@ -61,12 +62,12 @@ def rag_query(payload: QueryRequest, settings: Annotated[Settings, Depends(get_s
     # This uses your RAGPromptBuilder internally
     client = get_groq_client(settings)
     final_answer = generate_answer(payload.query,  rich_context_chunks, client)
-
+    normalize_answer =  normalize_final_answer(final_answer)
     # --- 3. Return everything to the client ---------------------------------
     return {
         "query": payload.query,
         "retrieved_chunks": rich_context_chunks,
-        "final_answer": final_answer,
+        "final_answer": normalize_answer,
         "source": retrieval_output.get("sources", [])  # Include sources if available
     }
 
