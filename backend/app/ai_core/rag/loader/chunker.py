@@ -1,87 +1,79 @@
 # rag/loader/chunker.py
 # ------------------------------------------------------------
-# PURPOSE:
-#   Convert raw text into coherent, semantic chunks.
-#
-# WHY THIS MATTERS:
-#   - RAG works best when chunks represent *meaningful units*
-#     (paragraphs, sections), not random slices of text.
-#   - Semantic chunking improves retrieval quality and reduces
-#     hallucinations because the LLM sees complete ideas.
-#
-# STRATEGY:
-#   1. Split text into paragraphs (semantic units)
-#   2. Accumulate paragraphs until max_chars is reached
-#   3. Start a new chunk when needed
-#
-# RESULT:
-#   A list of coherent chunks, each containing 1–3 paragraphs.
+# Robust semantic chunker that:
+# 1. Normalizes PDF text
+# 2. Creates paragraphs even if PDF has no blank lines
+# 3. Splits into semantic chunks
+# 4. Adds overlap
+# 5. Never returns empty chunks
 # ------------------------------------------------------------
 
 import re
+from typing import List
 
-def semantic_chunk_text(text: str, max_chars: int = 1200) -> list[str]:
+def semantic_chunk_text(
+    text: str,
+    max_chars: int = 1200,
+    overlap_chars: int = 200
+) -> List[str]:
     """
-    Split text into semantic chunks based on paragraphs.
+    Robust semantic chunking for messy PDF text.
 
-    PARAMETERS
-    ----------
-    text : str
-        The full raw text extracted from a document.
-
-    max_chars : int
-        Maximum number of characters allowed per chunk.
-        This ensures chunks are not too large for embedding
-        and remain efficient for retrieval.
-
-    RETURNS
-    -------
-    list[str]
-        A list of coherent text chunks.
+    Steps:
+    - Normalize line breaks
+    - Create paragraphs even when PDF has no blank lines
+    - Accumulate paragraphs into chunks
+    - Add overlap between chunks
     """
 
     # --------------------------------------------------------
-    # 1. Split text into paragraphs.
-    #
-    # We split on double newlines because:
-    #   - PDFs and books naturally separate paragraphs this way
-    #   - It preserves semantic meaning
-    #
-    # We also strip whitespace and remove empty paragraphs.
+    # 1. Normalize PDF text
+    # --------------------------------------------------------
+
+    # Replace multiple spaces/newlines with a single space
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n+", "\n", text)
+
+    # Force paragraph breaks after periods if needed
+    # This handles PDFs with no blank lines
+    text = re.sub(r"\.\s+", ".\n", text)
+
+    # --------------------------------------------------------
+    # 2. Split into paragraphs
     # --------------------------------------------------------
     paragraphs = [
         p.strip()
-        for p in re.split(r"\n\s*\n", text)
+        for p in text.split("\n")
         if p.strip()
     ]
 
-    chunks = []      # Final list of chunks
-    current = []     # Paragraphs being accumulated for current chunk
-    total_chars = 0  # Character count of current chunk
+    chunks = []
+    current = []
+    current_len = 0
 
     # --------------------------------------------------------
-    # 2. Accumulate paragraphs until max_chars is reached.
-    #
-    # This ensures:
-    #   - Chunks are coherent (multiple paragraphs)
-    #   - No chunk exceeds the embedding model’s limits
+    # 3. Build semantic chunks
     # --------------------------------------------------------
-    for paragraph in paragraphs:
-        paragraph_len = len(paragraph)
+    for p in paragraphs:
+        p_len = len(p)
 
-        # If adding this paragraph exceeds the limit → finalize chunk
-        if total_chars + paragraph_len > max_chars and current:
-            chunks.append("\n\n".join(current))
-            current = [paragraph]      # Start new chunk
-            total_chars = paragraph_len
+        if current_len + p_len > max_chars and current:
+            chunk = "\n\n".join(current).strip()
+            if chunk:
+                chunks.append(chunk)
+
+            # Overlap tail
+            tail = chunk[-overlap_chars:] if overlap_chars > 0 else ""
+            current = [tail, p] if tail else [p]
+            current_len = len(tail) + p_len
         else:
-            current.append(paragraph)
-            total_chars += paragraph_len
+            current.append(p)
+            current_len += p_len
 
-    # --------------------------------------------------------
-    # 3. Add the last chunk if it contains any text.
-    # --------------------------------------------------------
+    # Last chunk
     if current:
-        chunks.append("\n\n".join(current))
+        chunk = "\n\n".join(current).strip()
+        if chunk:
+            chunks.append(chunk)
 
     return chunks

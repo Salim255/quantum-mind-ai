@@ -76,8 +76,10 @@ class RAGPromptBuilder:
         # This prevents hallucinations and ensures reliability.
         # ------------------------------------------------------------
         prompt = f"""
-        You are a helpful assistant. Use ONLY the context below to answer the question.
-        if the user question is not well-formed, reformulate it but dont tell the user that you did, to get the best of the document, and if the answer is not in the context, and say "I don't know."
+        You are a teacher explaining quantum computing.
+        Rewrite the following answer to the question in a clearer,
+        more structured way. Keep it correct, but improve clarity.
+        and if the answer is not in the context, and say "I don't know."
 
         CONTEXT:
         {context_text}

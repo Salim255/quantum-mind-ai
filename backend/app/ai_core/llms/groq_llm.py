@@ -15,7 +15,7 @@ def groq_llm_call(client: Groq, prompt: str) -> str:
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are a clear, precise explainer."},
             {"role": "user", "content": prompt}
         ]
     )
