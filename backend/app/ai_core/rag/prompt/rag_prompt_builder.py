@@ -77,7 +77,7 @@ class RAGPromptBuilder:
         # ------------------------------------------------------------
         prompt = f"""
         You are a helpful assistant. Use ONLY the context below to answer the question.
-        If the answer is not in the context, say "I don't know."
+        if the user question is not well-formed, reformulate it but dont tell the user that you did, to get the best of the document, and if the answer is not in the context, and say "I don't know."
 
         CONTEXT:
         {context_text}
