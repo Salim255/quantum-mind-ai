@@ -5,11 +5,12 @@ from pydantic import BaseModel
 from app.core.settings import Settings
 from fastapi import FastAPI, Depends, File, UploadFile
 from typing import Annotated
-from app.ai_core.llms.groq_llm import groq_llm_call, get_groq_client
+from app.ai_core.llms.groq_llm import get_groq_client, groq_llm_call
 from app.ai_core.rag.loader.ingest import ingest_pdf
 import aiofiles   # Async file I/O library (non-blocking)
 import uuid       # Generates unique filenames
 from app.ai_core.rag.vector_store.search import search_similar_documents
+from app.ai_core.rag.generator.llm_generator import generate_answer
 
 @lru_cache
 def get_settings():
@@ -32,17 +33,37 @@ def health_check():
     return {"status": "ok", "message": "QuantumMind AI backend is running"}
 
 @app.post("/rag/query")
-def rag_query(payload: QueryRequest):
-    # This is a placeholder for your RAG query endpoint.
-    # It will eventually:
-    # 1. Embed the query
-    # 2. Search VECTOR_DB for relevant chunks
-    # 3. Use retrieved chunks as context for an LLM response
+def rag_query(payload: QueryRequest, settings: Annotated[Settings, Depends(get_settings)]):
+    """
+    FULL RAG PIPELINE:
+    1. Retrieve + rerank chunks
+    2. Extract top chunks
+    3. Build prompt + call LLM
+    4. Return final answer
+    """
 
-    results = search_similar_documents(payload.query, payload.top_k)
+    # --- 1. Retrieve + rerank chunks ----------------------------------------
+    # search_similar_documents returns:
+    # { "results": [chunk1, chunk2, chunk3] }
+    retrieval_output = search_similar_documents(payload.query, payload.top_k)
+
+    # Extract the list of text chunks
+    chunks = retrieval_output["results"]
+
+    # Take only the top 3 chunks for the LLM context
+    top_chunks = chunks[:3]
+
+    # --- 2. Generate final answer using the LLM ------------------------------
+    # This uses your RAGPromptBuilder internally
+
+    client = get_groq_client(settings)
+    final_answer = generate_answer(payload.query, top_chunks, client)
+
+    # --- 3. Return everything to the client ---------------------------------
     return {
         "query": payload.query,
-        "results": results
+        "retrieved_chunks": top_chunks,
+        "final_answer": final_answer
     }
 
 @app.post("/ingest/pdf")
@@ -136,10 +157,9 @@ def test_llm(settings: Annotated[Settings, Depends(get_settings)]):
 
     client = get_groq_client(settings)
 
-    result = groq_llm_call(client, prompt, debug=True)
+    result = groq_llm_call(client, prompt)
 
-    ingest_pdf("my_first_quantum_lesson.pdf")
-
+    
     return {
         "success": True,
         "llm_response": result
