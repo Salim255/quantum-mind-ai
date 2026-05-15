@@ -95,4 +95,4 @@ def search_similar_documents(query: str, top_k: int = 3):
     print(f"Top reranked results: {reranked[:top_k]}")
 
     # --- 7. Return only the text of the top_k results -------------------------
-    return {"results": [d["text"] for d in reranked[:top_k]]}
+    return {"results": [d["text"] for d in reranked[:top_k]], "sources": [d["source"] for d in reranked[:top_k]]}

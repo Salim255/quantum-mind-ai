@@ -67,7 +67,7 @@ def rag_query(payload: QueryRequest, settings: Annotated[Settings, Depends(get_s
         "query": payload.query,
         "retrieved_chunks": rich_context_chunks,
         "final_answer": final_answer,
-        "source": "QuantumMind AI RAG System"
+        "source": retrieval_output.get("sources", [])  # Include sources if available
     }
 
 @app.post("/ingest/pdf")
@@ -145,7 +145,7 @@ async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
     return {
         "status": "ok",
         "chunks_added": result["chunks_added"],
-        "filename": file.filename
+        "source": file.filename
     }
 
 
