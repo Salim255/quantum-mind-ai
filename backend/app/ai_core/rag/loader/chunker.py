@@ -1,7 +1,7 @@
 # rag/loader/chunker.py
 import re
 
-def chunk_text(text: str, chunk_size: int = 300, overlap: int = 50):
+def chunk_text(text: str, chunk_size: int = 400, overlap: int = 50):
     """
     Split long text into smaller chunks for better retrieval.
 

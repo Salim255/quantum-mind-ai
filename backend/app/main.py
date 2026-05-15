@@ -11,6 +11,7 @@ import aiofiles   # Async file I/O library (non-blocking)
 import uuid       # Generates unique filenames
 from app.ai_core.rag.vector_store.search import search_similar_documents
 from app.ai_core.rag.generator.llm_generator import generate_answer
+from app.ai_core.rag.context.context_builder import build_context
 
 @lru_cache
 def get_settings():
@@ -50,20 +51,23 @@ def rag_query(payload: QueryRequest, settings: Annotated[Settings, Depends(get_s
     # Extract the list of text chunks
     chunks = retrieval_output["results"]
 
+    # Build a rich context string for the LLM (optional, but improves answers)
+    rich_context_chunks = build_context(chunks, max_chars=3000)
+
     # Take only the top 3 chunks for the LLM context
-    top_chunks = chunks[:3]
+    
 
     # --- 2. Generate final answer using the LLM ------------------------------
     # This uses your RAGPromptBuilder internally
-
     client = get_groq_client(settings)
-    final_answer = generate_answer(payload.query, top_chunks, client)
+    final_answer = generate_answer(payload.query,  rich_context_chunks, client)
 
     # --- 3. Return everything to the client ---------------------------------
     return {
         "query": payload.query,
-        "retrieved_chunks": top_chunks,
-        "final_answer": final_answer
+        "retrieved_chunks": rich_context_chunks,
+        "final_answer": final_answer,
+        "source": "QuantumMind AI RAG System"
     }
 
 @app.post("/ingest/pdf")
@@ -126,7 +130,7 @@ async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
     # - embedding
     # - storing chunks in VECTOR_DB
   
-    result = ingest_pdf(temp_path)
+    result = ingest_pdf(temp_path, source=file.filename)
 
 
     # -----------------------------------------------------------------------
