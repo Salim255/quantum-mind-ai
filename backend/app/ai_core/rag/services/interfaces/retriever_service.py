@@ -1,9 +1,5 @@
-
 from abc import ABC, abstractmethod
-
-from app.ai_core.structured_outputs.schemas.rag_eval_schema import RetrievedChunk
 from app.ai_core.structured_outputs.schemas.retrieval_result_schema import RetrievalResultSchema
-
 
 # ------------------------------------------------------------------
 # ABSTRACT RETRIEVER SERVICE INTERFACE

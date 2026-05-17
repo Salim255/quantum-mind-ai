@@ -9,10 +9,8 @@ from app.ai_core.llms.groq_llm import get_groq_client, groq_llm_call
 from app.ai_core.rag.loader.ingest import ingest_pdf
 import aiofiles   # Async file I/O library (non-blocking)
 import uuid       # Generates unique filenames
-from app.ai_core.rag.vector_store.search import search_similar_documents
 from app.ai_core.rag.generator.llm_generator import generate_answer
 from app.ai_core.rag.context.context_builder import build_context
-from app.ai_core.rag.generator.answer_normalizer import normalize_final_answer
 from app.ai_core.structured_outputs.schemas.rag_eval_schema import (
     RAGEvaluationLog,
     RetrievedChunk
@@ -20,11 +18,21 @@ from app.ai_core.structured_outputs.schemas.rag_eval_schema import (
 from app.ai_core.rag.evaluation.logger import (
     log_rag_evaluation
 )
+from app.ai_core.rag.services.interfaces.retriever_service import RetrieverService
 from app.ai_core.rag.services.implementations.retriever_service_impl import RetrieverServiceImpl
+from app.ai_core.rag.services.implementations.generator_service_impl import GeneratorServiceImpl
+from app.ai_core.rag.services.interfaces.generator_service import GeneratorService
+
 
 @lru_cache
-def get_settings():
+def get_settings() -> Settings:
     return Settings()
+
+def get_retriever_service() -> RetrieverService:
+    return RetrieverServiceImpl()
+
+def get_answer_generator_service() -> GeneratorService:
+    return GeneratorServiceImpl()
 
 app = FastAPI(
     title="QuantumMind AI - Python Core",
@@ -45,7 +53,9 @@ def health_check():
 @app.post("/rag/query")
 def rag_query(
     payload: QueryRequest,
-    settings: Annotated[Settings, Depends(get_settings)]
+    settings: Annotated[Settings, Depends(get_settings)],
+    retriever_service: Annotated[RetrieverService, Depends(get_retriever_service)],
+    generator_service: Annotated[GeneratorService, Depends(get_answer_generator_service)]
 ):
     """
     Execute the full RAG pipeline.
@@ -98,8 +108,8 @@ def rag_query(
     #   "sources": [...]
     # }
     # ---------------------------------------------------------------
-    retriever = RetrieverServiceImpl()
-    retrieval_output = retriever.retrieve(payload.query)
+    
+    retrieval_output = retriever_service.retrieve(payload.query)
 
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS
@@ -162,7 +172,8 @@ def rag_query(
     # RETURNS:
     # RAGResponseSchema
     # ---------------------------------------------------------------
-    final_answer = generate_answer(
+   
+    final_answer =  generator_service.generate_answer(
         payload.query,
         rich_context_chunks,
         client
