@@ -22,6 +22,19 @@ def ingest_pdf(path: str, source: str):
 
     # 3. Add each chunk to the vector DB.
     for chunk in chunks:
+      text = chunk.lower()
+      # 🔥 FILTER STEP (replacement for is_useful_chunk)
+      if len(chunk) < 80:
+         continue
+
+      if "acknowledgements" in text:
+         continue
+      if "mit press" in text:
+         continue
+      if "all rights reserved" in text:
+         continue
+      if "introduction introduction" in text:
+         continue
       add_document(chunk, source=source)
 
     return {"status": "ok", "chunks_added": len(chunks)}

@@ -1,50 +1,46 @@
 # rag/generator/answer_normalizer.py
 # ------------------------------------------------------------
 # PURPOSE:
-#   Normalize the LLM final answer so it is:
-#   - clean
-#   - precise
-#   - grounded
-#   - without markdown
-#   - without fluff
-#   - without invented structure
+#   Clean ONLY formatting artifacts from the LLM output.
+#   It must NOT change meaning, structure, or content.
 # ------------------------------------------------------------
 
 import re
 
 def normalize_final_answer(text: str) -> str:
     """
-    Normalize the LLM final answer:
-    - remove markdown
-    - remove headings
-    - remove teacher tone
-    - remove fluff
-    - collapse multiple newlines
-    - enforce clean paragraphs
+    Clean LLM output for UI rendering.
+
+    RESPONSIBILITY:
+    - Fix escaped newlines
+    - Remove excessive spacing
+    - Ensure clean readable paragraphs
+
+    DO NOT:
+    - rewrite content
+    - remove ideas
+    - alter meaning
     """
 
-    # Remove markdown headings like **Title**, ### Title, etc.
-    text = re.sub(r"\*{1,3}([^*]+)\*{1,3}", r"\1", text)
-    text = re.sub(r"#+\s*", "", text)
+    if not text:
+        return ""
 
-    # Remove bold/italic markers
-    text = text.replace("**", "").replace("*", "")
+    # ------------------------------------------------------------
+    # 1. Fix escaped newlines (IMPORTANT)
+    # ------------------------------------------------------------
+    text = text.replace("\\n", "\n")
 
-    # Remove "In summary", "To illustrate", "Welcome students", etc.
-    text = re.sub(
-        r"(In summary|To illustrate|Welcome.*?discussion|Fortunately|In conclusion).*?\.",
-        "",
-        text,
-        flags=re.IGNORECASE
-    )
+    # ------------------------------------------------------------
+    # 2. Normalize excessive newlines
+    # ------------------------------------------------------------
+    text = re.sub(r"\n{3,}", "\n\n", text)
 
-    # Remove "Additional Resources" or similar
-    text = re.sub(r"Additional Resources.*", "", text, flags=re.IGNORECASE)
+    # ------------------------------------------------------------
+    # 3. Clean trailing/leading spaces per line
+    # ------------------------------------------------------------
+    text = "\n".join(line.strip() for line in text.split("\n"))
 
-    # Collapse multiple newlines
-    text = re.sub(r"\n{2,}", "\n", text)
-
-    # Strip whitespace
-    text = text.strip()
-
-    return text
+    # ------------------------------------------------------------
+    # 4. Final cleanup
+    # ------------------------------------------------------------
+    return text.strip()
