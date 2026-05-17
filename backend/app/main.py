@@ -1,6 +1,6 @@
 from functools import lru_cache
 import os
-import json
+import time
 from pydantic import BaseModel
 from app.core.settings import Settings
 from fastapi import FastAPI, Depends, File, UploadFile
@@ -13,6 +13,14 @@ from app.ai_core.rag.vector_store.search import search_similar_documents
 from app.ai_core.rag.generator.llm_generator import generate_answer
 from app.ai_core.rag.context.context_builder import build_context
 from app.ai_core.rag.generator.answer_normalizer import normalize_final_answer
+from app.ai_core.structured_outputs.schemas.rag_eval_schema import (
+    RAGEvaluationLog,
+    RetrievedChunk
+)
+from app.ai_core.rag.evaluation.logger import (
+    log_rag_evaluation
+)
+from app.ai_core.rag.services.implementations.retriever_service_impl import RetrieverServiceImpl
 
 @lru_cache
 def get_settings():
@@ -35,40 +43,231 @@ def health_check():
     return {"status": "ok", "message": "QuantumMind AI backend is running"}
 
 @app.post("/rag/query")
-def rag_query(payload: QueryRequest, settings: Annotated[Settings, Depends(get_settings)]):
+def rag_query(
+    payload: QueryRequest,
+    settings: Annotated[Settings, Depends(get_settings)]
+):
     """
-    FULL RAG PIPELINE:
-    1. Retrieve + rerank chunks
-    2. Extract top chunks
-    3. Build prompt + call LLM
-    4. Return final answer
+    Execute the full RAG pipeline.
+
+    INPUT
+    -----
+    payload.query:
+        User question
+
+    payload.top_k:
+        Number of chunks to retrieve
+
+    OUTPUT
+    ------
+    - query
+    - retrieved chunks
+    - structured final answer
+    - sources
+    - latency
     """
 
-    # --- 1. Retrieve + rerank chunks ----------------------------------------
-    # search_similar_documents returns:
-    # { "results": [chunk1, chunk2, chunk3] }
-    retrieval_output = search_similar_documents(payload.query, payload.top_k)
+    # ---------------------------------------------------------------
+    # START LATENCY TIMER
+    # ---------------------------------------------------------------
+    #
+    # We measure total pipeline execution time.
+    #
+    # Useful later for:
+    # - monitoring
+    # - dashboard analytics
+    # - optimization
+    # - performance regression detection
+    # ---------------------------------------------------------------
+    start_time = time.perf_counter()
 
-    # Extract the list of text chunks
+    # ---------------------------------------------------------------
+    # 1. SEMANTIC RETRIEVAL + RERANKING
+    # ---------------------------------------------------------------
+    #
+    # search_similar_documents():
+    #
+    # - embeds the query
+    # - performs cosine similarity search
+    # - selects top candidates
+    # - reranks using cross-encoder
+    #
+    # RETURNS:
+    # {
+    #   "results": [...],
+    #   "sources": [...]
+    # }
+    # ---------------------------------------------------------------
+    retriever = RetrieverServiceImpl()
+    retrieval_output = retriever.retrieve(payload.query)
+
+    print("[DEBUG] Retrieval output:", retrieval_output)  # Debug log to inspect retrieval results
+    # ---------------------------------------------------------------
+    # EXTRACT RETRIEVED CHUNKS
+    # ---------------------------------------------------------------
     chunks = retrieval_output["results"]
 
-    # Build a rich context string for the LLM (optional, but improves answers)
-    rich_context_chunks = build_context(chunks, max_chars=3000)
+    # ---------------------------------------------------------------
+    # EXTRACT SOURCES
+    # ---------------------------------------------------------------
+    #
+    # Sources help:
+    # - explain provenance
+    # - improve trust
+    # - support evaluation
+    # ---------------------------------------------------------------
+    sources = retrieval_output.get("sources", [])
 
-    # Take only the top 3 chunks for the LLM context
-    
+    # ---------------------------------------------------------------
+    # 2. BUILD OPTIMIZED CONTEXT
+    # ---------------------------------------------------------------
+    #
+    # build_context():
+    #
+    # - merges top chunks
+    # - limits total context size
+    # - preserves semantic coherence
+    #
+    # WHY IMPORTANT?
+    # --------------
+    # LLMs perform better with:
+    # - focused context
+    # - low noise
+    # - coherent passages
+    # ---------------------------------------------------------------
+    rich_context_chunks = build_context(
+        chunks,
+        max_chars=3000
+    )
 
-    # --- 2. Generate final answer using the LLM ------------------------------
-    # This uses your RAGPromptBuilder internally
+    # ---------------------------------------------------------------
+    # 3. INITIALIZE LLM CLIENT
+    # ---------------------------------------------------------------
+    #
+    # This creates the Groq client using API keys
+    # from application settings.
+    # ---------------------------------------------------------------
     client = get_groq_client(settings)
-    final_answer = generate_answer(payload.query,  rich_context_chunks, client)
-    ##normalize_answer =  normalize_final_answer(final_answer)
-    # --- 3. Return everything to the client ---------------------------------
+
+    # ---------------------------------------------------------------
+    # 4. GENERATE FINAL STRUCTURED ANSWER
+    # ---------------------------------------------------------------
+    #
+    # generate_answer():
+    #
+    # - builds the final RAG prompt
+    # - injects context
+    # - calls the LLM
+    # - validates structured JSON output
+    #
+    # RETURNS:
+    # RAGResponseSchema
+    # ---------------------------------------------------------------
+    final_answer = generate_answer(
+        payload.query,
+        rich_context_chunks,
+        client
+    )
+
+    # ---------------------------------------------------------------
+    # STOP LATENCY TIMER
+    # ---------------------------------------------------------------
+    #
+    # Convert total execution time into milliseconds.
+    # ---------------------------------------------------------------
+    latency_ms = (
+        time.perf_counter() - start_time
+    ) * 1000
+
+    # ---------------------------------------------------------------
+    # 5. BUILD STRUCTURED RETRIEVED CHUNKS
+    # ---------------------------------------------------------------
+    #
+    # We transform raw chunks into structured objects
+    # for evaluation logging.
+    #
+    # WHY?
+    # ----
+    # Later we can:
+    # - inspect retrieval quality
+    # - build dashboards
+    # - compute metrics
+    # - analyze hallucinations
+    # ---------------------------------------------------------------
+    retrieved_chunk_objects = []
+
+    for chunk, source in zip(chunks, sources):
+
+        retrieved_chunk_objects.append(
+
+            RetrievedChunk(
+                text=chunk,
+                source=source
+            )
+        )
+
+    # ---------------------------------------------------------------
+    # 6. CREATE RAG EVALUATION LOG
+    # ---------------------------------------------------------------
+    #
+    # This stores:
+    # - query
+    # - retrieved chunks
+    # - final answer
+    # - latency
+    # - model info
+    #
+    # This becomes the foundation of:
+    # - RAG analytics
+    # - evaluation dashboards
+    # - retrieval benchmarking
+    # ---------------------------------------------------------------
+    evaluation_log = RAGEvaluationLog(
+
+        query=payload.query,
+
+        retrieved_chunks=retrieved_chunk_objects,
+
+        final_answer=final_answer.model_dump(),
+
+        latency_ms=latency_ms,
+
+        model="llama-3.1-8b-instant",
+
+        top_k=payload.top_k
+    )
+
+    # ---------------------------------------------------------------
+    # 7. SAVE EVALUATION LOG
+    # ---------------------------------------------------------------
+    #
+    # Logs are stored in JSONL format.
+    #
+    # Every request becomes:
+    # - traceable
+    # - measurable
+    # - debuggable
+    # ---------------------------------------------------------------
+    log_rag_evaluation(evaluation_log)
+
+    # ---------------------------------------------------------------
+    # 8. RETURN API RESPONSE
+    # ---------------------------------------------------------------
+    #
+    # model_dump():
+    # Converts Pydantic schema into JSON-serializable dict.
+    # ---------------------------------------------------------------
     return {
+
         "query": payload.query,
+
         "retrieved_chunks": rich_context_chunks,
-        "final_answer": final_answer.model_dump(),  # Convert Pydantic model to dict for JSON serialization
-        "source": retrieval_output.get("sources", [])  # Include sources if available
+
+        "final_answer": final_answer.model_dump(),
+
+        "source": sources,
+
+        "latency_ms": latency_ms
     }
 
 @app.post("/ingest/pdf")
