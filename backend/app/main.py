@@ -1,6 +1,6 @@
 from functools import lru_cache
 import os
-
+import json
 from pydantic import BaseModel
 from app.core.settings import Settings
 from fastapi import FastAPI, Depends, File, UploadFile
@@ -62,12 +62,12 @@ def rag_query(payload: QueryRequest, settings: Annotated[Settings, Depends(get_s
     # This uses your RAGPromptBuilder internally
     client = get_groq_client(settings)
     final_answer = generate_answer(payload.query,  rich_context_chunks, client)
-    normalize_answer =  normalize_final_answer(final_answer)
+    ##normalize_answer =  normalize_final_answer(final_answer)
     # --- 3. Return everything to the client ---------------------------------
     return {
         "query": payload.query,
         "retrieved_chunks": rich_context_chunks,
-        "final_answer": normalize_answer,
+        "final_answer": final_answer.model_dump(),  # Convert Pydantic model to dict for JSON serialization
         "source": retrieval_output.get("sources", [])  # Include sources if available
     }
 
