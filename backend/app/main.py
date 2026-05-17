@@ -24,6 +24,7 @@ from app.ai_core.rag.services.implementations.generator_service_impl import Gene
 from app.ai_core.rag.services.interfaces.generator_service import GeneratorService
 from app.ai_core.rag.services.implementations.loader_service_impl import LoaderServiceImpl
 from app.ai_core.rag.services.interfaces.loader_service import LoaderService
+from backend.app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema
 
 
 @lru_cache
@@ -302,7 +303,7 @@ def rag_query(
 async def ingest_pdf_endpoint(
     file: Annotated[UploadFile, File(...)],
     loader_service: Annotated[LoaderService, Depends(get_loader_service)]
-    ):
+    ) -> IngestionResponseSchema:
     """
     Receive a PDF file from the client (Postman, UI, etc.),
     save it asynchronously, then ingest it into the vector store.
@@ -314,8 +315,8 @@ async def ingest_pdf_endpoint(
 
     Returns
     -------
-    dict
-        A JSON response confirming ingestion and showing how many chunks were added.
+    IngestionResponseSchema
+        A structured response confirming ingestion and showing how many chunks were added.
     """
 
     # -----------------------------------------------------------------------
