@@ -359,12 +359,7 @@ async def ingest_pdf_endpoint(
     # - how many chunks were added
     # - what the original filename was
 
-    print(f"Processing file : {temp_path}", result)  # Debug log to confirm file content (first 100 bytes)
-    return {
-        "status": "ok",
-        "chunks_added": result["chunks_added"],
-        "source": file.filename
-    }
+    return result
 
 
 @app.get("/llm/test")

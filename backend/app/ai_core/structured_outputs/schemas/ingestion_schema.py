@@ -8,3 +8,4 @@ class IngestionResponseSchema(BaseModel):
 
     status: str = Field(..., description="Ingestion status (ok / failed)")
     chunks_added: int = Field(..., description="Number of chunks successfully stored")
+    source: str = Field(..., description="Source of the ingested document")

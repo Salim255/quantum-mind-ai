@@ -8,13 +8,13 @@ from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionRes
 
 
 class LoaderServiceImpl(LoaderService):
-    def ingest_pdf(self, spath: str, source: str) -> IngestionResponseSchema:
+    def ingest_pdf(self, path: str, source: str) -> IngestionResponseSchema:
         """
         Load a PDF, chunk it, embed each chunk, and store in VECTOR_DB.
          """
 
         # 1. Extract raw text from the PDF.
-        full_text = load_pdf(spath)
+        full_text = load_pdf(path)
 
         # CLEAN THE TEXT BEFORE CHUNKING
         full_text = clean_text(full_text)
@@ -39,4 +39,8 @@ class LoaderServiceImpl(LoaderService):
                 continue
             add_document(chunk, source=source)
 
-        return {"status": "ok", "chunks_added": len(chunks)}
+        return IngestionResponseSchema(
+            status="ok",
+            chunks_added=len(chunks),
+            source=source
+        )

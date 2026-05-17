@@ -1,19 +1,22 @@
 from abc import ABC, abstractmethod
+from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema
 
 class LoaderService(ABC):
     @abstractmethod
-    def ingest(self, data: dict) -> bool:
+    def ingest_pdf(self, path: str, source: str) -> IngestionResponseSchema:
         """
-        Abstract method to ingest data into the system.
+        Abstract method to ingest a PDF into the system.
 
         Parameters
         ----------
-        data : dict
-            The data to be ingested, which can include text, metadata, and other relevant information.
+        path : str
+            The path to the PDF file.
+        source : str
+            The source of the PDF file.
 
         Returns
         -------
-        bool
-            A boolean indicating whether the ingestion was successful or not.
+        IngestionResponseSchema
+            The response indicating the outcome of the ingestion process.
         """
         pass

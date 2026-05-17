@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List
 
 
@@ -21,6 +21,6 @@ class RetrievalResultSchema(BaseModel):
         Sources associated with each chunk.
     """
 
-    results: List[str]
+    results: List[str] = Field(default_factory=[], description="List of retrieved semantic chunks relevant to the query")
 
-    sources: List[str]
+    sources: List[str] = Field(default_factory=[], description="List of sources associated with each retrieved chunk")
