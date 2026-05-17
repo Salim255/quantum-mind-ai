@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class IngestionService(ABC):
+class LoaderService(ABC):
     @abstractmethod
     def ingest(self, data: dict) -> bool:
         """

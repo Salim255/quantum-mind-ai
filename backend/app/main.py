@@ -22,6 +22,8 @@ from app.ai_core.rag.services.interfaces.retriever_service import RetrieverServi
 from app.ai_core.rag.services.implementations.retriever_service_impl import RetrieverServiceImpl
 from app.ai_core.rag.services.implementations.generator_service_impl import GeneratorServiceImpl
 from app.ai_core.rag.services.interfaces.generator_service import GeneratorService
+from app.ai_core.rag.services.implementations.loader_service_impl import LoaderServiceImpl
+from app.ai_core.rag.services.interfaces.loader_service import LoaderService
 
 
 @lru_cache
@@ -34,6 +36,9 @@ def get_retriever_service() -> RetrieverService:
 def get_answer_generator_service() -> GeneratorService:
     return GeneratorServiceImpl()
 
+def get_loader_service() -> LoaderService:
+    return LoaderServiceImpl()
+    
 app = FastAPI(
     title="QuantumMind AI - Python Core",
     description="AI Core for quantum research assistant (RAG, embeddings, vector search, quantum math)",
@@ -294,7 +299,10 @@ def rag_query(
 #
 # This is the modern, production-safe way to handle file uploads in 2026.
 # ---------------------------------------------------------------------------
-async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
+async def ingest_pdf_endpoint(
+    file: Annotated[UploadFile, File(...)],
+    loader_service: Annotated[LoaderService, Depends(get_loader_service)]
+    ):
     """
     Receive a PDF file from the client (Postman, UI, etc.),
     save it asynchronously, then ingest it into the vector store.
@@ -340,7 +348,7 @@ async def ingest_pdf_endpoint(file: Annotated[UploadFile, File(...)]):
     # - embedding
     # - storing chunks in VECTOR_DB
   
-    result = ingest_pdf(temp_path, source=file.filename)
+    result = loader_service.ingest_pdf(temp_path, source=file.filename)
 
 
     # -----------------------------------------------------------------------

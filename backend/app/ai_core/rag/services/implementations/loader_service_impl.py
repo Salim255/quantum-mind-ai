@@ -1,14 +1,14 @@
-from importlib.resources import path
 from app.ai_core.rag.loader.chunker import semantic_chunk_text
 from app.ai_core.rag.loader.cleaner import clean_text
 from app.ai_core.rag.loader.normalizer import normalize_text
 from app.ai_core.rag.loader.pdf_loader import load_pdf
-from app.ai_core.rag.services.interfaces.ingestion_service import IngestionService
-from app.ai_core.rag.vector_store.add_document import add_document  # your existing function
+from app.ai_core.rag.services.interfaces.loader_service import LoaderService
+from app.ai_core.rag.vector_store.add_document import add_document
+from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema  # your existing function
 
 
-class IngestionServiceImpl(IngestionService):
-    def ingest_pdf(self, spath: str, source: str):
+class LoaderServiceImpl(LoaderService):
+    def ingest_pdf(self, spath: str, source: str) -> IngestionResponseSchema:
         """
         Load a PDF, chunk it, embed each chunk, and store in VECTOR_DB.
          """
@@ -25,7 +25,7 @@ class IngestionServiceImpl(IngestionService):
         # 3. Add each chunk to the vector DB.
         for chunk in chunks:
             text = chunk.lower()
-            # 🔥 FILTER STEP (replacement for is_useful_chunk)
+            # FILTER STEP (replacement for is_useful_chunk)
             if len(chunk) < 80:
                 continue
 
