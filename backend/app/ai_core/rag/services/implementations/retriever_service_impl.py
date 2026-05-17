@@ -1,11 +1,11 @@
 from ast import List
 from app.ai_core.rag.services.interfaces.retriever_service import RetrieverService
 from app.ai_core.rag.vector_store.search import search_similar_documents
-from app.ai_core.structured_outputs.schemas.rag_eval_schema import RetrievedChunk
+from app.ai_core.structured_outputs.schemas.retrieval_result_schema import RetrievalResultSchema
 
 
 class RetrieverServiceImpl(RetrieverService):
-    def retrieve(self, query: str):
+    def retrieve(self, query: str)-> RetrievalResultSchema: 
         """
         Retrieves relevant chunks of information based on the input query.
 
@@ -16,7 +16,7 @@ class RetrieverServiceImpl(RetrieverService):
 
         Returns
         -------
-        List[RetrievedChunk]
-            A list of retrieved chunks, where each chunk contains the text and its relevance score.
+        RetrievalResultSchema
+            The structured retrieval results containing the retrieved chunks and their associated sources.
         """
         return search_similar_documents(query)

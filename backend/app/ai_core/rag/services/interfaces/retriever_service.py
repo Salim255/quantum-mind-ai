@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 
 from app.ai_core.structured_outputs.schemas.rag_eval_schema import RetrievedChunk
+from app.ai_core.structured_outputs.schemas.retrieval_result_schema import RetrievalResultSchema
 
 
 # ------------------------------------------------------------------
@@ -14,7 +15,7 @@ from app.ai_core.structured_outputs.schemas.rag_eval_schema import RetrievedChun
 # ------------------------------------------------------------------
 class RetrieverService(ABC):
     @abstractmethod
-    def retrieve(self, query: str):
+    def retrieve(self, query: str) -> RetrievalResultSchema:
         """
         Abstract method to retrieve relevant chunks of information based on the input query.
 
@@ -25,7 +26,7 @@ class RetrieverService(ABC):
 
         Returns
         -------
-        list[RetrievedChunk]
-            A list of retrieved chunks, where each chunk contains the text and its relevance score.
+        RetrievalResultSchema
+            The structured retrieval results containing the retrieved chunks and their associated sources.
         """
         pass

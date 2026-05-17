@@ -101,11 +101,10 @@ def rag_query(
     retriever = RetrieverServiceImpl()
     retrieval_output = retriever.retrieve(payload.query)
 
-    print("[DEBUG] Retrieval output:", retrieval_output)  # Debug log to inspect retrieval results
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS
     # ---------------------------------------------------------------
-    chunks = retrieval_output["results"]
+    chunks = retrieval_output.get("results", [])  # List of text chunks relevant to the query
 
     # ---------------------------------------------------------------
     # EXTRACT SOURCES
@@ -116,7 +115,7 @@ def rag_query(
     # - improve trust
     # - support evaluation
     # ---------------------------------------------------------------
-    sources = retrieval_output.get("sources", [])
+    sources = retrieval_output.get("sources", [])  # List of sources corresponding to each chunk
 
     # ---------------------------------------------------------------
     # 2. BUILD OPTIMIZED CONTEXT
