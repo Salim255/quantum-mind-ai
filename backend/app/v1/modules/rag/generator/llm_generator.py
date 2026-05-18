@@ -45,7 +45,7 @@ import json
 from groq import Groq
 
 from app.ai_core.llms.groq_llm import groq_llm_call
-from app.ai_core.rag.prompt.rag_prompt_builder import RAGPromptBuilder
+from backend.app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
 from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
 
 

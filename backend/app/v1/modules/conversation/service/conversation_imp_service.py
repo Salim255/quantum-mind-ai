@@ -1,20 +1,26 @@
+from typing import Optional
+
 from app.v1.modules.conversation.service.conversation_service import ConversationService
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from pydantic import BaseModel
-from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
+from app.v1.modules.conversation.schema.conversation_schema import ConversationResponse
 
 
 class QueryRequest(BaseModel):
     query: str
     top_k: int = 3
 
-
 class ConversationServiceImpl(ConversationService):
     def __init__(self, memory, rag_service: RAGService):
         self.memory = memory
         self.rag_service = rag_service
 
-    async def handle_message(self, user_id: str, message: str)-> RAGResponseSchema :
+    async def handle_message(
+            self, 
+            user_id: str,
+            message: str, 
+            conversation_id: Optional[str] = None
+            )-> ConversationResponse:
         # 1. Load conversation history
         history = self.memory.get_history(user_id)
 
@@ -34,7 +40,11 @@ class ConversationServiceImpl(ConversationService):
         self.memory.add_message(user_id, "user", message)
         self.memory.add_message(user_id, "assistant", final_answer)
 
-        return rag_result
+        return ConversationResponse(
+            answer=rag_result,
+            memory_updated=True,
+            conversation_id=conversation_id
+        )
 
     def _build_conversational_answer(self, history, user_message, rag_result):
         """

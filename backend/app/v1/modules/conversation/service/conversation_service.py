@@ -1,8 +1,14 @@
 from abc import ABC, abstractmethod
-from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
+from typing import Optional
+from app.v1.modules.conversation.schema.conversation_schema import ConversationResponse
 
 class ConversationService(ABC):
     @abstractmethod
-    async def handle_message(self, conversation_id: str, message: str)-> RAGResponseSchema:
+    async def handle_message(
+        self,
+        user_id: str, 
+        message: str, 
+        conversation_id: Optional[str] = None
+        ) -> ConversationResponse:
         # Placeholder for actual message processing logic
         pass

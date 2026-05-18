@@ -2,7 +2,7 @@ from typing import Annotated
 import os
 import asyncio
 import uuid
-from fastapi import File, UploadFile
+from fastapi import UploadFile
 import aiofiles
 from app.v1.modules.rag.loader.chunker import semantic_chunk_text
 from app.v1.modules.rag.loader.cleaner import clean_text
