@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from app.v1.modules.rag.services.implementations.loader_service_impl import LoaderServiceImpl
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.controller.controller import router as rag_router
+from app.v1.modules.conversation.controller.controller import router as conversation_router
 
 def get_loader_service() -> LoaderService:
     return LoaderServiceImpl()
@@ -15,6 +16,7 @@ app = FastAPI(
     root_path=get_settings().API_PREFIX
 )
 
+app.include_router(conversation_router)
 app.include_router(rag_router)
 
 @app.get("/health")
