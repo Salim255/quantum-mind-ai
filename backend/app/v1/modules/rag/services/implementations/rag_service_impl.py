@@ -19,6 +19,7 @@ class QueryRequest(BaseModel):
 class RAGServiceImpl(RAGService):
    def __init__(self, settings: Settings):
         self.settings = settings
+        
    def rag_pipeline(
          self,
          payload: QueryRequest
