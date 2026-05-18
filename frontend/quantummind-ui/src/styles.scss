@@ -1,1 +1,143 @@
 /* You can add global styles to this file, and also import other style files */
+/* ===========================
+   GLOBAL DESIGN SYSTEM
+   Premium Minimal UI — 2026
+   =========================== */
+
+/* ---------------------------
+   1. COLOR SYSTEM
+   --------------------------- */
+$color-bg: #f7f7f8;
+$color-surface: #ffffff;
+$color-text: #1a1a1a;
+$color-text-soft: #6b6b6b;
+$color-primary: #4b5cff; // premium blue
+$color-primary-soft: rgba(75, 92, 255, 0.08);
+$color-border: #e6e6e6;
+
+/* ---------------------------
+   2. TYPOGRAPHY
+   --------------------------- */
+$font-main: 'Inter', 'SF Pro Display', sans-serif;
+
+html, body {
+  font-family: $font-main;
+  background: $color-bg;
+  color: $color-text;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings */
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+h1 {
+  font-size: 3rem;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+/* Body text */
+p {
+  font-size: 1.1rem;
+  color: $color-text-soft;
+  line-height: 1.6;
+}
+
+/* ---------------------------
+   3. SPACING SYSTEM
+   --------------------------- */
+$space-xxs: 4px;
+$space-xs: 8px;
+$space-sm: 12px;
+$space-md: 20px;
+$space-lg: 32px;
+$space-xl: 48px;
+$space-xxl: 72px;
+
+/* ---------------------------
+   4. LAYOUT
+   --------------------------- */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: $space-xl $space-md;
+}
+
+/* ---------------------------
+   5. INPUTS
+   --------------------------- */
+.input {
+  width: 100%;
+  padding: $space-md;
+  border-radius: 12px;
+  border: 1px solid $color-border;
+  background: $color-surface;
+  font-size: 1.1rem;
+  transition: 0.2s ease;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-primary-soft;
+    outline: none;
+  }
+}
+
+/* ---------------------------
+   6. BUTTONS
+   --------------------------- */
+.btn {
+  padding: $space-md $space-lg;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.btn-primary {
+  background: $color-primary;
+  color: white;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+/* ---------------------------
+   7. CARD (for minimal premium blocks)
+   --------------------------- */
+.card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  padding: $space-xl;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+/* ---------------------------
+   8. LANDING PAGE HERO
+   --------------------------- */
+.hero {
+  text-align: center;
+  padding: $space-xxl 0;
+
+  h1 {
+    margin-bottom: $space-md;
+  }
+
+  p {
+    max-width: 600px;
+    margin: 0 auto $space-xl;
+  }
+}
