@@ -5,6 +5,6 @@ router = APIRouter(
     tags=["Conversation"]
 )
 
-@router.post("/")
-def start_conversation():
-    return {"message": "Conversation started"}
+@router.post("/messages")
+def send_message():
+    return {"message": "Message sent to conversation endpoint"}
