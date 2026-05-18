@@ -1,13 +1,13 @@
+from typing import Annotated
+from fastapi.params import Depends
 
-from app.v1.modules.rag.services.implementations.generator_service_impl import GeneratorServiceImpl
-from app.v1.modules.rag.services.implementations.retriever_service_impl import RetrieverServiceImpl
-from app.v1.modules.rag.services.interfaces.generator_service import GeneratorService
-from app.v1.modules.rag.services.interfaces.generator_service import GeneratorService
-from app.v1.modules.rag.services.interfaces.retriever_service import RetrieverService
+from app.v1.modules.rag.services.implementations.rag_service_impl import RAGServiceImpl
+from app.v1.modules.rag.services.interfaces.rag_service import RAGService
+from app.core.settings import Settings, get_settings
 
 
-def get_retriever_service() -> RetrieverService:
-    return RetrieverServiceImpl()
-
-def get_answer_generator_service() -> GeneratorService:
-    return GeneratorServiceImpl()
+def get_rag_service(
+        settings: Annotated[Settings, Depends(get_settings)]) -> RAGService:
+    return RAGServiceImpl(
+        settings=settings
+        )

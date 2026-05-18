@@ -1,8 +1,6 @@
 from functools import lru_cache
 import os
 from app.core.settings import Settings, get_settings
-from pydantic import BaseModel
-from app.core.settings import Settings
 from fastapi import FastAPI, Depends, File, UploadFile
 from typing import Annotated
 from app.ai_core.llms.groq_llm import get_groq_client, groq_llm_call
