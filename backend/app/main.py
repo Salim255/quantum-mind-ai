@@ -11,7 +11,7 @@ import uuid       # Generates unique filenames
 from app.v1.modules.rag.services.implementations.loader_service_impl import LoaderServiceImpl
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema
-from app.v1.modules.rag.controllers.controller import router as rag_router
+from app.v1.modules.rag.controller.controller import router as rag_router
 
 def get_loader_service() -> LoaderService:
     return LoaderServiceImpl()
@@ -23,7 +23,7 @@ app = FastAPI(
     root_path=get_settings().API_PREFIX
 )
 
-app.include_router(rag_router)  # Include the RAG router (if you have one defined in a separate file)
+app.include_router(rag_router)
 
 
 @app.get("/health")
