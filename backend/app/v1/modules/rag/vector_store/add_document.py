@@ -2,8 +2,8 @@ import numpy as np
 # NumPy is used for handling vectors (embeddings).
 # Even if this function does not manipulate vectors directly,
 # NumPy is essential for similarity search later in the pipeline.
-from app.ai_core.rag.vector_store.store import VECTOR_DB
-from app.ai_core.rag.embeddings.embedder import embed_text
+from app.v1.modules.rag.vector_store.store import VECTOR_DB
+from app.v1.modules.rag.embeddings.embedder import embed_text
 # Import the embedding function.
 # This function converts raw text into a dense vector representation
 # that your QuantumMind AI system will use for retrieval.

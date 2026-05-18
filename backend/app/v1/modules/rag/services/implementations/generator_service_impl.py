@@ -1,10 +1,10 @@
 from typing import List
 import json
 from groq import Groq
-from app.ai_core.rag.services.interfaces.generator_service import GeneratorService
+from app.v1.modules.rag.services.interfaces.generator_service import GeneratorService
 from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
 from app.ai_core.llms.groq_llm import groq_llm_call
-from app.ai_core.rag.prompt.rag_prompt_builder import RAGPromptBuilder
+from app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
 
 
 class GeneratorServiceImpl(GeneratorService):

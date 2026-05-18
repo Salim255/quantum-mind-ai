@@ -1,6 +1,6 @@
 from functools import lru_cache
 import os
-import time
+from app.core.settings import Settings, get_settings
 from pydantic import BaseModel
 from app.core.settings import Settings
 from fastapi import FastAPI, Depends, File, UploadFile
@@ -8,19 +8,10 @@ from typing import Annotated
 from app.ai_core.llms.groq_llm import get_groq_client, groq_llm_call
 import aiofiles   # Async file I/O library (non-blocking)
 import uuid       # Generates unique filenames
-from app.ai_core.rag.services.interfaces.retriever_service import RetrieverService
-from app.ai_core.rag.services.implementations.retriever_service_impl import RetrieverServiceImpl
-from app.ai_core.rag.services.implementations.generator_service_impl import GeneratorServiceImpl
-from app.ai_core.rag.services.interfaces.generator_service import GeneratorService
-from app.ai_core.rag.services.implementations.loader_service_impl import LoaderServiceImpl
-from app.ai_core.rag.services.interfaces.loader_service import LoaderService
+from app.v1.modules.rag.services.implementations.loader_service_impl import LoaderServiceImpl
+from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema
-from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
-from app.v1.modules.rag.router.router import rag_router  # Import the RAG router
-
-@lru_cache
-def get_settings() -> Settings:
-    return Settings()
+from app.v1.modules.rag.controllers.controller import router as rag_router
 
 def get_loader_service() -> LoaderService:
     return LoaderServiceImpl()
@@ -34,9 +25,6 @@ app = FastAPI(
 
 app.include_router(rag_router)  # Include the RAG router (if you have one defined in a separate file)
 
-class QueryRequest(BaseModel):
-    query: str
-    top_k: int = 3
 
 @app.get("/health")
 def health_check():

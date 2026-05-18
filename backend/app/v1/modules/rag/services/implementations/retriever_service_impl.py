@@ -1,6 +1,6 @@
 from ast import List
-from app.ai_core.rag.services.interfaces.retriever_service import RetrieverService
-from app.ai_core.rag.vector_store.search import search_similar_documents
+from app.v1.modules.rag.services.interfaces.retriever_service import RetrieverService
+from app.v1.modules.rag.vector_store.search import search_similar_documents
 from app.ai_core.structured_outputs.schemas.retrieval_result_schema import RetrievalResultSchema
 
 

@@ -1,19 +1,29 @@
-from fastapi import APIRouter, Depends, Depends
+from fastapi import APIRouter
+from fastapi import (APIRouter, Depends, Depends)
 from typing import Annotated
-from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
-from app.main import QueryRequest, get_settings
-from app.core.settings import Settings
-from app.main import QueryRequest
-from app.ai_core.rag.services.interfaces.generator_service import GeneratorService
-from app.ai_core.rag.services.interfaces.retriever_service import RetrieverService
-from app.v1.modules.rag.dependencies import (get_answer_generator_service, get_retriever_service)
+import time
 
-rag_router = APIRouter(
+from pydantic import BaseModel
+from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
+from app.core.settings import Settings, get_settings
+from app.ai_core.llms.groq_llm import get_groq_client
+from app.v1.modules.rag.services.interfaces.generator_service import GeneratorService
+from app.v1.modules.rag.services.interfaces.retriever_service import RetrieverService
+from app.v1.modules.rag.dependencies import (get_answer_generator_service, get_retriever_service)
+from app.v1.modules.rag.context.context_builder import build_context
+from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
+from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog, RetrievedChunk
+
+router = APIRouter(
     prefix="/rag",
     tags=["RAG"]
 )
 
-@rag_router.post("/query")
+class QueryRequest(BaseModel):
+    query: str
+    top_k: int = 3
+
+@router.post("/query")
 def rag_query(
     payload: QueryRequest,
     settings: Annotated[Settings, Depends(get_settings)],

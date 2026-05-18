@@ -1,8 +1,8 @@
 import numpy as np
 
-from app.ai_core.rag.embeddings.embedder import embed_text
-from app.ai_core.rag.vector_store.store import VECTOR_DB
-from app.ai_core.rag.retriever.reranker import rerank
+from app.v1.modules.rag.embeddings.embedder import embed_text
+from app.v1.modules.rag.vector_store.store import VECTOR_DB
+from app.v1.modules.rag.retriever.reranker import rerank
 
 
 def search_similar_documents(query: str, top_k: int = 3):

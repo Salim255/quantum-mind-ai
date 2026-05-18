@@ -1,9 +1,9 @@
-from app.ai_core.rag.loader.chunker import semantic_chunk_text
-from app.ai_core.rag.loader.cleaner import clean_text
-from app.ai_core.rag.loader.normalizer import normalize_text
-from app.ai_core.rag.loader.pdf_loader import load_pdf
-from app.ai_core.rag.services.interfaces.loader_service import LoaderService
-from app.ai_core.rag.vector_store.add_document import add_document
+from app.v1.modules.rag.loader.chunker import semantic_chunk_text
+from app.v1.modules.rag.loader.cleaner import clean_text
+from app.v1.modules.rag.loader.normalizer import normalize_text
+from app.v1.modules.rag.loader.pdf_loader import load_pdf
+from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
+from app.v1.modules.rag.vector_store.add_document import add_document
 from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema  # your existing function
 
 
