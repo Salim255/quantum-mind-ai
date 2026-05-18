@@ -6,7 +6,6 @@ from app.core.settings import Settings
 from fastapi import FastAPI, Depends, File, UploadFile
 from typing import Annotated
 from app.ai_core.llms.groq_llm import get_groq_client, groq_llm_call
-from app.ai_core.rag.loader.ingest import ingest_pdf
 import aiofiles   # Async file I/O library (non-blocking)
 import uuid       # Generates unique filenames
 from app.ai_core.rag.generator.llm_generator import generate_answer
@@ -24,8 +23,9 @@ from app.ai_core.rag.services.implementations.generator_service_impl import Gene
 from app.ai_core.rag.services.interfaces.generator_service import GeneratorService
 from app.ai_core.rag.services.implementations.loader_service_impl import LoaderServiceImpl
 from app.ai_core.rag.services.interfaces.loader_service import LoaderService
-from backend.app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema
-
+from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema
+from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.router.router import rag_router  # Import the RAG router
 
 @lru_cache
 def get_settings() -> Settings:
@@ -47,6 +47,7 @@ app = FastAPI(
     root_path=get_settings().API_PREFIX
 )
 
+app.include_router(rag_router)  # Include the RAG router (if you have one defined in a separate file)
 
 class QueryRequest(BaseModel):
     query: str
@@ -62,7 +63,7 @@ def rag_query(
     settings: Annotated[Settings, Depends(get_settings)],
     retriever_service: Annotated[RetrieverService, Depends(get_retriever_service)],
     generator_service: Annotated[GeneratorService, Depends(get_answer_generator_service)]
-):
+) -> RAGQueryResponseSchema:
     """
     Execute the full RAG pipeline.
 
@@ -273,18 +274,18 @@ def rag_query(
     # model_dump():
     # Converts Pydantic schema into JSON-serializable dict.
     # ---------------------------------------------------------------
-    return {
+    return RAGQueryResponseSchema(
 
-        "query": payload.query,
+        query=payload.query,
 
-        "retrieved_chunks": rich_context_chunks,
+        retrieved_chunks=rich_context_chunks,
 
-        "final_answer": final_answer.model_dump(),
+        final_answer=final_answer,
 
-        "source": sources,
+        source=sources,
 
-        "latency_ms": latency_ms
-    }
+        latency_ms=latency_ms
+    )
 
 @app.post("/ingest/pdf")
 # ---------------------------------------------------------------------------
