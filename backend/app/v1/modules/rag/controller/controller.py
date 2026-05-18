@@ -1,6 +1,5 @@
 from fastapi import (APIRouter, Depends, File, UploadFile)
 from typing import Annotated
-
 from pydantic import BaseModel
 from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
