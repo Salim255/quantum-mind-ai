@@ -1,0 +1,72 @@
+/* ============================================
+   BFM LAYOUT SYSTEM
+============================================ */
+@use "./colors.scss" as *;
+
+/* Spacing scale */
+$space-xxs: 4px;
+$space-xs: 8px;
+$space-sm: 12px;
+$space-md: 20px;
+$space-lg: 32px;
+$space-xl: 48px;
+$space-xxl: 72px;
+
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: $space-xl $space-md;
+}
+
+/* Card */
+.card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  padding: $space-xl;
+  margin-bottom: $space-xl;
+  box-shadow: $shadow-soft;
+}
+
+/* Buttons */
+.btn {
+  padding: $space-md $space-lg;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: 0.2s ease;
+
+  &--primary {
+    background: $color-primary;
+    color: white;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: $space-md;
+  border-radius: 12px;
+  border: 1px solid $color-border;
+  background: $color-surface;
+  font-size: 1.1rem;
+  transition: 0.2s ease;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-primary-soft;
+    outline: none;
+  }
+
+  &--textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+}

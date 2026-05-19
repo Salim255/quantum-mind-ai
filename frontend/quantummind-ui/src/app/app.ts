@@ -8,5 +8,10 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('quantummind-ui');
+  answer = signal('42');
+  userQuestion = "";
+  constructor() {
+    console.log('App component initialized');
+  }
+  ask(){}
 }

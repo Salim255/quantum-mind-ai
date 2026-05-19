@@ -1,0 +1,91 @@
+@use "../styles/colors.scss" as *;
+@use "../styles/layout.scss" as *;
+@use "../styles/typography.scss" as *;
+
+/* APP SHELL */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: $color-bg;
+}
+
+/* FIXED HEADER */
+.app__topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-md $space-xl;
+  background: $color-surface;
+  border-bottom: 1px solid $color-border;
+}
+
+.app__brand {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* MAIN CONTENT — ANSWER CENTERED */
+.app__content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $space-xl $space-lg;
+  overflow-y: auto;
+}
+
+/* ANSWER PANEL — 60% WIDTH */
+.answer {
+  width: 60%;
+  max-width: 800px;
+}
+
+.answer__text {
+  font-size: 1.2rem;
+  color: $color-text-soft;
+  line-height: 1.6;
+}
+
+/* INPUT BAR — THINNER + MORE RADIUS */
+.app__inputbar {
+  display: flex;
+  gap: $space-md;
+  //padding: $space-sm $space-lg;
+  border: 1px solid $color-border;
+  background: $color-bg;
+  align-items: center;
+  width: 60%;
+  margin: auto;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* TEXTAREA — thinner + more radius */
+.inputbar__textarea {
+  flex: 1;
+  min-height: 22px; /* thinner */
+  padding: $space-xs $space-sm;
+  border: none;
+  background-color: transparent;
+
+  resize: none;
+  font-size: 1rem;
+  line-height: 1.4;
+  transition: 0.2s ease;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+/* BUTTON — thinner + more radius */
+.inputbar__btn {
+  padding: $space-xs $space-sm;
+  border-radius: 16px; /* more radius */
+  font-size: 1rem;
+  margin-right: 1rem;
+}

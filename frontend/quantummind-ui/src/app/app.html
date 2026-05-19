@@ -1,0 +1,35 @@
+<div class="app">
+
+  <!-- FIXED TOPBAR -->
+  <header class="app__topbar">
+    <div class="app__brand">Quantum Mind</div>
+    <button class="btn btn--primary">Dashboard</button>
+  </header>
+
+  <!-- MAIN CONTENT (ANSWER CENTERED) -->
+  <main class="app__content">
+
+    @if(answer()){
+    <section class="panel answer">
+      <p class="answer__text">{{ answer() }}</p>
+    </section>
+    }
+
+  </main>
+
+  <!-- INPUT BAR AT THE BOTTOM -->
+  <div class="app__inputbar">
+    <textarea
+      class="inputbar__textarea"
+      placeholder="Ask your question..."
+      >
+    </textarea>
+
+    <button class="btn btn--primary inputbar__btn" (click)="ask()">
+      Send
+    </button>
+  </div>
+
+</div>
+
+<router-outlet></router-outlet>
