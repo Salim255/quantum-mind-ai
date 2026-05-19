@@ -18,7 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $space-md $space-xl;
+  padding: $space-sm;
   background: $color-surface;
   border-bottom: 1px solid $color-border;
 }
@@ -28,6 +28,21 @@
   font-weight: 600;
 }
 
+.app__btn {
+  padding: $space-xs $space-sm;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: $color-primary;
+  color: white;
+  transition: 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
 /* MAIN CONTENT — ANSWER CENTERED */
 .app__content {
   flex: 1;
@@ -42,6 +57,7 @@
 .answer {
   width: 60%;
   max-width: 800px;
+  background-color: red;
 }
 
 .answer__text {
@@ -76,7 +92,6 @@
   font-size: 1rem;
   line-height: 1.4;
   transition: 0.2s ease;
-
   &:focus {
     outline: none;
   }
