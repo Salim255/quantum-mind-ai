@@ -7,4 +7,6 @@ import { Component } from "@angular/core";
   standalone: false
 })
 
-export class MessageFormComponent {}
+export class MessageFormComponent {
+    ask(){}
+}

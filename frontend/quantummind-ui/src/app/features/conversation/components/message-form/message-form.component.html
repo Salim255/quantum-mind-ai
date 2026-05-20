@@ -1,5 +1,13 @@
-<form>
-  <div>
-    <h1>Hello from form</h1>
+<form class="msg-form">
+  <div class="msg-form__group">
+    <textarea
+      class="msg-form__textarea"
+      placeholder="Ask your question..."
+      >
+    </textarea>
   </div>
+
+  <button class="btn btn--primary msg-form__btn" (click)="ask()">
+    Send
+  </button>
 </form>
