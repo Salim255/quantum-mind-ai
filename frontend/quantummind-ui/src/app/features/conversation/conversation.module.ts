@@ -3,6 +3,8 @@ import { ConversationPage } from "./conversation.page";
 import { ConversationRoutingModule } from "./conversation-routing.module";
 import { CommonModule } from "@angular/common";
 import { MessagesComponent } from "./components/messages/messages.component";
+import { MessageItemComponent } from "./components/message-item/message-item.component";
+import { MessageFormComponent } from "./components/message-form/message-form.component";
 
 @NgModule({
   imports: [
@@ -10,6 +12,8 @@ import { MessagesComponent } from "./components/messages/messages.component";
     ConversationRoutingModule,
   ],
   declarations: [
+    MessageFormComponent,
+    MessageItemComponent,
     MessagesComponent,
     ConversationPage],
 })
