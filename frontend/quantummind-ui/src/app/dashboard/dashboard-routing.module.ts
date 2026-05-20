@@ -8,7 +8,12 @@ const routes: Routes = [
     component: DashboardPage,
     children: [
       {
-        path: "/conversation",
+        path: "",
+        pathMatch:"full",
+        redirectTo: "conversation"
+      },
+      {
+        path: "conversation",
         loadChildren: () => import("../features/conversation/conversation.module").then(m => m.ConversationModule)
       }
     ]
