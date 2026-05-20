@@ -3,7 +3,7 @@ import { ConversationPage } from "./conversation.page";
 import { ConversationRoutingModule } from "./conversation-routing.module";
 import { CommonModule } from "@angular/common";
 import { MessagesComponent } from "./components/messages/messages.component";
-import { MessageItemComponent } from "./components/message-item/message-item.component";
+import { QuestionMessageItemComponent } from "./components/question-message-item/question-message-item.component";
 import { MessageFormComponent } from "./components/message-form/message-form.component";
 
 @NgModule({
@@ -13,7 +13,7 @@ import { MessageFormComponent } from "./components/message-form/message-form.com
   ],
   declarations: [
     MessageFormComponent,
-    MessageItemComponent,
+    QuestionMessageItemComponent,
     MessagesComponent,
     ConversationPage],
 })
