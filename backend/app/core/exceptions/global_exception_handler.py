@@ -29,7 +29,7 @@ class ExceptionsHandler:
     # =========================
     # GLOBAL EXCEPTION
     # =========================
-    async def exception_handler(
+    def exception_handler(
             self,
             request: Request,
             exc: Exception
@@ -61,7 +61,7 @@ class ExceptionsHandler:
     # =========================
     # HTTP EXCEPTION
     # =========================
-    async def http_global_handler(self, request: Request, exc: StarletteHTTPException):
+    def http_global_handler(self, request: Request, exc: StarletteHTTPException):
         status = "error"
 
         body: dict = {
@@ -87,7 +87,7 @@ class ExceptionsHandler:
     # =========================
     # VALIDATION ERROR
     # =========================
-    async def validation_handler(self, request: Request, exc: RequestValidationError):
+    def validation_handler(self, request: Request, exc: RequestValidationError):
         status: str = "error"
         message: str = "Validation error"
         body: dict = {
@@ -109,7 +109,7 @@ class ExceptionsHandler:
             content=body
         )
     
-    async def app_exception_handler(
+    def app_exception_handler(
         self,
         request: Request,
         exc: AppException

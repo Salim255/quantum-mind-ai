@@ -2,8 +2,8 @@ class AppException(Exception):
     def __int__(
             self,
             message: str,
-            status_code: int = 400,
-            error_code: str = "APP_ERROR",
+            status_code: int,
+            error_code: str,
             data = None
             ):
         self.message = message

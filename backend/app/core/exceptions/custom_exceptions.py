@@ -4,7 +4,7 @@ from app.core.exceptions.error_code import ErrorCode
 class NotFoundException(AppException):
     def __init__(
             self,
-            message,
+            message: str = "Resource not found",
             error_code: ErrorCode = ErrorCode.NOT_FOUND
             ):
         super().__init__(
