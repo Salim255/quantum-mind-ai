@@ -1,4 +1,4 @@
 <div class="qs-msg-item">
-  <app-question></app-question>
-  <app-message-item></app-message-item>
+  <app-question [question]="message()?.query"></app-question>
+  <app-message-item [message]="message()?.final_answer"></app-message-item>
 </div>

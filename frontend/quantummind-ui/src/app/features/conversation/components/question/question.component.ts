@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
   selector: "app-question",
@@ -7,4 +7,6 @@ import { Component } from "@angular/core";
   standalone: false
 })
 
-export class QuestionComponent{}
+export class QuestionComponent{
+  @Input() question: string | undefined
+}

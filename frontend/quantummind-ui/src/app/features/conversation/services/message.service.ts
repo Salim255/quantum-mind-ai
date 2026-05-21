@@ -10,7 +10,7 @@ export class MessageService {
     this.messageSubject.next(message)
   }
 
-  get getMessage(): Observable<AnswerPayload | null>{
+  get getMessage$(): Observable<AnswerPayload | null>{
     return this.messageSubject.asObservable()
   }
 }
