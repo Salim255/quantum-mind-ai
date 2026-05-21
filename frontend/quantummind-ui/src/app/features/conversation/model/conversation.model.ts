@@ -1,20 +1,24 @@
 export interface MessageSchema {
+  id: string;
   question: string;
   response: any;
 }
 export class Conversation {
-  private user_id: string;
-  private conversation_id: string;
+  private userId: string;
+  private conversationId: string;
   private messages: MessageSchema []
+  private messagesMap: Map<string, number>  = new Map();
 
   constructor(
     conversation_id: string,
     user_id: string,
     messages: MessageSchema []
   ){
-    this.user_id = user_id;
-    this.conversation_id = conversation_id;
-    this.messages = messages
+    this.userId = user_id;
+    this.conversationId = conversation_id;
+    this.messages = messages;
+
+    this.buildMessagesMap();
   }
 
   appendMessage(message: MessageSchema){
@@ -22,14 +26,21 @@ export class Conversation {
   }
 
   getUerId(): string{
-    return this.user_id;
+    return this.userId;
   }
+
+  buildMessagesMap(): void{
+    this.messages.forEach((message, index) => {
+      this.messagesMap.set(message.id, index);
+    });
+  }
+
   getMessages(): MessageSchema[]{
     return this.messages;
   }
 
   getConversationId(): string{
-    return this.conversation_id;
+    return this.conversationId;
   }
 
 }

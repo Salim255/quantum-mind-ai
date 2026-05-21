@@ -1,32 +1,23 @@
 import { Injectable } from "@angular/core";
 import { ConversationHttpService, ConversationPayload } from "./conversation-http.service";
 import { BehaviorSubject, Observable } from "rxjs";
+import { Conversation } from "../model/conversation.model";
 
-
-export interface MessageSchema {
-  question: string;
-  response: any;
-}
-export interface ConversationSchema {
-  user_id: string;
-  conversation_id: string;
-  messages: MessageSchema []
-}
 
 @Injectable({providedIn: "root"})
 export class ConversationService {
-  private conversationSubject = new BehaviorSubject<ConversationSchema | null>(null)
+  private conversationSubject = new BehaviorSubject<Conversation| null>(null)
   constructor(private conversationHttpService: ConversationHttpService){}
 
   sendMessage(payload: ConversationPayload): Observable<any>{
     return this.conversationHttpService.sendMessage(payload);
   }
 
-  setConversation(conversation: ConversationSchema){
+  setConversation(conversation: Conversation){
     this.conversationSubject.next(conversation);
   }
 
-  get getConversation() {
+  get getConversation(): Observable<Conversation | null> {
     return this.conversationSubject.asObservable();
   }
   appendMessage(){
