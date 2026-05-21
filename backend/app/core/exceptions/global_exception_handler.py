@@ -1,8 +1,9 @@
 import logging
 import traceback
-from fastapi import( FastAPI, Request, HTTPException)
+from fastapi import(FastAPI, Request)
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import  RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.core.settings import Settings
 
 
@@ -11,26 +12,20 @@ logger = logging.getLogger(__name__)
 class ExceptionsHandler:
     def __init__(self, app: FastAPI, settings: Settings):
         self.app = app
-        self.settings = settings
+        self.settings = settings()
+        self.register_handler()
 
     def register_handler(self):
-        self.app.exception_handler(Exception)(
-            self.global_exception_handler
-        )
+        self.app.add_exception_handler(Exception, self.exception_handler)
 
-        self.app.exception_handler(HTTPException)(
-            self.http_global_handler
-        )
+        self.app.add_exception_handler(StarletteHTTPException, self.http_global_handler)
 
-        self.app.exception_handler(RequestValidationError)(
-            self.validation_handler
-        )
-
+        self.app.add_exception_handler(RequestValidationError, self.validation_handler)
 
     # =========================
     # GLOBAL EXCEPTION
     # =========================
-    def global_exception_handler(
+    async def exception_handler(
             self,
             request: Request,
             exc: Exception
@@ -55,14 +50,14 @@ class ExceptionsHandler:
             )
         logger.exception(exc)
         return JSONResponse(
-            status_code,
-            data=body
+            status_code=status_code,
+            content=body
         )
     
     # =========================
     # HTTP EXCEPTION
     # =========================
-    def http_global_handler(self, request: Request, exc: HTTPException):
+    async def http_global_handler(self, request: Request, exc: StarletteHTTPException):
         status = "error"
 
         body: dict = {
@@ -82,13 +77,13 @@ class ExceptionsHandler:
         
         return JSONResponse(
             status_code=exc.status_code,
-            data=body
+            content=body
         )
     
     # =========================
     # VALIDATION ERROR
     # =========================
-    def validation_handler(self, request: Request, exc: RequestValidationError):
+    async def validation_handler(self, request: Request, exc: RequestValidationError):
         status: str = "error"
         message: str = "Validation error"
         body: dict = {
@@ -107,5 +102,5 @@ class ExceptionsHandler:
             )
         return JSONResponse(
             status_code=422,
-            data=body
+            content=body
         )
