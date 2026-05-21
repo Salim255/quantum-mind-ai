@@ -16,7 +16,7 @@ export class ConversationHttpService {
 
   constructor(private http: HttpClient){}
 
-  sendMessage(message: string): Observable<any>{
-    return this.http.
+  sendMessage(payload: ConversationPayload): Observable<any>{
+    return this.http.post<any>(`${this.baseUrl}/messages`,payload)
   }
 }
