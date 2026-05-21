@@ -1,0 +1,25 @@
+@use "../../../styles/colors.scss" as *;
+@use "../../../styles/layout.scss" as *;
+@use "../../../styles/typography.scss" as *;
+
+.conversation {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: $color-bg;
+  app-messages {
+    flex: 1;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $space-xl $space-lg;
+    overflow-y: auto;
+    width: 60%;
+    background-color: red;
+  }
+  app-message-form {
+    position: sticky;
+    bottom: 0;
+  }
+}

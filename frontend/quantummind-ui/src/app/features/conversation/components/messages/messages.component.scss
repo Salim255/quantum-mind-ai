@@ -1,0 +1,11 @@
+@use "../../../../../styles/colors.scss" as *;
+@use "../../../../../styles/layout.scss" as *;
+@use "../../../../../styles/typography.scss" as *;
+
+.messages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $space-xl $space-lg;
+  overflow-y: auto;
+}
