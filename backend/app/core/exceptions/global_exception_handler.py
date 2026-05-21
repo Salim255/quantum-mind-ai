@@ -14,7 +14,18 @@ class ExceptionsHandler:
         self.settings = settings
 
     def register_handler(self):
-        self.app.exception_handler(Exception)
+        self.app.exception_handler(Exception)(
+            self.global_exception_handler
+        )
+
+        self.app.exception_handler(HTTPException)(
+            self.http_global_handler
+        )
+
+        self.app.exception_handler(RequestValidationError)(
+            self.validation_handler
+        )
+
 
     # =========================
     # GLOBAL EXCEPTION
