@@ -77,5 +77,24 @@ class ExceptionsHandler:
     # =========================
     # VALIDATION ERROR
     # =========================
-    async def validation_handler(self):
-        return ""
+    def validation_handler(self, request: Request, exc: RequestValidationError):
+        status: str = "error"
+        message: str = "Validation error"
+        body: dict = {
+            "status": status,
+            "message": message,
+            "data": exc.errors()
+        }
+
+        if self.settings.is_dev:
+            body["stack"] = "".join(
+                traceback.format_exception(
+                    type(exc),
+                    exc,
+                    exc.__traceback__
+                )
+            )
+        return JSONResponse(
+            status_code=422,
+            data=body
+        )
