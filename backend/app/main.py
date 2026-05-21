@@ -5,6 +5,7 @@ from app.v1.modules.rag.services.implementations.loader_service_impl import Load
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.controller.controller import router as rag_router
 from app.v1.modules.conversation.controller.controller import router as conversation_router
+from app.core.cors import setup_cors
 
 def get_loader_service() -> LoaderService:
     return LoaderServiceImpl()
@@ -15,6 +16,8 @@ app = FastAPI(
     version="0.1.0",
     root_path=get_settings().API_PREFIX
 )
+
+setup_cors(app)
 
 app.include_router(conversation_router)
 app.include_router(rag_router)

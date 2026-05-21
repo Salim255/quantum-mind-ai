@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ConversationHttpService, ConversationPayload } from "./conversation-http.service";
+import { ConversationHttpService, ConversationPayload, ConversationResponse, FinalAnswer } from "./conversation-http.service";
 import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { Conversation } from "../model/conversation.model";
 
@@ -9,10 +9,11 @@ export class ConversationService {
   private conversationSubject = new BehaviorSubject<Conversation| null>(null)
   constructor(private conversationHttpService: ConversationHttpService){}
 
-  sendMessage(payload: ConversationPayload): Observable<any>{
+  sendMessage(payload: ConversationPayload): Observable<ConversationResponse>{
     return this.conversationHttpService.sendMessage(payload).pipe(
-      tap((response) => {
-          console.log(response);
+      tap((response: ConversationResponse) => {
+        const final_answer: FinalAnswer = response?.answer?.final_answer;
+        console.log(final_answer);
       })
     );
   }

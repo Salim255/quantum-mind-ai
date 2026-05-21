@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges} from "@angular/core";
+import { MessageSchema } from "../../model/conversation.model";
 
 @Component({
   selector: "app-question-message-item",
@@ -6,4 +7,12 @@ import { Component } from "@angular/core";
   styleUrl: "./question-message-item.component.scss",
   standalone: false
 })
-export class QuestionMessageItemComponent{}
+export class QuestionMessageItemComponent implements OnChanges {
+  @Input() message!: MessageSchema;
+
+  ngOnChanges(changes: SimpleChanges): void {
+      if(changes){
+        console.log(this.message);
+      }
+  }
+}

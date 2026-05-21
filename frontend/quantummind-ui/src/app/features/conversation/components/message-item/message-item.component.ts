@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, Input, SimpleChanges } from "@angular/core";
+import { MessageSchema } from "../../model/conversation.model";
 
 @Component({
   selector: "app-message-item",
@@ -7,6 +8,12 @@ import { Component } from "@angular/core";
   standalone: false
 })
 
-export class MessageItemComponent{
+export class MessageItemComponent {
+  @Input() message!: MessageSchema;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes) {
+      console.log(this.message);
+    }
+  }
 }

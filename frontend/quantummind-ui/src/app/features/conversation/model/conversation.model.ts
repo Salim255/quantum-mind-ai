@@ -1,7 +1,7 @@
 export interface MessageSchema {
   id: string;
   question: string;
-  response: any;
+  response: string;
 }
 export class Conversation {
   private user_id: string;

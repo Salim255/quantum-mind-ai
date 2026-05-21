@@ -1,3 +1,5 @@
 <div class="messages">
-  <app-question-message-item></app-question-message-item>
+  @for(message of messages(); track $index){
+    <app-question-message-item [message]="message"></app-question-message-item>
+  }
 </div>

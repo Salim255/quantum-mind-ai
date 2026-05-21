@@ -9,6 +9,29 @@ export interface ConversationPayload {
   conversation_id: string;
 }
 
+export interface ConversationResponse {
+  answer: AnswerPayload;
+  memory_updated: boolean;
+  conversation_id: string;
+}
+
+export interface AnswerPayload {
+  query: string;
+  retrieved_chunks: string[];
+  final_answer: FinalAnswer;
+  source: string[];
+  latency_ms: number;
+}
+
+export interface FinalAnswer {
+  answer: string;
+  key_points: string[];
+  step_by_step: string[];
+  analogy: string;
+  confidence: number;
+  sources: string[];
+}
+
 @Injectable({providedIn: "root"})
 export class ConversationHttpService {
   private ENV = environment;
@@ -16,7 +39,7 @@ export class ConversationHttpService {
 
   constructor(private http: HttpClient){}
 
-  sendMessage(payload: ConversationPayload): Observable<any>{
-    return this.http.post<any>(`${this.baseUrl}/messages`,payload)
+  sendMessage(payload: ConversationPayload): Observable<ConversationResponse>{
+    return this.http.post<ConversationResponse>(`${this.baseUrl}/messages`,payload)
   }
 }
