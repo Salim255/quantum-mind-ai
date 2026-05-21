@@ -4,9 +4,11 @@ export interface MessageSchema {
   response: any;
 }
 export class Conversation {
-  private userId: string;
-  private conversationId: string;
+  private user_id: string;
+  private conversation_id: string;
   private messages: MessageSchema []
+
+  // messageId -> index in messages array
   private messagesMap: Map<string, number>  = new Map();
 
   constructor(
@@ -14,8 +16,8 @@ export class Conversation {
     user_id: string,
     messages: MessageSchema []
   ){
-    this.userId = user_id;
-    this.conversationId = conversation_id;
+    this.user_id = user_id;
+    this.conversation_id = conversation_id;
     this.messages = messages;
 
     this.buildMessagesMap();
@@ -39,7 +41,7 @@ export class Conversation {
   }
 
   getUerId(): string{
-    return this.userId;
+    return this.user_id;
   }
 
   buildMessagesMap(): void{
@@ -53,7 +55,7 @@ export class Conversation {
   }
 
   getConversationId(): string{
-    return this.conversationId;
+    return this.conversation_id;
   }
 
 }

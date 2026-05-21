@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { FormsModule} from "@angular/forms"
 import { ConversationPage } from "./conversation.page";
 import { ConversationRoutingModule } from "./conversation-routing.module";
 import { CommonModule } from "@angular/common";
@@ -10,6 +11,7 @@ import { MessageItemComponent } from "./components/message-item/message-item.com
 
 @NgModule({
   imports: [
+     FormsModule,
     CommonModule,
     ConversationRoutingModule,
   ],

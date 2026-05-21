@@ -12,7 +12,7 @@ export interface ConversationPayload {
 @Injectable({providedIn: "root"})
 export class ConversationHttpService {
   private ENV = environment;
-  private baseUrl: string = `${this.ENV}/conversations`;
+  private baseUrl: string = `${this.ENV.apiBaseUrl}/conversations`;
 
   constructor(private http: HttpClient){}
 
