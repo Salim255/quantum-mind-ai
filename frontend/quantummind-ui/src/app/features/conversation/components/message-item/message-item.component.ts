@@ -7,4 +7,6 @@ import { Component } from "@angular/core";
   standalone: false
 })
 
-export class MessageItemComponent{}
+export class MessageItemComponent{
+
+}
