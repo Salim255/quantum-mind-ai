@@ -7,6 +7,8 @@
   flex-direction: column;
   height: 100vh;
   background: $color-bg;
+  padding: 0 2rem;
+
   app-messages {
     flex: 1;
     align-self: center;

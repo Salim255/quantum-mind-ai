@@ -1,0 +1,19 @@
+@use "../../../../../styles/colors.scss" as *;
+@use "../../../../../styles/layout.scss" as *;
+@use "../../../../../styles/typography.scss" as *;
+
+.question {
+  display: flex;
+  &__paragraph {
+    max-width: 80%;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: $color-text-soft;
+    padding: $space-sm $space-md;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: 14px;
+    margin-left: auto;
+  }
+}
+
