@@ -4,7 +4,7 @@ class AppException(Exception):
             message: str,
             status_code: int = 400,
             error_code: str = "APP_ERROR",
-            data=None
+            data = None
             ):
         self.message = message
         self.status_code = status_code
