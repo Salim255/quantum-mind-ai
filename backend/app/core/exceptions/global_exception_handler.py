@@ -51,8 +51,28 @@ class ExceptionsHandler:
     # =========================
     # HTTP EXCEPTION
     # =========================
-    async def http_global_handler(self):
-        return ""
+    def http_global_handler(self, request: Request, exc: HTTPException):
+        status = "error"
+
+        body: dict = {
+            "status": status,
+            "message": str(exc.detail),
+            "data": None
+        }
+
+        if self.settings.is_dev:
+            body["stack"] = "".join(
+                traceback.format_exception(
+                    type(exc),
+                    exc,
+                    exc.__traceback__
+                )
+            )
+        
+        return JSONResponse(
+            status_code=exc.status_code,
+            data=body
+        )
     
     # =========================
     # VALIDATION ERROR
