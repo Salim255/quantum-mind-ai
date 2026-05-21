@@ -12,7 +12,7 @@ export class ConversationService {
   sendMessage(payload: ConversationPayload): Observable<ConversationResponse>{
     return this.conversationHttpService.sendMessage(payload).pipe(
       tap((response: ConversationResponse) => {
-        const final_answer: FinalAnswer = response?.answer?.final_answer;
+        const final_answer: FinalAnswer = response?.data.answer?.final_answer;
         console.log(final_answer);
       })
     );

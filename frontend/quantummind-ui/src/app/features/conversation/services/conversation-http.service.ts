@@ -10,9 +10,12 @@ export interface ConversationPayload {
 }
 
 export interface ConversationResponse {
-  answer: AnswerPayload;
-  memory_updated: boolean;
-  conversation_id: string;
+  status: "success",
+  data: {
+    answer: AnswerPayload;
+    memory_updated: boolean;
+    conversation_id: string;
+  }
 }
 
 export interface AnswerPayload {
