@@ -8,6 +8,8 @@ export interface MessageSchema {
   response: any;
 }
 export interface ConversationSchema {
+  user_id: string;
+  conversation_id: string;
   messages: MessageSchema []
 }
 
@@ -17,6 +19,17 @@ export class ConversationService {
   constructor(private conversationHttpService: ConversationHttpService){}
 
   sendMessage(payload: ConversationPayload): Observable<any>{
-    return  this.conversationHttpService.sendMessage(payload);
+    return this.conversationHttpService.sendMessage(payload);
+  }
+
+  setConversation(conversation: ConversationSchema){
+    this.conversationSubject.next(conversation);
+  }
+
+  get getConversation() {
+    return this.conversationSubject.asObservable();
+  }
+  appendMessage(){
+
   }
 }
