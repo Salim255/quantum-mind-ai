@@ -8,6 +8,7 @@ class RetrievalChunkDTO(BaseModel):
     text: str
     source: str
     concept: str
+    length: int = Field(default_factory=0, description="text length")
     cosine_score: float
     rerank_score: Optional[float] = None
     hybrid_score: Optional[float] = None

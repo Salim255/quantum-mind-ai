@@ -6,6 +6,7 @@ from app.v1.modules.rag.retriever.reranker import rerank
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 
 MIN_SIMILARITY_SCORE = 0.25
+MIN_CONFIDENCE_SCORE = 1.5
 
 def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO:
     """
@@ -62,7 +63,7 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
         # ------------------------------------------------------------
         if cosine_score < MIN_SIMILARITY_SCORE:
             continue
-        
+
         metadata = chunk.get("metadata", {})
         
         scored.append(
@@ -70,6 +71,7 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
                 text=chunk["text"],
                 source=metadata["source"] if metadata else "unknown",
                 concept=metadata["concept"] if metadata else "unknown",
+                length=metadata["length"] if metadata else 0,
                 cosine_score=float(cosine_score),
             )
        )
@@ -85,6 +87,19 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
     # We take more than top_k to avoid losing strong matches
     top_candidates = scored[:30]
 
+    # ------------------------------------------------------------
+    # NO RELEVANT DOCUMENTS FOUND
+    # ------------------------------------------------------------
+    # Why this matters
+    # Without this:
+    # empty retrieval may crash reranker
+    # or send empty pairs to model
+    # Now your pipeline becomes safe.
+    if not top_candidates:
+        return RetrievalResponseDTO(
+            results=[]
+        )
+
     print(f"[SEARCH] candidates sent to reranker: {len(top_candidates)}")
 
     # ------------------------------------------------------------
@@ -92,14 +107,39 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
     # ------------------------------------------------------------
     reranked: List[RetrievalChunkDTO] = rerank(query, top_candidates)
 
-
+    for doc in reranked[:top_k]:
+        print(
+            f"[RAG]"
+            f" source={doc.source}"
+            f" cosine={doc.cosine_score:.4f}"
+            f" rerank={doc.rerank_score:.4f}"
+            f" hybrid={doc.hybrid_score:.4f}"
+        )
     # ------------------------------------------------------------
     # 7. Final ranking based on hybrid score
     # ------------------------------------------------------------
     reranked.sort(key=lambda x: x.hybrid_score, reverse=True)
 
     # ------------------------------------------------------------
-    # 8. Return top-k results
+    # 8. CONFIDENCE FILTERING
+    # ------------------------------------------------------------
+    # If the best retrieved chunk is too weak,
+    # the system should avoid generating an answer.
+    #
+    # This dramatically reduces hallucinations.
+    # ------------------------------------------------------------
+  
+    best_score = reranked[0].hybrid_score if reranked else 0.0
+    print(f"[RAG] best hybrid score: {best_score:.4f}")
+
+    if best_score < MIN_CONFIDENCE_SCORE:
+
+        print("[RAG] retrieval confidence too low")
+
+        return RetrievalResponseDTO(results=[])
+
+    # ------------------------------------------------------------
+    # 9. Return top-k results
     # ------------------------------------------------------------
     return RetrievalResponseDTO(
         results=reranked[:top_k]
