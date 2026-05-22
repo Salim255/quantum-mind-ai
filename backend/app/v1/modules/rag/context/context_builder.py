@@ -2,7 +2,7 @@
 
 from typing import List
 # Type hint support for cleaner, more maintainable code.
-
+from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 
 # ------------------------------------------------------------------
 # CONTEXT BUILDER
@@ -42,7 +42,7 @@ from typing import List
 
 
 def build_context(
-    chunks: List[str],
+    chunks: List[RetrievalChunkDTO],
     max_chars: int = 3000
 ) -> List[str]:
     """
@@ -105,7 +105,7 @@ def build_context(
     for index, chunk in enumerate(chunks):
 
         # Character length of the current chunk.
-        chunk_length = len(chunk)
+        chunk_length = len(chunk.text)
 
         # ----------------------------------------------------------
         # Stop if adding this chunk exceeds the allowed context size.
@@ -141,7 +141,7 @@ def build_context(
         # ----------------------------------------------------------
         labeled_chunk = (
             f"[CONTEXT CHUNK {index + 1}]\n"
-            f"{chunk}"
+            f"{chunk.text}"
         )
 
         # Store labeled chunk.

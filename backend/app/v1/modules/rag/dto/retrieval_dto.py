@@ -1,7 +1,7 @@
 # app/v1/modules/rag/dto/retrieval_dto.py
 
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class RetrievalChunkDTO(BaseModel):
@@ -14,5 +14,4 @@ class RetrievalChunkDTO(BaseModel):
 
 
 class RetrievalResponseDTO(BaseModel):
-    query: str
-    results: List[RetrievalChunkDTO]
+    results: List[RetrievalChunkDTO] = Field(default_factory=[], description="List of retrieved semantic chunks relevant to the query")

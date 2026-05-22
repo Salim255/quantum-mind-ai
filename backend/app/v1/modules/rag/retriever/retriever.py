@@ -18,9 +18,9 @@
 # ---------------------------------------------------------------------------
 
 from app.v1.modules.rag.vector_store.search import  search_similar_documents
-from app.ai_core.structured_outputs.schemas.retrieval_result_schema import RetrievalResultSchema
+from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
 
-def retrieve(query: str) -> RetrievalResultSchema:
+def retrieve(query: str) -> RetrievalResponseDTO:
     """
     Retrieves relevant chunks of information based on the input query.
 

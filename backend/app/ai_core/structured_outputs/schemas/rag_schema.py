@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional
-
+from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 
 class RAGResponseSchema(BaseModel):
     """
@@ -25,3 +25,4 @@ class RAGResponseSchema(BaseModel):
 
     # Optional: traceability to chunks
     sources: List[str] = Field(default_factory=[], description="List of sources or chunk identifiers that support the answer")
+    retrieved_chunks: List[RetrievalChunkDTO] = Field(default_factory=list)

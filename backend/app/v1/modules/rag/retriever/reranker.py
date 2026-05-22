@@ -63,16 +63,16 @@ def rerank(query: str, docs: List[RetrievalChunkDTO]) ->  List[RetrievalChunkDTO
     # ------------------------------------------------------------
     # 4. compute hybrid score (same pass, still safe)
     # ------------------------------------------------------------
+    # We combine:
+    # - reranker score (semantic precision)
+    # - cosine score (embedding recall safety net)
+    #
+    # This prevents losing high-similarity chunks.
+    # ------------------------------------------------------------
     for doc in docs:
         doc.hybrid_score = (
             0.7 * (doc.rerank_score or 0.0) +
             0.3 * (doc.cosine_score or 0.0)
         )
-
-    # Sort by rerank score
-    # ------------------------------------------------------------
-    # 5. Sort by rerank score (primary ranking signal)
-    # ------------------------------------------------------------
-    docs.sort(key=lambda x: x.rerank_score, reverse=True)
 
     return docs

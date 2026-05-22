@@ -1,5 +1,5 @@
 import time
-from typing import Annotated
+from typing import Annotated, List
 from fastapi import Depends
 from pydantic import BaseModel
 from app.ai_core.llms.groq_llm import get_groq_client
@@ -9,8 +9,9 @@ from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.generator.generator_service import generate_answer
 from app.v1.modules.rag.retriever.retriever import retrieve
 from app.core.settings import Settings
-from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog, RetrievedChunk
+from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
+from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 
 class QueryRequest(BaseModel):
     query: str
@@ -75,23 +76,12 @@ class RAGServiceImpl(RAGService):
     # }
     # ---------------------------------------------------------------
         
-    retrieval_output = retrieve(payload.query)
+    retrieval_output: RetrievalResponseDTO = retrieve(payload.query)
 
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS
     # ---------------------------------------------------------------
-    chunks = retrieval_output.get("results", [])  # List of text chunks relevant to the query
-
-    # ---------------------------------------------------------------
-    # EXTRACT SOURCES
-    # ---------------------------------------------------------------
-    #
-    # Sources help:
-    # - explain provenance
-    # - improve trust
-    # - support evaluation
-    # ---------------------------------------------------------------
-    sources = retrieval_output.get("sources", [])  # List of sources corresponding to each chunk
+    chunks: List[RetrievalChunkDTO] = retrieval_output.results  # List of text chunks relevant to the query
 
     # ---------------------------------------------------------------
     # 2. BUILD OPTIMIZED CONTEXT
@@ -155,33 +145,7 @@ class RAGServiceImpl(RAGService):
         time.perf_counter() - start_time
     ) * 1000
 
-    # ---------------------------------------------------------------
-    # 5. BUILD STRUCTURED RETRIEVED CHUNKS
-    # ---------------------------------------------------------------
-    #
-    # We transform raw chunks into structured objects
-    # for evaluation logging.
-    #
-    # WHY?
-    # ----
-    # Later we can:
-    # - inspect retrieval quality
-    # - build dashboards
-    # - compute metrics
-    # - analyze hallucinations
-    # ---------------------------------------------------------------
-    retrieved_chunk_objects = []
-
-    for chunk, source in zip(chunks, sources):
-
-        retrieved_chunk_objects.append(
-
-            RetrievedChunk(
-                text=chunk,
-                source=source
-            )
-        )
-
+  
     # ---------------------------------------------------------------
     # 6. CREATE RAG EVALUATION LOG
     # ---------------------------------------------------------------
@@ -202,7 +166,7 @@ class RAGServiceImpl(RAGService):
 
         query=payload.query,
 
-        retrieved_chunks=retrieved_chunk_objects,
+        retrieved_chunks=chunks,
 
         final_answer=final_answer.model_dump(),
 
@@ -237,11 +201,9 @@ class RAGServiceImpl(RAGService):
 
         query=payload.query,
 
-        retrieved_chunks=rich_context_chunks,
+        retrieved_chunks=chunks,
 
         final_answer=final_answer,
-
-        source=sources,
 
         latency_ms=latency_ms
     )

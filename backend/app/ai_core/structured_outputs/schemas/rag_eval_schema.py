@@ -21,16 +21,9 @@
 
 from typing import List, Optional
 from pydantic import BaseModel, Field, Field
+from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 
 
-class RetrievedChunk(BaseModel):
-    """
-    Represents a retrieved chunk used during RAG.
-    """
-
-    text: str= Field(..., description="The text content of the retrieved chunk")
-    source: str = Field(..., description="The source document or identifier for the chunk")
-    score: Optional[float] = Field(None, description="The relevance score of the retrieved chunk")
 
 
 class RAGEvaluationLog(BaseModel):
@@ -46,7 +39,7 @@ class RAGEvaluationLog(BaseModel):
     # -----------------------------------------------------
     # RETRIEVAL
     # -----------------------------------------------------
-    retrieved_chunks: List[RetrievedChunk]
+    retrieved_chunks: List[RetrievalChunkDTO]
 
     # -----------------------------------------------------
     # FINAL GENERATED ANSWER

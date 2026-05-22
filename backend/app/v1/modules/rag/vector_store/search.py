@@ -49,20 +49,17 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
         
         scored.append(
             RetrievalChunkDTO(
-                "text": chunk.text,
-                "source": metadata["source"] if metadata else "unknown",
-                "concept": metadata["concept"] if metadata else "unknown",
-                "length": metadata["length"] if metadata else 0,
-                "cosine_score": float(cosine_score)
+                text=chunk["text"],
+                source=metadata["source"] if metadata else "unknown",
+                concept=metadata["concept"] if metadata else "unknown",
+                cosine_score=float(cosine_score),
             )
-            {
-           
-        })
+       )
 
     # ------------------------------------------------------------
     # 3. Sort by cosine similarity (recall stage)
     # ------------------------------------------------------------
-    scored.sort(key=lambda x: x["cosine_score"], reverse=True)
+    scored.sort(key=lambda x: x.cosine_score, reverse=True)
 
     # ------------------------------------------------------------
     # 4. Expand candidate pool (IMPORTANT FIX)
@@ -77,21 +74,6 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
     # ------------------------------------------------------------
     reranked: List[RetrievalChunkDTO] = rerank(query, top_candidates)
 
-    # ------------------------------------------------------------
-    # 6. Hybrid scoring (CRITICAL FIX)
-    # ------------------------------------------------------------
-    # We combine:
-    # - reranker score (semantic precision)
-    # - cosine score (embedding recall safety net)
-    #
-    # This prevents losing high-similarity chunks.
-    # ------------------------------------------------------------
-    for item in reranked:
-        RerankDocumentDTO
-        item.hybrid_score = (
-            0.7 * item.get("rerank_score", 0) +
-            0.3 * item.get("cosine_score", 0)
-        )
 
     # ------------------------------------------------------------
     # 7. Final ranking based on hybrid score
@@ -101,7 +83,6 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
     # ------------------------------------------------------------
     # 8. Return top-k results
     # ------------------------------------------------------------
-    return {
-        "results": [d["text"] for d in reranked[:top_k]],
-        "sources": [d["source"] for d in reranked[:top_k]]
-    }
+    return RetrievalResponseDTO(
+        results=reranked[:top_k]
+    )

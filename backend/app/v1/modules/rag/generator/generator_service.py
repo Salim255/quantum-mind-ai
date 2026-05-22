@@ -151,7 +151,7 @@ def generate_answer(
         prompt=prompt
     )
 
-    # ✅ FIX: parse raw JSON string into dict
+    # Parse raw JSON string into dict
     data = json.loads(response)
     # --------------------------------------------------------------
     # FINAL CLEANUP
@@ -160,4 +160,5 @@ def generate_answer(
     # Remove accidental surrounding whitespace
     # before returning the final answer.
     # --------------------------------------------------------------
+
     return  RAGResponseSchema.model_validate(data)
