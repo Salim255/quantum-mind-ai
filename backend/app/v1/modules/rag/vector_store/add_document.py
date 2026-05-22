@@ -5,7 +5,7 @@ import numpy as np
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.embeddings.embedder import embed_text
 from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
-from app.v1.modules.rag.dto.document_dto import DocumentDTO, AddedDocResponseDto
+from app.v1.modules.rag.dto.document_dto import (DocumentDTO, AddedDocResponseDto, MetadataDTO)
 # Import the embedding function.
 # This function converts raw text into a dense vector representation
 # that your QuantumMind AI system will use for retrieval.
@@ -44,8 +44,7 @@ def add_document(chunk: ChunkDTO, source: str = "document") -> AddedDocResponseD
     # We extract only the vector because that's what we store in the DB.
     # 1. Extract text safely
     # text = chunk["text"] if isinstance(chunk, dict) else chunk
-    text = chunk["text"]
-    embedding_result = embed_text(text=text, source=source)
+    embedding_result = embed_text(text=chunk.text, source=source)
     emb = embedding_result["embedding"]
 
 
@@ -54,13 +53,15 @@ def add_document(chunk: ChunkDTO, source: str = "document") -> AddedDocResponseD
     # - the raw text (for retrieval context)
     # - the embedding vector (for similarity search)
     # - the source tag (for smarter ranking)
-    concept = chunk.get("concept", "unknown") if isinstance(chunk, ChunkDTO) else "unknown"
-    
+   
     document_entry = DocumentDTO(
-        text,
-        emb,
-        source,
-        concept
+        text=chunk.text,
+        embedding=emb,
+        metadata=MetadataDTO(
+            source=source,
+            concept=chunk.concept,
+            length=chunk.length
+        )
         )
 
 
@@ -69,12 +70,12 @@ def add_document(chunk: ChunkDTO, source: str = "document") -> AddedDocResponseD
     # Later you can replace this with:
     # - a persistent DB (PostgreSQL + pgvector)
     # - a cloud vector DB (Pinecone, Weaviate, Qdrant)
-    VECTOR_DB.append(document_entry)
+    VECTOR_DB.append(document_entry.model_dump())
 
     # --- 4. Return a confirmation -------------------------------------------
     # The agent_core expects a JSON-serializable response.
     return AddedDocResponseDto(
             status="ok",
-            stored_text_length=len(text),
+            stored_text_length=len(chunk.text),
             source=source
         )

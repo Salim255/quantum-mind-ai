@@ -35,19 +35,23 @@ def search_similar_documents(query: str, top_k: int = 3):
     # ------------------------------------------------------------
     # 2. Compute cosine similarity against all documents
     # ------------------------------------------------------------
-    for doc in VECTOR_DB:
+    for chunk in VECTOR_DB:
 
-        d_emb = np.array(doc["embedding"])
+        d_emb = np.array(chunk["embedding"])
 
         # cosine similarity (vector alignment)
         cosine_score = np.dot(q_emb, d_emb) / (
             np.linalg.norm(q_emb) * np.linalg.norm(d_emb)
         )
 
+        metadata = chunk.get("metadata", {})
+        
         scored.append({
-            "text": doc["text"],
-            "source": doc["source"],
-            "cosine_score": float(cosine_score)  # IMPORTANT: keep this
+            "text": chunk["text"],
+            "source": metadata["source"] if metadata else "unknown",
+            "concept": metadata["concept"] if metadata else "unknown",
+            "length": metadata["length"] if metadata else 0,
+            "cosine_score": float(cosine_score)
         })
 
     # ------------------------------------------------------------

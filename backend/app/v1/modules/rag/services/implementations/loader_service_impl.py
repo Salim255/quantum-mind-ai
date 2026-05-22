@@ -91,9 +91,9 @@ class LoaderServiceImpl(LoaderService):
 
         # 3. Add each chunk to the vector DB.
         for chunk in chunks:
-            text = chunk["text"].lower()
+            text = chunk.text.lower()
             # FILTER STEP (replacement for is_useful_chunk)
-            if len(chunk["text"]) < 80:
+            if len(chunk.text) < 80:
                 continue
 
             if "acknowledgements" in text:

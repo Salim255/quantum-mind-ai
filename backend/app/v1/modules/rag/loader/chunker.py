@@ -64,7 +64,7 @@ def semantic_chunk_text(
     text: str,
     max_chars: int = 1200,
     overlap_sentences: int = 2
-) -> List[dict]:
+) -> List[ChunkDTO]:
     """
     Main semantic chunking pipeline.
 
@@ -181,7 +181,7 @@ def build_semantic_chunks(
     paragraphs: List[str],
     max_chars: int,
     overlap_sentences: int
-) -> List[dict]:
+) -> List[ChunkDTO]:
     """
     Build coherent semantic chunks.
 
@@ -206,10 +206,10 @@ def build_semantic_chunks(
     """
 
     # Final chunk storage.
-    chunks = []
+    chunks: List[ChunkDTO] = []
 
     # Sentences currently being accumulated.
-    current_chunk_sentences = []
+    current_chunk_sentences: List[str] = []
 
     # Current chunk size tracker.
     current_chunk_length = 0
@@ -258,11 +258,13 @@ def build_semantic_chunks(
 
                 # Never store empty chunks.
                 if chunk:
-                    chunks.append(   {
-                        "text": chunk,
-                        "concept": detect_concept(chunk),
-                        "length": len(chunk)
-                    })
+                    chunks.append(
+                        ChunkDTO(
+                            text=chunk,
+                            concept=detect_concept(chunk),
+                            length=len(chunk)
+                            )
+                        )
 
                 # --------------------------------------------------
                 # Create semantic overlap.
@@ -293,11 +295,11 @@ def build_semantic_chunks(
 
     if final_chunk:
         chunks.append(
-            {
-                "text": final_chunk,
-                "concept": detect_concept(final_chunk),
-                "length": len(final_chunk)
-            }
+            ChunkDTO(
+                text=final_chunk,
+                concept=detect_concept(final_chunk),
+                length=len(final_chunk)
+            )
         )
 
     return chunks
@@ -383,16 +385,16 @@ def cleanup_chunks(chunks: List[ChunkDTO]) -> List[ChunkDTO]:
     for chunk in chunks:
 
         # Normalize whitespace.
-        text = re.sub(r"\s+", " ", chunk["text"]).strip()
+        text = re.sub(r"\s+", " ", chunk.text).strip()
 
         # Skip tiny chunks.
         if len(text) > 80:
 
             cleaned.append(
                 ChunkDTO(
-                    text,
-                    chunk.get("concept", "unknown"),
-                    len(text))
+                    text=text,
+                    concept=chunk.concept,
+                    length=len(text))
                 )
 
     return cleaned
