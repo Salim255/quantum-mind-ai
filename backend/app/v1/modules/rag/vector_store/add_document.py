@@ -4,6 +4,8 @@ import numpy as np
 # NumPy is essential for similarity search later in the pipeline.
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.embeddings.embedder import embed_text
+from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
+from app.v1.modules.rag.dto.document_dto import DocumentDTO, AddedDocResponseDto
 # Import the embedding function.
 # This function converts raw text into a dense vector representation
 # that your QuantumMind AI system will use for retrieval.
@@ -14,7 +16,7 @@ from app.v1.modules.rag.embeddings.embedder import embed_text
 # { "text": "...", "embedding": [0.12, -0.44, ...], "source": "lesson" }
 
 
-def add_document(chunk: dict, source: str = "document") -> dict:
+def add_document(chunk: ChunkDTO, source: str = "document") -> AddedDocResponseDto:
     """
     Add a document to the QuantumMind AI vector store.
 
@@ -52,12 +54,14 @@ def add_document(chunk: dict, source: str = "document") -> dict:
     # - the raw text (for retrieval context)
     # - the embedding vector (for similarity search)
     # - the source tag (for smarter ranking)
-    document_entry = {
-        "text": text,
-        "embedding": emb,
-        "source": source,
-        "concept": chunk.get("concept", "unknown") if isinstance(chunk, dict) else "unknown"
-    }
+    concept = chunk.get("concept", "unknown") if isinstance(chunk, ChunkDTO) else "unknown"
+    
+    document_entry = DocumentDTO(
+        text,
+        emb,
+        source,
+        concept
+        )
 
 
     # --- 3. Save the entry in the in-memory vector DB -----------------------
@@ -69,8 +73,8 @@ def add_document(chunk: dict, source: str = "document") -> dict:
 
     # --- 4. Return a confirmation -------------------------------------------
     # The agent_core expects a JSON-serializable response.
-    return {
-        "status": "ok",
-        "stored_text_length": len(text),
-        "source": source
-    }
+    return AddedDocResponseDto(
+            status="ok",
+            stored_text_length=len(text),
+            source=source
+        )

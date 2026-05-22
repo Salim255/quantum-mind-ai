@@ -55,6 +55,7 @@ nltk.download("punkt")
 nltk.download("punkt_tab")
 
 from app.v1.modules.rag.loader.concept_tagger import detect_concept
+from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
 
 # ------------------------------------------------------------------
 # MAIN ENTRY POINT
@@ -360,7 +361,7 @@ def calculate_chunk_length(sentences: List[str]) -> int:
 # FINAL CLEANUP
 # ------------------------------------------------------------------
 
-def cleanup_chunks(chunks: List[dict]) -> List[dict]:
+def cleanup_chunks(chunks: List[ChunkDTO]) -> List[ChunkDTO]:
     """
     Final cleanup before embedding/storage.
 
@@ -377,7 +378,7 @@ def cleanup_chunks(chunks: List[dict]) -> List[dict]:
     - create noisy embeddings
     """
 
-    cleaned = []
+    cleaned: List[ChunkDTO] = []
 
     for chunk in chunks:
 
@@ -386,10 +387,12 @@ def cleanup_chunks(chunks: List[dict]) -> List[dict]:
 
         # Skip tiny chunks.
         if len(text) > 80:
-            cleaned.append({
-                 "text": text,
-                "concept": chunk.get("concept", "unknown"),
-                "length": len(text)
-            })
+
+            cleaned.append(
+                ChunkDTO(
+                    text,
+                    chunk.get("concept", "unknown"),
+                    len(text))
+                )
 
     return cleaned
