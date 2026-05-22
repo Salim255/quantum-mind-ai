@@ -1,6 +1,5 @@
 import time
 from typing import Annotated, List
-from fastapi import Depends
 from pydantic import BaseModel
 from app.ai_core.llms.groq_llm import get_groq_client
 from app.v1.modules.rag.context.context_builder import build_context
@@ -90,7 +89,6 @@ class RAGServiceImpl(RAGService):
     # avoid hallucinated generation.
     # ---------------------------------------------------------------
     # Final answer (must be grounded in context)
-
     if not chunks:
         return RAGQueryResponseSchema(
             query=payload.query,
