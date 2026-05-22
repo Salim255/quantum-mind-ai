@@ -63,7 +63,7 @@ def semantic_chunk_text(
     text: str,
     max_chars: int = 1200,
     overlap_sentences: int = 2
-) -> List[str]:
+) -> List[dict]:
     """
     Main semantic chunking pipeline.
 
@@ -257,7 +257,11 @@ def build_semantic_chunks(
 
                 # Never store empty chunks.
                 if chunk:
-                    chunks.append(chunk)
+                    chunks.append(   {
+                        "text": chunk,
+                        "concept": detect_concept(chunk),
+                        "length": len(chunk)
+                    })
 
                 # --------------------------------------------------
                 # Create semantic overlap.
@@ -289,9 +293,9 @@ def build_semantic_chunks(
     if final_chunk:
         chunks.append(
             {
-                "text": chunk,
-                "concept": detect_concept(chunk),
-                "length": len(chunk)
+                "text": final_chunk,
+                "concept": detect_concept(final_chunk),
+                "length": len(final_chunk)
             }
         )
 
@@ -356,7 +360,7 @@ def calculate_chunk_length(sentences: List[str]) -> int:
 # FINAL CLEANUP
 # ------------------------------------------------------------------
 
-def cleanup_chunks(chunks: List[str]) -> List[str]:
+def cleanup_chunks(chunks: List[dict]) -> List[dict]:
     """
     Final cleanup before embedding/storage.
 
@@ -378,10 +382,14 @@ def cleanup_chunks(chunks: List[str]) -> List[str]:
     for chunk in chunks:
 
         # Normalize whitespace.
-        chunk = re.sub(r"\s+", " ", chunk).strip()
+        text = re.sub(r"\s+", " ", chunk["text"]).strip()
 
         # Skip tiny chunks.
-        if len(chunk) > 80:
-            cleaned.append(chunk)
+        if len(text) > 80:
+            cleaned.append({
+                 "text": text,
+                "concept": chunk.get("concept", "unknown"),
+                "length": len(text)
+            })
 
     return cleaned

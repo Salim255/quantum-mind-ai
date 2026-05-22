@@ -14,7 +14,7 @@ from app.v1.modules.rag.embeddings.embedder import embed_text
 # { "text": "...", "embedding": [0.12, -0.44, ...], "source": "lesson" }
 
 
-def add_document(text: str, source: str = "document") -> dict:
+def add_document(chunk: dict, source: str = "document") -> dict:
     """
     Add a document to the QuantumMind AI vector store.
 
@@ -40,6 +40,9 @@ def add_document(text: str, source: str = "document") -> dict:
     # The embed_text() tool returns a dictionary:
     # { "embedding": [...], "normalize": True, "source": "lesson" }
     # We extract only the vector because that's what we store in the DB.
+    # 1. Extract text safely
+    # text = chunk["text"] if isinstance(chunk, dict) else chunk
+    text = chunk["text"]
     embedding_result = embed_text(text=text, source=source)
     emb = embedding_result["embedding"]
 
@@ -52,7 +55,8 @@ def add_document(text: str, source: str = "document") -> dict:
     document_entry = {
         "text": text,
         "embedding": emb,
-        "source": source
+        "source": source,
+        "concept": chunk.get("concept", "unknown") if isinstance(chunk, dict) else "unknown"
     }
 
 
