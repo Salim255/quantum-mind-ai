@@ -89,23 +89,22 @@ class RAGServiceImpl(RAGService):
     # If retrieval found no reliable chunks,
     # avoid hallucinated generation.
     # ---------------------------------------------------------------
+    # Final answer (must be grounded in context)
+
     if not chunks:
-
         return RAGQueryResponseSchema(
-
             query=payload.query,
-
             retrieved_chunks=[],
-
             final_answer={
                 "answer": (
                     "I could not find reliable information "
                     "to answer this question."
-                )
+                ),
+                "key_points": [],
+                "step_by_step": [],
+                "sources": [],
+                "retrieved_chunk":[]
             },
-
-            source=[],
-
             latency_ms=0
         )
 
@@ -189,17 +188,11 @@ class RAGServiceImpl(RAGService):
     # - retrieval benchmarking
     # ---------------------------------------------------------------
     evaluation_log = RAGEvaluationLog(
-
         query=payload.query,
-
         retrieved_chunks=chunks,
-
         final_answer=final_answer.model_dump(),
-
         latency_ms=latency_ms,
-
         model="llama-3.1-8b-instant",
-
         top_k=payload.top_k
     )
 
@@ -224,13 +217,9 @@ class RAGServiceImpl(RAGService):
     # Converts Pydantic schema into JSON-serializable dict.
     # ---------------------------------------------------------------
     return RAGQueryResponseSchema(
-
         query=payload.query,
-
         retrieved_chunks=chunks,
-
         final_answer=final_answer,
-
         latency_ms=latency_ms
     )
    
