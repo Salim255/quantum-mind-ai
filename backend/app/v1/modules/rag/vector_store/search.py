@@ -48,24 +48,6 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
         )
 
         # ------------------------------------------------------------
-        # METADATA BOOSTING
-        # ------------------------------------------------------------
-        # Metadata can improve retrieval precision.
-        #
-        # Example:
-        # - matching concept names
-        # - trusted sources
-        # - shorter cleaner chunks
-        # ------------------------------------------------------------
-        metadata = chunk.get("metadata", {})
-        metadata_bonus = 0.0
-        concept = metadata.get("concept", "").lower()
-        query_lower = query.lower()
-        # Boost if query mentions the same concept
-        if concept and concept in query_lower:
-            metadata_bonus += 0.15
-
-        # ------------------------------------------------------------
         # FILTER LOW-QUALITY MATCHES
         # ------------------------------------------------------------
         # Prevent irrelevant chunks from entering retrieval.
@@ -83,13 +65,31 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
             continue
 
        
+        # ------------------------------------------------------------
+        # METADATA BOOSTING
+        # ------------------------------------------------------------
+        # Metadata can improve retrieval precision.
+        #
+        # Example:
+        # - matching concept names
+        # - trusted sources
+        # - shorter cleaner chunks
+        # ------------------------------------------------------------
+        metadata = chunk.get("metadata", {})
+        metadata_bonus = 0.0
+        concept = metadata.get("concept", "").lower()
+        query_lower = query.lower()
+        # Boost if query mentions the same concept
+        if concept and concept in query_lower:
+            metadata_bonus += 0.15
+
         scored.append(
             RetrievalChunkDTO(
                 text=chunk["text"],
                 source=metadata["source"] if metadata else "unknown",
                 concept=metadata["concept"] if metadata else "unknown",
                 length=metadata["length"] if metadata else 0,
-                cosine_score=float(cosine_score),
+                cosine_score=float(cosine_score + metadata_bonus),
             )
        )
 
