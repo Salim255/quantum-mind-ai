@@ -84,6 +84,32 @@ class RAGServiceImpl(RAGService):
     chunks: List[RetrievalChunkDTO] = retrieval_output.results  # List of text chunks relevant to the query
 
     # ---------------------------------------------------------------
+    # LOW CONFIDENCE RETRIEVAL GUARD
+    # ---------------------------------------------------------------
+    # If retrieval found no reliable chunks,
+    # avoid hallucinated generation.
+    # ---------------------------------------------------------------
+    if not chunks:
+
+        return RAGQueryResponseSchema(
+
+            query=payload.query,
+
+            retrieved_chunks=[],
+
+            final_answer={
+                "answer": (
+                    "I could not find reliable information "
+                    "to answer this question."
+                )
+            },
+
+            source=[],
+
+            latency_ms=0
+        )
+
+    # ---------------------------------------------------------------
     # 2. BUILD OPTIMIZED CONTEXT
     # ---------------------------------------------------------------
     #
