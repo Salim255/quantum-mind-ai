@@ -5,6 +5,7 @@ from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.retriever.reranker import rerank
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 
+MIN_SIMILARITY_SCORE = 0.25
 
 def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO:
     """
@@ -45,6 +46,23 @@ def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO
             np.linalg.norm(q_emb) * np.linalg.norm(d_emb)
         )
 
+        # ------------------------------------------------------------
+        # FILTER LOW-QUALITY MATCHES
+        # ------------------------------------------------------------
+        # Prevent irrelevant chunks from entering retrieval.
+        #
+        # WHY IMPORTANT?
+        # --------------
+        # Without filtering:
+        # - unrelated chunks still get reranked
+        # - LLM receives noisy context
+        # - hallucinations increase
+        #
+        # Only semantically relevant chunks survive.
+        # ------------------------------------------------------------
+        if cosine_score < MIN_SIMILARITY_SCORE:
+            continue
+        
         metadata = chunk.get("metadata", {})
         
         scored.append(
