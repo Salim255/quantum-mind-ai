@@ -1,6 +1,6 @@
 from sentence_transformers import CrossEncoder
 from typing import List
-from app.v1.modules.rag.dto.rerank_dto import RerankDocumentDTO, RerankResponseDTO
+from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 # ------------------------------------------------------------
 # CROSS-ENCODER RERANKER
 # ------------------------------------------------------------
@@ -18,7 +18,7 @@ from app.v1.modules.rag.dto.rerank_dto import RerankDocumentDTO, RerankResponseD
 reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
 
-def rerank(query: str, docs: List[RerankDocumentDTO]) ->  RerankResponseDTO:
+def rerank(query: str, docs: List[RetrievalChunkDTO]) ->  List[RetrievalChunkDTO]:
     """
     Re-ranks candidate documents using a cross-encoder model.
 
@@ -59,9 +59,19 @@ def rerank(query: str, docs: List[RerankDocumentDTO]) ->  RerankResponseDTO:
     for doc, score in zip(docs, scores):
         doc.rerank_score = float(score)
 
+
+    # ------------------------------------------------------------
+    # 4. compute hybrid score (same pass, still safe)
+    # ------------------------------------------------------------
+    for doc in docs:
+        doc.hybrid_score = (
+            0.7 * (doc.rerank_score or 0.0) +
+            0.3 * (doc.cosine_score or 0.0)
+        )
+
     # Sort by rerank score
     # ------------------------------------------------------------
-    # 4. Sort by rerank score (primary ranking signal)
+    # 5. Sort by rerank score (primary ranking signal)
     # ------------------------------------------------------------
     docs.sort(key=lambda x: x.rerank_score, reverse=True)
 

@@ -1,11 +1,12 @@
 import numpy as np
-
+from typing import List
 from app.v1.modules.rag.embeddings.embedder import embed_text
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.retriever.reranker import rerank
-from app.v1.modules.rag.dto.rerank_dto import  RerankResponseDTO
+from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 
-def search_similar_documents(query: str, top_k: int = 3):
+
+def search_similar_documents(query: str, top_k: int = 3) -> RetrievalResponseDTO:
     """
     HYBRID SEMANTIC RETRIEVAL PIPELINE
 
@@ -46,12 +47,16 @@ def search_similar_documents(query: str, top_k: int = 3):
 
         metadata = chunk.get("metadata", {})
         
-        scored.append({
-            "text": chunk["text"],
-            "source": metadata["source"] if metadata else "unknown",
-            "concept": metadata["concept"] if metadata else "unknown",
-            "length": metadata["length"] if metadata else 0,
-            "cosine_score": float(cosine_score)
+        scored.append(
+            RetrievalChunkDTO(
+                "text": chunk.text,
+                "source": metadata["source"] if metadata else "unknown",
+                "concept": metadata["concept"] if metadata else "unknown",
+                "length": metadata["length"] if metadata else 0,
+                "cosine_score": float(cosine_score)
+            )
+            {
+           
         })
 
     # ------------------------------------------------------------
@@ -70,7 +75,7 @@ def search_similar_documents(query: str, top_k: int = 3):
     # ------------------------------------------------------------
     # 5. Rerank using cross-encoder (precision stage)
     # ------------------------------------------------------------
-    reranked: RerankResponseDTO = rerank(query, top_candidates)
+    reranked: List[RetrievalChunkDTO] = rerank(query, top_candidates)
 
     # ------------------------------------------------------------
     # 6. Hybrid scoring (CRITICAL FIX)
@@ -82,6 +87,7 @@ def search_similar_documents(query: str, top_k: int = 3):
     # This prevents losing high-similarity chunks.
     # ------------------------------------------------------------
     for item in reranked:
+        RerankDocumentDTO
         item.hybrid_score = (
             0.7 * item.get("rerank_score", 0) +
             0.3 * item.get("cosine_score", 0)

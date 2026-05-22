@@ -4,7 +4,12 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class ChunkDTO(BaseModel):
+class ChunkCandidateDTO(BaseModel):
     text: str
-    concept: str
-    length: int
+    source: str = "unknown"
+    concept: str = "unknown"
+    length: int = 0
+
+    cosine_score: float = 0.0
+    rerank_score: Optional[float] = None
+    hybrid_score: Optional[float] = None

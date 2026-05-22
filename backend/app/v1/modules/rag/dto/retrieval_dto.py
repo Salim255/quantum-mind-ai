@@ -4,7 +4,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class RetrievedChunkDTO(BaseModel):
+class RetrievalChunkDTO(BaseModel):
     text: str
     source: str
     concept: str
@@ -15,4 +15,4 @@ class RetrievedChunkDTO(BaseModel):
 
 class RetrievalResponseDTO(BaseModel):
     query: str
-    results: List[RetrievedChunkDTO]
+    results: List[RetrievalChunkDTO]
