@@ -1,6 +1,18 @@
 from typing import List
 
-
+# WHY START RULE-BASED?
+# Because:
+# deterministic
+# cheap
+# debuggable
+# no LLM latency
+# easier to evaluate
+# Later you can replace this with:
+# LLM expansion
+# HyDE
+# DSPy retrieval optimization
+# self-query retrievers
+# But this is the correct architecture foundation.
 def expand_query(query: str) -> List[str]:
     """
     Generate semantic variations of the user query.
