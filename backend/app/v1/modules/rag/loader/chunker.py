@@ -54,7 +54,7 @@ from typing import List
 nltk.download("punkt")
 nltk.download("punkt_tab")
 
-
+from app.v1.modules.rag.loader.concept_tagger import detect_concept
 
 # ------------------------------------------------------------------
 # MAIN ENTRY POINT
@@ -180,7 +180,7 @@ def build_semantic_chunks(
     paragraphs: List[str],
     max_chars: int,
     overlap_sentences: int
-) -> List[str]:
+) -> List[dict]:
     """
     Build coherent semantic chunks.
 
@@ -287,7 +287,13 @@ def build_semantic_chunks(
     final_chunk = finalize_chunk(current_chunk_sentences)
 
     if final_chunk:
-        chunks.append(final_chunk)
+        chunks.append(
+            {
+                "text": chunk,
+                "concept": detect_concept(chunk),
+                "length": len(chunk)
+            }
+        )
 
     return chunks
 
