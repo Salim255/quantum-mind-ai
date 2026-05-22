@@ -35,7 +35,8 @@
 #
 # This file implements a production-style semantic chunking pipeline.
 # ------------------------------------------------------------------
-
+from nltk.tokenize import sent_tokenize
+import nltk
 import re
 # Python regular expression module.
 # Used for:
@@ -47,10 +48,17 @@ from typing import List
 # Type hint support for cleaner, safer code.
 
 
+# Download the "punkt" model only once (NLTK sentence tokenizer data)
+# This is a pre-trained model that helps NLTK understand where sentences start and end.
+# It is NOT just splitting on ".", but uses language patterns (abbreviations, decimals, etc.).
+nltk.download("punkt")
+nltk.download("punkt_tab")
+
+
+
 # ------------------------------------------------------------------
 # MAIN ENTRY POINT
 # ------------------------------------------------------------------
-
 def semantic_chunk_text(
     text: str,
     max_chars: int = 1200,
@@ -163,42 +171,6 @@ def split_into_paragraphs(text: str) -> List[str]:
 # SENTENCE SPLITTING
 # ------------------------------------------------------------------
 
-def split_into_sentences(paragraph: str) -> List[str]:
-    """
-    Split a paragraph into sentences.
-
-    REGEX EXPLANATION
-    -----------------
-    (?<=[.!?])\\s+
-
-    Means:
-    - split AFTER punctuation
-    - split on following whitespace
-
-    Example:
-    --------
-    Input:
-        "Quantum is fascinating. Qubits are powerful."
-
-    Output:
-        [
-            "Quantum is fascinating.",
-            "Qubits are powerful."
-        ]
-    """
-
-    sentences = re.split(
-        r'(?<=[.!?])\s+',
-        paragraph
-    )
-
-    # Remove empty sentences.
-    return [
-        s.strip()
-        for s in sentences
-        if s.strip()
-    ]
-
 
 # ------------------------------------------------------------------
 # SEMANTIC CHUNK CONSTRUCTION
@@ -247,7 +219,16 @@ def build_semantic_chunks(
     for paragraph in paragraphs:
 
         # Split paragraph into sentences.
-        sentences = split_into_sentences(paragraph)
+        # Split a long text into a list of clean sentences
+        # Example:
+        # "Dr. Smith went home. He was tired."
+        # → ["Dr. Smith went home.", "He was tired."]
+        #
+        # Why this is important for RAG:
+        # - Keeps semantic meaning intact
+        # - Prevents breaking sentences in the middle
+        # - Produces cleaner chunks for embedding and retrieval
+        sentences = sent_tokenize(paragraph)
 
         # ----------------------------------------------------------
         # Process every sentence.
