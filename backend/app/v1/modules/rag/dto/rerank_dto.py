@@ -8,5 +8,6 @@ class RerankDocumentDTO(BaseModel):
     rerank_score: Optional[float] = None
 
 
+
 class RerankResponseDTO(BaseModel):
     documents: List[RerankDocumentDTO]

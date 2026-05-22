@@ -1,6 +1,6 @@
 from sentence_transformers import CrossEncoder
 from typing import List
-from app.v1.modules.rag.dto.rerank_dto import RerankDocumentDTO
+from app.v1.modules.rag.dto.rerank_dto import RerankDocumentDTO, RerankResponseDTO
 # ------------------------------------------------------------
 # CROSS-ENCODER RERANKER
 # ------------------------------------------------------------
@@ -18,7 +18,7 @@ from app.v1.modules.rag.dto.rerank_dto import RerankDocumentDTO
 reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
 
-def rerank(query: str, docs: List[RerankDocumentDTO]) -> List[RerankDocumentDTO]:
+def rerank(query: str, docs: List[RerankDocumentDTO]) ->  RerankResponseDTO:
     """
     Re-ranks candidate documents using a cross-encoder model.
 
@@ -49,7 +49,8 @@ def rerank(query: str, docs: List[RerankDocumentDTO]) -> List[RerankDocumentDTO]
     # ------------------------------------------------------------
     # 2. Predict relevance scores
     # ------------------------------------------------------------
-    scores = reranker.predict(pairs)
+    scores: List[float] = reranker.predict(pairs)
+    scores = list(scores)
 
     # Attach scores
     # ------------------------------------------------------------

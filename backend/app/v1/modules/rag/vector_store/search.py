@@ -3,7 +3,7 @@ import numpy as np
 from app.v1.modules.rag.embeddings.embedder import embed_text
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.retriever.reranker import rerank
-
+from app.v1.modules.rag.dto.rerank_dto import  RerankResponseDTO
 
 def search_similar_documents(query: str, top_k: int = 3):
     """
@@ -70,7 +70,7 @@ def search_similar_documents(query: str, top_k: int = 3):
     # ------------------------------------------------------------
     # 5. Rerank using cross-encoder (precision stage)
     # ------------------------------------------------------------
-    reranked = rerank(query, top_candidates)
+    reranked: RerankResponseDTO = rerank(query, top_candidates)
 
     # ------------------------------------------------------------
     # 6. Hybrid scoring (CRITICAL FIX)
@@ -82,7 +82,7 @@ def search_similar_documents(query: str, top_k: int = 3):
     # This prevents losing high-similarity chunks.
     # ------------------------------------------------------------
     for item in reranked:
-        item["hybrid_score"] = (
+        item.hybrid_score = (
             0.7 * item.get("rerank_score", 0) +
             0.3 * item.get("cosine_score", 0)
         )
@@ -90,7 +90,7 @@ def search_similar_documents(query: str, top_k: int = 3):
     # ------------------------------------------------------------
     # 7. Final ranking based on hybrid score
     # ------------------------------------------------------------
-    reranked.sort(key=lambda x: x["hybrid_score"], reverse=True)
+    reranked.sort(key=lambda x: x.hybrid_score, reverse=True)
 
     # ------------------------------------------------------------
     # 8. Return top-k results
