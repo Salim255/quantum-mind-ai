@@ -11,6 +11,7 @@ HIGH_CONFIDENCE = 5.0
 MEDIUM_CONFIDENCE = 2.5
 LOW_CONFIDENCE = 1.0
 
+
 def decide_retrieval_action(best_score: float) -> str:
     """
     Determines system behavior based on retrieval confidence.
