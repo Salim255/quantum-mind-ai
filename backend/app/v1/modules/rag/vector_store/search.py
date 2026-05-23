@@ -5,7 +5,7 @@ from app.v1.modules.rag.embeddings.embedder import embed_text
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.retriever.reranker import rerank
 from app.v1.modules.rag.retriever.query_expander import expand_query
-
+from app.v1.modules.rag.retriever.decision_engine import decide_retrieval_action
 from app.v1.modules.rag.dto.retrieval_dto import (
     RetrievalResponseDTO,
     RetrievalChunkDTO
@@ -215,7 +215,6 @@ def search_similar_documents(
     # ------------------------------------------------------------
     query_matrix = np.stack(query_embeddings)
 
-    print("Test===== \n: ", query_matrix)
     for chunk in VECTOR_DB:
 
         # ------------------------------------------------------------
@@ -472,19 +471,21 @@ def search_similar_documents(
     # than hallucinate.
     # ============================================================
 
-    best_score = (
-        reranked[0].hybrid_score
-        if reranked
-        else 0.0
-    )
+    best_score = reranked[0].hybrid_score if reranked else 0.0
 
-    print(f"[RAG] best hybrid score: {best_score:.4f}")
+    action = decide_retrieval_action(best_score)
 
-    if best_score < MIN_CONFIDENCE_SCORE:
+    print(f"[RAG] decision = {action}, score = {best_score:.4f}")
 
-        print("[RAG] retrieval confidence too low")
-
+    if action == "NO_RESULT":
         return RetrievalResponseDTO(results=[])
+
+    if action == "CLARIFY":
+        return RetrievalResponseDTO(results=[])
+    
+    if action == "RETRY":
+        expanded = expand_query(query + " more context")
+        return search_similar_documents(expanded[0], top_k)
 
     # ============================================================
     # 12. FINAL TOP-K RESULTS
