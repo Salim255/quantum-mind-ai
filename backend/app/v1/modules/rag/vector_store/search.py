@@ -12,6 +12,8 @@ from app.v1.modules.rag.dto.retrieval_dto import (
 )
 from app.v1.modules.rag.retriever.decision_engine import RetrievalAction
 from app.v1.modules.rag.retriever.diversity_filter import diversify_results
+from app.v1.modules.rag.context.context_builder import assign_context_role
+
 
 # ============================================================
 # RETRIEVAL THRESHOLDS
@@ -437,6 +439,9 @@ def search_similar_documents(
         key=lambda x: x.hybrid_score,
         reverse=True
     )
+    
+    for i, chunk in enumerate(reranked):
+        chunk.context_role = assign_context_role(chunk, i)
 
     # ============================================================
     # DEBUG LOGGING

@@ -4,7 +4,7 @@ import asyncio
 import uuid
 from fastapi import UploadFile
 import aiofiles
-from app.v1.modules.rag.loader.chunker import semantic_chunk_text
+from app.v1.modules.rag.loader.chunker import RAGChunker
 from app.v1.modules.rag.loader.cleaner import clean_text
 from app.v1.modules.rag.loader.normalizer import normalize_text
 from app.v1.modules.rag.loader.pdf_loader import load_pdf
@@ -87,7 +87,7 @@ class LoaderServiceImpl(LoaderService):
         full_text = clean_text(full_text)
         normalized = normalize_text(full_text)  # fix structure
         # 2. Split into smaller chunks.
-        chunks = semantic_chunk_text(normalized)
+        chunks = RAGChunker.semantic_chunk_text(normalized)
 
         # 3. Add each chunk to the vector DB.
         for chunk in chunks:

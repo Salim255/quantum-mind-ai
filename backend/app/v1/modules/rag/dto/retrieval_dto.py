@@ -12,6 +12,7 @@ class RetrievalChunkDTO(BaseModel):
     cosine_score: float
     rerank_score: Optional[float] = None
     hybrid_score: Optional[float] = None
+    context_role: str = "supporting"
 
 
 class RetrievalResponseDTO(BaseModel):

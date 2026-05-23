@@ -40,6 +40,80 @@ from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 # This file implements a clean educational RAG context builder.
 # ------------------------------------------------------------------
 
+def assign_context_role(chunk: RetrievalChunkDTO, index: int) -> str:
+    """
+    Assigns reasoning role based on ranking position.
+    """
+
+    # Top chunk = main answer signal
+    if index == 0:
+        return "core"
+
+    # Second chunk = explanation support
+    if index == 1:
+        return "supporting"
+
+    # Lower chunks = examples / edge cases
+    return "example"
+
+def build_reasoned_context(
+    chunks: List[RetrievalChunkDTO],
+    max_chars: int = 3000
+) -> str:
+    """
+    Builds structured reasoning context with strict size control.
+
+    WHY THIS MATTERS
+    ----------------
+    Prevents:
+    - Groq token overflow (TPM errors)
+    - excessive prompt cost
+    - noisy context injection
+
+    Ensures:
+    - structured reasoning order
+    - safe LLM input size
+    """
+
+    sections = {
+        "core": [],
+        "supporting": [],
+        "example": []
+    }
+
+    # ------------------------------------------------------------
+    # 1. GROUP BY ROLE
+    # ------------------------------------------------------------
+    for chunk in chunks:
+        role = getattr(chunk, "context_role", "supporting")
+        sections[role].append(chunk)
+
+    context_parts = []
+    total_chars = 0
+
+    # ------------------------------------------------------------
+    # 2. ORDERED INSERTION (core → support → examples)
+    # ------------------------------------------------------------
+
+    ordered_roles = ["core", "supporting", "example"]
+
+    for role in ordered_roles:
+
+        for c in sections[role]:
+
+            block = f"[{role.upper()}]\n{c.text}\n\n"
+            block_len = len(block)
+
+            # ----------------------------------------------------
+            # 3. HARD LIMIT CHECK
+            # ----------------------------------------------------
+            if total_chars + block_len > max_chars:
+                return "".join(context_parts).strip()
+
+            context_parts.append(block)
+            total_chars += block_len
+
+    return "".join(context_parts).strip()
 
 def build_context(
     chunks: List[RetrievalChunkDTO],
