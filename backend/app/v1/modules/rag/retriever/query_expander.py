@@ -1,58 +1,133 @@
+# app/v1/modules/rag/retriever/query_expander.py
+
 from typing import List
 
-# WHY START RULE-BASED?
-# Because:
-# deterministic
-# cheap
-# debuggable
-# no LLM latency
-# easier to evaluate
-# Later you can replace this with:
-# LLM expansion
-# HyDE
-# DSPy retrieval optimization
-# self-query retrievers
-# But this is the correct architecture foundation.
+
 def expand_query(query: str) -> List[str]:
     """
-    Generate semantic variations of the user query.
+    QUERY EXPANSION LAYER
 
-    WHY?
-    ----
-    Users may phrase concepts differently than documents.
+    PURPOSE
+    -------
+    Improves retrieval recall by generating multiple
+    semantic variations of the user's query.
 
-    Query expansion improves retrieval recall by searching
-    multiple semantic variants of the same intent.
+    WHY IMPORTANT?
+    --------------
+    Users may ask the same concept in different ways.
+
+    Example:
+    --------
+    Original:
+        "What is entanglement?"
+
+    Expanded:
+        - "Explain quantum entanglement"
+        - "Definition of entanglement"
+        - "How do entangled particles work"
+
+    This increases the chance of retrieving:
+    - differently worded chunks
+    - hidden semantic matches
+    - better educational context
+
+    CURRENT VERSION
+    ---------------
+    Right now this is rule-based/simple expansion.
+
+    LATER YOU CAN UPGRADE TO:
+    -------------------------
+    - LLM-generated expansions
+    - HyDE retrieval
+    - synonym generation
+    - domain-aware reformulation
+    - multilingual retrieval
+
+    PARAMETERS
+    ----------
+    query : str
+        Original user query.
+
+    RETURNS
+    -------
+    List[str]
+        List of expanded semantic queries.
     """
 
-    query_lower = query.lower()
+    # ------------------------------------------------------------
+    # START WITH ORIGINAL QUERY
+    # ------------------------------------------------------------
+    # Always preserve the user's original wording.
+    # This remains the primary retrieval anchor.
+    # ------------------------------------------------------------
+    expanded_queries = [query]
 
-    expansions = [query]
+    q = query.lower()
 
     # ------------------------------------------------------------
-    # SIMPLE RULE-BASED EXPANSIONS
+    # QUANTUM-SPECIFIC EXPANSIONS
+    # ------------------------------------------------------------
+    # Add semantic variations for known concepts.
+    #
+    # WHY?
+    # ----
+    # Educational PDFs may describe concepts
+    # using different terminology.
     # ------------------------------------------------------------
 
-    if "qubit" in query_lower:
-        expansions.extend([
-            "quantum bit",
-            "qubit state",
-            "quantum computing qubit"
+    # ------------------------------------------------------------
+    # ENTANGLEMENT
+    # ------------------------------------------------------------
+    if "entanglement" in q:
+
+        expanded_queries.extend([
+            "Explain quantum entanglement",
+            "Definition of entanglement",
+            "How entangled particles behave",
+            "Quantum correlation between particles"
         ])
 
-    if "entanglement" in query_lower:
-        expansions.extend([
-            "quantum entanglement",
-            "entangled particles",
-            "spooky action at a distance"
+    # ------------------------------------------------------------
+    # SUPERPOSITION
+    # ------------------------------------------------------------
+    if "superposition" in q:
+
+        expanded_queries.extend([
+            "Explain quantum superposition",
+            "Quantum state combination",
+            "Particle existing in multiple states",
+            "Definition of superposition"
         ])
 
-    if "superposition" in query_lower:
-        expansions.extend([
-            "quantum superposition",
-            "multiple quantum states",
-            "wave function state"
+    # ------------------------------------------------------------
+    # QUBITS
+    # ------------------------------------------------------------
+    if "qubit" in q or "qubits" in q:
+
+        expanded_queries.extend([
+            "Explain qubits",
+            "Quantum computing bit",
+            "Difference between bit and qubit",
+            "Quantum information unit"
         ])
 
-    # Remove duplicates while preserving order
-    return list(dict.fromkeys(expansions))
+    # ------------------------------------------------------------
+    # MEASUREMENT
+    # ------------------------------------------------------------
+    if "measurement" in q:
+
+        expanded_queries.extend([
+            "Quantum measurement collapse",
+            "Wave function collapse",
+            "Observation in quantum mechanics",
+            "Measurement of quantum states"
+        ])
+
+    # ------------------------------------------------------------
+    # REMOVE DUPLICATES
+    # ------------------------------------------------------------
+    # dict.fromkeys preserves order while removing duplicates.
+    # ------------------------------------------------------------
+    expanded_queries = list(dict.fromkeys(expanded_queries))
+
+    return expanded_queries

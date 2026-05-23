@@ -17,57 +17,81 @@ from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 
 reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
+# ------------------------------------------------------------
+# CONFIGURATION
+# ------------------------------------------------------------
+# Controls batching size for inference safety.
+# Large batches can cause:
+# - memory spikes
+# - GPU/CPU saturation
+# ------------------------------------------------------------
+BATCH_SIZE = 32
+
 
 def rerank(query: str, docs: List[RetrievalChunkDTO]) ->  List[RetrievalChunkDTO]:
     """
-    Re-ranks candidate documents using a cross-encoder model.
+    Re-ranks retrieved documents using a cross-encoder model.
 
-    PARAMETERS
+    This step improves precision by re-evaluating
+    semantic relevance between query and documents.
+
+    Parameters
     ----------
     query : str
-        The user question (e.g., "what is quantum entanglement?")
+        User question.
 
-    docs : List[Dict[str, Any]]
+    docs : List[RetrievalChunkDTO]
         Candidate chunks from vector search.
-        Each doc must contain:
-            - text (str)
-            - cosine_score (float, optional)
 
-    RETURNS
+    Returns
     -------
-    List[Dict[str, Any]]
-        Same docs enriched with:
-            - rerank_score (float)
-        Sorted from most relevant → least relevant
+    List[RetrievalChunkDTO]
+        Same objects enriched with rerank_score,
+        sorted by final relevance.
     """
 
     # ------------------------------------------------------------
-    # 1. Build query-document pairs
+    # 1. BUILD QUERY-DOCUMENT PAIRS
     # ------------------------------------------------------------
-    pairs = [(query, d.text) for d in docs]
+    # We convert retrieval candidates into model input format.
+    # Each pair is independently scored by the cross-encoder.
+    # ------------------------------------------------------------
+    pairs = [(query, doc.text) for doc in docs]
+  
 
     # ------------------------------------------------------------
-    # 2. Predict relevance scores
+    # 2. BATCHED PREDICTION
     # ------------------------------------------------------------
-    scores: List[float] = reranker.predict(pairs)
-    scores = list(scores)
+    # We avoid sending all pairs at once to prevent:
+    # - memory overload
+    # - inference instability
+    # ------------------------------------------------------------
+    all_scores: List[float] = []
 
-    # Attach scores
+    for i in range(0, len(pairs), BATCH_SIZE):
+        batch = pairs[i:i + BATCH_SIZE]
+
+        batch_scores = reranker.predict(batch)
+
+        # Ensure consistent Python list type
+        all_scores.extend(list(batch_scores))
+
+
     # ------------------------------------------------------------
-    # 3. Attach rerank scores back to documents
+    # 3. ATTACH SCORES TO DTOs (NO STRUCTURE CHANGE)
     # ------------------------------------------------------------
-    for doc, score in zip(docs, scores):
+    # We mutate only score fields, not structure.
+    # This keeps pipeline compatible with later stages.
+    # ------------------------------------------------------------
+    for doc, score in zip(docs, all_scores):
         doc.rerank_score = float(score)
 
-
     # ------------------------------------------------------------
-    # 4. compute hybrid score (same pass, still safe)
+    # 4. COMPUTE HYBRID SCORE (FINAL SCORING LAYER)
     # ------------------------------------------------------------
-    # We combine:
-    # - reranker score (semantic precision)
-    # - cosine score (embedding recall safety net)
-    #
-    # This prevents losing high-similarity chunks.
+    # Hybrid scoring balances:
+    # - reranker precision (semantic understanding)
+    # - cosine recall safety (embedding similarity)
     # ------------------------------------------------------------
     for doc in docs:
         doc.hybrid_score = (
