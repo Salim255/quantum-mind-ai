@@ -99,4 +99,9 @@ def rerank(query: str, docs: List[RetrievalChunkDTO]) ->  List[RetrievalChunkDTO
             0.3 * (doc.cosine_score or 0.0)
         )
 
+     # ------------------------------------------------------------
+    # 5. FINAL SORTING (PRIMARY SIGNAL = RERANK SCORE)
+    # ------------------------------------------------------------
+    docs.sort(key=lambda x: x.rerank_score or 0.0, reverse=True)
+    
     return docs
