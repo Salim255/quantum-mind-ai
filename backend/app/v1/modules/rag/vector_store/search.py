@@ -61,439 +61,438 @@ MIN_SIMILARITY_SCORE = 0.25
 
 MIN_CONFIDENCE_SCORE = 1.5
 
+class RAGSearchSimilar:
+    @classmethod
+    def search_similar_documents(
+        cls,
+        query: str,
+        top_k: int = 3
+    ) -> RetrievalResponseDTO:
+        """
+        HYBRID SEMANTIC RETRIEVAL PIPELINE
 
-def search_similar_documents(
-    query: str,
-    top_k: int = 3
-) -> RetrievalResponseDTO:
-    """
-    HYBRID SEMANTIC RETRIEVAL PIPELINE
+        This function performs advanced semantic retrieval using:
 
-    This function performs advanced semantic retrieval using:
+        1. Multi-query expansion
+        2. Dense vector similarity
+        3. Metadata-aware scoring
+        4. Cross-encoder reranking
+        5. Hybrid score ranking
+        6. Confidence filtering
 
-    1. Multi-query expansion
-    2. Dense vector similarity
-    3. Metadata-aware scoring
-    4. Cross-encoder reranking
-    5. Hybrid score ranking
-    6. Confidence filtering
+        ============================================================
+        PIPELINE OVERVIEW
+        ============================================================
 
-    ============================================================
-    PIPELINE OVERVIEW
-    ============================================================
+        USER QUERY
+            ↓
 
-    USER QUERY
-        ↓
+        QUERY EXPANSION
+            ↓
 
-    QUERY EXPANSION
-        ↓
+        EMBEDDING GENERATION
+            ↓
 
-    EMBEDDING GENERATION
-        ↓
+        COSINE SIMILARITY SEARCH
+            ↓
 
-    COSINE SIMILARITY SEARCH
-        ↓
+        METADATA BOOSTING
+            ↓
 
-    METADATA BOOSTING
-        ↓
+        TOP-CANDIDATE SELECTION
+            ↓
 
-    TOP-CANDIDATE SELECTION
-        ↓
+        CROSS-ENCODER RERANKING
+            ↓
 
-    CROSS-ENCODER RERANKING
-        ↓
+        HYBRID SCORING
+            ↓
 
-    HYBRID SCORING
-        ↓
+        CONFIDENCE FILTERING
+            ↓
 
-    CONFIDENCE FILTERING
-        ↓
+        FINAL TOP-K RESULTS
 
-    FINAL TOP-K RESULTS
+        ============================================================
+        WHY THIS ARCHITECTURE IS STRONG
+        ============================================================
 
-    ============================================================
-    WHY THIS ARCHITECTURE IS STRONG
-    ============================================================
+        Cosine similarity:
+            excellent recall
 
-    Cosine similarity:
-        excellent recall
+        Reranker:
+            excellent precision
 
-    Reranker:
-        excellent precision
+        Hybrid score:
+            balances both
 
-    Hybrid score:
-        balances both
+        Confidence filtering:
+            reduces hallucinations
 
-    Confidence filtering:
-        reduces hallucinations
+        Multi-query retrieval:
+            improves semantic coverage
+        """
 
-    Multi-query retrieval:
-        improves semantic coverage
-    """
-
-    # ============================================================
-    # 1. QUERY EXPANSION
-    # ============================================================
-    #
-    # WHY IMPORTANT?
-    # --------------
-    # Users may ask the same concept differently.
-    #
-    # Example:
-    #
-    # Query:
-    # "What is entanglement?"
-    #
-    # Expanded queries:
-    # - "Explain quantum entanglement"
-    # - "What does entangled state mean?"
-    # - "Quantum particles correlation"
-    #
-    # This dramatically improves retrieval recall.
-    # ============================================================
-
-    expanded_queries: List[str] = expand_query(query)
-
-    print(f"[RAG] expanded queries: {expanded_queries}")
-
-    # ============================================================
-    # 2. EMBED ALL QUERY VARIANTS
-    # ============================================================
-    #
-    # Every expanded query becomes a vector.
-    #
-    # Later:
-    # each chunk competes against ALL query vectors.
-    #
-    # We keep the BEST similarity score.
-    # ============================================================
-
-    query_embeddings: List[np.ndarray] = [
-        np.array(
-            embed_text(text=q, source="user_query")["embedding"]
-        ) 
-        for q in expanded_queries
-        ]
-
-    # ============================================================
-    # RETRIEVAL ACCUMULATOR
-    # ============================================================
-
-    scored_chunks: List[RetrievalChunkDTO] = []
-
-    print(f"[RAG] VECTOR_DB size: {len(VECTOR_DB)}")
-
-    # ============================================================
-    # 3. VECTOR SIMILARITY SEARCH
-    # ============================================================
-    #
-    # Each stored chunk is compared against ALL expanded queries.
-    #
-    # We keep:
-    # BEST(query ↔ chunk similarity)
-    #
-    # WHY?
-    # ----
-    # A chunk may align strongly with one wording
-    # but weakly with another.
-    #
-    # Multi-query retrieval solves this.
-    # ============================================================
-
-    # ------------------------------------------------------------
-    # BUILD QUERY EMBEDDING MATRIX
-    # ------------------------------------------------------------
-    # We embed multiple query variations (query expansion step)
-    # into a single matrix so we can compare them in one operation.
-    #
-    # Shape:
-    #   query_matrix → (Q, D)
-    #   Q = number of expanded queries
-    #   D = embedding dimension
-    # ------------------------------------------------------------
-    query_matrix = np.stack(query_embeddings)
-
-    for chunk in VECTOR_DB:
-
-        # ------------------------------------------------------------
-        # LOAD DOCUMENT EMBEDDING
-        # ------------------------------------------------------------
-        # Each chunk already has a precomputed embedding stored in DB.
-        # We convert it to numpy array for vector operations.
-        #
-        # Shape:
-        #   doc_vec → (D,)
-        # ------------------------------------------------------------
-        doc_vec = np.array(chunk["embedding"])
-
-
-        # ------------------------------------------------------------
-        # VECTORISED COSINE SIMILARITY (FAST PATH)
-        # ------------------------------------------------------------
-        # Instead of looping over each query embedding (O(Q)),
-        # we compute all similarities in a single matrix operation.
-        #
-        # Operation:
-        #   query_matrix @ doc_vec → dot product for all queries
-        #
-        # Result:
-        #   similarities → (Q,)
-        #
-        # Then we normalize using L2 norms to compute cosine similarity.
-        # ------------------------------------------------------------
-        query_norms = np.linalg.norm(query_matrix, axis=1)
-        doc_norm = np.linalg.norm(doc_vec)
-
-        similarities = (query_matrix @ doc_vec) / (query_norms * doc_norm + 1e-8)
-
-
-        # ------------------------------------------------------------
-        # SELECT BEST MATCH ACROSS ALL EXPANDED QUERIES
-        # ------------------------------------------------------------
-        # We assume:
-        # - query expansion may produce paraphrases
-        # - we want the strongest semantic match only
-        #
-        # So we take the maximum similarity score.
-        # ------------------------------------------------------------
-        cosine_score = float(np.max(similarities))
-
-        # ========================================================
-        # 4. FILTER LOW-QUALITY MATCHES
-        # ========================================================
+        # ============================================================
+        # 1. QUERY EXPANSION
+        # ============================================================
         #
         # WHY IMPORTANT?
         # --------------
-        # Prevent garbage chunks from:
-        # - entering reranker
-        # - increasing noise
-        # - polluting context
-        #
-        # This improves:
-        # - precision
-        # - speed
-        # - hallucination resistance
-        # ========================================================
-
-        if cosine_score < MIN_SIMILARITY_SCORE:
-            continue
-
-        # ========================================================
-        # 5. METADATA BOOSTING
-        # ========================================================
-        #
-        # Metadata improves ranking quality.
+        # Users may ask the same concept differently.
         #
         # Example:
+        #
         # Query:
-        # "Explain entanglement"
+        # "What is entanglement?"
         #
-        # Chunk concept:
-        # "entanglement"
+        # Expanded queries:
+        # - "Explain quantum entanglement"
+        # - "What does entangled state mean?"
+        # - "Quantum particles correlation"
         #
-        # → boost score
+        # This dramatically improves retrieval recall.
+        # ============================================================
+
+        expanded_queries: List[str] = expand_query(query)
+
+        print(f"[RAG] expanded queries: {expanded_queries}")
+
+        # ============================================================
+        # 2. EMBED ALL QUERY VARIANTS
+        # ============================================================
+        #
+        # Every expanded query becomes a vector.
+        #
+        # Later:
+        # each chunk competes against ALL query vectors.
+        #
+        # We keep the BEST similarity score.
+        # ============================================================
+
+        query_embeddings: List[np.ndarray] = [
+            np.array(
+                embed_text(text=q, source="user_query")["embedding"]
+            ) 
+            for q in expanded_queries
+            ]
+
+  
+
+        # ============================================================
+        # 7. EXPAND CANDIDATE POOL
+        # ============================================================
+        sorted_chunks = cls.perform_multi_query_vector_search()
+        
+        top_candidates = scored_chunks[:30]
+
+        print(
+            f"[RAG] candidates sent to reranker:"
+            f" {len(top_candidates)}"
+        )
+
+        # ============================================================
+        # 8. SAFE EMPTY RETRIEVAL HANDLING
+        # ============================================================
         #
         # WHY IMPORTANT?
         # --------------
-        # Semantic similarity alone is not always enough.
+        # Prevent:
+        # - reranker crashes
+        # - empty inference calls
+        # - downstream failures
+        # ============================================================
+
+        if not top_candidates:
+
+            print("[RAG] no relevant candidates found")
+
+            return RetrievalResponseDTO(results=[])
+
+        # ============================================================
+        # 9. CROSS-ENCODER RERANKING
+        # ============================================================
         #
-        # Metadata adds structured intelligence.
-        # ========================================================
+        # Dense retrieval:
+        # good recall
+        #
+        # Cross-encoder:
+        # high precision
+        #
+        # The reranker directly compares:
+        #
+        # (query, chunk)
+        #
+        # together in the SAME transformer.
+        #
+        # This is far more accurate.
+        # ============================================================
 
-        metadata = chunk.get("metadata", {})
+        reranked: List[RetrievalChunkDTO] = rerank(
+            query,
+            top_candidates
+        )
 
-        metadata_bonus = 0.0
+        # ============================================================
+        # 10. SORT BY HYBRID SCORE
+        # ============================================================
+        #
+        # Hybrid score combines:
+        #
+        # - rerank_score
+        # - cosine_score
+        #
+        # WHY IMPORTANT?
+        # --------------
+        # Prevents reranker instability from
+        # destroying strong semantic matches.
+        # ============================================================
 
-        concept = metadata.get("concept", "").lower()
+        reranked.sort(
+            key=lambda x: x.hybrid_score,
+            reverse=True
+        )
+        
+        for i, chunk in enumerate(reranked):
+            chunk.context_role = assign_context_role(chunk, i)
 
-        query_lower = query.lower()
+        # ============================================================
+        # DEBUG LOGGING
+        # ============================================================
 
-        # --------------------------------------------------------
-        # BOOST MATCHING CONCEPTS
-        # --------------------------------------------------------
+        for doc in reranked[:top_k]:
 
-        if concept and concept in query_lower:
-            metadata_bonus += 0.15
-
-        # ========================================================
-        # BUILD RETRIEVAL DTO
-        # ========================================================
-
-        scored_chunks.append(
-
-            RetrievalChunkDTO(
-                text=chunk["text"],
-
-                source=metadata["source"]
-                if metadata else "unknown",
-
-                concept=metadata["concept"]
-                if metadata else "unknown",
-
-                length=metadata["length"]
-                if metadata else 0,
-
-                cosine_score=float(
-                    cosine_score + metadata_bonus
-                ),
+            print(
+                f"[RAG]"
+                f" source={doc.source}"
+                f" cosine={doc.cosine_score:.4f}"
+                f" rerank={doc.rerank_score:.4f}"
+                f" hybrid={doc.hybrid_score:.4f}"
             )
+
+        # ============================================================
+        # 11. CONFIDENCE FILTERING
+        # ============================================================
+        #
+        # WHY IMPORTANT?
+        # --------------
+        # Even top-ranked chunks may still be weak.
+        #
+        # If confidence is low:
+        # → better to answer:
+        #   "I don't know"
+        #
+        # than hallucinate.
+        # ============================================================
+
+        best_score = reranked[0].hybrid_score if reranked else 0.0
+
+        action = decide_retrieval_action(best_score)
+
+        print(f"[RAG] decision = {action}, score = {best_score:.4f}")
+
+        if action == RetrievalAction.NO_RESULT:
+            return RetrievalResponseDTO(results=[])
+
+        if action == RetrievalAction.CLARIFY:
+            return RetrievalResponseDTO(results=[])
+        
+        if action == RetrievalAction.RETRY:
+            expanded = expand_query(query + " more context")
+            return search_similar_documents(expanded[0], top_k)
+
+        # ============================================================
+        # 12. FINAL TOP-K RESULTS
+        # ============================================================
+
+        final_chunks = diversify_results(reranked, top_k=top_k)
+
+        return RetrievalResponseDTO(
+            results=final_chunks
         )
-
-    # ============================================================
-    # 6. SORT BY COSINE SCORE
-    # ============================================================
-    #
-    # This is the RECALL stage.
-    #
-    # Goal:
-    # keep the most semantically relevant candidates.
-    # ============================================================
-
-    scored_chunks.sort(
-        key=lambda x: x.cosine_score,
-        reverse=True
-    )
-
-    # ============================================================
-    # 7. EXPAND CANDIDATE POOL
-    # ============================================================
-    #
-    # WHY IMPORTANT?
-    # --------------
-    # We intentionally keep MORE candidates
-    # before reranking.
-    #
-    # If we only kept top_k immediately,
-    # we could accidentally lose:
-    # - semantically valuable chunks
-    # - alternative explanations
-    #
-    # Cross-encoder reranking will later refine this.
-    # ============================================================
-
-    top_candidates = scored_chunks[:30]
-
-    print(
-        f"[RAG] candidates sent to reranker:"
-        f" {len(top_candidates)}"
-    )
-
-    # ============================================================
-    # 8. SAFE EMPTY RETRIEVAL HANDLING
-    # ============================================================
-    #
-    # WHY IMPORTANT?
-    # --------------
-    # Prevent:
-    # - reranker crashes
-    # - empty inference calls
-    # - downstream failures
-    # ============================================================
-
-    if not top_candidates:
-
-        print("[RAG] no relevant candidates found")
-
-        return RetrievalResponseDTO(results=[])
-
-    # ============================================================
-    # 9. CROSS-ENCODER RERANKING
-    # ============================================================
-    #
-    # Dense retrieval:
-    # good recall
-    #
-    # Cross-encoder:
-    # high precision
-    #
-    # The reranker directly compares:
-    #
-    # (query, chunk)
-    #
-    # together in the SAME transformer.
-    #
-    # This is far more accurate.
-    # ============================================================
-
-    reranked: List[RetrievalChunkDTO] = rerank(
-        query,
-        top_candidates
-    )
-
-    # ============================================================
-    # 10. SORT BY HYBRID SCORE
-    # ============================================================
-    #
-    # Hybrid score combines:
-    #
-    # - rerank_score
-    # - cosine_score
-    #
-    # WHY IMPORTANT?
-    # --------------
-    # Prevents reranker instability from
-    # destroying strong semantic matches.
-    # ============================================================
-
-    reranked.sort(
-        key=lambda x: x.hybrid_score,
-        reverse=True
-    )
     
-    for i, chunk in enumerate(reranked):
-        chunk.context_role = assign_context_role(chunk, i)
+    @staticmethod
+    def perform_multi_query_vector_search(
+        query: str,
+        query_embeddings: List[np.ndarray]
+    )-> List[RetrievalChunkDTO]:
+              # ============================================================
+        # RETRIEVAL ACCUMULATOR
+        # ============================================================
 
-    # ============================================================
-    # DEBUG LOGGING
-    # ============================================================
+        scored_chunks: List[RetrievalChunkDTO] = []
 
-    for doc in reranked[:top_k]:
+        print(f"[RAG] VECTOR_DB size: {len(VECTOR_DB)}")
 
-        print(
-            f"[RAG]"
-            f" source={doc.source}"
-            f" cosine={doc.cosine_score:.4f}"
-            f" rerank={doc.rerank_score:.4f}"
-            f" hybrid={doc.hybrid_score:.4f}"
+        # ============================================================
+        # 3. VECTOR SIMILARITY SEARCH
+        # ============================================================
+        #
+        # Each stored chunk is compared against ALL expanded queries.
+        #
+        # We keep:
+        # BEST(query ↔ chunk similarity)
+        #
+        # WHY?
+        # ----
+        # A chunk may align strongly with one wording
+        # but weakly with another.
+        #
+        # Multi-query retrieval solves this.
+        # ============================================================
+
+        # ------------------------------------------------------------
+        # BUILD QUERY EMBEDDING MATRIX
+        # ------------------------------------------------------------
+        # We embed multiple query variations (query expansion step)
+        # into a single matrix so we can compare them in one operation.
+        #
+        # Shape:
+        #   query_matrix → (Q, D)
+        #   Q = number of expanded queries
+        #   D = embedding dimension
+        # ------------------------------------------------------------
+        query_matrix = np.stack(query_embeddings)
+
+        for chunk in VECTOR_DB:
+
+            # ------------------------------------------------------------
+            # LOAD DOCUMENT EMBEDDING
+            # ------------------------------------------------------------
+            # Each chunk already has a precomputed embedding stored in DB.
+            # We convert it to numpy array for vector operations.
+            #
+            # Shape:
+            #   doc_vec → (D,)
+            # ------------------------------------------------------------
+            doc_vec = np.array(chunk["embedding"])
+
+
+            # ------------------------------------------------------------
+            # VECTORISED COSINE SIMILARITY (FAST PATH)
+            # ------------------------------------------------------------
+            # Instead of looping over each query embedding (O(Q)),
+            # we compute all similarities in a single matrix operation.
+            #
+            # Operation:
+            #   query_matrix @ doc_vec → dot product for all queries
+            #
+            # Result:
+            #   similarities → (Q,)
+            #
+            # Then we normalize using L2 norms to compute cosine similarity.
+            # ------------------------------------------------------------
+            query_norms = np.linalg.norm(query_matrix, axis=1)
+            doc_norm = np.linalg.norm(doc_vec)
+
+            similarities = (query_matrix @ doc_vec) / (query_norms * doc_norm + 1e-8)
+
+
+            # ------------------------------------------------------------
+            # SELECT BEST MATCH ACROSS ALL EXPANDED QUERIES
+            # ------------------------------------------------------------
+            # We assume:
+            # - query expansion may produce paraphrases
+            # - we want the strongest semantic match only
+            #
+            # So we take the maximum similarity score.
+            # ------------------------------------------------------------
+            cosine_score = float(np.max(similarities))
+
+            # ========================================================
+            # 4. FILTER LOW-QUALITY MATCHES
+            # ========================================================
+            #
+            # WHY IMPORTANT?
+            # --------------
+            # Prevent garbage chunks from:
+            # - entering reranker
+            # - increasing noise
+            # - polluting context
+            #
+            # This improves:
+            # - precision
+            # - speed
+            # - hallucination resistance
+            # ========================================================
+
+            if cosine_score < MIN_SIMILARITY_SCORE:
+                continue
+
+            # ========================================================
+            # 5. METADATA BOOSTING
+            # ========================================================
+            #
+            # Metadata improves ranking quality.
+            #
+            # Example:
+            # Query:
+            # "Explain entanglement"
+            #
+            # Chunk concept:
+            # "entanglement"
+            #
+            # → boost score
+            #
+            # WHY IMPORTANT?
+            # --------------
+            # Semantic similarity alone is not always enough.
+            #
+            # Metadata adds structured intelligence.
+            # ========================================================
+
+            metadata = chunk.get("metadata", {})
+
+            metadata_bonus = 0.0
+
+            concept = metadata.get("concept", "").lower()
+
+            query_lower = query.lower()
+
+            # --------------------------------------------------------
+            # BOOST MATCHING CONCEPTS
+            # --------------------------------------------------------
+
+            if concept and concept in query_lower:
+                metadata_bonus += 0.15
+
+            # ========================================================
+            # BUILD RETRIEVAL DTO
+            # ========================================================
+
+            scored_chunks.append(
+
+                RetrievalChunkDTO(
+                    text=chunk["text"],
+
+                    source=metadata["source"]
+                    if metadata else "unknown",
+
+                    concept=metadata["concept"]
+                    if metadata else "unknown",
+
+                    length=metadata["length"]
+                    if metadata else 0,
+
+                    cosine_score=float(
+                        cosine_score + metadata_bonus
+                    ),
+                )
+            )
+
+        # ============================================================
+        # 6. SORT BY COSINE SCORE
+        # ============================================================
+        #
+        # This is the RECALL stage.
+        #
+        # Goal:
+        # keep the most semantically relevant candidates.
+        # ============================================================
+
+        scored_chunks.sort(
+            key=lambda x: x.cosine_score,
+            reverse=True
         )
-
-    # ============================================================
-    # 11. CONFIDENCE FILTERING
-    # ============================================================
-    #
-    # WHY IMPORTANT?
-    # --------------
-    # Even top-ranked chunks may still be weak.
-    #
-    # If confidence is low:
-    # → better to answer:
-    #   "I don't know"
-    #
-    # than hallucinate.
-    # ============================================================
-
-    best_score = reranked[0].hybrid_score if reranked else 0.0
-
-    action = decide_retrieval_action(best_score)
-
-    print(f"[RAG] decision = {action}, score = {best_score:.4f}")
-
-    if action == RetrievalAction.NO_RESULT:
-        return RetrievalResponseDTO(results=[])
-
-    if action == RetrievalAction.CLARIFY:
-        return RetrievalResponseDTO(results=[])
-    
-    if action == RetrievalAction.RETRY:
-        expanded = expand_query(query + " more context")
-        return search_similar_documents(expanded[0], top_k)
-
-    # ============================================================
-    # 12. FINAL TOP-K RESULTS
-    # ============================================================
-
-    final_chunks = diversify_results(reranked, top_k=top_k)
-
-    return RetrievalResponseDTO(
-        results=final_chunks
-    )
+        
+        return RetrievalChunkDTO(scored_chunks)
