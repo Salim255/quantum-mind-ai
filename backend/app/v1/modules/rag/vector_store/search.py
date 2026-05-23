@@ -10,6 +10,7 @@ from app.v1.modules.rag.dto.retrieval_dto import (
     RetrievalResponseDTO,
     RetrievalChunkDTO
 )
+from app.v1.modules.rag.retriever.decision_engine import RetrievalAction
 
 # ============================================================
 # RETRIEVAL THRESHOLDS
@@ -164,18 +165,12 @@ def search_similar_documents(
     # We keep the BEST similarity score.
     # ============================================================
 
-    query_embeddings: List[np.ndarray] = []
-
-    for expanded_query in expanded_queries:
-
-        embedding = np.array(
-            embed_text(
-                text=expanded_query,
-                source="user_query"
-            )["embedding"]
-        )
-
-        query_embeddings.append(embedding)
+    query_embeddings: List[np.ndarray] = [
+        np.array(
+            embed_text(text=q, source="user_query")["embedding"]
+        ) 
+        for q in expanded_queries
+        ]
 
     # ============================================================
     # RETRIEVAL ACCUMULATOR
@@ -243,10 +238,10 @@ def search_similar_documents(
         #
         # Then we normalize using L2 norms to compute cosine similarity.
         # ------------------------------------------------------------
-        similarities = (query_matrix @ doc_vec) / (
-            np.linalg.norm(query_matrix, axis=1)
-            * np.linalg.norm(doc_vec)
-        )
+        query_norms = np.linalg.norm(query_matrix, axis=1)
+        doc_norm = np.linalg.norm(doc_vec)
+
+        similarities = (query_matrix @ doc_vec) / (query_norms * doc_norm + 1e-8)
 
 
         # ------------------------------------------------------------
@@ -477,13 +472,13 @@ def search_similar_documents(
 
     print(f"[RAG] decision = {action}, score = {best_score:.4f}")
 
-    if action == "NO_RESULT":
+    if action == RetrievalAction.NO_RESULT:
         return RetrievalResponseDTO(results=[])
 
-    if action == "CLARIFY":
+    if action == RetrievalAction.CLARIFY:
         return RetrievalResponseDTO(results=[])
     
-    if action == "RETRY":
+    if action == RetrievalAction.RETRY:
         expanded = expand_query(query + " more context")
         return search_similar_documents(expanded[0], top_k)
 

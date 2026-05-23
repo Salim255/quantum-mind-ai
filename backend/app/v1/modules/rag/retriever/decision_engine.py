@@ -12,6 +12,52 @@ MEDIUM_CONFIDENCE = 2.5
 LOW_CONFIDENCE = 1.0
 
 
+from enum import Enum
+
+
+class RetrievalAction(str, Enum):
+    """
+    Decision outcomes for the retrieval pipeline.
+
+    This controls what the RAG system should do
+    after evaluating retrieval confidence.
+    """
+
+    # ------------------------------------------------------------
+    # NO_RESULT
+    # ------------------------------------------------------------
+    # No relevant context found in vector DB.
+    #
+    # → Generator should refuse or say:
+    #   "I don't have enough information."
+    # ------------------------------------------------------------
+    NO_RESULT = "NO_RESULT"
+
+    # ------------------------------------------------------------
+    # CLARIFY
+    # ------------------------------------------------------------
+    # Query is too ambiguous.
+    #
+    # → System should ask user a follow-up question.
+    # ------------------------------------------------------------
+    CLARIFY = "CLARIFY"
+
+    # ------------------------------------------------------------
+    # RETRY
+    # ------------------------------------------------------------
+    # Retrieval is weak but salvageable.
+    #
+    # → System should expand query or re-run retrieval.
+    # ------------------------------------------------------------
+    RETRY = "RETRY"
+
+    # ------------------------------------------------------------
+    # OK
+    # ------------------------------------------------------------
+    # Retrieval is strong enough to answer directly.
+    # ------------------------------------------------------------
+    OK = "OK"
+    
 def decide_retrieval_action(best_score: float) -> str:
     """
     Determines system behavior based on retrieval confidence.
