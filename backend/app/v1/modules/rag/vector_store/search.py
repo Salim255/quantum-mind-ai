@@ -11,6 +11,7 @@ from app.v1.modules.rag.dto.retrieval_dto import (
     RetrievalChunkDTO
 )
 from app.v1.modules.rag.retriever.decision_engine import RetrievalAction
+from app.v1.modules.rag.retriever.diversity_filter import diversify_results
 
 # ============================================================
 # RETRIEVAL THRESHOLDS
@@ -486,6 +487,8 @@ def search_similar_documents(
     # 12. FINAL TOP-K RESULTS
     # ============================================================
 
+    final_chunks = diversify_results(reranked, top_k=top_k)
+
     return RetrievalResponseDTO(
-        results=reranked[:top_k]
+        results=final_chunks
     )

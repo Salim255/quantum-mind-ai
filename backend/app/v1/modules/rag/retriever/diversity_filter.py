@@ -1,18 +1,23 @@
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 
+# ============================================================
+# DIVERSITY FILTER
+# ============================================================
+# This module ensures that the final retrieved results:
+#
+# 1. Do NOT contain duplicate or near-duplicate chunks
+# 2. Cover multiple concepts instead of repeating one idea
+# 3. Preserve ranking quality from reranker
+#
+# WHY THIS MATTERS
+# -----------------
+# Without diversity filtering:
+# - LLM receives redundant context
+# - token space is wasted
+# - answer quality decreases (repetition bias)
+# ============================================================
 
-def is_similar(a: str, b: str, threshold: float = 0.92) -> bool:
-    """
-    Lightweight semantic duplication check.
-
-    NOTE:
-    In production you can replace this with:
-    - embedding similarity
-    - or MinHash / cosine similarity
-    """
-
-    return a.strip().lower() == b.strip().lower()
 
 def diversify_results(
     chunks: List[RetrievalChunkDTO],
@@ -20,44 +25,65 @@ def diversify_results(
     top_k: int = 3
 ) -> List[RetrievalChunkDTO]:
     """
-    Selects diverse, non-redundant top-k results.
+    Selects a diverse subset of top-ranked chunks.
 
-    Goals:
-    - avoid duplicates
-    - ensure concept diversity
-    - preserve ranking quality
+    Strategy:
+    ---------
+    - Keep highest scoring chunks first
+    - Remove duplicates
+    - Limit repetition per concept
+    - Preserve ranking order
     """
 
-    selected = []
+    selected: List[RetrievalChunkDTO] = []
+
+    # ------------------------------------------------------------
+    # Track already selected texts (hard deduplication)
+    # ------------------------------------------------------------
+    # WHY:
+    # Prevent identical or near-identical chunk text from appearing
+    # multiple times in final context.
+    # ------------------------------------------------------------
     seen_texts = set()
+
+    # ------------------------------------------------------------
+    # Track concept frequency (diversity control)
+    # ------------------------------------------------------------
+    # WHY:
+    # Prevent system from returning multiple chunks
+    # from the same concept/topic.
+    # ------------------------------------------------------------
     concept_count = {}
 
     for chunk in chunks:
 
+        # Normalize text for deduplication
         text_key = chunk.text.strip().lower()
+
+        # Extract concept safely
         concept = (chunk.concept or "unknown").lower()
 
         # --------------------------------------------------------
-        # 1. HARD DEDUPLICATION
+        # 1. HARD DEDUPLICATION CHECK
         # --------------------------------------------------------
         if text_key in seen_texts:
             continue
 
         # --------------------------------------------------------
-        # 2. CONCEPT LIMIT
+        # 2. CONCEPT DIVERSITY LIMIT
         # --------------------------------------------------------
         if concept_count.get(concept, 0) >= max_per_concept:
             continue
 
         # --------------------------------------------------------
-        # ACCEPT CHUNK
+        # 3. ACCEPT CHUNK
         # --------------------------------------------------------
         selected.append(chunk)
         seen_texts.add(text_key)
         concept_count[concept] = concept_count.get(concept, 0) + 1
 
         # --------------------------------------------------------
-        # STOP CONDITION
+        # 4. STOP EARLY IF WE REACHED TOP-K
         # --------------------------------------------------------
         if len(selected) >= top_k:
             break
