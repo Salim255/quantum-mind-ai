@@ -316,7 +316,7 @@ class RAGSearchSimilar:
         query: str,
         query_embeddings: List[np.ndarray]
     )-> List[RetrievalChunkDTO]:
-              # ============================================================
+        # ============================================================
         # RETRIEVAL ACCUMULATOR
         # ============================================================
 
@@ -494,5 +494,5 @@ class RAGSearchSimilar:
             key=lambda x: x.cosine_score,
             reverse=True
         )
-        
+
         return RetrievalChunkDTO(scored_chunks)
