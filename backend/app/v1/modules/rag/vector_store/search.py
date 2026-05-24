@@ -337,6 +337,76 @@ class RAGSearchSimilar:
         """
         return np.stack(query_embeddings)
     
+    
+    @classmethod
+    def score_document_against_queries(
+        cl,
+        query: str,
+        chunk: dict,
+        query_matrix: np.ndarray
+    )-> RetrievalChunkDTO | None:
+        """
+        Compare one document against all expanded queries.
+
+        RETURNS
+        -------
+        RetrievalChunkDTO
+            Structured retrieval result
+
+        None
+            If similarity is below threshold
+        """
+
+        # ------------------------------------------------------------
+        # LOAD DOCUMENT VECTOR
+        # ------------------------------------------------------------
+        document_vector = np.array(chunk["embedding"])
+
+        # ------------------------------------------------------------
+        # COMPUTE COSINE SIMILARITIES
+        # ------------------------------------------------------------
+        cosine_score = (
+            cls.compute_best_cosine_similarity(
+                query_matrix,
+                document_vector
+            )
+        )
+
+        # ------------------------------------------------------------
+        # FILTER LOW-QUALITY MATCHES
+        # ------------------------------------------------------------
+        if cosine_score < MIN_SIMILARITY_SCORE:
+            return None
+        
+        # ------------------------------------------------------------
+        # APPLY METADATA BOOSTING
+        # ------------------------------------------------------------
+        boosted_score = (
+            RAGSearchSimilar.apply_metadata_boost(
+                query=query,
+                chunk=chunk,
+                cosine_score=cosine_score
+            )
+        )
+
+        # ------------------------------------------------------------
+        # BUILD DTO
+        # ------------------------------------------------------------
+
+        metadata = chunk.get("metadata", {})
+
+        return RetrievalChunkDTO(
+            text=chunk["text"],
+
+            source=metadata.get("source", "unknown"),
+
+            concept=metadata.get("concept", "unknown"),
+
+            length=metadata.get("length", 0),
+
+            cosine_score=boosted_score
+        )
+    
     @staticmethod
     def perform_multi_query_vector_search(
         query: str,
