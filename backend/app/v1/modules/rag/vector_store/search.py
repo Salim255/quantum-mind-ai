@@ -156,7 +156,7 @@ class RAGSearchSimilar:
 
         expanded_queries: List[str] = expand_query(query)
 
-        print(f"[RAG] expanded queries: {expanded_queries}")
+        # print(f"[RAG] expanded queries: {expanded_queries}")
 
         # ============================================================
         # 2. EMBED ALL QUERY VARIANTS
@@ -182,9 +182,12 @@ class RAGSearchSimilar:
         # ============================================================
         # 7. EXPAND CANDIDATE POOL
         # ============================================================
-        sorted_chunks = cls.perform_multi_query_vector_search()
+        scored_chunks: List[RetrievalChunkDTO] = cls.perform_multi_query_vector_search(
+            query=query, 
+            query_embeddings=query_embeddings
+            )
         
-        top_candidates = scored_chunks[:30]
+        top_candidates: List[RetrievalChunkDTO] = scored_chunks[:30]
 
         print(
             f"[RAG] candidates sent to reranker:"
@@ -259,7 +262,6 @@ class RAGSearchSimilar:
         # ============================================================
         # DEBUG LOGGING
         # ============================================================
-
         for doc in reranked[:top_k]:
 
             print(
@@ -299,7 +301,7 @@ class RAGSearchSimilar:
         
         if action == RetrievalAction.RETRY:
             expanded = expand_query(query + " more context")
-            return search_similar_documents(expanded[0], top_k)
+            return cls.search_similar_documents(expanded[0], top_k)
 
         # ============================================================
         # 12. FINAL TOP-K RESULTS
@@ -310,6 +312,30 @@ class RAGSearchSimilar:
         return RetrievalResponseDTO(
             results=final_chunks
         )
+    
+    @staticmethod
+    def build_query_matrix(
+        query_embeddings: List[np.ndarray]
+    )->np.ndarray:
+        """
+        Convert multiple query embeddings into a single matrix.
+
+        WHY IMPORTANT?
+        --------------
+        Vectorized matrix operations are significantly faster
+        than nested Python loops.
+
+        Shape
+        -----
+        (Q, D)
+
+        Q:
+            Number of expanded queries
+
+        D:
+            Embedding dimension
+        """
+        return np.stack(query_embeddings)
     
     @staticmethod
     def perform_multi_query_vector_search(
@@ -495,4 +521,4 @@ class RAGSearchSimilar:
             reverse=True
         )
 
-        return RetrievalChunkDTO(scored_chunks)
+        return scored_chunks
