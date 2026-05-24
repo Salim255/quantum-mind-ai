@@ -499,8 +499,9 @@ class RAGSearchSimilar:
         
         return chunks
     
-    @staticmethod
+    @classmethod
     def perform_multi_query_vector_search(
+        cls,
         query: str,
         query_embeddings: List[np.ndarray]
     )-> List[RetrievalChunkDTO]:
@@ -677,10 +678,6 @@ class RAGSearchSimilar:
         # Goal:
         # keep the most semantically relevant candidates.
         # ============================================================
-
-        scored_chunks.sort(
-            key=lambda x: x.cosine_score,
-            reverse=True
-        )
+        scored_chunks = cls.rank_by_cosine_similarity(scored_chunks)
 
         return scored_chunks
