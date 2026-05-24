@@ -340,7 +340,7 @@ class RAGSearchSimilar:
     
     @classmethod
     def score_document_against_queries(
-        cl,
+        cls,
         query: str,
         chunk: dict,
         query_matrix: np.ndarray
@@ -407,6 +407,40 @@ class RAGSearchSimilar:
             cosine_score=boosted_score
         )
     
+    @staticmethod
+    def compute_best_cosine_similarity(
+        query_matrix: np.ndarray,
+        document_vector: np.ndarray
+    )-> float:
+        """
+        Compute the best cosine similarity between
+        a document and all expanded queries.
+
+        WHY IMPORTANT?
+        --------------
+        Different query reformulations may match
+        different semantic expressions inside documents.
+
+        We keep ONLY the strongest semantic alignment.
+        """
+
+        query_norms = np.linalg.norm(
+            query_matrix,
+            axis=1
+        )
+
+        document_norm = np.linalg.norm(
+            document_vector
+        )
+
+        similarities = (
+            query_matrix @ document_vector
+        ) / (
+            query_norms * document_norm + 1e-8
+        )
+
+        return float(np.max(similarities))
+        
     @staticmethod
     def perform_multi_query_vector_search(
         query: str,
