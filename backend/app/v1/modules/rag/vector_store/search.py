@@ -382,7 +382,7 @@ class RAGSearchSimilar:
         # APPLY METADATA BOOSTING
         # ------------------------------------------------------------
         boosted_score = (
-            RAGSearchSimilar.apply_metadata_boost(
+            cls.apply_metadata_boost(
                 query=query,
                 chunk=chunk,
                 cosine_score=cosine_score
@@ -480,6 +480,24 @@ class RAGSearchSimilar:
             metadata_bonus += 0.15
 
         return cosine_score + metadata_bonus
+    
+    @staticmethod
+    def rank_by_cosine_similarity(chunks: List[RetrievalChunkDTO])-> List[RetrievalChunkDTO]:
+        """
+        Sort retrieval candidates by cosine similarity.
+
+        This represents the RECALL stage of retrieval.
+
+        Higher similarity means:
+        stronger semantic relevance.
+        """
+
+        chunks.sort(
+            key=lambda x: x.cosine_score,
+            reverse=True
+        )
+        
+        return chunks
     
     @staticmethod
     def perform_multi_query_vector_search(
