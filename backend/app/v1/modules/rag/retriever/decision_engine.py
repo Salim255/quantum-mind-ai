@@ -57,8 +57,8 @@ class RetrievalAction(str, Enum):
     # Retrieval is strong enough to answer directly.
     # ------------------------------------------------------------
     OK = "OK"
-    
-def decide_retrieval_action(best_score: float) -> str:
+
+def decide_retrieval_action(best_score: float) -> RetrievalAction:
     """
     Determines system behavior based on retrieval confidence.
 
@@ -75,21 +75,21 @@ def decide_retrieval_action(best_score: float) -> str:
     # CASE 1: STRONG SIGNAL
     # ------------------------------------------------------------
     if best_score >= HIGH_CONFIDENCE:
-        return "ANSWER"
+        return  RetrievalAction.OK
 
     # ------------------------------------------------------------
     # CASE 2: MODERATE SIGNAL
     # ------------------------------------------------------------
     if best_score >= MEDIUM_CONFIDENCE:
-        return "RETRY"
+        return  RetrievalAction.RETRY
 
     # ------------------------------------------------------------
     # CASE 3: WEAK SIGNAL
     # ------------------------------------------------------------
     if best_score >= LOW_CONFIDENCE:
-        return "CLARIFY"
+        return  RetrievalAction.CLARIFY
 
     # ------------------------------------------------------------
     # CASE 4: NO MEANINGFUL MATCH
     # ------------------------------------------------------------
-    return "NO_RESULT"
+    return  RetrievalAction.NO_RESULT

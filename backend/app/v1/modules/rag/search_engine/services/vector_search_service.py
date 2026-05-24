@@ -12,7 +12,7 @@ class VectorSearchService:
         cls,
         query: str, 
         query_embeddings: List[np.ndarray]
-        )-> RetrievalChunkDTO:
+        )-> List[RetrievalChunkDTO]:
         query_matrix = cls.build_query_matrix(query_embeddings)
 
         results: List[RetrievalChunkDTO] = []

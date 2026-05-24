@@ -25,7 +25,7 @@ class RerankingService:
         together inside the SAME transformer model.
         """
 
-        reranked = rerank(
+        reranked: List[RetrievalChunkDTO] = rerank(
             query,
             candidates
         )

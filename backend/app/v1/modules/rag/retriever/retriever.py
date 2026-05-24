@@ -17,8 +17,11 @@
 # This makes it easy to debug and perfect for learning how RAG works.
 # ---------------------------------------------------------------------------
 
-from app.v1.modules.rag.vector_store.search import  RAGSearchSimilar
+#from app.v1.modules.rag.vector_store.search import  RAGSearchSimilar
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
+from app.v1.modules.rag.search_engine.orchestrators.search_engine_impl import SearchEngineImpl
+
+search_engine =  SearchEngineImpl()
 
 def retrieve(query: str) -> RetrievalResponseDTO:
     """
@@ -34,4 +37,6 @@ def retrieve(query: str) -> RetrievalResponseDTO:
     RetrievalResultSchema
         The structured retrieval results containing the retrieved chunks and their associated sources.
     """
-    return RAGSearchSimilar.search_similar_documents(query)
+    #return RAGSearchSimilar.search_similar_documents(query)
+    return search_engine.search_similar_documents(query=query)
+

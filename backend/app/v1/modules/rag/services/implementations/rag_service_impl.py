@@ -1,8 +1,8 @@
 import time
-from typing import Annotated, List
+from typing import List
 from pydantic import BaseModel
 from app.ai_core.llms.groq_llm import get_groq_client
-from app.v1.modules.rag.context.context_builder import build_context, build_reasoned_context
+from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.generator.generator_service import generate_answer
