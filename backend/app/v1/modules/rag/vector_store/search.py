@@ -442,6 +442,46 @@ class RAGSearchSimilar:
         return float(np.max(similarities))
         
     @staticmethod
+    def apply_metadata_boost(
+        query: str,
+        chunk: dict,
+        cosine_score: float
+    )-> float:
+        """
+        Apply metadata-aware ranking bonuses.
+
+        WHY IMPORTANT?
+        --------------
+        Pure semantic similarity is sometimes insufficient.
+
+        Metadata provides structured retrieval signals:
+        - concepts
+        - trusted sources
+        - tags
+        - educational categories
+        """
+
+        metadata = chunk.get("metadata", {})
+
+
+        concept = metadata.get(
+            "concept",
+            ""
+        ).lower()
+
+        query_lower = query.lower()
+
+        metadata_bonus = 0.0
+
+        # ------------------------------------------------------------
+        # CONCEPT MATCH BOOST
+        # ------------------------------------------------------------
+        if concept and concept in query_lower:
+            metadata_bonus += 0.15
+
+        return cosine_score + metadata_bonus
+    
+    @staticmethod
     def perform_multi_query_vector_search(
         query: str,
         query_embeddings: List[np.ndarray]
