@@ -8,6 +8,7 @@ from app.v1.modules.rag.dependencies import get_rag_service
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 
 memory_manager = MemoryManager()
+
 def get_memory_manager() -> MemoryManager:
     return memory_manager
 

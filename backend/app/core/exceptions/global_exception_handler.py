@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class ExceptionsHandler:
     def __init__(self, app: FastAPI, settings: Settings):
         self.app = app
-        self.settings = settings()
+        self.settings = settings
         self.register_handler()
 
     def register_handler(self):
