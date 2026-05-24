@@ -316,7 +316,7 @@ class RAGSearchSimilar:
     @staticmethod
     def build_query_matrix(
         query_embeddings: List[np.ndarray]
-    )->np.ndarray:
+    )-> np.ndarray:
         """
         Convert multiple query embeddings into a single matrix.
 
@@ -545,129 +545,11 @@ class RAGSearchSimilar:
 
         for chunk in VECTOR_DB:
 
-            # ------------------------------------------------------------
-            # LOAD DOCUMENT EMBEDDING
-            # ------------------------------------------------------------
-            # Each chunk already has a precomputed embedding stored in DB.
-            # We convert it to numpy array for vector operations.
-            #
-            # Shape:
-            #   doc_vec → (D,)
-            # ------------------------------------------------------------
-            doc_vec = np.array(chunk["embedding"])
-
-
-            # ------------------------------------------------------------
-            # VECTORISED COSINE SIMILARITY (FAST PATH)
-            # ------------------------------------------------------------
-            # Instead of looping over each query embedding (O(Q)),
-            # we compute all similarities in a single matrix operation.
-            #
-            # Operation:
-            #   query_matrix @ doc_vec → dot product for all queries
-            #
-            # Result:
-            #   similarities → (Q,)
-            #
-            # Then we normalize using L2 norms to compute cosine similarity.
-            # ------------------------------------------------------------
-            query_norms = np.linalg.norm(query_matrix, axis=1)
-            doc_norm = np.linalg.norm(doc_vec)
-
-            similarities = (query_matrix @ doc_vec) / (query_norms * doc_norm + 1e-8)
-
-
-            # ------------------------------------------------------------
-            # SELECT BEST MATCH ACROSS ALL EXPANDED QUERIES
-            # ------------------------------------------------------------
-            # We assume:
-            # - query expansion may produce paraphrases
-            # - we want the strongest semantic match only
-            #
-            # So we take the maximum similarity score.
-            # ------------------------------------------------------------
-            cosine_score = float(np.max(similarities))
-
-            # ========================================================
-            # 4. FILTER LOW-QUALITY MATCHES
-            # ========================================================
-            #
-            # WHY IMPORTANT?
-            # --------------
-            # Prevent garbage chunks from:
-            # - entering reranker
-            # - increasing noise
-            # - polluting context
-            #
-            # This improves:
-            # - precision
-            # - speed
-            # - hallucination resistance
-            # ========================================================
-
-            if cosine_score < MIN_SIMILARITY_SCORE:
-                continue
-
-            # ========================================================
-            # 5. METADATA BOOSTING
-            # ========================================================
-            #
-            # Metadata improves ranking quality.
-            #
-            # Example:
-            # Query:
-            # "Explain entanglement"
-            #
-            # Chunk concept:
-            # "entanglement"
-            #
-            # → boost score
-            #
-            # WHY IMPORTANT?
-            # --------------
-            # Semantic similarity alone is not always enough.
-            #
-            # Metadata adds structured intelligence.
-            # ========================================================
-
-            metadata = chunk.get("metadata", {})
-
-            metadata_bonus = 0.0
-
-            concept = metadata.get("concept", "").lower()
-
-            query_lower = query.lower()
-
-            # --------------------------------------------------------
-            # BOOST MATCHING CONCEPTS
-            # --------------------------------------------------------
-
-            if concept and concept in query_lower:
-                metadata_bonus += 0.15
-
-            # ========================================================
-            # BUILD RETRIEVAL DTO
-            # ========================================================
-
-            scored_chunks.append(
-
-                RetrievalChunkDTO(
-                    text=chunk["text"],
-
-                    source=metadata["source"]
-                    if metadata else "unknown",
-
-                    concept=metadata["concept"]
-                    if metadata else "unknown",
-
-                    length=metadata["length"]
-                    if metadata else 0,
-
-                    cosine_score=float(
-                        cosine_score + metadata_bonus
-                    ),
+            scored_chunks = cls.score_document_against_queries(
+                query=query,
+                chunk=chunk, 
+                query_matrix=query_matrix
                 )
-            )
 
         # ============================================================
         # 6. SORT BY COSINE SCORE
