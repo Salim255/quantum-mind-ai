@@ -6,24 +6,25 @@ from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.generator.generator_service import generate_answer
-from app.v1.modules.rag.retriever.retriever import retrieve
 from app.core.settings import Settings
 from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
+from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
 
 class QueryRequest(BaseModel):
     query: str
     top_k: int = 3
 
 class RAGServiceImpl(RAGService):
-   def __init__(self, settings: Settings):
+   def __init__(self, settings: Settings, search_engine_service: SearchEngineImpl):
         self.settings = settings
+        self.search_engine_service = search_engine_service
         
    def rag_pipeline(
-         self,
-         payload: QueryRequest
-         ) -> RAGQueryResponseSchema:
+        self,
+        payload: QueryRequest
+        ) -> RAGQueryResponseSchema:
     """
     Execute the full RAG pipeline.
 
@@ -75,7 +76,7 @@ class RAGServiceImpl(RAGService):
     # }
     # ---------------------------------------------------------------
         
-    retrieval_output: RetrievalResponseDTO = retrieve(payload.query)
+    retrieval_output: RetrievalResponseDTO = self.search_engine_service.search_similar_documents(payload.query)
 
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS

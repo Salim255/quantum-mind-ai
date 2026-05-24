@@ -16,13 +16,15 @@
 # It is intentionally simple and pure.
 # This makes it easy to debug and perfect for learning how RAG works.
 # ---------------------------------------------------------------------------
-
+from typing import Annotated
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
 from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
+from app.v1.modules.rag.dependencies import get_search_engine_service
 
-search_engine =  SearchEngineImpl()
-
-def retrieve(query: str) -> RetrievalResponseDTO:
+def retriev(
+        query: str,
+        search_engine: Annotated[SearchEngineImpl,  get_search_engine_service]
+    ) -> RetrievalResponseDTO:
     """
     Retrieves relevant chunks of information based on the input query.
 
