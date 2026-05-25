@@ -18,6 +18,7 @@ class SearchEngineImpl(SearchEngineInterface):
             query: str, 
             top_k: int = 3
         )-> RetrievalResponseDTO:
+        retry_counter = 0
         # 1. expand
         expanded_queries: List[str] = QueryExpansionService.expand(query)
 
@@ -33,6 +34,7 @@ class SearchEngineImpl(SearchEngineInterface):
         if not candidates:
             return RetrievalResponseDTO(results=[])
         
+     
         # 4. rerank
         reranked: List[RetrievalChunkDTO] = RerankingService.rerank_candidates(query, candidates)
 
@@ -64,8 +66,11 @@ class SearchEngineImpl(SearchEngineInterface):
                 # - broaden retrieval
                 # - rerank again
                 # --------------------------------------------------------
-                # TODO
-                return
+                retry_counter +=1
+                return self._handle_retry(
+                    query=query,
+                    top_k=top_k
+                )
             case RetrievalAction.CLARIFY:
                 # TODO
                 return
@@ -75,7 +80,22 @@ class SearchEngineImpl(SearchEngineInterface):
     # ---------------------------------------------------------
     # MAIN RETRIEVAL PIPELINE
     # ---------------------------------------------------------
-   
+    def _execute_pipeline(
+        self,
+        query: str,
+        top_k: int
+    ) -> List[RetrievalChunkDTO]:
+
+        candidates = self._retrieve_candidates(query)
+
+        if not candidates:
+            return []
+
+        return self._post_process_candidates(
+            query=query,
+            candidates=candidates,
+            top_k=top_k
+        )
         
     # ---------------------------------------------------------
     # RETRIEVAL
@@ -84,7 +104,32 @@ class SearchEngineImpl(SearchEngineInterface):
     # ---------------------------------------------------------
     # POST PROCESSING
     # ---------------------------------------------------------
+    def _post_process_candidates(
+        self,
+        query: str,
+        candidates: List[RetrievalChunkDTO],
+        top_k: int
+    ) -> List[RetrievalChunkDTO]:
 
+        reranked: List[RetrievalChunkDTO] = (
+            RerankingService.rerank_candidates(
+                query,
+                candidates
+            )
+        )
+
+        diversified: List[RetrievalChunkDTO] = (
+            DiversityService.diversify(
+                reranked,
+                top_k
+            )
+        )
+
+        ContextRoleService.assign_reasoning_roles(
+            diversified
+        )
+
+        return diversified
     # ---------------------------------------------------------
     # RETRY HANDLER
     # ---------------------------------------------------------
