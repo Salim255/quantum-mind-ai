@@ -1,9 +1,6 @@
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
-from app.v1.modules.rag.retriever.decision_engine import (
-    decide_retrieval_action,
-    RetrievalAction
-)
+from app.v1.modules.rag.retriever.decision_engine import (decide_retrieval_action, RetrievalAction)
 
 
 class DecisionService:
@@ -25,4 +22,5 @@ class DecisionService:
             """
             best_score = chunks[0].hybrid_score if chunks else 0.0
 
+            print("best_score___\n", best_score)
             return decide_retrieval_action(best_score)

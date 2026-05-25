@@ -18,42 +18,20 @@ class SearchEngineImpl(SearchEngineInterface):
             query: str, 
             top_k: int = 3
         )-> RetrievalResponseDTO:
-        diversified = self._execute_pipeline(
+        diversified = self.execute_pipeline(
             query=query,
             top_k=top_k
         )
       
-        # 1. expand
-        expanded_queries: List[str] = QueryExpansionService.expand(query)
-
-        # 2. embed
-        query_embeddings: List[np.ndarray] = EmbeddingService.embed_expanded_queries(expanded_queries)
-
-        # 3. vector search
-        candidates: List[RetrievalChunkDTO] = VectorSearchService.multi_query_vector_search(
-            query,
-            query_embeddings
-        )
-
-        if not candidates:
+        if not diversified:
             return RetrievalResponseDTO(results=[])
         
-     
-        # 4. rerank
-        #reranked: List[RetrievalChunkDTO] = RerankingService.rerank_candidates(query, candidates)
-
-        # 5. diversity
-        #diversified: List[RetrievalChunkDTO] = DiversityService.diversify(reranked, top_k)
-
-
-        # 6. context roles
-        #ContextRoleService.assign_reasoning_roles(diversified)
-
         # --------------------------------------------------------
         # STEP 7:
         # HANDLE RETRIEVAL DECISION
         # --------------------------------------------------------
         action: RetrievalAction = DecisionService.evaluate_retrieval_confidence(diversified)
+
         match action:
             case RetrievalAction.OK: 
                 # --------------------------------------------------------
@@ -70,8 +48,7 @@ class SearchEngineImpl(SearchEngineInterface):
                 # - broaden retrieval
                 # - rerank again
                 # --------------------------------------------------------
-                retry_counter +=1
-                return self._handle_retry(
+                return self.handle_retry(
                     query=query,
                     top_k=top_k
                 )
@@ -84,18 +61,18 @@ class SearchEngineImpl(SearchEngineInterface):
     # ---------------------------------------------------------
     # MAIN RETRIEVAL PIPELINE
     # ---------------------------------------------------------
-    def _execute_pipeline(
+    def execute_pipeline(
         self,
         query: str,
         top_k: int
     ) -> List[RetrievalChunkDTO]:
 
-        candidates = self._retrieve_candidates(query)
+        candidates = self.retrieve_candidates(query)
 
         if not candidates:
             return []
 
-        return self._post_process_candidates(
+        return self.post_process_candidates(
             query=query,
             candidates=candidates,
             top_k=top_k
@@ -104,21 +81,23 @@ class SearchEngineImpl(SearchEngineInterface):
     # ---------------------------------------------------------
     # RETRIEVAL
     # ---------------------------------------------------------
-    def _retrieve_candidates(
+    def retrieve_candidates(
         self,
         query: str
     ) -> List[RetrievalChunkDTO]:
-
+        # 1. expand
         expanded_queries: List[str] = (
             QueryExpansionService.expand(query)
         )
 
+        # 2. embed
         query_embeddings: List[np.ndarray] = (
             EmbeddingService.embed_expanded_queries(
                 expanded_queries
             )
         )
 
+        # 3. vector search
         return VectorSearchService.multi_query_vector_search(
             query,
             query_embeddings
@@ -128,13 +107,14 @@ class SearchEngineImpl(SearchEngineInterface):
     # ---------------------------------------------------------
     # POST PROCESSING
     # ---------------------------------------------------------
-    def _post_process_candidates(
+    def post_process_candidates(
         self,
         query: str,
         candidates: List[RetrievalChunkDTO],
         top_k: int
     ) -> List[RetrievalChunkDTO]:
 
+        # 4. rerank
         reranked: List[RetrievalChunkDTO] = (
             RerankingService.rerank_candidates(
                 query,
@@ -142,6 +122,7 @@ class SearchEngineImpl(SearchEngineInterface):
             )
         )
 
+        # 5. diversity
         diversified: List[RetrievalChunkDTO] = (
             DiversityService.diversify(
                 reranked,
@@ -149,6 +130,7 @@ class SearchEngineImpl(SearchEngineInterface):
             )
         )
 
+        # 6. context roles
         ContextRoleService.assign_reasoning_roles(
             diversified
         )
@@ -157,13 +139,13 @@ class SearchEngineImpl(SearchEngineInterface):
     # ---------------------------------------------------------
     # RETRY HANDLER
     # ---------------------------------------------------------
-    def _handle_retry(
+    def handle_retry(
         self,
         query: str,
         top_k: int
     ) -> RetrievalResponseDTO:
 
-        retry_results = self._execute_pipeline(
+        retry_results = self.execute_pipeline(
             query=query,
             top_k=top_k * 2
         )
