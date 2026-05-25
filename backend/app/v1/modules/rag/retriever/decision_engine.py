@@ -70,7 +70,6 @@ def decide_retrieval_action(best_score: float) -> RetrievalAction:
         - "CLARIFY"
         - "NO_RESULT"
     """
-
     # ------------------------------------------------------------
     # CASE 1: STRONG SIGNAL
     # ------------------------------------------------------------
