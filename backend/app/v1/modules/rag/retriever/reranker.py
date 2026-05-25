@@ -2,21 +2,6 @@ from sentence_transformers import CrossEncoder
 from typing import List
 import time
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
-# ------------------------------------------------------------
-# CROSS-ENCODER RERANKER
-# ------------------------------------------------------------
-# This model is used AFTER vector search.
-#
-# It takes (query, document) pairs and directly predicts
-# how relevant the document is to the query.
-#
-# Unlike embeddings (which are independent vectors),
-# cross-encoders look at BOTH texts together.
-#
-# This makes them MUCH more accurate, but slower.
-# ------------------------------------------------------------
-
-reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
 # ------------------------------------------------------------
 # CONFIGURATION

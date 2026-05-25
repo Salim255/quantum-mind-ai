@@ -1,4 +1,7 @@
+from sentence_transformers import CrossEncoder
+from sentence_transformers import SentenceTransformer
 from app.core.settings import Settings, get_settings
+from app.v1.modules.rag.embeddings.embedder import EmbeddingService
 from groq import Groq
 
 class Container:
@@ -17,7 +20,28 @@ class Container:
 
         # MODELS (load once)
         #self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        #self.reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L6-v2")
+        # Load the embedding model ONCE at module import time.
+        # This avoids reloading the model on every request, which would be slow.
+        # "all-MiniLM-L6-v2" is a fast, lightweight, high‑quality embedding model.
+        self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+        self.embedding_service = EmbeddingService(self.embedding_model)
+        
+        # MODELS (load once)
+        # ------------------------------------------------------------
+        # CROSS-ENCODER RERANKER
+        # ------------------------------------------------------------
+        # This model is used AFTER vector search.
+        #
+        # It takes (query, document) pairs and directly predicts
+        # how relevant the document is to the query.
+        #
+        # Unlike embeddings (which are independent vectors),
+        # cross-encoders look at BOTH texts together.
+        #
+        # This makes them MUCH more accurate, but slower.
+        # ------------------------------------------------------------
+
+        self.reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
         # VECTOR DB CLIENT (example)
         # self.vector_db = QdrantClient(...)

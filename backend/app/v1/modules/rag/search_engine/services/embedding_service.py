@@ -1,11 +1,15 @@
 from typing import List
 import numpy as np
+from fastapi import Request
+from app.core.container import Container
 
-from app.v1.modules.rag.embeddings.embedder import embed_text
 
 class EmbeddingService:
+    def __init__(self, request: Request):
+        self.container:Container = request.app.state.container
     @staticmethod
     def embed_expanded_queries(
+        self,
         expanded_queries: List[str]
         ) -> List[np.ndarray]:
         """
@@ -31,7 +35,7 @@ class EmbeddingService:
 
         return [
             np.array(
-                embed_text(
+                self.container.embed_text(
                     text=query,
                     source="user_query"
                 )["embedding"]
