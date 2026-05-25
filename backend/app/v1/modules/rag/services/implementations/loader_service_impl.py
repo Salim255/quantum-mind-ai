@@ -1,18 +1,27 @@
 import os
 import asyncio
 import uuid
-from fastapi import UploadFile
+from fastapi import Request, UploadFile
 import aiofiles
+from app.core.container import Container
 from app.v1.modules.rag.loader.chunker import RAGChunker
 from app.v1.modules.rag.loader.cleaner import clean_text
 from app.v1.modules.rag.loader.normalizer import normalize_text
 from app.v1.modules.rag.loader.pdf_loader import load_pdf
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
-from app.v1.modules.rag.vector_store.add_document import add_document
+from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
 from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema  # your existing function
 
 
 class LoaderServiceImpl(LoaderService):
+    def __init__(
+            self, 
+            container: Container, 
+            add_document_service: RAGAddDocument
+        ):
+        self.container:Container = container
+        self.add_document_service: RAGAddDocument = add_document_service
+
     async def upload_and_ingest_pdf(
         self,
         file: UploadFile,
@@ -103,7 +112,8 @@ class LoaderServiceImpl(LoaderService):
                 continue
             if "introduction introduction" in text:
                 continue
-            add_document(chunk, source=source)
+
+            self.add_document_service.add_document(chunk=chunk, source=source)
 
         return IngestionResponseSchema(
             status="ok",

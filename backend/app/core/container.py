@@ -25,7 +25,7 @@ class Container:
         # "all-MiniLM-L6-v2" is a fast, lightweight, high‑quality embedding model.
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
         self.embedding_service = EmbeddingService(self.embedding_model)
-        
+
         # MODELS (load once)
         # ------------------------------------------------------------
         # CROSS-ENCODER RERANKER

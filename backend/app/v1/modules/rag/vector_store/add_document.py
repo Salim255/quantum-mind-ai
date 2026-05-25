@@ -1,9 +1,7 @@
-import numpy as np
 # NumPy is used for handling vectors (embeddings).
 # Even if this function does not manipulate vectors directly,
 # NumPy is essential for similarity search later in the pipeline.
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
-from app.v1.modules.rag.embeddings.embedder import embed_text
 from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
 from app.v1.modules.rag.dto.document_dto import (DocumentDTO, AddedDocResponseDto, MetadataDTO)
 from app.core.container import Container
@@ -18,10 +16,9 @@ from fastapi import Request
 # { "text": "...", "embedding": [0.12, -0.44, ...], "source": "lesson" }
 
 class RAGAddDocument:
-    def __init__(self, request: Request):
-        self.container:Container = request.app.state.container
-
-    @staticmethod
+    def __init__(self, container: Container):
+        self.container:Container = container
+  
     def add_document(self, chunk: ChunkDTO, source: str = "document") -> AddedDocResponseDto:
         """
         Add a document to the QuantumMind AI vector store.
@@ -50,7 +47,7 @@ class RAGAddDocument:
         # We extract only the vector because that's what we store in the DB.
         # 1. Extract text safely
         # text = chunk["text"] if isinstance(chunk, dict) else chunk
-        embedding_result = self.container.embed_text(text=chunk.text, source=source)
+        embedding_result = self.container.embedding_service.embed_text(text=chunk.text, source=source)
         emb = embedding_result["embedding"]
 
 
