@@ -1,20 +1,6 @@
 from groq import Groq
+import time
 from app.core.settings import Settings
-
-
-# ------------------------------------------------------------------
-# GROQ CLIENT FACTORY
-# ------------------------------------------------------------------
-
-def get_groq_client(settings: Settings) -> Groq:
-    """
-    Create and return the Groq client.
-
-    The API key is loaded from application settings.
-    """
-
-    return Groq(api_key=settings.GROAI_API_KEY)
-
 
 # ------------------------------------------------------------------
 # LLM CALL
@@ -90,6 +76,8 @@ def groq_llm_call(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
+
+    start = time.perf_counter()
     response = client.chat.completions.create(
 
         # ----------------------------------------------------------
@@ -121,9 +109,11 @@ def groq_llm_call(
                 "role": "user",
                 "content": prompt
             }
-        ]
+        ],
+        temperature=0.2,
+        max_tokens=300,
     )
-
+    print("print___\n",time.perf_counter() - start )
     # --------------------------------------------------------------
     # EXTRACT FINAL MODEL RESPONSE
     # --------------------------------------------------------------

@@ -1,24 +1,25 @@
 import time
 from typing import List
 from pydantic import BaseModel
-from app.ai_core.llms.groq_llm import get_groq_client
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.generator.generator_service import generate_answer
-from app.core.settings import Settings
 from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
+from app.core.container import Container
+from app.core.container import Container
+
 
 class QueryRequest(BaseModel):
     query: str
     top_k: int = 3
 
 class RAGServiceImpl(RAGService):
-   def __init__(self, settings: Settings, search_engine_service: SearchEngineImpl):
-        self.settings = settings
+   def __init__(self, container: Container, search_engine_service: SearchEngineImpl):
+        self.container = container
         self.search_engine_service = search_engine_service
         
    def rag_pipeline(
@@ -129,6 +130,7 @@ class RAGServiceImpl(RAGService):
     #    max_chars=3000
     #)
     rich_context_chunks = build_reasoned_context(retrieval_output.results)
+
     # ---------------------------------------------------------------
     # 3. INITIALIZE LLM CLIENT
     # ---------------------------------------------------------------
@@ -136,8 +138,10 @@ class RAGServiceImpl(RAGService):
     # This creates the Groq client using API keys
     # from application settings.
     # ---------------------------------------------------------------
-    client = get_groq_client(self.settings)
-
+  
+    client = self.container.groq_client
+ 
+   
     # ---------------------------------------------------------------
     # 4. GENERATE FINAL STRUCTURED ANSWER
     # ---------------------------------------------------------------
@@ -152,13 +156,12 @@ class RAGServiceImpl(RAGService):
     # RETURNS:
     # RAGResponseSchema
     # ---------------------------------------------------------------
-
-    final_answer =  generate_answer(
+  
+    final_answer = generate_answer(
         payload.query,
         rich_context_chunks,
         client
     )
-
     # ---------------------------------------------------------------
     # STOP LATENCY TIMER
     # ---------------------------------------------------------------
@@ -206,8 +209,9 @@ class RAGServiceImpl(RAGService):
     # - measurable
     # - debuggable
     # ---------------------------------------------------------------
+    start = time.perf_counter()
     log_rag_evaluation(evaluation_log)
-
+    print("log_rag_evaluation_timer___:\n",  time.perf_counter() - start)
     # ---------------------------------------------------------------
     # 8. RETURN API RESPONSE
     # ---------------------------------------------------------------

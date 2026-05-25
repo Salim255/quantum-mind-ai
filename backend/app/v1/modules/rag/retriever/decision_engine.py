@@ -6,7 +6,6 @@
 # They replace simple "if score < threshold" logic
 # with multi-level reasoning.
 # ------------------------------------------------------------
-
 HIGH_CONFIDENCE = 5.0
 MEDIUM_CONFIDENCE = 2.5
 LOW_CONFIDENCE = 1.0
@@ -70,7 +69,8 @@ def decide_retrieval_action(best_score: float) -> RetrievalAction:
         - "CLARIFY"
         - "NO_RESULT"
     """
-    # ------------------------------------------------------------
+    # -------
+    # -----------------------------------------------------
     # CASE 1: STRONG SIGNAL
     # ------------------------------------------------------------
     if best_score >= HIGH_CONFIDENCE:

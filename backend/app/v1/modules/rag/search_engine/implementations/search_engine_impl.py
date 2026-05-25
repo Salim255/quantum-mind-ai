@@ -1,5 +1,6 @@
 from typing import List
 import numpy as np
+import time
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
 from app.v1.modules.rag.search_engine.services.query_expansion_service import QueryExpansionService
 from app.v1.modules.rag.search_engine.services.vector_search_service import VectorSearchService
@@ -30,8 +31,9 @@ class SearchEngineImpl(SearchEngineInterface):
         # STEP 7:
         # HANDLE RETRIEVAL DECISION
         # --------------------------------------------------------
+        start = time.perf_counter()
         action: RetrievalAction = DecisionService.evaluate_retrieval_confidence(diversified)
-
+        print("evaluate_retrieval_confidence___TIME:\n", time.perf_counter() - start)
         match action:
             case RetrievalAction.OK: 
                 # --------------------------------------------------------
@@ -48,13 +50,18 @@ class SearchEngineImpl(SearchEngineInterface):
                 # - broaden retrieval
                 # - rerank again
                 # --------------------------------------------------------
-                return self.handle_retry(
-                    query=query,
-                    top_k=top_k
+                #return self.handle_retry(
+                #    query=query,
+                #    top_k=top_k
+                #) 
+                return RetrievalResponseDTO(
+                    results=diversified
                 )
+            
             case RetrievalAction.CLARIFY:
                 # TODO
-                return
+                return RetrievalResponseDTO(results=[])
+            
             case _:
                  return RetrievalResponseDTO(results=[])
             
@@ -71,7 +78,7 @@ class SearchEngineImpl(SearchEngineInterface):
 
         if not candidates:
             return []
-
+    
         return self.post_process_candidates(
             query=query,
             candidates=candidates,
@@ -85,6 +92,7 @@ class SearchEngineImpl(SearchEngineInterface):
         self,
         query: str
     ) -> List[RetrievalChunkDTO]:
+        start = time.perf_counter()
         # 1. expand
         expanded_queries: List[str] = (
             QueryExpansionService.expand(query)
@@ -98,6 +106,7 @@ class SearchEngineImpl(SearchEngineInterface):
         )
 
         # 3. vector search
+        print("retrieve_candidates TIME:____\n", time.perf_counter() - start)
         return VectorSearchService.multi_query_vector_search(
             query,
             query_embeddings
@@ -113,15 +122,14 @@ class SearchEngineImpl(SearchEngineInterface):
         candidates: List[RetrievalChunkDTO],
         top_k: int
     ) -> List[RetrievalChunkDTO]:
-
         # 4. rerank
         reranked: List[RetrievalChunkDTO] = (
             RerankingService.rerank_candidates(
                 query,
-                candidates
+                candidates=candidates[:10]
             )
         )
-
+        start = time.perf_counter()
         # 5. diversity
         diversified: List[RetrievalChunkDTO] = (
             DiversityService.diversify(
@@ -129,7 +137,7 @@ class SearchEngineImpl(SearchEngineInterface):
                 top_k
             )
         )
-
+        print("diversified TIME:____\n", time.perf_counter() - start)
         # 6. context roles
         ContextRoleService.assign_reasoning_roles(
             diversified

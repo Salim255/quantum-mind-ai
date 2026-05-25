@@ -6,18 +6,25 @@ from app.v1.modules.rag.services.implementations.loader_service_impl import Load
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
 from app.core.container import Container
+from fastapi import Request
+
+# ------------------------------------------------------------
+# CONTAINER DEPENDENCY
+# ------------------------------------------------------------
+def get_container(request: Request) -> Container:
+    return request.app.state.container
 
 def get_search_engine_service() -> SearchEngineImpl:
     return SearchEngineImpl()
 
 def get_rag_service(
+        container: Annotated[Container, Depends(get_container)],
         search_engine_service: Annotated[SearchEngineImpl, Depends(get_search_engine_service)]
         ) -> RAGService:
     return RAGServiceImpl(
         search_engine_service=search_engine_service,
-        settings=Container.settings
+        container=container
         )
 
 def get_loader_service() -> LoaderService:
     return LoaderServiceImpl()
-

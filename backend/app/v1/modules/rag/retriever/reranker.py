@@ -1,5 +1,6 @@
 from sentence_transformers import CrossEncoder
 from typing import List
+import time
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 # ------------------------------------------------------------
 # CROSS-ENCODER RERANKER
@@ -56,8 +57,11 @@ def rerank(query: str, docs: List[RetrievalChunkDTO]) ->  List[RetrievalChunkDTO
     # We convert retrieval candidates into model input format.
     # Each pair is independently scored by the cross-encoder.
     # ------------------------------------------------------------
+
+    start = time.perf_counter()
+
     pairs = [(query, doc.text) for doc in docs]
-  
+    
 
     # ------------------------------------------------------------
     # 2. BATCHED PREDICTION
@@ -103,5 +107,5 @@ def rerank(query: str, docs: List[RetrievalChunkDTO]) ->  List[RetrievalChunkDTO
     # 5. FINAL SORTING (PRIMARY SIGNAL = RERANK SCORE)
     # ------------------------------------------------------------
     docs.sort(key=lambda x: x.rerank_score or 0.0, reverse=True)
-    
+    print("RERANK TIME:____\n", time.perf_counter() - start)
     return docs

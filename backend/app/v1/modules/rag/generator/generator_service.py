@@ -1,5 +1,6 @@
 from typing import List
 import json
+import time
 from groq import Groq
 from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
 from app.ai_core.llms.groq_llm import groq_llm_call
@@ -106,8 +107,6 @@ def generate_answer(
     if not chunks:
         return RAGResponseSchema(
             answer="I don't know based on the provided context",
-            key_points=[],
-            step_by_step=[],
             analogy="",
             confidence=0.0,
             sources=[]
@@ -146,10 +145,12 @@ def generate_answer(
     # - anti-hallucination
     # - concise explanations
     # --------------------------------------------------------------
+    general_start_anser = time.perf_counter()
     response = groq_llm_call(
         client=client,
         prompt=prompt
     )
+    print("general_start_anser_timer___:\n",  time.perf_counter() - general_start_anser)
 
     # Parse raw JSON string into dict
     data = json.loads(response)
