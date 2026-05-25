@@ -74,6 +74,23 @@ def expand_query(query: str) -> List[str]:
     # Educational PDFs may describe concepts
     # using different terminology.
     # ------------------------------------------------------------
+     # ============================================================
+    # 1. DOMAIN-LEVEL EXPANSION (IMPORTANT FIX)
+    # ============================================================
+    # This fixes:
+    #   "what is quantum?"
+    #   "quantum?"
+    #   "explain quantum"
+    # ============================================================
+    if "quantum" in q and len(q.split()) <= 4:
+
+        expanded_queries.extend([
+            "quantum computing basics",
+            "introduction to quantum mechanics",
+            "qubits superposition entanglement measurement",
+            "quantum state explanation",
+            "how quantum computing works"
+        ])
 
     # ------------------------------------------------------------
     # ENTANGLEMENT
