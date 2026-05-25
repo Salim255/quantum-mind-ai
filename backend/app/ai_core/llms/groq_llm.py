@@ -1,6 +1,6 @@
 from groq import Groq
 import time
-from app.core.settings import Settings
+from app.core.settings import Settings, get_settings
 
 # ------------------------------------------------------------------
 # LLM CALL
@@ -76,9 +76,7 @@ def groq_llm_call(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
-
-    start = time.perf_counter()
-    response = client.chat.completions.create(
+    stream = client.chat.completions.create(
 
         # ----------------------------------------------------------
         # MODEL
@@ -110,10 +108,13 @@ def groq_llm_call(
                 "content": prompt
             }
         ],
-        temperature=0.2,
+        response_format={"type": "json_object"},
         max_tokens=300,
+        timeout=10,
+        stream=True
     )
-    print("print___\n",time.perf_counter() - start )
+    
+
     # --------------------------------------------------------------
     # EXTRACT FINAL MODEL RESPONSE
     # --------------------------------------------------------------
@@ -124,4 +125,10 @@ def groq_llm_call(
     #
     # which contains the generated answer text.
     #
-    return response.choices[0].message.content
+    full_response = ""
+
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            full_response += chunk.choices[0].delta.content
+
+    return full_response

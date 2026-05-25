@@ -12,8 +12,20 @@ from app.v1.modules.rag.search_engine.services.embedding_service import Embeddin
 from app.v1.modules.rag.search_engine.interfaces.search_engine_interface import SearchEngineInterface
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.retriever.decision_engine import RetrievalAction
+from app.core.container import Container
 
 class SearchEngineImpl(SearchEngineInterface):
+    def __init__(
+            self, 
+            container: Container,
+            reranking_service: RerankingService,
+            embedding_service: EmbeddingService
+        
+        ):
+        self.reranking_service = reranking_service
+        self.container = container
+        self.embedding_service = embedding_service
+
     def search_similar_documents(
             self, 
             query: str, 
@@ -100,7 +112,7 @@ class SearchEngineImpl(SearchEngineInterface):
 
         # 2. embed
         query_embeddings: List[np.ndarray] = (
-            EmbeddingService.embed_expanded_queries(
+            self.embedding_service.embed_expanded_queries(
                 expanded_queries
             )
         )
@@ -124,9 +136,9 @@ class SearchEngineImpl(SearchEngineInterface):
     ) -> List[RetrievalChunkDTO]:
         # 4. rerank
         reranked: List[RetrievalChunkDTO] = (
-            RerankingService.rerank_candidates(
+            self.reranking_service.rerank_candidates(
                 query,
-                candidates=candidates[:10]
+                candidates=candidates[:5]
             )
         )
         start = time.perf_counter()

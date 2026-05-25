@@ -5,7 +5,7 @@ from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
 from app.v1.modules.rag.dto.document_dto import (DocumentDTO, AddedDocResponseDto, MetadataDTO)
 from app.core.container import Container
-from fastapi import Request
+
 # Import the embedding function.
 # This function converts raw text into a dense vector representation
 # that your QuantumMind AI system will use for retrieval.
@@ -47,7 +47,7 @@ class RAGAddDocument:
         # We extract only the vector because that's what we store in the DB.
         # 1. Extract text safely
         # text = chunk["text"] if isinstance(chunk, dict) else chunk
-        embedding_result = self.container.embedding_service.embed_text(text=chunk.text, source=source)
+        embedding_result = self.container.rag_embedder.embed_text(text=chunk.text, source=source)
         emb = embedding_result["embedding"]
 
 

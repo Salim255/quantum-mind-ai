@@ -1,7 +1,7 @@
 from sentence_transformers import CrossEncoder
 from sentence_transformers import SentenceTransformer
 from app.core.settings import Settings, get_settings
-from app.v1.modules.rag.embeddings.embedder import EmbeddingService
+from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
 from groq import Groq
 
 class Container:
@@ -24,7 +24,7 @@ class Container:
         # This avoids reloading the model on every request, which would be slow.
         # "all-MiniLM-L6-v2" is a fast, lightweight, high‑quality embedding model.
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        self.embedding_service = EmbeddingService(self.embedding_model)
+        self.rag_embedder = RAGEmbedder(self.embedding_model)
 
         # MODELS (load once)
         # ------------------------------------------------------------

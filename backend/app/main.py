@@ -32,3 +32,4 @@ ExceptionsHandler(app, settings=container.settings)
 @app.get("/health")
 def health_check():
     return {"status": "ok", "message": "QuantumMind AI backend is running"}
+  

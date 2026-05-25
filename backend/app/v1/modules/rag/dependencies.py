@@ -6,8 +6,11 @@ from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
 from app.v1.modules.rag.services.implementations.loader_service_impl import LoaderServiceImpl
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
+from app.v1.modules.rag.search_engine.services.reranking_service import RerankingService
 from app.core.container import Container
 from fastapi import Request
+from app.v1.modules.rag.search_engine.services.embedding_service import EmbeddingService
+
 
 # ------------------------------------------------------------
 # CONTAINER DEPENDENCY
@@ -20,8 +23,28 @@ def get_add_document_service(
     ) -> RAGAddDocument:
     return  RAGAddDocument(container=container)
 
-def get_search_engine_service() -> SearchEngineImpl:
-    return SearchEngineImpl()
+def get_ranking_service(
+        container: Annotated[Container, Depends(get_container)]
+) -> RerankingService:
+    return RerankingService(container=container)
+
+def get_embedding_service(
+        container: Annotated[Container, Depends(get_container)]
+) -> EmbeddingService:
+    return EmbeddingService(
+        container=container
+    )
+
+def get_search_engine_service(
+        container: Annotated[Container, Depends(get_container)],
+        reranking_service: Annotated[RerankingService, Depends(get_ranking_service)],
+        embedding_service: Annotated[EmbeddingService, Depends(get_embedding_service)]
+) -> SearchEngineImpl:
+    return SearchEngineImpl(
+        container=container,
+        reranking_service=reranking_service,
+        embedding_service=embedding_service
+    )
 
 def get_rag_service(
         container: Annotated[Container, Depends(get_container)],

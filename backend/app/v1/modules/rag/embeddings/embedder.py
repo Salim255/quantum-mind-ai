@@ -13,7 +13,7 @@ import numpy as np
 
 
 
-class EmbeddingService:
+class RAGEmbedder:
     def __init__(self, model: SentenceTransformer):
             self.model = model
     def embed_text(self, text: str, source: str = "document") -> dict:

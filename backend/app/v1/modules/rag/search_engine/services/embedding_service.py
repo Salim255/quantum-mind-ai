@@ -5,9 +5,9 @@ from app.core.container import Container
 
 
 class EmbeddingService:
-    def __init__(self, request: Request):
-        self.container:Container = request.app.state.container
-    @staticmethod
+    def __init__(self, container: Container):
+        self.container:Container = container
+    
     def embed_expanded_queries(
         self,
         expanded_queries: List[str]
@@ -35,7 +35,7 @@ class EmbeddingService:
 
         return [
             np.array(
-                self.container.embed_text(
+                self.container.rag_embedder.embed_text(
                     text=query,
                     source="user_query"
                 )["embedding"]

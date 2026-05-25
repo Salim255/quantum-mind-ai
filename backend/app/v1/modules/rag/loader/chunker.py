@@ -65,7 +65,7 @@ class RAGChunker:
     def semantic_chunk_text(
         cls,
         text: str,
-        max_chars: int = 1200,
+        max_chars: int = 500,
         overlap_sentences: int = 2
     ) -> List[ChunkDTO]:
         """
