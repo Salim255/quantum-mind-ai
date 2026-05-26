@@ -18,6 +18,9 @@ app = FastAPI(
     root_path=container.settings.API_PREFIX
 )
 
+#@app.lifespan("startup")
+#async def startup_event():
+#   nltk.download("punkt", quiet=True)
 # --------------------------------------------------------
 # STORE IT INSIDE FASTAPI STATE
 # --------------------------------------------------------

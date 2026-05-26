@@ -82,7 +82,7 @@ def expand_query(query: str) -> List[str]:
     #   "quantum?"
     #   "explain quantum"
     # ============================================================
-    if "quantum" in q and len(q.split()) <= 4:
+    if "quantum" in q:
 
         expanded_queries.extend([
             "quantum computing basics",

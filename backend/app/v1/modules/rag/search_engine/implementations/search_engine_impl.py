@@ -43,9 +43,9 @@ class SearchEngineImpl(SearchEngineInterface):
         # STEP 7:
         # HANDLE RETRIEVAL DECISION
         # --------------------------------------------------------
-        start = time.perf_counter()
+    
         action: RetrievalAction = DecisionService.evaluate_retrieval_confidence(diversified)
-        print("evaluate_retrieval_confidence___TIME:\n", time.perf_counter() - start)
+  
         match action:
             case RetrievalAction.OK: 
                 # --------------------------------------------------------
@@ -93,7 +93,7 @@ class SearchEngineImpl(SearchEngineInterface):
     
         return self.post_process_candidates(
             query=query,
-            candidates=candidates,
+            candidates=candidates[:10],
             top_k=top_k
         )
         
@@ -104,7 +104,7 @@ class SearchEngineImpl(SearchEngineInterface):
         self,
         query: str
     ) -> List[RetrievalChunkDTO]:
-        start = time.perf_counter()
+  
         # 1. expand
         expanded_queries: List[str] = (
             QueryExpansionService.expand(query)
@@ -118,7 +118,6 @@ class SearchEngineImpl(SearchEngineInterface):
         )
 
         # 3. vector search
-        print("retrieve_candidates TIME:____\n", time.perf_counter() - start)
         return VectorSearchService.multi_query_vector_search(
             query,
             query_embeddings
@@ -134,14 +133,15 @@ class SearchEngineImpl(SearchEngineInterface):
         candidates: List[RetrievalChunkDTO],
         top_k: int
     ) -> List[RetrievalChunkDTO]:
+        
         # 4. rerank
         reranked: List[RetrievalChunkDTO] = (
             self.reranking_service.rerank_candidates(
                 query,
-                candidates=candidates[:5]
+                candidates=candidates
             )
         )
-        start = time.perf_counter()
+   
         # 5. diversity
         diversified: List[RetrievalChunkDTO] = (
             DiversityService.diversify(
@@ -149,7 +149,7 @@ class SearchEngineImpl(SearchEngineInterface):
                 top_k
             )
         )
-        print("diversified TIME:____\n", time.perf_counter() - start)
+
         # 6. context roles
         ContextRoleService.assign_reasoning_roles(
             diversified

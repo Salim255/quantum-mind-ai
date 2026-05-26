@@ -22,5 +22,4 @@ class DecisionService:
             """
             best_score = chunks[0].hybrid_score if chunks else 0.0
 
-            print("best_score___\n", best_score)
             return decide_retrieval_action(best_score)

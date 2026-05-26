@@ -1,7 +1,7 @@
 import os
 import asyncio
 import uuid
-from fastapi import Request, UploadFile
+from fastapi import  UploadFile
 import aiofiles
 from app.core.container import Container
 from app.v1.modules.rag.loader.chunker import RAGChunker
@@ -99,7 +99,7 @@ class LoaderServiceImpl(LoaderService):
 
         # 3. Add each chunk to the vector DB.
         for chunk in chunks:
-            text = chunk.text.lower()
+            text = chunk.text
             # FILTER STEP (replacement for is_useful_chunk)
             if len(chunk.text) < 80:
                 continue

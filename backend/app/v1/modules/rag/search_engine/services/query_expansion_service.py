@@ -16,6 +16,6 @@ class QueryExpansionService:
     def embed(self, queries: List[str]) -> List[np.ndarray]:
      
         return [
-            np.array(self.container.embed_text(q, source="user_query")["embedding"])
+            np.ndarray(self.container.embed_text(q, source="user_query")["embedding"])
             for q in queries
         ]

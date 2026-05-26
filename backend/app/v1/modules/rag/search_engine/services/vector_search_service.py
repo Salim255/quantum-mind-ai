@@ -1,5 +1,4 @@
 import numpy as np
-import time
 from typing import List
 from app.v1.modules.rag.search_engine.services.scoring_service import ScoringService
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
@@ -14,7 +13,7 @@ class VectorSearchService:
         query: str, 
         query_embeddings: List[np.ndarray]
         )-> List[RetrievalChunkDTO]:
-        start = time.perf_counter()
+    
         query_matrix = cls.build_query_matrix(query_embeddings)
 
         results: List[RetrievalChunkDTO] = []
@@ -52,7 +51,7 @@ class VectorSearchService:
                     cosine_score=boosted_score
                 )
             )
-        print("multi_query_vector_search TIME:____\n", time.perf_counter() - start)
+      
         return sorted(results, key=lambda x: x.cosine_score, reverse=True)
 
     # ============================================================
