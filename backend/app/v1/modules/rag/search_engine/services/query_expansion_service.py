@@ -12,10 +12,3 @@ class QueryExpansionService:
     def expand(query: str) -> List[str]:
         return expand_query(query)
     
-    @staticmethod
-    def embed(self, queries: List[str]) -> List[np.ndarray]:
-     
-        return [
-            np.ndarray(self.container.embed_text(q, source="user_query")["embedding"])
-            for q in queries
-        ]

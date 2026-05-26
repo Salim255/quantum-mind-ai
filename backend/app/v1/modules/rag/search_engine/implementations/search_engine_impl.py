@@ -1,6 +1,5 @@
 from typing import List
 import numpy as np
-import time
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
 from app.v1.modules.rag.search_engine.services.query_expansion_service import QueryExpansionService
 from app.v1.modules.rag.search_engine.services.vector_search_service import VectorSearchService
@@ -11,8 +10,10 @@ from app.v1.modules.rag.search_engine.services.decision_service import DecisionS
 from app.v1.modules.rag.search_engine.services.embedding_service import EmbeddingService
 from app.v1.modules.rag.search_engine.interfaces.search_engine_interface import SearchEngineInterface
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
+from app.v1.modules.rag.dto.query_analysis_result_dto import QueryAnalysisResultDto
 from app.v1.modules.rag.retriever.decision_engine import RetrievalAction
 from app.core.container import Container
+from app.v1.modules.rag.search_engine.services.query_analysis_service import QueryAnalysisService
 
 class SearchEngineImpl(SearchEngineInterface):
     def __init__(
@@ -104,12 +105,19 @@ class SearchEngineImpl(SearchEngineInterface):
         self,
         query: str
     ) -> List[RetrievalChunkDTO]:
-  
-        # 1. expand
-        expanded_queries: List[str] = (
-            QueryExpansionService.expand(query)
-        )
+        
+        analysis: QueryAnalysisResultDto = QueryAnalysisService.detect(query)
 
+        expanded_queries: List[str]
+
+        # 1. expand
+        if analysis.requires_expansion:
+            expanded_queries = (
+                QueryExpansionService.expand(query)
+            )
+        else:
+            expanded_queries = [query]
+        
         # 2. embed
         query_embeddings: List[np.ndarray] = (
             self.embedding_service.embed_expanded_queries(

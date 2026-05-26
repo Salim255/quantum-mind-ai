@@ -1,150 +1,156 @@
 # app/v1/modules/rag/retriever/query_expander.py
-
 from typing import List
-
 
 def expand_query(query: str) -> List[str]:
     """
-    QUERY EXPANSION LAYER
+    QUERY EXPANSION ENGINE (CONCEPT-DRIVEN VERSION)
+    ===============================================
 
     PURPOSE
     -------
-    Improves retrieval recall by generating multiple
-    semantic variations of the user's query.
+    This service expands a user query into multiple semantic variants
+    to improve retrieval recall in vector databases.
 
-    WHY IMPORTANT?
-    --------------
-    Users may ask the same concept in different ways.
+    WHY QUERY EXPANSION EXISTS
+    --------------------------
+    In real-world RAG systems, users rarely ask questions
+    using the exact wording found in documents.
 
     Example:
-    --------
-    Original:
-        "What is entanglement?"
+        User query:
+            "What is entanglement?"
 
-    Expanded:
-        - "Explain quantum entanglement"
-        - "Definition of entanglement"
-        - "How do entangled particles work"
+        Document may contain:
+            - "quantum correlation between particles"
+            - "Bell state phenomenon"
+            - "non-local quantum behavior"
 
-    This increases the chance of retrieving:
-    - differently worded chunks
-    - hidden semantic matches
-    - better educational context
+    Without expansion → retrieval misses relevant chunks.
+    With expansion → retrieval becomes robust.
 
-    CURRENT VERSION
-    ---------------
-    Right now this is rule-based/simple expansion.
+    ------------------------------------------------------------
+    DESIGN PRINCIPLE (VERY IMPORTANT)
+    ------------------------------------------------------------
+    ❌ BAD:
+        Hardcoded keyword rules ("if quantum in query")
 
-    LATER YOU CAN UPGRADE TO:
-    -------------------------
-    - LLM-generated expansions
-    - HyDE retrieval
-    - synonym generation
-    - domain-aware reformulation
-    - multilingual retrieval
+    ✅ GOOD:
+        Use a centralized concept knowledge base (CONCEPTS)
 
-    PARAMETERS
-    ----------
-    query : str
-        Original user query.
-
-    RETURNS
-    -------
-    List[str]
-        List of expanded semantic queries.
+    This ensures:
+        - scalability
+        - consistency with concept detection
+        - easier maintenance
+        - no duplicated logic
     """
 
     # ------------------------------------------------------------
-    # START WITH ORIGINAL QUERY
+    # STEP 1: ALWAYS KEEP ORIGINAL QUERY
     # ------------------------------------------------------------
-    # Always preserve the user's original wording.
-    # This remains the primary retrieval anchor.
+    # WHY:
+    # The original query is the most precise user intent signal.
+    # It MUST always be part of retrieval input.
     # ------------------------------------------------------------
-    expanded_queries = [query]
+    expanded_queries: List[str] = [query]
 
+    # Normalize query for matching (lowercase for robust comparison)
     q = query.lower()
 
     # ------------------------------------------------------------
-    # QUANTUM-SPECIFIC EXPANSIONS
+    # STEP 2: CONCEPT-DRIVEN EXPANSION
     # ------------------------------------------------------------
-    # Add semantic variations for known concepts.
+    # WHY THIS EXISTS:
+    # Instead of hardcoding rules per topic,
+    # we reuse the CONCEPTS knowledge base.
+
+    # Each concept contains:
+    #   - anchors (strong semantic matches)
+    #   - soft keywords (weak semantic signals)
+
+    # This makes expansion:
+    #   - scalable
+    #   - consistent
+    #   - reusable across retrieval + concept detection
+    # ------------------------------------------------------------
+    for concept_name, concept_data in CONCEPTS.items():
+
+        # --------------------------------------------------------
+        # CHECK IF QUERY BELONGS TO THIS CONCEPT
+        # --------------------------------------------------------
+        # We match against anchors because they represent
+        # strong semantic identity of the concept.
+        #
+        # Example:
+        #   "entanglement" → matches entanglement concept
+        # --------------------------------------------------------
+        if any(anchor in q for anchor in concept_data["anchors"]):
+
+            # ----------------------------------------------------
+            # STEP 2A: EXPAND USING STRONG SEMANTIC ANCHORS
+            # ----------------------------------------------------
+            # WHY:
+            # Anchors represent core vocabulary used in documents.
+            # Adding them improves retrieval recall significantly.
+            # ----------------------------------------------------
+            for anchor in concept_data["anchors"]:
+                expanded_queries.append(anchor)
+
+            # ----------------------------------------------------
+            # STEP 2B: EXPAND USING SOFT SEMANTIC SIGNALS
+            # ----------------------------------------------------
+            # WHY:
+            # Soft keywords capture paraphrases and intuition-level
+            # descriptions often used in educational content.
+            #
+            # Example:
+            #   "spooky action"
+            #   "linked qubits"
+            # ----------------------------------------------------
+            for soft_keyword in concept_data.get("keywords_soft", []):
+                expanded_queries.append(soft_keyword)
+
+    # ------------------------------------------------------------
+    # STEP 3: GENERAL EXPANSION FOR SHORT / VAGUE QUERIES
+    # ------------------------------------------------------------
+    # WHY THIS EXISTS:
+    # Short queries like:
+    #   "quantum"
+    #   "entanglement"
     #
-    # WHY?
-    # ----
-    # Educational PDFs may describe concepts
-    # using different terminology.
+    # are too vague for precise retrieval.
+    #
+    # We generate interpretive forms to increase recall.
     # ------------------------------------------------------------
-     # ============================================================
-    # 1. DOMAIN-LEVEL EXPANSION (IMPORTANT FIX)
-    # ============================================================
-    # This fixes:
-    #   "what is quantum?"
-    #   "quantum?"
-    #   "explain quantum"
-    # ============================================================
-    if "quantum" in q:
+    if len(q.split()) <= 2:
 
         expanded_queries.extend([
-            "quantum computing basics",
-            "introduction to quantum mechanics",
-            "qubits superposition entanglement measurement",
-            "quantum state explanation",
-            "how quantum computing works"
+            f"explain {q}",
+            f"what is {q}",
+            f"definition of {q}"
         ])
 
     # ------------------------------------------------------------
-    # ENTANGLEMENT
+    # STEP 4: REMOVE DUPLICATES WHILE PRESERVING ORDER
     # ------------------------------------------------------------
-    if "entanglement" in q:
-
-        expanded_queries.extend([
-            "Explain quantum entanglement",
-            "Definition of entanglement",
-            "How entangled particles behave",
-            "Quantum correlation between particles"
-        ])
-
-    # ------------------------------------------------------------
-    # SUPERPOSITION
-    # ------------------------------------------------------------
-    if "superposition" in q:
-
-        expanded_queries.extend([
-            "Explain quantum superposition",
-            "Quantum state combination",
-            "Particle existing in multiple states",
-            "Definition of superposition"
-        ])
-
-    # ------------------------------------------------------------
-    # QUBITS
-    # ------------------------------------------------------------
-    if "qubit" in q or "qubits" in q:
-
-        expanded_queries.extend([
-            "Explain qubits",
-            "Quantum computing bit",
-            "Difference between bit and qubit",
-            "Quantum information unit"
-        ])
-
-    # ------------------------------------------------------------
-    # MEASUREMENT
-    # ------------------------------------------------------------
-    if "measurement" in q:
-
-        expanded_queries.extend([
-            "Quantum measurement collapse",
-            "Wave function collapse",
-            "Observation in quantum mechanics",
-            "Measurement of quantum states"
-        ])
-
-    # ------------------------------------------------------------
-    # REMOVE DUPLICATES
-    # ------------------------------------------------------------
-    # dict.fromkeys preserves order while removing duplicates.
+    # WHY:
+    # Expansion may generate repeated queries across:
+    # - concepts
+    # - anchors
+    # - soft keywords
+    #
+    # dict.fromkeys() preserves insertion order
+    # (important for deterministic retrieval behavior)
     # ------------------------------------------------------------
     expanded_queries = list(dict.fromkeys(expanded_queries))
 
+    # ------------------------------------------------------------
+    # FINAL OUTPUT
+    # ------------------------------------------------------------
+    # This list will be:
+    #   1. embedded
+    #   2. used for multi-query vector search
+    #
+    # Result:
+    #   Higher recall + better semantic coverage
+    # ------------------------------------------------------------
     return expanded_queries
