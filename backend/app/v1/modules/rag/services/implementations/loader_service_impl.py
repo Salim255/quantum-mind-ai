@@ -98,21 +98,10 @@ class LoaderServiceImpl(LoaderService):
 
         # 4. Add each chunk to the vector DB.
         for chunk in chunks:
-            text = chunk.text
-            # FILTER STEP (replacement for is_useful_chunk)
-            if len(chunk.text) < 80:
-                continue
-
-            if "acknowledgements" in text:
-                continue
-            if "mit press" in text:
-                continue
-            if "all rights reserved" in text:
-                continue
-            if "introduction introduction" in text:
-                continue
-
-            self.add_document_service.add_document(chunk=chunk, source=source)
+            self.add_document_service.add_document(
+                chunk=chunk,
+                source=source
+            )
 
         return IngestionResponseSchema(
             status="ok",
