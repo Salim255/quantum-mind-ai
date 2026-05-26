@@ -1,5 +1,8 @@
 # app/v1/modules/rag/retriever/query_expander.py
+
 from typing import List
+from app.v1.modules.rag.loader.concept_tagger import CONCEPTS
+
 
 def expand_query(query: str) -> List[str]:
     """
