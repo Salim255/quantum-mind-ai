@@ -15,6 +15,17 @@ class ConversationServiceImpl(ConversationService):
         self.memory = memory
         self.rag_service = rag_service
 
+    async def stream_message(  self, 
+            user_id: str,
+            message: str, 
+            conversation_id: Optional[str] = None
+            ):
+            # 2. Run your existing RAG pipeline (correct call)
+            return self.rag_service.rag_stream_pipeline(
+                QueryRequest(query=message, top_k=3)
+            )
+        
+
     async def handle_message(
             self, 
             user_id: str,

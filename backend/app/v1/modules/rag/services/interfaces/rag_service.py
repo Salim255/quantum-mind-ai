@@ -11,6 +11,10 @@ class QueryRequest(BaseModel):
     
 class RAGService(ABC):
     @abstractmethod
+    def rag_stream_pipeline(self, payload: QueryRequest):
+        pass
+        
+    @abstractmethod
     def rag_pipeline(self, payload: QueryRequest) -> RAGQueryResponseSchema:
         """
         Abstract method to execute the entire RAG pipeline, including retrieval and answer generation.

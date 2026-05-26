@@ -21,7 +21,113 @@ class RAGServiceImpl(RAGService):
    def __init__(self, container: Container, search_engine_service: SearchEngineImpl):
         self.container = container
         self.search_engine_service = search_engine_service
+
+   def rag_stream_pipeline(
+        self,
+        payload: QueryRequest
+        ) -> RAGQueryResponseSchema:
+    """
+    Execute the full RAG pipeline.
+
+    INPUT
+    -----
+    payload.query:
+        User question
+
+    payload.top_k:
+        Number of chunks to retrieve
+
+    OUTPUT
+    ------
+    - query
+    - retrieved chunks
+    - structured final answer
+    - sources
+    - latency
+    """
+    # ---------------------------------------------------------------
+    # 1. SEMANTIC RETRIEVAL + RERANKING
+    # ---------------------------------------------------------------
+    #
+    # search_similar_documents():
+    #
+    # - embeds the query
+    # - performs cosine similarity search
+    # - selects top candidates
+    # - reranks using cross-encoder
+    #
+    # RETURNS:
+    # {
+    #   "results": [...],
+    #   "sources": [...]
+    # }
+    # ---------------------------------------------------------------
         
+    retrieval_output: RetrievalResponseDTO = self.search_engine_service.search_similar_documents(payload.query)
+
+    # ---------------------------------------------------------------
+    # EXTRACT RETRIEVED CHUNKS
+    # ---------------------------------------------------------------
+    chunks: List[RetrievalChunkDTO] = retrieval_output.results  # List of text chunks relevant to the query
+
+    # ---------------------------------------------------------------
+    # LOW CONFIDENCE RETRIEVAL GUARD
+    # ---------------------------------------------------------------
+    # If retrieval found no reliable chunks,
+    # avoid hallucinated generation.
+    # ---------------------------------------------------------------
+    # Final answer (must be grounded in context)
+    if not chunks:
+        return RAGQueryResponseSchema(
+            query=payload.query,
+            retrieved_chunks=[],
+            final_answer={
+                "answer": (
+                    "I could not find reliable information "
+                    "to answer this question."
+                ),
+                "key_points": [],
+                "step_by_step": [],
+                "sources": [],
+                "retrieved_chunk":[]
+            },
+            latency_ms=0
+        )
+
+    # ---------------------------------------------------------------
+    # 2. BUILD OPTIMIZED CONTEXT
+    # ---------------------------------------------------------------
+    rich_context_chunks: str = build_reasoned_context(retrieval_output.results)
+
+
+    # ---------------------------------------------------------------
+    # 3. INITIALIZE LLM CLIENT
+    # ---------------------------------------------------------------  
+    client = self.container.groq_client
+ 
+   
+    # ---------------------------------------------------------------
+    # 4. GENERATE FINAL STRUCTURED ANSWER
+    # ---------------------------------------------------------------
+    final_answer = generate_answer(
+        payload.query,
+        rich_context_chunks,
+        client
+    )
+
+    # ---------------------------------------------------------------
+    # 8. RETURN API RESPONSE
+    # ---------------------------------------------------------------
+    #
+    # model_dump():
+    # Converts Pydantic schema into JSON-serializable dict.
+    # ---------------------------------------------------------------
+    return RAGQueryResponseSchema(
+        query=payload.query,
+        retrieved_chunks=chunks,
+        final_answer=final_answer,
+    )
+   
    def rag_pipeline(
         self,
         payload: QueryRequest
@@ -100,10 +206,8 @@ class RAGServiceImpl(RAGService):
                     "I could not find reliable information "
                     "to answer this question."
                 ),
-                "key_points": [],
-                "step_by_step": [],
-                "sources": [],
-                "retrieved_chunk":[]
+                "analogy": "",
+                "confidence": 0.8
             },
             latency_ms=0
         )
@@ -158,7 +262,7 @@ class RAGServiceImpl(RAGService):
     # RAGResponseSchema
     # ---------------------------------------------------------------
   
-    final_answer: AGResponseSchema = generate_answer(
+    final_answer = generate_answer(
         payload.query,
         rich_context_chunks,
         client
