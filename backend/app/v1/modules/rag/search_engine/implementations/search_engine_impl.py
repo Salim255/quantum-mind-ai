@@ -46,7 +46,7 @@ class SearchEngineImpl(SearchEngineInterface):
         # --------------------------------------------------------
     
         action: RetrievalAction = DecisionService.evaluate_retrieval_confidence(diversified)
-  
+        print("diversified coanditdate___=====: \n", action)
         match action:
             case RetrievalAction.OK: 
                 # --------------------------------------------------------
@@ -73,7 +73,10 @@ class SearchEngineImpl(SearchEngineInterface):
             
             case RetrievalAction.CLARIFY:
                 # TODO
-                return RetrievalResponseDTO(results=[])
+                return RetrievalResponseDTO(
+                    results=diversified
+                )
+            
             
             case _:
                  return RetrievalResponseDTO(results=[])
@@ -88,7 +91,7 @@ class SearchEngineImpl(SearchEngineInterface):
     ) -> List[RetrievalChunkDTO]:
 
         candidates = self.retrieve_candidates(query)
-
+       
         if not candidates:
             return []
     
@@ -149,7 +152,8 @@ class SearchEngineImpl(SearchEngineInterface):
                 candidates=candidates
             )
         )
-   
+    
+        
         # 5. diversity
         diversified: List[RetrievalChunkDTO] = (
             DiversityService.diversify(
@@ -158,11 +162,12 @@ class SearchEngineImpl(SearchEngineInterface):
             )
         )
 
+       
         # 6. context roles
         ContextRoleService.assign_reasoning_roles(
             diversified
         )
-
+  
         return diversified
     # ---------------------------------------------------------
     # RETRY HANDLER
