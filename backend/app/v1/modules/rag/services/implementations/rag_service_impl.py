@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
-from app.v1.modules.rag.generator.generator_service import generate_answer
+from app.v1.modules.rag.generator.generator_service import (generate_answer, generate_streaming_answer)
 from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
@@ -109,7 +109,7 @@ class RAGServiceImpl(RAGService):
     # ---------------------------------------------------------------
     # 4. GENERATE FINAL STRUCTURED ANSWER
     # ---------------------------------------------------------------
-    final_answer = generate_answer(
+    final_answer = generate_streaming_answer(
         payload.query,
         rich_context_chunks,
         client
