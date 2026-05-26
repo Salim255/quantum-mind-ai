@@ -9,7 +9,7 @@ from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluation
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
-from app.core.container import Container
+from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
 from app.core.container import Container
 
 
@@ -129,7 +129,8 @@ class RAGServiceImpl(RAGService):
     #    chunks,
     #    max_chars=3000
     #)
-    rich_context_chunks = build_reasoned_context(retrieval_output.results)
+    rich_context_chunks: str = build_reasoned_context(retrieval_output.results)
+
 
     # ---------------------------------------------------------------
     # 3. INITIALIZE LLM CLIENT
@@ -157,7 +158,7 @@ class RAGServiceImpl(RAGService):
     # RAGResponseSchema
     # ---------------------------------------------------------------
   
-    final_answer = generate_answer(
+    final_answer: AGResponseSchema = generate_answer(
         payload.query,
         rich_context_chunks,
         client

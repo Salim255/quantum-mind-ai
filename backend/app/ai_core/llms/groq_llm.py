@@ -1,6 +1,4 @@
 from groq import Groq
-import time
-from app.core.settings import Settings, get_settings
 
 # ------------------------------------------------------------------
 # LLM CALL
