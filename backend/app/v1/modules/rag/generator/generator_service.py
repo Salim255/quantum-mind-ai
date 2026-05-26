@@ -3,7 +3,7 @@ import json
 import time
 from groq import Groq
 from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
-from app.ai_core.llms.groq_llm import groq_llm_call
+from app.ai_core.llms.groq_llm import (groq_llm_call, groq_llm_call_streaming)
 from app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
 
 
@@ -72,16 +72,6 @@ def generate_streaming_answer(
     # --------------------------------------------------------------
     # BUILD STRUCTURED RAG PROMPT
     # --------------------------------------------------------------
-    #
-    # The prompt builder is responsible for:
-    # - formatting context
-    # - injecting the question
-    # - organizing retrieved chunks
-    # - improving grounding
-    #
-    # Good prompt construction is CRITICAL
-    # for high-quality RAG systems.
-    # --------------------------------------------------------------
     prompt = RAGPromptBuilder.build(
         query=query,
         chunks=chunks
@@ -90,36 +80,15 @@ def generate_streaming_answer(
     # --------------------------------------------------------------
     # GENERATE FINAL ANSWER USING THE LLM
     # --------------------------------------------------------------
-    #
-    # The LLM:
-    # - reads the retrieved context
-    # - interprets the user's question
-    # - synthesizes a grounded answer
-    #
-    # The system prompt inside groq_llm_call()
-    # enforces:
-    # - grounding
-    # - anti-hallucination
-    # - concise explanations
-    # --------------------------------------------------------------
-    general_start_anser = time.perf_counter()
-    response = groq_llm_call(
+    response = groq_llm_call_streaming(
         client=client,
         prompt=prompt
     )
-    print("general_start_anser_timer___:\n",  time.perf_counter() - general_start_anser)
+    
 
     # Parse raw JSON string into dict
-    data = json.loads(response)
-    # --------------------------------------------------------------
-    # FINAL CLEANUP
-    # --------------------------------------------------------------
-    #
-    # Remove accidental surrounding whitespace
-    # before returning the final answer.
-    # --------------------------------------------------------------
+    return json.loads(response)
 
-    return  RAGResponseSchema.model_validate(data)
 
 
 # ------------------------------------------------------------------
@@ -261,6 +230,7 @@ def generate_answer(
     # - concise explanations
     # --------------------------------------------------------------
     general_start_anser = time.perf_counter()
+
     response = groq_llm_call(
         client=client,
         prompt=prompt
