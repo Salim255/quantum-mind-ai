@@ -64,7 +64,7 @@ class RAGChunker:
     # ------------------------------------------------------------------
     def semantic_chunk_text(
         cls,
-        text: str,
+        normalized_text: str,
         max_chars: int = 600,
         overlap_sentences: int = 2
     ) -> List[ChunkDTO]:
@@ -97,18 +97,12 @@ class RAGChunker:
 
         # --------------------------------------------------------------
         # STEP 1:
-        # Normalize spacing while preserving structure.
+        # Split into semantic paragraphs.
         # --------------------------------------------------------------
-        normalized = cls.normalize_chunk_text(text)
+        paragraphs: List[str] = cls.split_into_paragraphs(normalized_text)
 
         # --------------------------------------------------------------
         # STEP 2:
-        # Split into semantic paragraphs.
-        # --------------------------------------------------------------
-        paragraphs = cls.split_into_paragraphs(normalized)
-
-        # --------------------------------------------------------------
-        # STEP 3:
         # Build semantic chunks from sentence groups.
         # --------------------------------------------------------------
         chunks = cls.build_semantic_chunks(
@@ -153,22 +147,79 @@ class RAGChunker:
     @staticmethod
     def split_into_paragraphs(text: str) -> List[str]:
         """
-        Split text into paragraphs.
+        PARAGRAPH SPLITTER FOR RAG PIPELINE
+        ====================================
 
-        WHY PARAGRAPHS?
-        ---------------
-        Paragraphs often naturally represent:
-        - one concept
-        - one explanation
-        - one educational idea
+        PURPOSE
+        -------
+        Split cleaned text into paragraph-level semantic units.
 
-        This makes them ideal semantic boundaries.
+        WHY THIS STEP EXISTS
+        --------------------
+        In RAG systems, paragraphs often represent:
+        - a single idea
+        - a single explanation
+        - a coherent semantic unit
+
+        This makes them ideal building blocks for chunking.
+
+        IMPORTANT:
+        This is NOT final chunking.
+        It is only a semantic segmentation step.
         """
 
+        # ------------------------------------------------------------
+        # 1. SPLIT TEXT INTO PARAGRAPHS
+        # ------------------------------------------------------------
+        # WHY THIS EXISTS:
+        # After cleaning, most PDFs use blank lines (\n\n)
+        # to separate logical paragraphs.
+        #
+        # WHAT THIS DOES:
+        # Splits text wherever there is a paragraph break.
+        #
+        # PATTERN EXPLANATION:
+        # \n\s*\n means:
+        # - newline
+        # - optional spaces
+        # - another newline
+        #
+        # WHY THIS IS BETTER THAN simple "\n\n":
+        # - handles messy PDFs with spaces between newlines
+        # - more robust to extraction noise
+        #
+        # WHAT HAPPENS IF REMOVED:
+        # - no paragraph structure
+        # - chunking becomes arbitrary
+        # - embeddings lose semantic grouping
+        paragraphs = re.split(r"\n\s*\n", text)
+
+        # ------------------------------------------------------------
+        # 2. CLEAN AND FILTER EMPTY PARAGRAPHS
+        # ------------------------------------------------------------
+        # WHY THIS EXISTS:
+        # PDF extraction often produces:
+        # - empty strings
+        # - whitespace-only blocks
+        # - noise from page formatting
+        #
+        # WHAT THIS DOES:
+        # - removes empty paragraphs
+        # - trims whitespace around text
+        #
+        # WHY STRIP IS IMPORTANT:
+        # Without strip():
+        # - you may keep "fake paragraphs"
+        # - chunking becomes noisy
+        #
+        # WHAT HAPPENS IF REMOVED:
+        # - empty chunks
+        # - useless embeddings
+        # - degraded retrieval quality
         return [
             p.strip()
-            for p in text.split("\n\n")
-            if p.strip()
+            for p in paragraphs
+            if len(p.strip()) > 0
         ]
 
     # ------------------------------------------------------------------

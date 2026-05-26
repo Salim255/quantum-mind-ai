@@ -6,7 +6,6 @@ import aiofiles
 from app.core.container import Container
 from app.v1.modules.rag.loader.chunker import RAGChunker
 from app.v1.modules.rag.loader.cleaner import clean_text
-from app.v1.modules.rag.loader.normalizer import normalize_text
 from app.v1.modules.rag.loader.pdf_loader import load_pdf
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
@@ -74,13 +73,13 @@ class LoaderServiceImpl(LoaderService):
         # We run this in a separate thread to avoid blocking the event loop,
         # since ingest_pdf is CPU-bound and not async.
         result = await asyncio.to_thread(self.process_pdf, temp_path, source=file.filename)
+
         # 4. Return a clean JSON response
         # -----------------------------------------------------------------------
         # This tells the client:
         # - ingestion succeeded
         # - how many chunks were added
         # - what the original filename was
-
         return result
 
     def process_pdf(self, path: str, source: str) -> IngestionResponseSchema:
@@ -91,13 +90,13 @@ class LoaderServiceImpl(LoaderService):
         # 1. Extract raw text from the PDF.
         full_text = load_pdf(path)
 
-        # CLEAN THE TEXT BEFORE CHUNKING
-        full_text = clean_text(full_text)
-        normalized = normalize_text(full_text)  # fix structure
-        # 2. Split into smaller chunks.
-        chunks = RAGChunker.semantic_chunk_text(normalized)
+        # 2. CLEAN THE TEXT BEFORE CHUNKING
+        full_text = clean_text(text=full_text)
 
-        # 3. Add each chunk to the vector DB.
+        # 3. Split into smaller chunks.
+        chunks = RAGChunker.semantic_chunk_text(normalized_text=full_text)
+
+        # 4. Add each chunk to the vector DB.
         for chunk in chunks:
             text = chunk.text
             # FILTER STEP (replacement for is_useful_chunk)

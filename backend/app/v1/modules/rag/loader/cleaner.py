@@ -3,123 +3,104 @@ import re
 
 def clean_text(text: str) -> str:
     """
-    SAFE RAG TEXT CLEANER
-    =====================
+    CLEAN TEXT FOR RAG PIPELINE (FINAL PRODUCTION VERSION)
+    =====================================================
 
-    Goal:
-    -----
-    Clean PDF/OCR text WITHOUT destroying meaning.
+    PURPOSE
+    -------
+    Remove ONLY extraction noise from PDF text while preserving meaning.
 
-    Principle:
-    ----------
-    - Preserve semantic content
-    - Preserve structure (paragraphs, headings)
-    - Only remove obvious noise
+    PRINCIPLE
+    ---------
+    - DO NOT rewrite sentences
+    - DO NOT infer structure
+    - DO NOT improve readability
+    - ONLY fix corruption from PDF extraction
 
-    This is optimized for:
-    - embeddings quality
-    - retrieval accuracy
-    - hybrid search compatibility
+    WHY THIS IS IMPORTANT
+    ---------------------
+    Bad cleaning = lost keywords + bad retrieval
+    Good cleaning = stable embeddings + correct RAG results
     """
 
     # ------------------------------------------------------------
-    # 1. Normalize encoding issues
+    # 1. REMOVE MATH / INLINE FORMULAS (NOISE FOR RAG)
     # ------------------------------------------------------------
     # WHY:
-    # PDFs often contain weird unicode artifacts:
-    # - broken spaces
-    # - invisible characters
-    # - inconsistent encoding
-    #
-    # We normalize early to avoid embedding noise.
-    text = text.replace("\x00", " ")
-
-    # ------------------------------------------------------------
-    # 2. Remove LaTeX math blocks (SAFE VERSION)
-    # ------------------------------------------------------------
-    # WHY:
-    # Math blocks often add noise for semantic search
-    # BUT: we remove only clearly bounded expressions
-    #
-    # SAFETY:
-    # This avoids removing large accidental chunks.
+    # Math expressions rarely help semantic search and add noise
     text = re.sub(r'\${1,2}[^$]{1,2000}?\${1,2}', ' ', text)
 
     # ------------------------------------------------------------
-    # 3. Remove citation markers [1], [23]
+    # 2. REMOVE CITATIONS LIKE [1], [23]
     # ------------------------------------------------------------
     # WHY:
-    # Citations rarely help embeddings
+    # Citations are metadata, not semantic content
     text = re.sub(r'\[\d{1,4}\]', ' ', text)
 
     # ------------------------------------------------------------
-    # 4. Fix hyphenated line breaks (VERY IMPORTANT)
+    # 3. FIX HYPHENATED LINE BREAKS (CRITICAL STEP)
     # ------------------------------------------------------------
-    # WHY:
-    # PDFs often break words like:
-    #   "transfor-"
-    #   "mation"
+    # WHY THIS EXISTS:
+    # PDFs split words at line breaks:
     #
-    # We reconstruct proper words.
-    text = re.sub(r'-\n\s*', '', text)
+    #   inter-
+    #   action
+    #
+    # WITHOUT FIX:
+    # - embeddings break words
+    # - keyword search fails
+    #
+    # WITH FIX:
+    # - restores original word integrity
+    text = re.sub(r"-\s*\n\s*", "", text)
 
     # ------------------------------------------------------------
-    # 5. Remove repeated single page numbers ONLY
+    # 4. REMOVE ISOLATED PAGE NUMBERS
     # ------------------------------------------------------------
     # WHY:
-    # Safe removal of isolated page numbers
-    #
-    # IMPORTANT:
-    # Only removes standalone numeric lines.
+    # Page numbers have no semantic meaning
     text = re.sub(r'^\s*\d{1,4}\s*$', '', text, flags=re.MULTILINE)
 
     # ------------------------------------------------------------
-    # 6. Remove obvious copyright / publisher noise
+    # 5. REMOVE COMMON PDF BOILERPLATE NOISE
     # ------------------------------------------------------------
     # WHY:
-    # These sections do not contribute semantic value
+    # These are repeated publisher artifacts that pollute embeddings
     noise_patterns = [
         r'all rights reserved',
         r'copyright',
         r'isbn',
         r'lccn',
         r'library of congress',
-        r'cataloging[-\s]in[-\s]publication',
-        r'printed and bound',
     ]
 
     for pattern in noise_patterns:
         text = re.sub(pattern, ' ', text, flags=re.IGNORECASE)
 
     # ------------------------------------------------------------
-    # 7. DO NOT REMOVE CHAPTERS OR HEADINGS
+    # 6. NORMALIZE SPACES (STRUCTURAL STABILIZATION)
     # ------------------------------------------------------------
-    # WHY:
-    # These are IMPORTANT for chunking + retrieval.
+    # WHY THIS COMES LATE:
+    # After removing noise, spacing becomes inconsistent
     #
-    # ❌ Removed:
-    #   chapter removal regex
-    #   "introduction" removal
-    #   TOC structure removal
+    # WHAT IT DOES:
+    # "word     word" → "word word"
     #
-    # Reason:
-    # They are semantic anchors.
+    # IMPACT IF REMOVED:
+    # - unstable tokenization
+    # - noisy embeddings
+    text = re.sub(r"[ \t]+", " ", text)
 
     # ------------------------------------------------------------
-    # 8. Normalize spaces (SAFE VERSION)
+    # 7. NORMALIZE EXCESS NEWLINES
     # ------------------------------------------------------------
     # WHY:
-    # We reduce noise but preserve structure.
-    text = re.sub(r'[ \t]+', ' ', text)
-
-    # ------------------------------------------------------------
-    # 9. Normalize excessive newlines
-    # ------------------------------------------------------------
-    # WHY:
-    # Keeps paragraph structure intact
+    # Prevents excessive blank gaps from PDF extraction
     text = re.sub(r'\n{3,}', '\n\n', text)
 
     # ------------------------------------------------------------
-    # 10. Final trim
+    # 8. FINAL CLEANUP
     # ------------------------------------------------------------
+    # WHY:
+    # Ensures consistent output formatting for chunking stage
     return text.strip()
