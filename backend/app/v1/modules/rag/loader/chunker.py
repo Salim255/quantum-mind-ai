@@ -117,7 +117,6 @@ class RAGChunker:
         # --------------------------------------------------------------
         return cls.cleanup_chunks(chunks)
 
-
         # ------------------------------------------------------------------
         # TEXT NORMALIZATION
         # ------------------------------------------------------------------
@@ -359,42 +358,65 @@ class RAGChunker:
     # FINAL CLEANUP
     # ------------------------------------------------------------------
     @staticmethod
-    def cleanup_chunks(chunks: List[ChunkDTO]) -> List[ChunkDTO]:
+    def cleanup_chunks(chunks: List["ChunkDTO"]) -> List["ChunkDTO"]:
         """
-        Final cleanup before embedding/storage.
+        FINAL QUALITY GATE FOR CHUNKS
+        =============================
 
-        OPERATIONS
-        ----------
-        - normalize spaces
-        - remove tiny/noisy chunks
+        PURPOSE
+        -------
+        Remove low-quality chunks before embedding.
 
-        WHY REMOVE TINY CHUNKS?
-        -----------------------
-        Very small chunks often:
-        - lack context
-        - reduce retrieval quality
-        - create noisy embeddings
+        IMPORTANT DESIGN RULE
+        ---------------------
+        This step MUST NOT modify semantic structure.
+        It only filters or lightly normalizes.
         """
 
-        cleaned: List[ChunkDTO] = []
+        cleaned: List["ChunkDTO"] = []
 
         for chunk in chunks:
 
-            # Normalize whitespace.
-            text = re.sub(r"\s+", " ", chunk.text).strip()
+            text = chunk.text
 
-            # Skip tiny chunks.
-            if len(text) > 80:
+            # --------------------------------------------------------
+            # 1. LIGHT NORMALIZATION (SAFE ONLY)
+            # --------------------------------------------------------
+            # WHY:
+            # Fix accidental spacing issues without destroying structure
+            #
+            # NOTE:
+            # We do NOT collapse newlines fully here anymore
+            text = re.sub(r"[ \t]+", " ", text)
 
-                cleaned.append(
-                    ChunkDTO(
-                        text=text,
-                        concept=chunk.concept,
-                        length=len(text))
-                    )
+            # --------------------------------------------------------
+            # 2. LENGTH FILTER (QUALITY CONTROL)
+            # --------------------------------------------------------
+            # WHY THIS EXISTS:
+            # Very small chunks:
+            # - lack semantic context
+            # - produce weak embeddings
+            #
+            # BUT WARNING:
+            # threshold must be carefully tuned
+            if len(text) < 60:
+                continue
+
+            # --------------------------------------------------------
+            # 3. PRESERVE ORIGINAL METADATA
+            # --------------------------------------------------------
+            # WHY:
+            # Avoid recomputation bugs and inconsistencies
+            cleaned.append(
+                ChunkDTO(
+                    text=text,
+                    concept=chunk.concept,
+                    length=len(text)
+                )
+            )
 
         return cleaned
-    
+        
     # ------------------------------------------------------------------
     # CHUNK FINALIZATION
     # ------------------------------------------------------------------
