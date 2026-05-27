@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "quantummind-ui": {
+    "quantum-mind-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -67,10 +67,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "quantummind-ui:build:production"
+              "buildTarget": "quantum-mind-ui:build:production"
             },
             "development": {
-              "buildTarget": "quantummind-ui:build:development"
+              "buildTarget": "quantum-mind-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
