@@ -10,16 +10,19 @@ services:
   quantum-mind-qdrant:
     image: qdrant/qdrant:latest
 
-    container_name: quantum-mind-qdrant
-
     restart: always
 
+    
     ports:
       - "6333:6333"
 
     ###########################################################
     # PERSIST VECTOR DATABASE DATA
     ###########################################################
+
+    env_file:
+        - ./secrets.env
+        
     volumes:
       - quantum-mind-qdrant-data:/qdrant/storage
 
@@ -41,14 +44,7 @@ services:
     depends_on:
       - quantum-mind-qdrant
 
-    ###########################################################
-    # BUILD LOCAL BACKEND IMAGE
-    ###########################################################
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-
-    container_name: quantum-mind-api
+    image: crawan/quantum-mind-api:latest
 
     restart: always
 
@@ -56,7 +52,7 @@ services:
     # HOST:CONTAINER
     ###########################################################
     ports:
-      - "8000:8000"
+      - "3009:8000"
 
     ###########################################################
     # ENV VARIABLES
@@ -82,19 +78,12 @@ services:
   ###########################################################
   quantum-mind-client:
 
-    ###########################################################
-    # BUILD ANGULAR IMAGE
-    ###########################################################
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-
-    container_name: quantum-mind-client
+    image: crawan/quantum-mind-client:latest
 
     restart: always
 
     ports:
-      - "3000:80"
+      - "3010:80"
 
     ###########################################################
     # INTERNAL NETWORK
