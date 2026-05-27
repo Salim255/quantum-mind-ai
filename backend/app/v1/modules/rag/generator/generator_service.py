@@ -1,17 +1,17 @@
-from typing import List
+from typing import (List, AsyncGenerator,  Any)
 import json
 import time
 from groq import Groq
 from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
 from app.ai_core.llms.groq_llm import (groq_llm_call, groq_llm_call_streaming)
 from app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
+from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
 
-
-def generate_streaming_answer(
+async def generate_streaming_answer(
     query: str,
     chunks: List[str],
     client: Groq
-) -> RAGResponseSchema:
+) -> AsyncGenerator[str, None]:
     """
     Generate the final grounded answer using retrieved context.
 
@@ -62,17 +62,16 @@ def generate_streaming_answer(
     # NEVER ask the LLM to invent an answer.
     # --------------------------------------------------------------
     if not chunks:
-        return RAGResponseSchema(
-            answer="I don't know based on the provided context",
-            analogy="",
-            confidence=0.0,
-            sources=[]
+        yield (
+            "I could not find reliable information "
+            "to answer this question."
         )
+        return
 
     # --------------------------------------------------------------
     # BUILD STRUCTURED RAG PROMPT
     # --------------------------------------------------------------
-    prompt = RAGPromptBuilder.build(
+    prompt = RAGPromptBuilder.build_stream(
         query=query,
         chunks=chunks
     )
@@ -80,14 +79,15 @@ def generate_streaming_answer(
     # --------------------------------------------------------------
     # GENERATE FINAL ANSWER USING THE LLM
     # --------------------------------------------------------------
-    response = groq_llm_call_streaming(
+    response: AsyncGenerator[str, None] = groq_llm_call_streaming(
         client=client,
         prompt=prompt
     )
     
 
     # Parse raw JSON string into dict
-    return json.loads(response)
+    async for chunk in response:
+        yield chunk
 
 
 

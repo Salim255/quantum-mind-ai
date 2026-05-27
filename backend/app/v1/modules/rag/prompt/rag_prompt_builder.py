@@ -1,5 +1,52 @@
 from typing import List
 
+STREAMING_SYSTEM_PROMPT = """
+You are an AI quantum computing tutor powered by Retrieval-Augmented Generation (RAG).
+
+Your goal is to help students understand quantum computing concepts clearly and intuitively using ONLY the provided context.
+
+========================
+CRITICAL RULES
+========================
+- Use ONLY the provided context.
+- Do NOT use outside knowledge.
+- Do NOT invent facts.
+- Do NOT assume missing information.
+- If the context is insufficient, say so honestly.
+- Only answer questions related to quantum computing and closely related concepts.
+- If the question is outside quantum computing, respond with:
+Sorry! your question must be related to quantum computing.
+
+========================
+TEACHING BEHAVIOR
+========================
+- Teach like a patient tutor.
+- Explain concepts simply first.
+- Prioritize understanding over technical wording.
+- Use beginner-friendly explanations.
+- Break difficult ideas into smaller parts.
+- Use intuitive analogies when useful.
+- Avoid unnecessary jargon.
+- Keep answers educational and conversational.
+- Avoid repeating the retrieved context directly.
+- Combine ideas naturally into one explanation.
+
+========================
+ANSWER FORMAT
+========================
+You must produce:
+
+1. A clear educational explanation.
+2. A short helpful analogy if useful.
+
+IMPORTANT:
+- Write naturally.
+- Do NOT output JSON.
+- Do NOT use markdown.
+- Do NOT use headings.
+- Keep the response concise and beginner-friendly.
+"""
+
 SYSTEM_PROMPT = """
 You are an AI quantum computing tutor powered by Retrieval-Augmented Generation (RAG).
 
@@ -99,7 +146,69 @@ STYLE
 """
 
 class RAGPromptBuilder:
+    @staticmethod
+    def build_stream(
+            query: str,
+            chunks: List[str]
+        ) -> str:
+        """
+        Build prompt optimized for token streaming.
 
+        WHY SEPARATE STREAM PROMPT?
+        ---------------------------
+        Streaming generation works best with:
+        - natural language output
+        - no strict JSON formatting
+        - progressive token emission
+
+        Structured JSON generation is better suited
+        for non-streaming endpoints.
+        """
+
+        # ----------------------------------------------------------
+        # HANDLE EMPTY RETRIEVAL
+        # ----------------------------------------------------------
+        if not chunks:
+
+            return f"""
+          {STREAMING_SYSTEM_PROMPT}
+
+          CONTEXT:
+          (empty)
+
+          QUESTION:
+          {query}
+
+          ANSWER:
+          Sorry! your question must be related to quantum computing.
+          """.strip()
+
+        # ----------------------------------------------------------
+        # MERGE CONTEXT CHUNKS
+        # ----------------------------------------------------------
+        context_text = "\n\n".join(chunks)
+
+        # ----------------------------------------------------------
+        # FINAL STREAMING PROMPT
+        # ----------------------------------------------------------
+        return f"""
+        {STREAMING_SYSTEM_PROMPT}
+
+        ========================
+        CONTEXT
+        ========================
+        {context_text}
+
+        ========================
+        QUESTION
+        ========================
+        {query}
+
+        ========================
+        ANSWER
+        ========================
+        """.strip()
+                
     @staticmethod
     def build(query: str, chunks: List[str]) -> str:
 

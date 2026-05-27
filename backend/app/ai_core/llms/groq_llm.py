@@ -1,13 +1,13 @@
 from groq import Groq
-
+from typing import AsyncGenerator
 # ------------------------------------------------------------------
 # LLM CALL
 # ------------------------------------------------------------------
 
-def groq_llm_call_streaming(
+async def groq_llm_call_streaming(
     client: Groq,
     prompt: str
-    ):
+    )-> AsyncGenerator[str, None]:
     """
     Call the Groq-hosted LLM for grounded RAG generation.
 
@@ -106,31 +106,30 @@ def groq_llm_call_streaming(
                 "content": prompt
             }
         ],
-        response_format={"type": "json_object"},
         max_tokens=300,
         timeout=10,
         stream=True
     )
     
 
-    # --------------------------------------------------------------
-    # EXTRACT FINAL MODEL RESPONSE
-    # --------------------------------------------------------------
+    # ----------------------------------------------------------
+    # Stream iteration
+    # ----------------------------------------------------------
     #
-    # Groq returns:
+    # IMPORTANT:
+    # This Groq Stream object is SYNCHRONOUS iterable.
     #
-    # response.choices[0].message.content
-    #
-    # which contains the generated answer text.
-    #
+    # Therefore:
+    # - use "for"
+    # - NOT "async for"
+    # ----------------------
    
-
     for chunk in stream:
-        data = chunk.choices[0].delta.content
-        yield data
-
-   
-
+        data: str | None = chunk.choices[0].delta.content
+        # avoid None chunks
+        if data:
+            yield data
+     
 
 def groq_llm_call(
     client: Groq,

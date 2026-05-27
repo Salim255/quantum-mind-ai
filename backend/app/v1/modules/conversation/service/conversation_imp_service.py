@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import AsyncGenerator, Optional
 
 from app.v1.modules.conversation.service.conversation_service import ConversationService
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
@@ -19,11 +19,14 @@ class ConversationServiceImpl(ConversationService):
             user_id: str,
             message: str, 
             conversation_id: Optional[str] = None
-            ):
+            )-> AsyncGenerator[str, None]:
             # 2. Run your existing RAG pipeline (correct call)
-            return self.rag_service.rag_stream_pipeline(
+            stream = self.rag_service.rag_stream_pipeline(
                 QueryRequest(query=message, top_k=3)
             )
+
+            async for chunk in stream:
+                 yield chunk
         
 
     async def handle_message(

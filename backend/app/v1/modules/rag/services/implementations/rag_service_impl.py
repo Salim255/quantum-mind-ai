@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import (List, AsyncGenerator)
 from pydantic import BaseModel
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
@@ -11,7 +11,7 @@ from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, Retrieva
 from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
 from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
 from app.core.container import Container
-
+from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
 
 class QueryRequest(BaseModel):
     query: str
@@ -22,10 +22,10 @@ class RAGServiceImpl(RAGService):
         self.container = container
         self.search_engine_service = search_engine_service
 
-   def rag_stream_pipeline(
+   async def rag_stream_pipeline(
         self,
         payload: QueryRequest
-        ) -> RAGQueryResponseSchema:
+        ) -> AsyncGenerator[str, None]:
     """
     Execute the full RAG pipeline.
 
@@ -78,21 +78,11 @@ class RAGServiceImpl(RAGService):
     # ---------------------------------------------------------------
     # Final answer (must be grounded in context)
     if not chunks:
-        return RAGQueryResponseSchema(
-            query=payload.query,
-            retrieved_chunks=[],
-            final_answer={
-                "answer": (
-                    "I could not find reliable information "
-                    "to answer this question."
-                ),
-                "key_points": [],
-                "step_by_step": [],
-                "sources": [],
-                "retrieved_chunk":[]
-            },
-            latency_ms=0
+        yield (
+            "I could not find reliable information "
+            "to answer this question."
         )
+        return
 
     # ---------------------------------------------------------------
     # 2. BUILD OPTIMIZED CONTEXT
@@ -109,7 +99,7 @@ class RAGServiceImpl(RAGService):
     # ---------------------------------------------------------------
     # 4. GENERATE FINAL STRUCTURED ANSWER
     # ---------------------------------------------------------------
-    final_answer = generate_streaming_answer(
+    final_answer: AsyncGenerator[str, None] = generate_streaming_answer(
         payload.query,
         rich_context_chunks,
         client
@@ -122,11 +112,8 @@ class RAGServiceImpl(RAGService):
     # model_dump():
     # Converts Pydantic schema into JSON-serializable dict.
     # ---------------------------------------------------------------
-    return RAGQueryResponseSchema(
-        query=payload.query,
-        retrieved_chunks=chunks,
-        final_answer=final_answer,
-    )
+    async for chunk in final_answer:
+       yield chunk
    
    def rag_pipeline(
         self,
