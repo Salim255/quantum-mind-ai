@@ -28,7 +28,7 @@ FROM nginx:1.25-alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy Angular build output to nginx folder
-COPY --from=build /app/dist/qunatummind-ui/browser /usr/share/nginx/html
+COPY --from=build /app/dist/quantum-mind-ui/browser /usr/share/nginx/html
 
 # Copy custom nginx config (IMPORTANT for Angular routing)
 # This enables SPA fallback (deep linking support)

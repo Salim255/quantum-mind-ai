@@ -86,7 +86,7 @@ pipeline {
                 // WHY:
                 // Angular app is compiled and served via Nginx container
                 sh """
-                    docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend
+                    docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend/quantum-mind-ui
                     docker tag ${FRONTEND_IMAGE}:${IMAGE_TAG} ${FRONTEND_IMAGE}:latest
                 """
             }
