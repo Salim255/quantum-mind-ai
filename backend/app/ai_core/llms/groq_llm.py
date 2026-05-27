@@ -1,9 +1,13 @@
 from groq import Groq
 from typing import AsyncGenerator
+import logging
+import json
+
+logger = logging.getLogger(__name__)
+
 # ------------------------------------------------------------------
 # LLM CALL
 # ------------------------------------------------------------------
-
 async def groq_llm_call_streaming(
     client: Groq,
     prompt: str
@@ -74,61 +78,71 @@ async def groq_llm_call_streaming(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
-    stream = client.chat.completions.create(
+    try:
+        stream = client.chat.completions.create(
 
-        # ----------------------------------------------------------
-        # MODEL
-        # ----------------------------------------------------------
-        #
-        # llama-3.1-8b-instant:
-        # - fast
-        # - low latency
-        # - good for educational RAG
-        #
-        model="llama-3.1-8b-instant",
+            # ----------------------------------------------------------
+            # MODEL
+            # ----------------------------------------------------------
+            #
+            # llama-3.1-8b-instant:
+            # - fast
+            # - low latency
+            # - good for educational RAG
+            #
+            model="llama-3.1-8b-instant",
 
-        # ----------------------------------------------------------
-        # CONVERSATION MESSAGES
-        # ----------------------------------------------------------
-        messages=[
+            # ----------------------------------------------------------
+            # CONVERSATION MESSAGES
+            # ----------------------------------------------------------
+            messages=[
 
-            # System behavior instructions.
-            {
-                "role": "system",
-                "content": system_prompt
-            },
+                # System behavior instructions.
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
 
-            # Final RAG prompt containing:
-            # - user question
-            # - retrieved context
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        max_tokens=300,
-        timeout=10,
-        stream=True
-    )
+                # Final RAG prompt containing:
+                # - user question
+                # - retrieved context
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            max_tokens=300,
+            timeout=10,
+            stream=True
+        )
     
 
-    # ----------------------------------------------------------
-    # Stream iteration
-    # ----------------------------------------------------------
-    #
-    # IMPORTANT:
-    # This Groq Stream object is SYNCHRONOUS iterable.
-    #
-    # Therefore:
-    # - use "for"
-    # - NOT "async for"
-    # ----------------------
-   
-    for chunk in stream:
-        data: str | None = chunk.choices[0].delta.content
-        # avoid None chunks
-        if data:
-            yield data
+        # ----------------------------------------------------------
+        # Stream iteration
+        # ----------------------------------------------------------
+        #
+        # IMPORTANT:
+        # This Groq Stream object is SYNCHRONOUS iterable.
+        #
+        # Therefore:
+        # - use "for"
+        # - NOT "async for"
+        # ----------------------
+    
+        for chunk in stream:
+            data: str | None = chunk.choices[0].delta.content
+            # avoid None chunks
+            if data:
+                yield data
+
+    except Exception as e:
+        logger.exception(e)
+        yield "Streaming failed"
+    
+    finally:
+        # optional cleanup if stream supports it
+        if stream and hasattr(stream, "close"):
+            stream.close()
      
 
 def groq_llm_call(

@@ -62,10 +62,8 @@ async def generate_streaming_answer(
     # NEVER ask the LLM to invent an answer.
     # --------------------------------------------------------------
     if not chunks:
-        yield (
-            "I could not find reliable information "
-            "to answer this question."
-        )
+        message =  "I could not find reliable information, to answer this question."
+        yield f"data: {json.dumps(message)}\n\n"
         return
 
     # --------------------------------------------------------------
