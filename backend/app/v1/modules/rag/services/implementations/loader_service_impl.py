@@ -11,6 +11,7 @@ from app.v1.modules.rag.loader.pdf_loader import load_pdf
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
 from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema  # your existing function
+from app.core.exceptions.custom_exceptions import LoaderException
 
 logger = logging.getLogger(__name__)
 
@@ -87,15 +88,13 @@ class LoaderServiceImpl(LoaderService):
             # - ingestion succeeded
             # - how many chunks were added
             # - what the original filename was
+            logger.info("PDF ingestion completed successfully")
             return result
         
         except Exception as e:
             logger.exception("Exception in load doc", e)
             raise e
-        
-        finally:
-            logger.info("PDF ingestion completed successfully")
-
+                    
     def process_pdf(self, path: str, source: str) -> IngestionResponseSchema:
         """
         Load a PDF, chunk it, embed each chunk, and store in VECTOR_DB.

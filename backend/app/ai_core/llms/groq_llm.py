@@ -1,5 +1,5 @@
 from groq import Groq
-from typing import AsyncGenerator
+from typing import Generator
 import logging
 from app.core.exceptions.custom_exceptions import StreamException
 
@@ -8,10 +8,10 @@ logger = logging.getLogger(__name__)
 # ------------------------------------------------------------------
 # LLM CALL
 # ------------------------------------------------------------------
-async def groq_llm_call_streaming(
+def groq_llm_call_streaming(
     client: Groq,
     prompt: str
-    )-> AsyncGenerator[str, None]:
+    )-> Generator[str, None, None]:
     """
     Call the Groq-hosted LLM for grounded RAG generation.
 
@@ -78,72 +78,62 @@ async def groq_llm_call_streaming(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
-    try:
-        stream = client.chat.completions.create(
-
-            # ----------------------------------------------------------
-            # MODEL
-            # ----------------------------------------------------------
-            #
-            # llama-3.1-8b-instant:
-            # - fast
-            # - low latency
-            # - good for educational RAG
-            #
-            model="llama-3.1-8b-instant",
-
-            # ----------------------------------------------------------
-            # CONVERSATION MESSAGES
-            # ----------------------------------------------------------
-            messages=[
-
-                # System behavior instructions.
-                {
-                    "role": "system",
-                    "content": system_prompt
-                },
-
-                # Final RAG prompt containing:
-                # - user question
-                # - retrieved context
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
-            max_tokens=300,
-            timeout=10,
-            stream=True
-        )
-    
+    stream = client.chat.completions.create(
 
         # ----------------------------------------------------------
-        # Stream iteration
+        # MODEL
         # ----------------------------------------------------------
         #
-        # IMPORTANT:
-        # This Groq Stream object is SYNCHRONOUS iterable.
+        # llama-3.1-8b-instant:
+        # - fast
+        # - low latency
+        # - good for educational RAG
         #
-        # Therefore:
-        # - use "for"
-        # - NOT "async for"
-        # ----------------------
-    
-        for chunk in stream:
-            data: str | None = chunk.choices[0].delta.content
-            # avoid None chunks
-            if data:
-                yield data
+        model="llama-3.1-8b-instant",
 
-    except Exception as e:
-        logger.exception("Streaming failed:\n",e)
-        yield "Streaming failed"
+        # ----------------------------------------------------------
+        # CONVERSATION MESSAGES
+        # ----------------------------------------------------------
+        messages=[
+
+            # System behavior instructions.
+            {
+                "role": "system",
+                "content": system_prompt
+            },
+
+            # Final RAG prompt containing:
+            # - user question
+            # - retrieved context
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        max_tokens=300,
+        timeout=10,
+        stream=True
+    )
+
+
+    # ----------------------------------------------------------
+    # Stream iteration
+    # ----------------------------------------------------------
+    #
+    # IMPORTANT:
+    # This Groq Stream object is SYNCHRONOUS iterable.
+    #
+    # Therefore:
+    # - use "for"
+    # - NOT "async for"
+    # ----------------------
+
+    for chunk in stream:
+        data: str | None = chunk.choices[0].delta.content
+        # avoid None chunks
+        if data:
+            yield data
     
-    finally:
-        # optional cleanup if stream supports it
-        if stream and hasattr(stream, "close"):
-            stream.close()
-     
 
 def groq_llm_call(
     client: Groq,

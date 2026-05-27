@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Generator
 from app.v1.modules.conversation.schema.conversation_schema import ConversationResponse
 
 class ConversationService(ABC):
     
     @abstractmethod
-    async def stream_message(
+    def stream_message(
         self,
         user_id: str, 
         message: str, 
         conversation_id: Optional[str] = None
-        ):
+        )-> Generator[str, None, None]:
         pass
     
     @abstractmethod

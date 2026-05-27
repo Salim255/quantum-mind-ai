@@ -1,5 +1,5 @@
 import time
-from typing import (List, AsyncGenerator)
+from typing import (List, Generator)
 from pydantic import BaseModel
 import json
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
@@ -23,10 +23,10 @@ class RAGServiceImpl(RAGService):
         self.container = container
         self.search_engine_service = search_engine_service
 
-   async def rag_stream_pipeline(
+   def rag_stream_pipeline(
         self,
         payload: QueryRequest
-        ) -> AsyncGenerator[str, None]:
+        ) -> Generator[str, None, None]:
     """
     Execute the full RAG pipeline.
 
@@ -98,7 +98,7 @@ class RAGServiceImpl(RAGService):
     # ---------------------------------------------------------------
     # 4. GENERATE FINAL STRUCTURED ANSWER
     # ---------------------------------------------------------------
-    final_answer: AsyncGenerator[str, None] = generate_streaming_answer(
+    final_answer: Generator[str, None, None] = generate_streaming_answer(
         payload.query,
         rich_context_chunks,
         client
@@ -111,7 +111,7 @@ class RAGServiceImpl(RAGService):
     # model_dump():
     # Converts Pydantic schema into JSON-serializable dict.
     # ---------------------------------------------------------------
-    async for chunk in final_answer:
+    for chunk in final_answer:
        yield chunk
    
    def rag_pipeline(

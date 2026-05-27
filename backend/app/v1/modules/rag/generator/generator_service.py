@@ -1,4 +1,4 @@
-from typing import (List, AsyncGenerator,  Any)
+from typing import (List, Generator,  Any)
 import json
 import time
 from groq import Groq
@@ -7,11 +7,11 @@ from app.ai_core.llms.groq_llm import (groq_llm_call, groq_llm_call_streaming)
 from app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
 from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
 
-async def generate_streaming_answer(
+def generate_streaming_answer(
     query: str,
     chunks: List[str],
     client: Groq
-) -> AsyncGenerator[str, None]:
+) -> Generator[str, None, None]:
     """
     Generate the final grounded answer using retrieved context.
 
@@ -77,14 +77,14 @@ async def generate_streaming_answer(
     # --------------------------------------------------------------
     # GENERATE FINAL ANSWER USING THE LLM
     # --------------------------------------------------------------
-    response: AsyncGenerator[str, None] = groq_llm_call_streaming(
+    response: Generator[str, None, None] = groq_llm_call_streaming(
         client=client,
         prompt=prompt
     )
     
 
     # Parse raw JSON string into dict
-    async for chunk in response:
+    for chunk in response:
         yield chunk
 
 

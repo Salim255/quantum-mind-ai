@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Optional
+from typing import Generator, Optional
 import json
 import logging
 from app.v1.modules.conversation.service.conversation_service import ConversationService
@@ -18,18 +18,32 @@ class ConversationServiceImpl(ConversationService):
         self.memory = memory
         self.rag_service = rag_service
 
-    async def stream_message(  self, 
+    def stream_message(  self, 
             user_id: str,
             message: str, 
             conversation_id: Optional[str] = None
-            )-> AsyncGenerator[str, None]:
-            # 2. Run your existing RAG pipeline (correct call)
-            stream: AsyncGenerator[str, None] = self.rag_service.rag_stream_pipeline(
-                QueryRequest(query=message, top_k=3)
-            )
+            )-> Generator[str, None, None]:
+
+            try:
+                # 2. Run your existing RAG pipeline (correct call)
+                stream: Generator[str, None, None] = self.rag_service.rag_stream_pipeline(
+                    QueryRequest(query=message, top_k=3)
+                )
+        
+                for chunk in stream:
+                    yield f"data: {json.dumps(chunk)}\n\n"
     
-            async for chunk in stream:
-                yield chunk
+            except Exception as e:
+                logger.exception("Streaming failed:\n", e)
+
+                message = "Streaming failed"
+
+                yield f"data: {json.dumps(message)}\n\n"
+                 
+            # optional cleanup if stream supports it
+            finally:
+                if stream and hasattr(stream, "close"):
+                    stream.close()
     
     async def handle_message(
             self, 

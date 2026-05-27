@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated, AsyncGenerator
+from typing import Annotated, Generator
 from app.v1.modules.conversation.dependencies import get_conversation_service
 from app.v1.modules.conversation.service.conversation_service import ConversationService
 from app.v1.modules.conversation.schema.conversation_schema import ConversationRequest, ConversationResponse
@@ -31,7 +31,7 @@ async def send_message(
     "/messages/stream",
     status_code=200
 )
-async def stream_message(
+def stream_message(
     payload: ConversationRequest,
     conversation_service: Annotated[
         ConversationService,
@@ -41,7 +41,7 @@ async def stream_message(
     # ------------------------------------------------------
     # STREAM EVENTS FROM SERVICE
     # ------------------------------------------------------
-    event_generator: AsyncGenerator[str, None] = conversation_service.stream_message(
+    event_generator: Generator[str, None, None] = conversation_service.stream_message(
         user_id=payload.user_id,
         message=payload.message,
         conversation_id=payload.conversation_id
