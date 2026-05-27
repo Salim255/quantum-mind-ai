@@ -94,8 +94,7 @@ class LoaderServiceImpl(LoaderService):
             raise e
         
         finally:
-            print("FINALLY HIT")
-            logger.info("All is good")
+            logger.info("PDF ingestion completed successfully")
 
     def process_pdf(self, path: str, source: str) -> IngestionResponseSchema:
         """

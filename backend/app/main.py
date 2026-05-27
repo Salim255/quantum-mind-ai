@@ -21,8 +21,7 @@ app = FastAPI(
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    force=True  # IMPORTANT (overrides uvicorn config safely)
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
 #@app.lifespan("startup")
