@@ -24,10 +24,40 @@ export class ConversationService {
     );
   }
 
+  async consumeStream(reader: ReadableStreamDefaultReader<Uint8Array>) {
+
+    const decoder = new TextDecoder();
+    let fullText = '';
+
+    while (true) {
+
+      const { value, done } = await reader.read();
+
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+
+      fullText += chunk;
+
+      console.log('stream chunk:', chunk);
+      console.log('accumulated:', fullText);
+
+      // 👉 update UI here
+      // this.aiMessage = fullText;
+    }
+
+    reader.releaseLock();
+  }
+
   async sendStreamMessage(
     payload: ConversationPayload
     ):Promise< ReadableStreamDefaultReader<Uint8Array> | null> {
-    return await this.conversationHttpService.sendStreamMessage(payload)
+    const response =  await this.conversationHttpService.sendStreamMessage(payload)
+    console.log(response);
+   if(response){
+     this.consumeStream(response);
+   }
+    return response
   }
 
   setConversation(conversation: Conversation){

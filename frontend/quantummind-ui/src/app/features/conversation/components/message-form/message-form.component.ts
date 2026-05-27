@@ -14,16 +14,8 @@ export class MessageFormComponent {
   user_message: string = "";
   ask(){}
 
-  submit( ){
-    console.log(this.user_message);
+  async submit( ){
     const payload: ConversationPayload = {user_id: "", conversation_id: "", message: this.user_message}
-    this.conservationService.sendMessage(payload).subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+    await this.conservationService.sendStreamMessage(payload);
   }
 }
