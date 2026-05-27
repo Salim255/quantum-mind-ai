@@ -1,7 +1,7 @@
 from groq import Groq
 from typing import AsyncGenerator
 import logging
-import json
+from app.core.exceptions.custom_exceptions import StreamException
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +136,7 @@ async def groq_llm_call_streaming(
                 yield data
 
     except Exception as e:
-        logger.exception(e)
+        logger.exception("Streaming failed:\n",e)
         yield "Streaming failed"
     
     finally:

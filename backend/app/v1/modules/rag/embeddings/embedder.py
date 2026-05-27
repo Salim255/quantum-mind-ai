@@ -35,7 +35,7 @@ class RAGEmbedder:
 
         # Encode the text into a dense vector using the loaded model.
         # The output is a NumPy array, which we convert to a list for JSON compatibility.
-        embedding = self.model.encode(text).tolist()
+        embedding = self.model.encode(text, show_progress_bar=False).tolist()
 
         # Return the embedding wrapped in a dict.
         return {"embedding": embedding, "source": source}
