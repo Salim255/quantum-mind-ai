@@ -37,15 +37,29 @@ export class ConversationService {
 
       const chunk = decoder.decode(value, { stream: true });
 
-      fullText += chunk;
+      // split SSE messages
+      const lines = chunk.split('\n');
 
-      console.log('stream chunk:', chunk);
-      console.log('accumulated:', fullText);
+      for (const line of lines) {
 
+        if (line.startsWith('data:')) {
+
+          const content = line.replace('data:', '').trim();
+
+          // remove quotes if present
+          const cleaned = content.replace(/^"|"$/g, '');
+
+          fullText += cleaned;
+          console.log('accumulated:', fullText);
+          //this.aiMessage = fullText;
+        }
+      }
+
+      //fullText += chunk;
       // 👉 update UI here
       // this.aiMessage = fullText;
     }
-
+    //console.log('accumulated:', fullText);
     reader.releaseLock();
   }
 
@@ -53,7 +67,7 @@ export class ConversationService {
     payload: ConversationPayload
     ):Promise< ReadableStreamDefaultReader<Uint8Array> | null> {
     const response =  await this.conversationHttpService.sendStreamMessage(payload)
-    console.log(response);
+    console.log("response: ",response);
    if(response){
      this.consumeStream(response);
    }
