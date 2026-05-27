@@ -47,10 +47,13 @@ export class ConversationService {
           const content = line.replace('data:', '').trim();
 
           // remove quotes if present
-          const cleaned = content.replace(/^"|"$/g, '');
-
+          const cleaned = content
+              .replace(/^"|"$/g, '')
+              .replace(/\\n/g, '\n');
+          // const cleaned = content.replace(/\\n/g, '\n');
+          //const cleaned = content.replace(/\n/g, '<br>');
           fullText += cleaned;
-          console.log('accumulated:', fullText);
+          this.messageService.setStreamResponseSubject(fullText);
           //this.aiMessage = fullText;
         }
       }

@@ -11,11 +11,11 @@ export class MessageService {
     this.messageSubject.next(message)
   }
 
-  setStreamResponse(response: string | null) {
+  setStreamResponseSubject(response: string | null) {
     this.streamingResponseSubject.next(response);
   }
 
-  get getStreamResponse(): Observable<string | null>{
+  get getStreamResponse$(): Observable<string | null>{
     return this.streamingResponseSubject.asObservable();
   }
 

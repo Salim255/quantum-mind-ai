@@ -9,7 +9,7 @@ from fastapi.responses import StreamingResponse
 
 router = APIRouter(
     prefix="/conversations",
-    tags=["Conversation"]
+    tags=["Conversations"]
 )
 
 @router.post("/messages")
@@ -33,21 +33,16 @@ async def stream_message(
         Depends(get_conversation_service)
     ]
 ):
-
-    async def event_generator():
-        # ------------------------------------------------------
-        # STREAM EVENTS FROM SERVICE
-        # ------------------------------------------------------
-        async for event in conversation_service.stream_message(
-            user_id=payload.user_id,
-            message=payload.message,
-            conversation_id=payload.conversation_id
-        ):
-
-            # SSE FORMAT
-            yield f"data: {json.dumps(event)}\n\n"
+    # ------------------------------------------------------
+    # STREAM EVENTS FROM SERVICE
+    # ------------------------------------------------------
+    event_generator = conversation_service.stream_message(
+        user_id=payload.user_id,
+        message=payload.message,
+        conversation_id=payload.conversation_id
+    )
 
     return StreamingResponse(
-        event_generator(),
+        event_generator,
         media_type="text/event-stream"
     )

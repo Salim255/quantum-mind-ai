@@ -1,5 +1,6 @@
 from typing import AsyncGenerator, Optional
-
+import json
+import logging
 from app.v1.modules.conversation.service.conversation_service import ConversationService
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from pydantic import BaseModel
@@ -9,6 +10,8 @@ from app.v1.modules.conversation.schema.conversation_schema import ConversationR
 class QueryRequest(BaseModel):
     query: str
     top_k: int = 3
+
+logger = logging.getLogger(__name__)
 
 class ConversationServiceImpl(ConversationService):
     def __init__(self, memory, rag_service: RAGService):
@@ -24,9 +27,26 @@ class ConversationServiceImpl(ConversationService):
             stream = self.rag_service.rag_stream_pipeline(
                 QueryRequest(query=message, top_k=3)
             )
+            try:
+                async for chunk in stream:
 
-            async for chunk in stream:
-                 yield chunk
+                    yield f"data: {json.dumps(chunk)}\n\n"
+
+                yield "event: done\ndata: [DONE]\n\n"
+    
+            except Exception as e:
+
+                error_payload = {
+                    "type": "error",
+                    "message": "Streaming failed"
+                }
+
+                logger.exception(f"Streaming error: {e}")
+
+                yield f"event: error\ndata: {json.dumps(error_payload)}\n\n"
+
+                
+           
         
 
     async def handle_message(
