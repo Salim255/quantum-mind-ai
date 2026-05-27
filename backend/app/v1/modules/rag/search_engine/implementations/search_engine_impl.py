@@ -46,7 +46,7 @@ class SearchEngineImpl(SearchEngineInterface):
         # --------------------------------------------------------
     
         action: RetrievalAction = DecisionService.evaluate_retrieval_confidence(diversified)
-        print("diversified coanditdate___=====: \n", action)
+
         match action:
             case RetrievalAction.OK: 
                 # --------------------------------------------------------

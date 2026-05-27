@@ -24,6 +24,12 @@ export class ConversationService {
     );
   }
 
+  async sendStreamMessage(
+    payload: ConversationPayload
+    ):Promise< ReadableStreamDefaultReader<Uint8Array> | null> {
+    return await this.conversationHttpService.sendStreamMessage(payload)
+  }
+
   setConversation(conversation: Conversation){
     this.conversationSubject.next(conversation);
   }
@@ -45,5 +51,7 @@ export class ConversationService {
   get getConversation(): Observable<Conversation | null> {
     return this.conversationSubject.asObservable();
   }
+
+
   appendMessage(){}
 }

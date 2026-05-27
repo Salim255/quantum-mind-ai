@@ -45,4 +45,19 @@ export class ConversationHttpService {
   sendMessage(payload: ConversationPayload): Observable<ConversationResponse>{
     return this.http.post<ConversationResponse>(`${this.baseUrl}/messages`,payload)
   }
+
+  async sendStreamMessage(payload: ConversationPayload): Promise<ReadableStreamDefaultReader<Uint8Array> | null >{
+
+    const response =  await fetch(`${this.baseUrl}/messages/stream`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+
+    if (!response.body) return null
+
+    return response.body.getReader();
+  }
 }
