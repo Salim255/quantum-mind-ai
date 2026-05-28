@@ -56,11 +56,8 @@ services:
     ###########################################################
     # ENV VARIABLES
     ###########################################################
-    environment:
-      GROQ_API_KEY: ${GROQ_API_KEY}
-      QDRANT_API_KEY: ${QDRANT_API_KEY}
-      API_PREFIX: ${API_PREFIX}
-      ENV: ${ENV}
+    env_file:
+      - .env
   
     ###########################################################
     # INTERNAL NETWORK
