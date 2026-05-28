@@ -22,7 +22,7 @@ services:
 
     env_file:
         - ./secrets.env
-        
+
     volumes:
       - quantum-mind-qdrant-data:/qdrant/storage
 
@@ -58,7 +58,7 @@ services:
     # ENV VARIABLES
     ###########################################################
     env_file:
-      - ./backend/.env
+      - ./secrets.env
 
     ###########################################################
     # LIVE DEV MOUNT (OPTIONAL)
