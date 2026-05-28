@@ -159,12 +159,12 @@ pipeline {
                     withCredentials([file(credentialsId: 'QUANTUM_API_SECRETS_FILE', variable: 'SECRETS_FILE')]) {
                         sh '''
                             # Copy the secret file into the workspace
-                            cat "$SECRETS_FILE" > secrets.env
+                            cat "$SECRETS_FILE" > .env
                             
                             # Instead of rebuilding locally, we PULL from Docker Hub
                             docker-compose pull
 
-                            # Run docker-compose (it will load secrets.env)
+                            # Run docker-compose (it will load .env)
                             docker-compose up -d
                         '''
                     }

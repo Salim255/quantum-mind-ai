@@ -19,9 +19,8 @@ services:
     ###########################################################
     # PERSIST VECTOR DATABASE DATA
     ###########################################################
-
-    env_file:
-        - ./secrets.env
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY}
 
     volumes:
       - quantum-mind-qdrant-data:/qdrant/storage
@@ -57,9 +56,12 @@ services:
     ###########################################################
     # ENV VARIABLES
     ###########################################################
-    env_file:
-      - ./secrets.env
-
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      QDRANT_API_KEY: ${QDRANT_API_KEY}
+      API_PREFIX: ${API_PREFIX}
+      ENV: ${ENV}
+  
     ###########################################################
     # INTERNAL NETWORK
     ###########################################################
