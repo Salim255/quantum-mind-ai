@@ -133,3 +133,7 @@ docker-compose.override.yml
 *.db
 *.bak
 *.tmp
+.env
+*.env
+.env
+*.env
