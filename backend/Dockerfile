@@ -90,7 +90,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 #
 # Now we copy your actual FastAPI project into the container.
 #
-COPY . .
+COPY app /app/app
 
 # ---------------------------------------------------
 # 4. Ensure Python can find "app" module
