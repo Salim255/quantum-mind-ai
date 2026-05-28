@@ -92,6 +92,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 #
 COPY . .
 
+# ---------------------------------------------------
+# 4. Ensure Python can find "app" module
+# ---------------------------------------------------
+ENV PYTHONPATH=/app
 
 # ------------------------------------------------------------
 # 7. EXPOSE PORT
