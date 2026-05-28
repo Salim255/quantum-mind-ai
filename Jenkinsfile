@@ -161,6 +161,8 @@ pipeline {
                             # Copy the secret file into the workspace
                             cat "$SECRETS_FILE" > .env
                             
+                            docker-compose down
+
                             # Instead of rebuilding locally, we PULL from Docker Hub
                             docker-compose pull
 
