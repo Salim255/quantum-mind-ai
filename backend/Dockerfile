@@ -97,6 +97,11 @@ COPY . .
 # ---------------------------------------------------
 ENV PYTHONPATH=/app
 
+
+# 🔍 DEBUG: show file structure inside image at build time
+RUN echo "===== FILE STRUCTURE INSIDE IMAGE =====" && \
+    ls -R /app && \
+    echo "===== END DEBUG ====="
 # ------------------------------------------------------------
 # 7. EXPOSE PORT
 # ------------------------------------------------------------
@@ -122,4 +127,4 @@ EXPOSE 8000
 # - 0.0.0.0 → allows external access (important in Docker)
 # - 8000 → port inside container
 #
-CMD ["uvicorn", "app.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
