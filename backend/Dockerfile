@@ -48,7 +48,7 @@ ENV PYTHONUNBUFFERED=1
 # This defines where your code will live inside the container.
 # Every following command runs inside /app.
 #
-WORKDIR /app
+WORKDIR /backend
 
 
 # ------------------------------------------------------------
@@ -90,7 +90,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 #
 # Now we copy your actual FastAPI project into the container.
 #
-COPY app /app/app
+COPY . .
 
 # ---------------------------------------------------
 # 4. Ensure Python can find "app" module
@@ -127,4 +127,4 @@ EXPOSE 8000
 # - 0.0.0.0 → allows external access (important in Docker)
 # - 8000 → port inside container
 #
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
