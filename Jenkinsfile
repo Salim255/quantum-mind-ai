@@ -150,14 +150,27 @@ pipeline {
         // =======================================================
         // 7. OPTIONAL DEPLOY STEP (COMMENTED)
         // =======================================================
-        // stage('Deploy') {
-        //     steps {
-        //         sh """
-        //             docker compose pull
-        //             docker compose up -d
-        //         """
-        //     }
-        // }
+        stage("ROLLOUT APP") {
+            steps {
+                script {
+                    // Start new containers in detached mode
+                    // sh 'docker-compose up -d'
+
+                    withCredentials([file(credentialsId: 'QUANTUM_API_SECRETS_FILE', variable: 'SECRETS_FILE')]) {
+                        sh '''
+                            # Copy the secret file into the workspace
+                            cat "$SECRETS_FILE" > secrets.env
+                            
+                            # Instead of rebuilding locally, we PULL from Docker Hub
+                            docker-compose pull
+
+                            # Run docker-compose (it will load secrets.env)
+                            docker-compose up -d
+                        '''
+                    }
+                }
+            }
+        }
     }
 
 
