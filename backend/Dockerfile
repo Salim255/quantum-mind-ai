@@ -92,15 +92,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
 #
 COPY . .
 
-# ---------------------------------------------------
-# 4. Ensure Python can find "app" module
-# ---------------------------------------------------
-ENV PYTHONPATH=/app
 
 
 # 🔍 DEBUG: show file structure inside image at build time
 RUN echo "===== FILE STRUCTURE INSIDE IMAGE =====" && \
-    ls -R /app && \
+    ls -R /backend && \
     echo "===== END DEBUG ====="
 # ------------------------------------------------------------
 # 7. EXPOSE PORT
