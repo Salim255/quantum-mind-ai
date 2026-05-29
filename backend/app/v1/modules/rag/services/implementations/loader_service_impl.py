@@ -85,12 +85,20 @@ class LoaderServiceImpl(LoaderService):
             # 3. Split into smaller chunks.
             chunks = RAGChunker.semantic_chunk_text(normalized_text=full_text)
             
+            sem = asyncio.Semaphore(5)
+            async def safe_add(chunk):
+                async with sem:
+                    return self.add_document_service.add_document(chunk, source=file.filename)
+    
+          
+            await asyncio.gather(*(safe_add(c) for c in chunks))
+            
             # 4. Add each chunk to the vector DB.
-            for chunk in chunks:
-                self.add_document_service.add_document(
-                    chunk=chunk,
-                    source=file.filename
-                )
+            #for chunk in chunks:
+            #    self.add_document_service.add_document(
+            #        chunk=chunk,
+            #        source=file.filename
+            #    )
 
             # 4. Return a clean JSON response
             # -----------------------------------------------------------------------
