@@ -2,6 +2,7 @@ from sentence_transformers import CrossEncoder
 from sentence_transformers import SentenceTransformer
 from app.core.settings import Settings, get_settings
 from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
+from app.db.qdrant import QdrantService
 from groq import Groq
 
 class Container:
@@ -40,8 +41,8 @@ class Container:
         #
         # This makes them MUCH more accurate, but slower.
         # ------------------------------------------------------------
-
         self.reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
         # VECTOR DB CLIENT (example)
-        # self.vector_db = QdrantClient(...)
+        # QdrantClient(...)
+        self.qdrant = QdrantService(qdrant_url=self.settings.QDRANT_URL)

@@ -65,7 +65,7 @@ class RAGAddDocument:
                 concept=chunk.concept,
                 length=chunk.length
             )
-            )
+        )
 
 
         # --- 3. Save the entry in the in-memory vector DB -----------------------
