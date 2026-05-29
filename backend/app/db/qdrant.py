@@ -1,11 +1,25 @@
 from qdrant_client import QdrantClient
 from app.core.settings import Settings, get_settings
-from typing import Annotated
+from qdrant_client.models import Distance, VectorParams
 
 class QdrantService:
-    def __init__(self, qdrant_url: str):
-        self.qdrant_url = qdrant_url
-        self._client = QdrantClient(url=self.qdrant_url) # CREATE ONCE
+    def __init__(self, settings: Settings):
+        self.settings = settings
+    
+        self._client = QdrantClient(url=self.settings.QDRANT_URL) # CREATE ONCE
+
+    def create_collection(self):
+        try:
+            self._client.create_collection(
+                collection_name=self.settings.COLLECTION_NAME,
+                vectors_config=VectorParams(
+                    size=self.settings.VECTOR_SIZE,  # your embedding model size
+                    distance=Distance.COSINE
+                )
+            )
+        except Exception as e:
+            print(e)
+      
 
     @property
     def client(self)-> QdrantClient:

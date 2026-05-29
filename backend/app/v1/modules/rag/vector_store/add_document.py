@@ -5,6 +5,7 @@ from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
 from app.v1.modules.rag.dto.document_dto import (DocumentDTO, AddedDocResponseDto, MetadataDTO)
 from app.core.container import Container
+from app.db.qdrant_mapper import QdrantMapper
 
 # Import the embedding function.
 # This function converts raw text into a dense vector representation
@@ -73,6 +74,16 @@ class RAGAddDocument:
         # Later you can replace this with:
         # - a persistent DB (PostgreSQL + pgvector)
         # - a cloud vector DB (Pinecone, Weaviate, Qdrant)
+        self.container.qdrant.client.upsert(
+            collection_name="documents",
+            points=[
+                QdrantMapper.to_point(
+                    doc=document_entry,
+                    point_id=1
+                )
+            ]
+        )
+
         VECTOR_DB.append(document_entry.model_dump())
 
         # --- 4. Return a confirmation -------------------------------------------

@@ -45,4 +45,4 @@ class Container:
 
         # VECTOR DB CLIENT (example)
         # QdrantClient(...)
-        self.qdrant = QdrantService(qdrant_url=self.settings.QDRANT_URL)
+        self.qdrant = QdrantService(settings=self.settings)
