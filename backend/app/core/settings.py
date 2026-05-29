@@ -9,9 +9,11 @@ class Settings(BaseSettings):
     GROAI_API_KEY: str
 
     ENV: str
-    
+
     QDRANT_API_KEY: str
-     
+    
+    QDRANT_URL: str
+    
     model_config = SettingsConfigDict(env_file=".env")
 
     @property
