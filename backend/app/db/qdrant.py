@@ -6,7 +6,9 @@ class QdrantService:
     def __init__(self, settings: Settings):
         self.settings = settings
     
-        self._client = QdrantClient(url=self.settings.QDRANT_URL) # CREATE ONCE
+        self._client = QdrantClient(url=self.settings.QDRANT_URL, timeout=120) # CREATE ONCE
+
+        self.create_collection()
 
     def create_collection(self):
         try:

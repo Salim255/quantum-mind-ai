@@ -84,7 +84,7 @@ class RAGAddDocument:
             ]
         )
 
-        VECTOR_DB.append(document_entry.model_dump())
+        # VECTOR_DB.append(document_entry.model_dump())
 
         # --- 4. Return a confirmation -------------------------------------------
         # The agent_core expects a JSON-serializable response.

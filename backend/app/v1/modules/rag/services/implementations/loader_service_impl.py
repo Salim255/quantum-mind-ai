@@ -76,10 +76,20 @@ class LoaderServiceImpl(LoaderService):
         
             # We run this in a separate thread to avoid blocking the event loop,
             # since ingest_pdf is CPU-bound and not async.
-            result = await asyncio.to_thread(
+            full_text: str = await asyncio.to_thread(
                 self.process_pdf,
                 temp_path,
                 source=file.filename
+                )
+
+            # 3. Split into smaller chunks.
+            chunks = RAGChunker.semantic_chunk_text(normalized_text=full_text)
+            
+            # 4. Add each chunk to the vector DB.
+            for chunk in chunks:
+                self.add_document_service.add_document(
+                    chunk=chunk,
+                    source=file.filename
                 )
 
             # 4. Return a clean JSON response
@@ -89,7 +99,13 @@ class LoaderServiceImpl(LoaderService):
             # - how many chunks were added
             # - what the original filename was
             logger.info("PDF ingestion completed successfully")
-            return result
+
+            return IngestionResponseSchema(
+                status="ok",
+                chunks_added=len(chunks),
+                 source=file.filename
+            )
+           
         
         except Exception as e:
             logger.exception("Exception in load doc", e)
@@ -104,20 +120,7 @@ class LoaderServiceImpl(LoaderService):
         full_text = load_pdf(path)
 
         # 2. CLEAN THE TEXT BEFORE CHUNKING
-        full_text = clean_text(text=full_text)
+        full_text: str = clean_text(text=full_text)
 
-        # 3. Split into smaller chunks.
-        chunks = RAGChunker.semantic_chunk_text(normalized_text=full_text)
-
-        # 4. Add each chunk to the vector DB.
-        for chunk in chunks:
-            self.add_document_service.add_document(
-                chunk=chunk,
-                source=source
-            )
-
-        return IngestionResponseSchema(
-            status="ok",
-            chunks_added=len(chunks),
-            source=source
-        )
+        return  full_text
+    
