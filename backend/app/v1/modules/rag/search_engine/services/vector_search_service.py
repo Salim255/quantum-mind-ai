@@ -28,6 +28,69 @@ class VectorSearchService:
     MIN_SIMILARITY_SCORE = 0.25
 
     @classmethod
+    def multi_query_qdrant_vector_search(
+        cls,
+        query: str,
+        query_embeddings: List[np.ndarray],
+        qdrant_client
+    ) -> List[RetrievalChunkDTO]:
+
+        results = []
+
+        # =====================================================
+        # SEARCH EACH QUERY VECTOR
+        # =====================================================
+        for query_embedding in query_embeddings:
+
+            search_results = qdrant_client.search(
+                collection_name="documents",
+                query_vector=query_embedding.tolist(),
+                limit=20
+            )
+
+            for hit in search_results:
+
+                cosine_score = hit.score
+
+                # ---------------------------------------------
+                # EARLY FILTERING
+                # ---------------------------------------------
+                if cosine_score < cls.MIN_SIMILARITY_SCORE:
+                    continue
+
+                payload = hit.payload
+
+                # ---------------------------------------------
+                # METADATA BOOSTING
+                # ---------------------------------------------
+                boosted_score = (
+                    ScoringService.apply_metadata_boost(
+                        query=query,
+                        chunk=payload,
+                        cosine_score=cosine_score
+                    )
+                )
+
+                results.append(
+                    RetrievalChunkDTO(
+                        text=payload.get("text", ""),
+                        source=payload.get("source", "unknown"),
+                        concept=payload.get("concept", "unknown"),
+                        length=payload.get("length", 0),
+                        cosine_score=boosted_score
+                    )
+                )
+
+        # =====================================================
+        # FINAL RANKING
+        # =====================================================
+        return sorted(
+            results,
+            key=lambda x: x.cosine_score,
+            reverse=True
+        )
+    
+    @classmethod
     def multi_query_vector_search(
         cls,
         query: str,

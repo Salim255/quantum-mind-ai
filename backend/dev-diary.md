@@ -172,9 +172,3 @@ it’s the foundation for **clean, reproducible, and maintainable Python apps**.
 - pip install PyPDF2
 
 ## DB
-
-# Qdrant
-
-- pip install qdrant-client
-- remote: ssh -L 6333:localhost:6333 user@....
-- locally: docker run -p 6333:6333 qdrant/qdrant

@@ -88,7 +88,7 @@ class LoaderServiceImpl(LoaderService):
             sem = asyncio.Semaphore(5)
             async def safe_add(chunk):
                 async with sem:
-                    return self.add_document_service.add_document(chunk, source=file.filename)
+                    return self.add_document_service.add_qdrant_document(chunk, source=file.filename)
     
           
             await asyncio.gather(*(safe_add(c) for c in chunks))

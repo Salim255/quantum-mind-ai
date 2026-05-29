@@ -134,7 +134,35 @@ class SearchEngineImpl(SearchEngineInterface):
             query_embeddings
         )
 
+    async def retrieve_qdrant_candidates(
+        self,
+        query: str
+    ) -> List[RetrievalChunkDTO]:
+        
+        analysis: QueryAnalysisResultDto = QueryAnalysisService.detect(query)
 
+        expanded_queries: List[str]
+
+        # 1. expand
+        if analysis.requires_expansion:
+            expanded_queries = (
+                QueryExpansionService.expand(query)
+            )
+        else:
+            expanded_queries = [query]
+        
+        # 2. embed
+        query_embeddings: List[np.ndarray] = (
+            self.embedding_service.embed_expanded_queries(
+                expanded_queries
+            )
+        )
+
+        # 3. vector search
+        return VectorSearchService.multi_query_qdrant_vector_search(
+            query,
+            query_embeddings
+        )
     # ---------------------------------------------------------
     # POST PROCESSING
     # ---------------------------------------------------------
