@@ -5,7 +5,6 @@ from app.v1.modules.rag.search_engine.services.scoring_service import ScoringSer
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from concurrent.futures import ThreadPoolExecutor  # Provides a pool of worker threads to run tasks in parallel
-from app.db.qdrant import qdrant_to_dto
 from qdrant_client.models import ScoredPoint
 from app.v1.modules.rag.dto.document_dto import DocumentDTO, MetadataDTO
 
@@ -262,8 +261,9 @@ class VectorSearchService:
 
         return np.stack(query_embeddings)
     
-    @staticmethod
+    @classmethod
     def rank_qdrant_candidates(
+        cls,
         query: str,
         query_matrix,
         candidates: List[DocumentDTO]
@@ -280,7 +280,7 @@ class VectorSearchService:
             # STEP 2: cosine similarity against query embeddings
             # --------------------------------------------------------
 
-            doc_vec = np.array(chunk["embedding"])
+            doc_vec = np.array(chunk.embedding)
 
             similarities = ScoringService.compute_cosine_similarity(
                 query_matrix,
@@ -309,7 +309,7 @@ class VectorSearchService:
             # --------------------------------------------------------
             chunk.cosine_score = boosted_score
 
-            results.append(chunk)
+            results.append(cls.build_retrival_dto(chunk=chunk))
 
         # ------------------------------------------------------------
         # STEP 6: final ranking
@@ -330,6 +330,7 @@ class VectorSearchService:
         payload = point.payload or {}
 
         return DocumentDTO(
+            id=point.id,
             text=payload["text"],
             embedding=point.vector,
             metadata=MetadataDTO(
@@ -341,11 +342,11 @@ class VectorSearchService:
         )
 
     @staticmethod
-    def built_retrival_dto(chunk: DocumentDTO, cosine_score: float )->RetrievalChunkDTO:
+    def build_retrival_dto(chunk: DocumentDTO )->RetrievalChunkDTO:
         return RetrievalChunkDTO(
-                    text=chunk["text"],
-                    source=chunk["source"],
-                    concept=chunk["concept"],
-                    length=chunk["length"],
-                    cosine_score=cosine_score
+                    text=chunk.text,
+                    source=chunk.metadata.source,
+                    concept=chunk.metadata.concept,
+                    length=chunk.metadata.length,
+                    cosine_score=chunk.cosine_score
                 )

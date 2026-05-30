@@ -177,15 +177,13 @@ class SearchEngineImpl(SearchEngineInterface):
         top_k: int
     ) -> List[RetrievalChunkDTO]:
         
-       
+
         # 4. rerank
         reranked: List[RetrievalChunkDTO] = self.reranking_service.rerank_candidates(
                 query,
                 candidates=candidates
             )
-        
-        print("Test to compare:____\n", "Befoer ranked: ____\n",  candidates[0], "Ranked___\n", reranked[0])
-
+      
         # 5. diversity
         diversified: List[RetrievalChunkDTO] = (
             DiversityService.diversify(
