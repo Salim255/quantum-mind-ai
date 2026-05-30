@@ -4,6 +4,7 @@ from qdrant_client import QdrantClient
 from app.v1.modules.rag.search_engine.services.scoring_service import ScoringService
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
+from concurrent.futures import ThreadPoolExecutor  # Provides a pool of worker threads to run tasks in parallel
 
 MIN_SIMILARITY_SCORE = 0.25
 
@@ -184,24 +185,81 @@ class VectorSearchService:
 
     @staticmethod
     def fetch_candidate_chunks_from_qdrant(
-        cls,
-        query_embeddings: List[np.ndarray],
-        qdrant_client: QdrantClient,
-        limit: int = 100
+        query_embeddings: List[np.ndarray],  # List of query vectors (each query embedding from your model)
+        qdrant_client: QdrantClient,          # Your Qdrant client instance (used to query vector DB)
+        limit: int = 100                      # Number of top results to retrieve per query
     ):
-        all_search_results = []
-        for query_embedding in query_embeddings:
+        """
+        This function runs MULTIPLE Qdrant searches in PARALLEL
+        instead of doing them one by one (sequentially).
 
-            search_results = qdrant_client.query_points(
-                collection_name="documents",
-                query=query_embedding.tolist(),
-                limit=limit,
-                with_vectors=True
+        WHY THIS IS IMPORTANT:
+        ----------------------
+        - Each Qdrant request takes time (network + search latency)
+        - Running them sequentially = slow
+        - Running them in parallel = faster response time
+        """
+
+        # ------------------------------------------------------------
+        # STEP 1: Define a helper function (runs ONE Qdrant query)
+        # ------------------------------------------------------------
+        def search(query_embedding):
+            """
+            This function sends ONE query embedding to Qdrant
+            and returns the matching points.
+            """
+
+            return (
+                qdrant_client.query_points(
+                    collection_name="documents",   # Which collection to search in Qdrant
+                    query=query_embedding.tolist(), # Convert numpy vector -> Python list (Qdrant format)
+                    limit=limit,                    # Max number of results to return
+                    with_vectors=True               # Include stored vectors in the response (needed for reranking later)
+                ).points                           # Extract only the list of matching points
             )
 
-            all_search_results.append(
-                search_results.points
+        # ------------------------------------------------------------
+        # STEP 2: Create a thread pool (worker system)
+        # ------------------------------------------------------------
+        # max_workers=5 means:
+        # → up to 5 Qdrant queries can run at the same time
+        # → if you have more queries, they wait in queue
+        # ------------------------------------------------------------
+        with ThreadPoolExecutor(max_workers=5) as executor:
+
+            # --------------------------------------------------------
+            # STEP 3: Execute ALL queries in parallel
+            # --------------------------------------------------------
+            # executor.map does this:
+            #
+            # query_embeddings = [q1, q2, q3]
+            #
+            # runs:
+            #   thread1 -> search(q1)
+            #   thread2 -> search(q2)
+            #   thread3 -> search(q3)
+            #
+            # ALL at the same time (not sequentially)
+            # --------------------------------------------------------
+            results = list(
+                executor.map(search, query_embeddings)
             )
+
+        # ------------------------------------------------------------
+        # STEP 4: Return results
+        # ------------------------------------------------------------
+        # Structure of results:
+        #
+        # [
+        #   [points from query1],
+        #   [points from query2],
+        #   [points from query3]
+        # ]
+        #
+        # Each inner list = Qdrant results for one query embedding
+        # ------------------------------------------------------------
+        return results
+    
     # ============================================================
     # QUERY MATRIX BUILDER
     # ============================================================
