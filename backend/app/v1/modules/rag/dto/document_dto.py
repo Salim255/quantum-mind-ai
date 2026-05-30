@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -10,9 +10,11 @@ class MetadataDTO(BaseModel):
 
 
 class DocumentDTO(BaseModel):
+    id: Optional[str] = None
     text: str
     embedding: List[float]
     metadata: MetadataDTO
+    cosine_score: Optional[float] = None
 
 
 class AddedDocResponseDto(BaseModel):

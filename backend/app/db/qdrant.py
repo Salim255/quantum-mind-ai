@@ -1,6 +1,8 @@
+import numpy as np
 from qdrant_client import QdrantClient
 from app.core.settings import Settings
 from qdrant_client.models import Distance, VectorParams
+
 
 class QdrantService:
     def __init__(self, settings: Settings):

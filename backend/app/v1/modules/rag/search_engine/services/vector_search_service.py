@@ -5,7 +5,9 @@ from app.v1.modules.rag.search_engine.services.scoring_service import ScoringSer
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from concurrent.futures import ThreadPoolExecutor  # Provides a pool of worker threads to run tasks in parallel
+from app.db.qdrant import qdrant_to_dto
 from qdrant_client.models import ScoredPoint
+from app.v1.modules.rag.dto.document_dto import DocumentDTO, MetadataDTO
 
 MIN_SIMILARITY_SCORE = 0.25
 
@@ -40,7 +42,7 @@ class VectorSearchService:
         # STEP 1: PREPARE QUERY MATRIX
         # --------------------------------------------------------
         # Get candidate_chunks
-        candidates: List[RetrievalChunkDTO] = cls.fetch_candidate_chunks_from_qdrant(
+        candidates:List[DocumentDTO] = cls.fetch_candidate_chunks_from_qdrant(
             query_embeddings,
             qdrant_client,
             limit=100
@@ -159,7 +161,7 @@ class VectorSearchService:
         query_embeddings: List[np.ndarray],  # List of query vectors (each query embedding from your model)
         qdrant_client: QdrantClient,          # Your Qdrant client instance (used to query vector DB)
         limit: int = 100                      # Number of top results to retrieve per query
-    )-> List[RetrievalChunkDTO]:
+    )-> List[DocumentDTO]:
         """
         This function runs MULTIPLE Qdrant searches in PARALLEL
         instead of doing them one by one (sequentially).
@@ -170,7 +172,7 @@ class VectorSearchService:
         - Running them sequentially = slow
         - Running them in parallel = faster response time
         """
-        merged_points: List[RetrievalChunkDTO] = []
+        merged_points: List[DocumentDTO] = []
         # ------------------------------------------------------------
         # STEP 1: Define a helper function (runs ONE Qdrant query)
         # ------------------------------------------------------------
@@ -222,7 +224,7 @@ class VectorSearchService:
         # to:   [point, point, point, ...]
         # ------------------------------------------------------------
         all_points = [
-            cls.qdrant_to_dto(point)
+            cls.scored_point_to_document(point)
             for sublist in list_of_lists
             for point in sublist
         ]
@@ -264,7 +266,7 @@ class VectorSearchService:
     def rank_qdrant_candidates(
         query: str,
         query_matrix,
-        candidates: List[RetrievalChunkDTO]
+        candidates: List[DocumentDTO]
     ) -> List[RetrievalChunkDTO]:
 
         results: List[RetrievalChunkDTO] = []
@@ -278,7 +280,7 @@ class VectorSearchService:
             # STEP 2: cosine similarity against query embeddings
             # --------------------------------------------------------
 
-            doc_vec = np.array(chunk.vector)
+            doc_vec = np.array(chunk["embedding"])
 
             similarities = ScoringService.compute_cosine_similarity(
                 query_matrix,
@@ -323,13 +325,27 @@ class VectorSearchService:
         return results
     
     @staticmethod
-    def qdrant_to_dto(point: ScoredPoint) -> RetrievalChunkDTO:
-        return RetrievalChunkDTO(
-            id=str(point.id),
-            text=point.payload.get("text", ""),
-            source=point.payload.get("source", "unknown"),
-            concept=point.payload.get("concept", "unknown"),
-            length=point.payload.get("length", 0),
-            vector=np.array(point.vector),
-            cosine_score=point.score  # initial score from Qdrant
+    def scored_point_to_document(point: ScoredPoint) -> DocumentDTO:
+
+        payload = point.payload or {}
+
+        return DocumentDTO(
+            text=payload["text"],
+            embedding=point.vector,
+            metadata=MetadataDTO(
+                difficulty=payload.get("difficulty", "unknown"),
+                source=payload.get("source", "unknown"),
+                concept=payload.get("concept", "unknown"),
+                length=payload.get("length", 0)
+            )
         )
+
+    @staticmethod
+    def built_retrival_dto(chunk: DocumentDTO, cosine_score: float )->RetrievalChunkDTO:
+        return RetrievalChunkDTO(
+                    text=chunk["text"],
+                    source=chunk["source"],
+                    concept=chunk["concept"],
+                    length=chunk["length"],
+                    cosine_score=cosine_score
+                )

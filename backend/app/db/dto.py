@@ -6,8 +6,13 @@ class PointDTO(BaseModel):
     id: str
 
     text: str
+    
     source: str
+
     concept: str
+
+    difficulty: str = "beginner"
+
     length: int
 
     vector: List[float]
