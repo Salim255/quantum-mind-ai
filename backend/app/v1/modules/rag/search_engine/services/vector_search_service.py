@@ -5,6 +5,7 @@ from app.v1.modules.rag.search_engine.services.scoring_service import ScoringSer
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from concurrent.futures import ThreadPoolExecutor  # Provides a pool of worker threads to run tasks in parallel
+from qdrant_client.models import ScoredPoint
 
 MIN_SIMILARITY_SCORE = 0.25
 
@@ -152,8 +153,9 @@ class VectorSearchService:
             reverse=True
         )
 
-    @staticmethod
+    @classmethod
     def fetch_candidate_chunks_from_qdrant(
+        cls,
         query_embeddings: List[np.ndarray],  # List of query vectors (each query embedding from your model)
         qdrant_client: QdrantClient,          # Your Qdrant client instance (used to query vector DB)
         limit: int = 100                      # Number of top results to retrieve per query
@@ -220,7 +222,7 @@ class VectorSearchService:
         # to:   [point, point, point, ...]
         # ------------------------------------------------------------
         all_points = [
-            point
+            cls.qdrant_to_dto(point)
             for sublist in list_of_lists
             for point in sublist
         ]
@@ -229,10 +231,10 @@ class VectorSearchService:
         # STEP 4: DEDUPLICATE by point ID
         # (same document can appear in multiple queries)
         # ------------------------------------------------------------
-        unique_points = {}
-
-        for point in all_points:
-            unique_points[str(point.id)] = point  # overwrites duplicates automatically
+        unique_points = {
+            point.id: point
+            for point in all_points
+        }  # overwrites duplicates automatically
 
         # ------------------------------------------------------------
         # STEP 5: FINAL CLEAN LIST
@@ -294,7 +296,7 @@ class VectorSearchService:
             # --------------------------------------------------------
             # STEP 4: metadata boosting
             # --------------------------------------------------------
-            boosted_score = ScoringService.apply_metadata_boost(
+            boosted_score: float = ScoringService.apply_metadata_boost(
                 query=query,
                 chunk=chunk,
                 cosine_score=cosine_score
@@ -319,3 +321,15 @@ class VectorSearchService:
         # STEP 7: top-K cut
         # ------------------------------------------------------------
         return results
+    
+    @staticmethod
+    def qdrant_to_dto(point: ScoredPoint) -> RetrievalChunkDTO:
+        return RetrievalChunkDTO(
+            id=str(point.id),
+            text=point.payload.get("text", ""),
+            source=point.payload.get("source", "unknown"),
+            concept=point.payload.get("concept", "unknown"),
+            length=point.payload.get("length", 0),
+            vector=np.array(point.vector),
+            cosine_score=point.score  # initial score from Qdrant
+        )
