@@ -57,8 +57,18 @@ class ScoringService:
         - educational structure
         - domain intelligence
         """
+        print("Chuck to score====\n", chunk)
+        # --------------------------------------------------------
+        # NORMALIZE METADATA ACCESS (dict + Qdrant compatible)
+        # --------------------------------------------------------
 
-        metadata = chunk.get("metadata", {})
+        # Case 1: dict (local VECTOR_DB)
+        if isinstance(chunk, dict):
+            metadata = chunk.get("metadata", {})
+
+        # Case 2: Qdrant ScoredPoint
+        else:
+            metadata = getattr(chunk, "payload", {})
 
         concept = metadata.get(
             "concept",

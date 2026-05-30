@@ -34,7 +34,7 @@ class ConversationServiceImpl(ConversationService):
                     yield f"data: {json.dumps(chunk)}\n\n"
     
             except Exception as e:
-                logger.exception("Streaming failed:\n", e)
+                logger.exception("Streaming failed")
 
                 message = "Streaming failed"
 

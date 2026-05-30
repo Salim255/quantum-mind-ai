@@ -45,6 +45,7 @@ class VectorSearchService:
             limit=100
             )
         
+        print("Retrieved candidates:======\n", candidates)
         # --------------------------------------------------------
         # STEP 2: PREPARE QUERY MATRIX
         # --------------------------------------------------------
@@ -274,7 +275,8 @@ class VectorSearchService:
             # --------------------------------------------------------
             # STEP 2: cosine similarity against query embeddings
             # --------------------------------------------------------
-            doc_vec = np.array(chunk.embedding)
+
+            doc_vec = np.array(chunk.vector)
 
             similarities = ScoringService.compute_cosine_similarity(
                 query_matrix,
