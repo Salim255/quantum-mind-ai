@@ -27,8 +27,6 @@ class VectorSearchService:
     - NLP logic
     """
 
-    MIN_SIMILARITY_SCORE = 0.25
-
     @classmethod
     def multi_query_qdrant_vector_search(
         cls,
@@ -53,58 +51,18 @@ class VectorSearchService:
         # WHY:
         # Enables vectorized similarity computation
         query_matrix = cls.build_query_matrix(query_embeddings)
-        results: List[RetrievalChunkDTO] = []
-        
-        # =====================================================
-        # SEARCH EACH QUERY VECTOR
-        # =====================================================
-        for query_embedding in query_embeddings:
+        ranked_candidates: List[RetrievalChunkDTO] = []
 
-            search_results = qdrant_client.query_points(
-                collection_name="documents",
-                query=query_embedding.tolist(),
-                limit=20,
-                with_vectors=False
-            )
-
-            print("Test data of search_results===== \n",search_results)
-            for hit in search_results.points:
-                cosine_score = hit.score
-            
-                # ---------------------------------------------
-                # EARLY FILTERING
-                # ---------------------------------------------
-                if cosine_score < cls.MIN_SIMILARITY_SCORE:
-                    continue
-
-                payload = hit.payload
-
-                # ---------------------------------------------
-                # METADATA BOOSTING
-                # ---------------------------------------------
-                boosted_score = (
-                    ScoringService.apply_metadata_boost(
-                        query=query,
-                        chunk=payload,
-                        cosine_score=cosine_score
-                    )
-                )
-
-                results.append(
-                    RetrievalChunkDTO(
-                        text=payload.get("text", ""),
-                        source=payload.get("source", "unknown"),
-                        concept=payload.get("concept", "unknown"),
-                        length=payload.get("length", 0),
-                        cosine_score=boosted_score
-                    )
-                )
-
+        ranked_candidates = cls.rank_qdrant_candidates(
+            query,
+            query_matrix,
+            candidates
+        )
         # =====================================================
         # FINAL RANKING
         # =====================================================
         return sorted(
-            results,
+            ranked_candidates,
             key=lambda x: x.cosine_score,
             reverse=True
         )
@@ -151,7 +109,7 @@ class VectorSearchService:
             # ----------------------------------------------------
             # WHY:
             # Remove obviously irrelevant chunks early
-            if cosine_score < cls.MIN_SIMILARITY_SCORE:
+            if cosine_score < MIN_SIMILARITY_SCORE:
                 continue
 
             # ----------------------------------------------------
@@ -298,3 +256,64 @@ class VectorSearchService:
         """
 
         return np.stack(query_embeddings)
+    
+    @staticmethod
+    def rank_qdrant_candidates(
+        query: str,
+        query_matrix,
+        candidates: List[RetrievalChunkDTO]
+    ) -> List[RetrievalChunkDTO]:
+
+        results: List[RetrievalChunkDTO] = []
+
+        # ------------------------------------------------------------
+        # STEP 1: iterate over Qdrant candidates
+        # ------------------------------------------------------------
+        for chunk in candidates:
+
+            # --------------------------------------------------------
+            # STEP 2: cosine similarity against query embeddings
+            # --------------------------------------------------------
+            doc_vec = np.array(chunk.embedding)
+
+            similarities = ScoringService.compute_cosine_similarity(
+                query_matrix,
+                doc_vec
+            )
+
+            cosine_score = ScoringService.best_score(similarities)
+
+            # --------------------------------------------------------
+            # STEP 3: early filtering
+            # --------------------------------------------------------
+            if cosine_score < MIN_SIMILARITY_SCORE:
+                continue
+
+            # --------------------------------------------------------
+            # STEP 4: metadata boosting
+            # --------------------------------------------------------
+            boosted_score = ScoringService.apply_metadata_boost(
+                query=query,
+                chunk=chunk,
+                cosine_score=cosine_score
+            )
+
+            # --------------------------------------------------------
+            # STEP 5: attach score to DTO
+            # --------------------------------------------------------
+            chunk.cosine_score = boosted_score
+
+            results.append(chunk)
+
+        # ------------------------------------------------------------
+        # STEP 6: final ranking
+        # ------------------------------------------------------------
+        results.sort(
+            key=lambda x: x.cosine_score,
+            reverse=True
+        )
+
+        # ------------------------------------------------------------
+        # STEP 7: top-K cut
+        # ------------------------------------------------------------
+        return results
