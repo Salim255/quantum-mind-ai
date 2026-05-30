@@ -41,16 +41,12 @@ class VectorSearchService:
         # STEP 1: PREPARE QUERY MATRIX
         # --------------------------------------------------------
         # Get candidate_chunks
-        candidate_chunks: List[RetrievalChunkDTO] = cls.fetch_candidate_chunks_from_qdrant(
+        candidates: List[RetrievalChunkDTO] = cls.fetch_candidate_chunks_from_qdrant(
             query_embeddings,
             qdrant_client,
             limit=100
             )
         
-        # 3 filter_candidate_chunks
-        filterd = {}
-        for cunk in candidate_chunks:
-
         # --------------------------------------------------------
         # STEP 2: PREPARE QUERY MATRIX
         # --------------------------------------------------------
@@ -58,6 +54,7 @@ class VectorSearchService:
         # Enables vectorized similarity computation
         query_matrix = cls.build_query_matrix(query_embeddings)
         results: List[RetrievalChunkDTO] = []
+        
         # =====================================================
         # SEARCH EACH QUERY VECTOR
         # =====================================================
@@ -282,7 +279,7 @@ class VectorSearchService:
         # STEP 5: FINAL CLEAN LIST
         # ------------------------------------------------------------
         merged_points = list(unique_points.values())
-        
+
         return merged_points
     
     # ============================================================
