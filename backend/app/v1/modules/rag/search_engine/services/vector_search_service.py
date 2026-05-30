@@ -1,5 +1,6 @@
 import numpy as np
 from typing import List
+from qdrant_client import QdrantClient
 from app.v1.modules.rag.search_engine.services.scoring_service import ScoringService
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
@@ -35,23 +36,30 @@ class VectorSearchService:
         qdrant_client
     ) -> List[RetrievalChunkDTO]:
 
-        results = []
+        # --------------------------------------------------------
+        # STEP 1: PREPARE QUERY MATRIX
+        # --------------------------------------------------------
+        # WHY:
+        # Enables vectorized similarity computation
+        query_matrix = cls.build_query_matrix(query_embeddings)
 
+        results: List[RetrievalChunkDTO] = []
         # =====================================================
         # SEARCH EACH QUERY VECTOR
         # =====================================================
         for query_embedding in query_embeddings:
 
-            search_results = qdrant_client.search(
+            search_results = qdrant_client.query_points(
                 collection_name="documents",
-                query_vector=query_embedding.tolist(),
-                limit=20
+                query=query_embedding.tolist(),
+                limit=20,
+                with_vectors=False
             )
 
-            for hit in search_results:
-
+            print("Test data of search_results===== \n",search_results)
+            for hit in search_results.points:
                 cosine_score = hit.score
-
+            
                 # ---------------------------------------------
                 # EARLY FILTERING
                 # ---------------------------------------------
@@ -174,6 +182,26 @@ class VectorSearchService:
             reverse=True
         )
 
+    @staticmethod
+    def fetch_candidate_chunks_from_qdrant(
+        cls,
+        query_embeddings: List[np.ndarray],
+        qdrant_client: QdrantClient,
+        limit: int = 100
+    ):
+        all_search_results = []
+        for query_embedding in query_embeddings:
+
+            search_results = qdrant_client.query_points(
+                collection_name="documents",
+                query=query_embedding.tolist(),
+                limit=limit,
+                with_vectors=True
+            )
+
+            all_search_results.append(
+                search_results.points
+            )
     # ============================================================
     # QUERY MATRIX BUILDER
     # ============================================================

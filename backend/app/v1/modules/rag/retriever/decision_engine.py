@@ -73,6 +73,7 @@ def decide_retrieval_action(best_score: float) -> RetrievalAction:
     # -----------------------------------------------------
     # CASE 1: STRONG SIGNAL
     # ------------------------------------------------------------
+  
     if best_score >= HIGH_CONFIDENCE:
         return  RetrievalAction.OK
 

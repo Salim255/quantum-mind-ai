@@ -1,5 +1,5 @@
 from qdrant_client import QdrantClient
-from app.core.settings import Settings, get_settings
+from app.core.settings import Settings
 from qdrant_client.models import Distance, VectorParams
 
 class QdrantService:
@@ -22,7 +22,6 @@ class QdrantService:
         except Exception as e:
             print(e)
       
-
     @property
     def client(self)-> QdrantClient:
 

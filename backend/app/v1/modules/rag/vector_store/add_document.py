@@ -76,6 +76,13 @@ class RAGAddDocument:
             ]
         )
 
+        #self.container.qdrant.client.scroll(
+        #    collection_name="documents",
+        #    limit=1,
+        #    with_vectors=True
+        #)
+
+    
         # --- 4. Return a confirmation -------------------------------------------
         # The agent_core expects a JSON-serializable response.
         return AddedDocResponseDto(

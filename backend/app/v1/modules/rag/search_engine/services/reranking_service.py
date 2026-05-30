@@ -266,8 +266,10 @@ class RerankingService:
             #
             # which may later cause serialization issues.
             # --------------------------------------------------------
+            print("batch_scores type: ___:\n",type(batch_scores))
+            print("batch_scores value:===\n", batch_scores)
             for doc, score in zip(batch_docs, batch_scores):
-
+                print("score type ===\n", type(score), score)
                 doc.rerank_score = float(score)
 
         # ------------------------------------------------------------

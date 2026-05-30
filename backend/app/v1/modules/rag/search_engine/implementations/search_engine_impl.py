@@ -32,7 +32,8 @@ class SearchEngineImpl(SearchEngineInterface):
             query: str, 
             top_k: int = 3
         )-> RetrievalResponseDTO:
-        diversified = self.execute_pipeline(
+
+        diversified:List[RetrievalChunkDTO] = self.execute_pipeline(
             query=query,
             top_k=top_k
         )
@@ -46,7 +47,7 @@ class SearchEngineImpl(SearchEngineInterface):
         # --------------------------------------------------------
     
         action: RetrievalAction = DecisionService.evaluate_retrieval_confidence(diversified)
-
+        
         match action:
             case RetrievalAction.OK: 
                 # --------------------------------------------------------
@@ -90,8 +91,9 @@ class SearchEngineImpl(SearchEngineInterface):
         top_k: int
     ) -> List[RetrievalChunkDTO]:
 
-        candidates = self.retrieve_candidates(query)
-       
+        # candidates = self.retrieve_candidates(query)
+
+        candidates: List[RetrievalChunkDTO] = self.retrieve_qdrant_candidates(query=query)
         if not candidates:
             return []
     
@@ -134,7 +136,7 @@ class SearchEngineImpl(SearchEngineInterface):
             query_embeddings
         )
 
-    async def retrieve_qdrant_candidates(
+    def retrieve_qdrant_candidates(
         self,
         query: str
     ) -> List[RetrievalChunkDTO]:
@@ -160,9 +162,11 @@ class SearchEngineImpl(SearchEngineInterface):
 
         # 3. vector search
         return VectorSearchService.multi_query_qdrant_vector_search(
-            query,
-            query_embeddings
+            query=query,
+            query_embeddings=query_embeddings,
+            qdrant_client=self.container.qdrant.client
         )
+    
     # ---------------------------------------------------------
     # POST PROCESSING
     # ---------------------------------------------------------
@@ -173,15 +177,15 @@ class SearchEngineImpl(SearchEngineInterface):
         top_k: int
     ) -> List[RetrievalChunkDTO]:
         
+       
         # 4. rerank
-        reranked: List[RetrievalChunkDTO] = (
-            self.reranking_service.rerank_candidates(
+        reranked: List[RetrievalChunkDTO] = self.reranking_service.rerank_candidates(
                 query,
                 candidates=candidates
             )
-        )
-    
         
+        print("Test to compare:____\n", "Befoer ranked: ____\n",  candidates[0], "Ranked___\n", reranked[0])
+
         # 5. diversity
         diversified: List[RetrievalChunkDTO] = (
             DiversityService.diversify(
@@ -190,7 +194,6 @@ class SearchEngineImpl(SearchEngineInterface):
             )
         )
 
-       
         # 6. context roles
         ContextRoleService.assign_reasoning_roles(
             diversified
