@@ -36,14 +36,27 @@ class VectorSearchService:
         query_embeddings: List[np.ndarray],
         qdrant_client
     ) -> List[RetrievalChunkDTO]:
-
+        
         # --------------------------------------------------------
         # STEP 1: PREPARE QUERY MATRIX
+        # --------------------------------------------------------
+        # Get candidate_chunks
+        candidate_chunks: List[RetrievalChunkDTO] = cls.fetch_candidate_chunks_from_qdrant(
+            query_embeddings,
+            qdrant_client,
+            limit=100
+            )
+        
+        # 3 filter_candidate_chunks
+        filterd = {}
+        for cunk in candidate_chunks:
+
+        # --------------------------------------------------------
+        # STEP 2: PREPARE QUERY MATRIX
         # --------------------------------------------------------
         # WHY:
         # Enables vectorized similarity computation
         query_matrix = cls.build_query_matrix(query_embeddings)
-
         results: List[RetrievalChunkDTO] = []
         # =====================================================
         # SEARCH EACH QUERY VECTOR
@@ -188,7 +201,7 @@ class VectorSearchService:
         query_embeddings: List[np.ndarray],  # List of query vectors (each query embedding from your model)
         qdrant_client: QdrantClient,          # Your Qdrant client instance (used to query vector DB)
         limit: int = 100                      # Number of top results to retrieve per query
-    ):
+    )-> List[RetrievalChunkDTO]:
         """
         This function runs MULTIPLE Qdrant searches in PARALLEL
         instead of doing them one by one (sequentially).
@@ -199,7 +212,7 @@ class VectorSearchService:
         - Running them sequentially = slow
         - Running them in parallel = faster response time
         """
-
+        merged_points: List[RetrievalChunkDTO] = []
         # ------------------------------------------------------------
         # STEP 1: Define a helper function (runs ONE Qdrant query)
         # ------------------------------------------------------------
@@ -241,24 +254,36 @@ class VectorSearchService:
             #
             # ALL at the same time (not sequentially)
             # --------------------------------------------------------
-            results = list(
+            list_of_lists = list(
                 executor.map(search, query_embeddings)
             )
 
         # ------------------------------------------------------------
-        # STEP 4: Return results
+        # STEP 3: FLATTEN results
+        # from: [[points], [points], [points]]
+        # to:   [point, point, point, ...]
         # ------------------------------------------------------------
-        # Structure of results:
-        #
-        # [
-        #   [points from query1],
-        #   [points from query2],
-        #   [points from query3]
-        # ]
-        #
-        # Each inner list = Qdrant results for one query embedding
+        all_points = [
+            point
+            for sublist in list_of_lists
+            for point in sublist
+        ]
+
         # ------------------------------------------------------------
-        return results
+        # STEP 4: DEDUPLICATE by point ID
+        # (same document can appear in multiple queries)
+        # ------------------------------------------------------------
+        unique_points = {}
+
+        for point in all_points:
+            unique_points[str(point.id)] = point  # overwrites duplicates automatically
+
+        # ------------------------------------------------------------
+        # STEP 5: FINAL CLEAN LIST
+        # ------------------------------------------------------------
+        merged_points = list(unique_points.values())
+        
+        return merged_points
     
     # ============================================================
     # QUERY MATRIX BUILDER
