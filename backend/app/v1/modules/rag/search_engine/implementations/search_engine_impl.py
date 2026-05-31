@@ -11,7 +11,7 @@ from app.v1.modules.rag.search_engine.services.embedding_service import Embeddin
 from app.v1.modules.rag.search_engine.interfaces.search_engine_interface import RetrieverInterface
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.dto.query_analysis_result_dto import QueryAnalysisResultDto
-from app.v1.modules.rag.retriever.decision_engine import RetrievalAction
+from app.v1.modules.rag.search_engine.services.decision_service import RetrievalAction
 from app.core.container import Container
 from app.v1.modules.rag.search_engine.services.query_analysis_service import QueryAnalysisService
 

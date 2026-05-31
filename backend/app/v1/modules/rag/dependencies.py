@@ -48,10 +48,10 @@ def get_retriever_service(
 
 def get_rag_service(
         container: Annotated[Container, Depends(get_container)],
-        search_engine_service: Annotated[RetrieverImpl, Depends(get_retriever_service)]
+        retriever_service: Annotated[RetrieverImpl, Depends(get_retriever_service)]
         ) -> RAGService:
     return RAGServiceImpl(
-        search_engine_service=search_engine_service,
+        retriever_service=retriever_service,
         container=container
         )
 
