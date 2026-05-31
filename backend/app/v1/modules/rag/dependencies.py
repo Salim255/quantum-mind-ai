@@ -5,11 +5,11 @@ from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
 from app.v1.modules.rag.services.implementations.loader_service_impl import LoaderServiceImpl
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
-from app.v1.modules.rag.search_engine.implementations.search_engine_impl import  RetrieverImpl
-from app.v1.modules.rag.search_engine.services.reranking_service import RerankingService
+from app.v1.modules.rag.retriever.implementations.search_engine_impl import  RetrieverImpl
+from app.v1.modules.rag.retriever.services.reranking_service import RerankingService
 from app.core.container import Container
 from fastapi import Request
-from app.v1.modules.rag.search_engine.services.embedding_service import EmbeddingService
+from app.v1.modules.rag.retriever.services.embedding_service import EmbeddingService
 
 
 # ------------------------------------------------------------

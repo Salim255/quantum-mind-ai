@@ -1,7 +1,7 @@
 import numpy as np
 from typing import List
 from qdrant_client import QdrantClient
-from app.v1.modules.rag.search_engine.services.scoring_service import ScoringService
+from app.v1.modules.rag.retriever.services.scoring_service import ScoringService
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
 from concurrent.futures import ThreadPoolExecutor  # Provides a pool of worker threads to run tasks in parallel

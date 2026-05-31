@@ -1,19 +1,19 @@
 from typing import List
 import numpy as np
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
-from app.v1.modules.rag.search_engine.services.query_expansion_service import QueryExpansionService
-from app.v1.modules.rag.search_engine.services.vector_search_service import VectorSearchService
-from app.v1.modules.rag.search_engine.services.reranking_service import RerankingService
-from app.v1.modules.rag.search_engine.services.diversity_service import DiversityService
-from app.v1.modules.rag.search_engine.services.context_role_service import ContextRoleService
-from app.v1.modules.rag.search_engine.services.decision_service import DecisionService
-from app.v1.modules.rag.search_engine.services.embedding_service import EmbeddingService
-from app.v1.modules.rag.search_engine.interfaces.search_engine_interface import RetrieverInterface
+from app.v1.modules.rag.retriever.services.query_expansion_service import QueryExpansionService
+from app.v1.modules.rag.retriever.services.vector_search_service import VectorSearchService
+from app.v1.modules.rag.retriever.services.reranking_service import RerankingService
+from app.v1.modules.rag.retriever.services.diversity_service import DiversityService
+from app.v1.modules.rag.retriever.services.context_role_service import ContextRoleService
+from app.v1.modules.rag.retriever.services.decision_service import DecisionService
+from app.v1.modules.rag.retriever.services.embedding_service import EmbeddingService
+from app.v1.modules.rag.retriever.interfaces.search_engine_interface import RetrieverInterface
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.dto.query_analysis_result_dto import QueryAnalysisResultDto
-from app.v1.modules.rag.search_engine.services.decision_service import RetrievalAction
+from app.v1.modules.rag.retriever.services.decision_service import RetrievalAction
 from app.core.container import Container
-from app.v1.modules.rag.search_engine.services.query_analysis_service import QueryAnalysisService
+from app.v1.modules.rag.retriever.services.query_analysis_service import QueryAnalysisService
 
 class RetrieverImpl(RetrieverInterface):
     def __init__(

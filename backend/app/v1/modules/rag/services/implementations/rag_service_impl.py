@@ -9,7 +9,7 @@ from app.v1.modules.rag.generator.generator_service import (generate_answer, gen
 from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
-from app.v1.modules.rag.search_engine.implementations.search_engine_impl import RetrieverImpl
+from app.v1.modules.rag.retriever.implementations.search_engine_impl import RetrieverImpl
 from app.core.container import Container
 
 
