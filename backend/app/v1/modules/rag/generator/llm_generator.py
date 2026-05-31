@@ -45,8 +45,8 @@ import json
 from groq import Groq
 
 from app.ai_core.llms.groq_llm import groq_llm_call
-from backend.app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
-from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
+from app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
+from app.v1.modules.rag.dto.rag_response_dto import RAGResponseDto
 
 
 # ------------------------------------------------------------------
@@ -109,13 +109,10 @@ def generate_answer(
     # --------------------------------------------------------------
     if not chunks:
 
-      return RAGResponseSchema(
+      return  RAGResponseDto(
         answer="I don't know based on the provided context",
-        key_points=[],
-        step_by_step=[],
         analogy="",
         confidence=0.0,
-        sources=[]
       )
 
     # --------------------------------------------------------------

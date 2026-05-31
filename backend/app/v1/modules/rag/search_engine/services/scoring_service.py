@@ -57,7 +57,7 @@ class ScoringService:
         - educational structure
         - domain intelligence
         """
-        print("Chuck to score====\n", chunk)
+  
         # --------------------------------------------------------
         # NORMALIZE METADATA ACCESS (dict + Qdrant compatible)
         # --------------------------------------------------------

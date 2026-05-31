@@ -1,8 +1,7 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
-from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
+from typing import Optional
 
-class RAGResponseSchema(BaseModel):
+class RAGResponseDto(BaseModel):
     """
     Standard output format for ALL RAG queries.
     This is the contract between LLM and API.

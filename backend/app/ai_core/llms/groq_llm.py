@@ -205,7 +205,7 @@ def groq_llm_call(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
-    stream = client.chat.completions.create(
+    response = client.chat.completions.create(
 
         # ----------------------------------------------------------
         # MODEL
@@ -253,10 +253,6 @@ def groq_llm_call(
     #
     # which contains the generated answer text.
     #
-    full_response = ""
+  
 
-    for chunk in stream:
-        if chunk.choices[0].delta.content:
-            full_response += chunk.choices[0].delta.content
-
-    return full_response
+    return response

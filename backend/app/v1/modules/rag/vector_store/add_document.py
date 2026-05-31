@@ -90,6 +90,7 @@ class RAGAddDocument:
                 stored_text_length=len(chunk.text),
                 source=source
             )
+    
     def add_document(self, chunk: ChunkDTO, source: str = "document") -> AddedDocResponseDto:
         """
         Add a document to the QuantumMind AI vector store.

@@ -344,9 +344,9 @@ class VectorSearchService:
     @staticmethod
     def build_retrival_dto(chunk: DocumentDTO )->RetrievalChunkDTO:
         return RetrievalChunkDTO(
-                    text=chunk.text,
-                    source=chunk.metadata.source,
-                    concept=chunk.metadata.concept,
-                    length=chunk.metadata.length,
-                    cosine_score=chunk.cosine_score
-                )
+            text=chunk.text,
+            source=chunk.metadata.source,
+            concept=chunk.metadata.concept,
+            length=chunk.metadata.length,
+            cosine_score=chunk.cosine_score
+        )

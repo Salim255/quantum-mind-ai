@@ -10,9 +10,8 @@ from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluation
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
-from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
 from app.core.container import Container
-from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
+
 
 class QueryRequest(BaseModel):
     query: str

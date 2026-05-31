@@ -2,10 +2,10 @@ from typing import (List, Generator,  Any)
 import json
 import time
 from groq import Groq
-from app.ai_core.structured_outputs.schemas.rag_schema import RAGResponseSchema
+from app.v1.modules.rag.dto.rag_response_dto import RAGResponseDto
 from app.ai_core.llms.groq_llm import (groq_llm_call, groq_llm_call_streaming)
 from app.v1.modules.rag.prompt.rag_prompt_builder import RAGPromptBuilder
-from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
+
 
 def generate_streaming_answer(
     query: str,
@@ -136,7 +136,7 @@ def generate_answer(
     query: str,
     chunks: List[str],
     client: Groq
-) -> RAGResponseSchema:
+) -> RAGResponseDto:
     """
     Generate the final grounded answer using retrieved context.
 
