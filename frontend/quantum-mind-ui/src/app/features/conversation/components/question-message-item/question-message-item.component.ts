@@ -1,7 +1,5 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, signal, SimpleChanges} from "@angular/core";
-import { MessageSchema } from "../../model/conversation.model";
+import { Component, OnDestroy, OnInit, signal} from "@angular/core";
 import { Subscription } from "rxjs";
-import { ConversationService } from "../../services/conversation.service";
 import { MessageService } from "../../services/message.service";
 import { AnswerPayload } from "../../services/conversation-http.service";
 

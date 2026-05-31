@@ -7,6 +7,8 @@ export class MessageService {
   private streamingResponseSubject = new BehaviorSubject<string | null>(null)
   private messageSubject = new BehaviorSubject<AnswerPayload | null>(null)
 
+  constructor(){}
+
   setMessage(message: AnswerPayload){
     this.messageSubject.next(message)
   }

@@ -3,18 +3,20 @@ import { AnswerPayload, ConversationHttpService, ConversationPayload, Conversati
 import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { Conversation } from "../model/conversation.model";
 import { MessageService } from "./message.service";
-
+import { QuestionService } from "./question.service";
 
 @Injectable({providedIn: "root"})
 export class ConversationService {
   private conversationSubject = new BehaviorSubject<Conversation| null>(null);
 
   constructor(
+    private questionService: QuestionService,
     private messageService: MessageService,
     private conversationHttpService: ConversationHttpService,
   ){}
 
   sendMessage(payload: ConversationPayload): Observable<ConversationResponse>{
+    this.questionService.setQuestion(payload.message);
     return this.conversationHttpService.sendMessage(payload).pipe(
       tap((response: ConversationResponse) => {
         const final_answer: FinalAnswer = response?.data.answer?.final_answer;
@@ -69,12 +71,13 @@ export class ConversationService {
   async sendStreamMessage(
     payload: ConversationPayload
     ):Promise< ReadableStreamDefaultReader<Uint8Array> | null> {
-    const response =  await this.conversationHttpService.sendStreamMessage(payload)
-    console.log("response: ",response);
-   if(response){
-     this.consumeStream(response);
-   }
-    return response
+      this.questionService.setQuestion(payload.message);
+      const response =  await this.conversationHttpService.sendStreamMessage(payload)
+
+      if(response){
+        this.consumeStream(response);
+      }
+      return response
   }
 
   setConversation(conversation: Conversation){

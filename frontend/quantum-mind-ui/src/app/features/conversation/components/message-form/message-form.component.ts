@@ -10,11 +10,12 @@ import { ConversationPayload } from "../../services/conversation-http.service";
 })
 
 export class MessageFormComponent {
+
   constructor(private conservationService: ConversationService){}
   user_message: string = "";
   ask(){}
 
-  async submit( ){
+  async submit(){
     const payload: ConversationPayload = {user_id: "", conversation_id: "", message: this.user_message}
     await this.conservationService.sendStreamMessage(payload);
   }
