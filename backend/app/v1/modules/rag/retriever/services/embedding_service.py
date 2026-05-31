@@ -1,12 +1,24 @@
 from typing import List
 import numpy as np
+import time
 from fastapi import Request
 from app.core.container import Container
-
+from concurrent.futures import ThreadPoolExecutor
 
 class EmbeddingService:
     def __init__(self, container: Container):
         self.container:Container = container
+    
+    def query_embeder(self, query: str):
+        return np.array(
+            self.container.rag_embedder.embed_text(
+                text=query,
+                source="user_query"
+            )["embedding"]
+        )
+
+        #Perfoamnce check=====
+        #2.105046750046313
     
     def embed_expanded_queries(
         self,
@@ -32,13 +44,9 @@ class EmbeddingService:
         Embeddings convert semantic meaning into vector space,
         enabling mathematical similarity comparison.
         """
-
         return [
-            np.array(
-                self.container.rag_embedder.embed_text(
-                    text=query,
-                    source="user_query"
-                )["embedding"]
-            )
-            for query in expanded_queries
+           self.query_embeder(query=query)
+           for query in expanded_queries
         ]
+       
+    

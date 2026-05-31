@@ -1,4 +1,3 @@
-from time import time
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 
@@ -19,7 +18,7 @@ class RerankingService:
     def rerank_candidates(
         self,
         query: str,
-        docs: List[RetrievalChunkDTO]
+        candidates: List[RetrievalChunkDTO]
     ) -> List[RetrievalChunkDTO]:
         """
         CROSS-ENCODER RERANKING ENGINE
@@ -89,7 +88,7 @@ class RerankingService:
         # - possible batching edge-case bugs
         # - wasted GPU/CPU resources
         # ------------------------------------------------------------
-        if not docs:
+        if not  candidates:
             return []
 
         # ------------------------------------------------------------
@@ -132,7 +131,7 @@ class RerankingService:
         #
         # The reranker understands this is a DIRECT answer.
         # ------------------------------------------------------------
-        pairs = [(query, doc.text) for doc in docs]
+        pairs = [(query, doc.text) for doc in candidates]
 
         # ------------------------------------------------------------
         # STEP 2: BATCHED MODEL INFERENCE
@@ -180,7 +179,7 @@ class RerankingService:
             # - scores may attach to wrong chunks
             # - ranking becomes corrupted
             # --------------------------------------------------------
-            batch_docs = docs[i:i + BATCH_SIZE]
+            batch_docs = candidates[i:i + BATCH_SIZE]
 
             # --------------------------------------------------------
             # STEP 2A: RUN CROSS-ENCODER MODEL
@@ -269,7 +268,7 @@ class RerankingService:
         # ----
         # Cross-encoders are usually more accurate.
         # ------------------------------------------------------------
-        for doc in docs:
+        for doc in candidates:
 
             doc.hybrid_score = (
 
@@ -305,7 +304,7 @@ class RerankingService:
         # combined ranking signal.
         # ------------------------------------------------------------
        
-        docs.sort(
+        candidates.sort(
             key=lambda x: x.hybrid_score or 0.0,
             reverse=True
         )
@@ -326,9 +325,9 @@ class RerankingService:
         # ------------------------------------------------------------
         # Remove noise
         MIN_RERANK_SCORE = 0.25
-        docs = [
+        candidates = [
             doc
-            for doc in docs
+            for doc in  candidates
             if (doc.rerank_score or -999) >= MIN_RERANK_SCORE
         ]
-        return docs
+        return  candidates

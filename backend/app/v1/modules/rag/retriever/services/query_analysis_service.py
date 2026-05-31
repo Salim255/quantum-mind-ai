@@ -1,5 +1,6 @@
 import re
-from app.v1.modules.rag.dto.query_analysis_result_dto import QueryAnalysisResultDto
+from app.v1.modules.rag.dto.query_analysis_result_dto import QueryAnalysisResultDto, QueryType
+
 
 class QueryAnalysisService:
     """
@@ -90,11 +91,16 @@ class QueryAnalysisService:
         # 4. QUERY TYPE CLASSIFICATION
         # --------------------------------------------------------
         if is_broad:
-            query_type = "broad"
+            query_type = QueryType.IS_BROAD
+
         elif is_specific:
-            query_type = "specific"
+            query_type = QueryType.SPECIFIC
+
+        elif is_question:
+            query_type = QueryType.IS_QUESTION
+
         else:
-            query_type = "keyword"
+            query_type = QueryType.KEYWORD
 
         # --------------------------------------------------------
         # OUTPUT STRUCTURE

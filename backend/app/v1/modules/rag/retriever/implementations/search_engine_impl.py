@@ -1,5 +1,6 @@
 from typing import List
 import numpy as np
+import time
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
 from app.v1.modules.rag.retriever.services.query_expansion_service import QueryExpansionService
 from app.v1.modules.rag.retriever.services.vector_search_service import VectorSearchService
@@ -128,7 +129,7 @@ class RetrieverImpl(RetrieverInterface):
                 expanded_queries
             )
         )
-
+   
         # 3. vector search
         return VectorSearchService.multi_query_vector_search(
             query,
@@ -153,12 +154,13 @@ class RetrieverImpl(RetrieverInterface):
             expanded_queries = [query]
         
         # 2. embed
+        start = time.perf_counter()
         query_embeddings: List[np.ndarray] = (
             self.embedding_service.embed_expanded_queries(
                 expanded_queries
             )
         )
-
+        print("Perfoamnce check=====\n",  time.perf_counter() - start)
         # 3. vector search
         return VectorSearchService.multi_query_qdrant_vector_search(
             query=query,

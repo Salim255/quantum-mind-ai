@@ -56,7 +56,7 @@ class QueryExpansionService:
         expanded_queries: List[str] = [query]
 
         # Normalize query for matching (lowercase for robust comparison)
-        q = query.lower()
+        normalize_query = query.lower()
 
         # ------------------------------------------------------------
         # STEP 2: CONCEPT-DRIVEN EXPANSION
@@ -85,7 +85,7 @@ class QueryExpansionService:
             # Example:
             #   "entanglement" → matches entanglement concept
             # --------------------------------------------------------
-            if any(anchor in q for anchor in concept_data["anchors"]):
+            if any(anchor in normalize_query for anchor in concept_data["anchors"]):
 
                 # ----------------------------------------------------
                 # STEP 2A: EXPAND USING STRONG SEMANTIC ANCHORS
@@ -123,12 +123,12 @@ class QueryExpansionService:
         #
         # We generate interpretive forms to increase recall.
         # ------------------------------------------------------------
-        if len(q.split()) <= 2:
+        if len(normalize_query.split()) <= 2:
 
             expanded_queries.extend([
-                f"explain {q}",
-                f"what is {q}",
-                f"definition of {q}"
+                f"explain {normalize_query}",
+                f"what is {normalize_query}",
+                f"definition of {normalize_query}"
             ])
 
         # ------------------------------------------------------------
