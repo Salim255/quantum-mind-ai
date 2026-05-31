@@ -3,10 +3,10 @@ from typing import (List, Generator)
 from pydantic import BaseModel
 import json
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
-from app.v1.modules.rag.dto.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.generator.generator_service import (generate_answer, generate_streaming_answer)
-from app.v1.modules.rag.dto.rag_eval_schema import RAGEvaluationLog
+from app.v1.modules.rag.dto.rag_eval_dto import RAGEvaluationLogDto
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 from app.v1.modules.rag.retriever.implementations.search_engine_impl import RetrieverImpl
@@ -116,7 +116,7 @@ class RAGServiceImpl(RAGService):
    def rag_pipeline(
         self,
         payload: QueryRequest
-        ) -> RAGQueryResponseSchema:
+        ) -> RAGQueryFinaleResponseDto:
     """
     Execute the full RAG pipeline.
 
@@ -183,7 +183,7 @@ class RAGServiceImpl(RAGService):
     # ---------------------------------------------------------------
     # Final answer (must be grounded in context)
     if not chunks:
-        return RAGQueryResponseSchema(
+        return RAGQueryFinaleResponseDto(
             query=payload.query,
             retrieved_chunks=[],
             final_answer={
@@ -279,7 +279,7 @@ class RAGServiceImpl(RAGService):
     # - evaluation dashboards
     # - retrieval benchmarking
     # ---------------------------------------------------------------
-    evaluation_log = RAGEvaluationLog(
+    evaluation_log = RAGEvaluationLogDto(
         query=payload.query,
         retrieved_chunks=chunks,
         final_answer=final_answer.model_dump(),
@@ -309,7 +309,7 @@ class RAGServiceImpl(RAGService):
     # model_dump():
     # Converts Pydantic schema into JSON-serializable dict.
     # ---------------------------------------------------------------
-    return RAGQueryResponseSchema(
+    return RAGQueryFinaleResponseDto(
         query=payload.query,
         retrieved_chunks=chunks,
         final_answer=final_answer,

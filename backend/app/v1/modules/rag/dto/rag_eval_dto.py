@@ -19,14 +19,14 @@
 # of the RAG evaluation dashboard.
 # ---------------------------------------------------------
 
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel, Field, Field
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 
 
 
 
-class RAGEvaluationLog(BaseModel):
+class RAGEvaluationLogDto(BaseModel):
     """
     Full evaluation log for a single RAG query.
     """

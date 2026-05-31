@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
-from app.v1.modules.rag.dto.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
 from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
 
 class QueryRequest(BaseModel):
@@ -10,11 +10,11 @@ class QueryRequest(BaseModel):
     
 class RAGService(ABC):
     @abstractmethod
-    def rag_stream_pipeline(self, payload: QueryRequest)->StreamingResponseDto:
+    def rag_stream_pipeline(self, payload: QueryRequest) -> StreamingResponseDto:
         pass
         
     @abstractmethod
-    def rag_pipeline(self, payload: QueryRequest) -> RAGQueryResponseSchema:
+    def rag_pipeline(self, payload: QueryRequest) -> RAGQueryFinaleResponseDto:
         """
         Abstract method to execute the entire RAG pipeline, including retrieval and answer generation.
 

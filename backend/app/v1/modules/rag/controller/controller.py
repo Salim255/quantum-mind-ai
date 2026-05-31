@@ -1,7 +1,7 @@
 from fastapi import (APIRouter, Depends, File, UploadFile)
 from typing import Annotated
 from pydantic import BaseModel
-from app.v1.modules.rag.dto.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.dependencies import get_rag_service
 from app.v1.modules.rag.dto.ingestion_dto import IngestionResponseDto
@@ -22,7 +22,7 @@ class QueryRequest(BaseModel):
 def rag_query(
     payload: QueryRequest,
     rag_service: Annotated[RAGService, Depends(get_rag_service)]
-) -> RAGQueryResponseSchema:
+) -> RAGQueryFinaleResponseDto:
     return rag_service.rag_pipeline(payload)
 
 @router.post("/ingest-pdf")

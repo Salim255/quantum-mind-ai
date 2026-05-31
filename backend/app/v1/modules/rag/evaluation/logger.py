@@ -54,10 +54,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-from app.v1.modules.rag.dto.rag_eval_schema import (
-    RAGEvaluationLog
-)
-
+from app.v1.modules.rag.dto.rag_eval_dto import RAGEvaluationLogDto
 # -------------------------------------------------------------------
 # LOG FILE LOCATION
 # -------------------------------------------------------------------
@@ -79,7 +76,7 @@ LOG_FILE = LOG_DIR / "rag_logs.jsonl"
 # SAVE RAG EVALUATION LOG
 # -------------------------------------------------------------------
 
-def log_rag_evaluation(log: RAGEvaluationLog) -> None:
+def log_rag_evaluation(log: RAGEvaluationLogDto) -> None:
     """
     Append a RAG evaluation log to the JSONL file.
 

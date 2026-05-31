@@ -7,7 +7,7 @@ from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 # ------------------------------------------------------------
 # FULL RAG API RESPONSE
 # ------------------------------------------------------------
-class RAGQueryResponseSchema(BaseModel):
+class RAGQueryFinaleResponseDto(BaseModel):
     query: str
     
     retrieved_chunks: List[RetrievalChunkDTO] = Field(default_factory=list)
