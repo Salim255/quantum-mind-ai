@@ -1,10 +1,11 @@
 import numpy as np
 from typing import List
-from qdrant_client import QdrantClient
+import asyncio
+import time
+from qdrant_client import AsyncQdrantClient
 from app.v1.modules.rag.retriever.services.scoring_service import ScoringService
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.vector_store.store import VECTOR_DB
-from concurrent.futures import ThreadPoolExecutor  # Provides a pool of worker threads to run tasks in parallel
 from qdrant_client.models import ScoredPoint
 from app.v1.modules.rag.dto.document_dto import DocumentDTO, MetadataDTO
 
@@ -30,7 +31,7 @@ class VectorSearchService:
     """
 
     @classmethod
-    def multi_query_qdrant_vector_search(
+    async def multi_query_qdrant_vector_search(
         cls,
         query: str,
         query_embeddings: List[np.ndarray],
@@ -41,19 +42,22 @@ class VectorSearchService:
         # STEP 1: PREPARE QUERY MATRIX
         # --------------------------------------------------------
         # Get candidate_chunks
-        candidates:List[DocumentDTO] = cls.fetch_candidate_chunks_from_qdrant(
+        start =  time.perf_counter()
+
+        candidates:List[DocumentDTO] = await cls.fetch_candidate_chunks_from_qdrant(
             query_embeddings,
             qdrant_client,
             limit=100
             )
         
-  
+        print("Perfoamnce check=====\n",  time.perf_counter() - start)
         # --------------------------------------------------------
         # STEP 2: PREPARE QUERY MATRIX
         # --------------------------------------------------------
         # WHY:
         # Enables vectorized similarity computation
         query_matrix = cls.build_query_matrix(query_embeddings)
+
         ranked_candidates: List[RetrievalChunkDTO] = []
 
         ranked_candidates = cls.rank_qdrant_candidates(
@@ -155,10 +159,10 @@ class VectorSearchService:
         )
 
     @classmethod
-    def fetch_candidate_chunks_from_qdrant(
+    async def fetch_candidate_chunks_from_qdrant(
         cls,
         query_embeddings: List[np.ndarray],  # List of query vectors (each query embedding from your model)
-        qdrant_client: QdrantClient,          # Your Qdrant client instance (used to query vector DB)
+        qdrant_client: AsyncQdrantClient,          # Your Qdrant client instance (used to query vector DB)
         limit: int = 100                      # Number of top results to retrieve per query
     )-> List[DocumentDTO]:
         """
@@ -172,50 +176,21 @@ class VectorSearchService:
         - Running them in parallel = faster response time
         """
         merged_points: List[DocumentDTO] = []
-        # ------------------------------------------------------------
-        # STEP 1: Define a helper function (runs ONE Qdrant query)
-        # ------------------------------------------------------------
-        def search(query_embedding):
-            """
-            This function sends ONE query embedding to Qdrant
-            and returns the matching points.
-            """
+       
+  
 
-            return (
-                qdrant_client.query_points(
-                    collection_name="documents",   # Which collection to search in Qdrant
-                    query=query_embedding.tolist(), # Convert numpy vector -> Python list (Qdrant format)
-                    limit=limit,                    # Max number of results to return
-                    with_vectors=True               # Include stored vectors in the response (needed for reranking later)
-                ).points                           # Extract only the list of matching points
-            )
-
-        # ------------------------------------------------------------
-        # STEP 2: Create a thread pool (worker system)
-        # ------------------------------------------------------------
-        # max_workers=5 means:
-        # → up to 5 Qdrant queries can run at the same time
-        # → if you have more queries, they wait in queue
-        # ------------------------------------------------------------
-        with ThreadPoolExecutor(max_workers=5) as executor:
-
-            # --------------------------------------------------------
-            # STEP 3: Execute ALL queries in parallel
-            # --------------------------------------------------------
-            # executor.map does this:
-            #
-            # query_embeddings = [q1, q2, q3]
-            #
-            # runs:
-            #   thread1 -> search(q1)
-            #   thread2 -> search(q2)
-            #   thread3 -> search(q3)
-            #
-            # ALL at the same time (not sequentially)
-            # --------------------------------------------------------
-            list_of_lists = list(
-                executor.map(search, query_embeddings)
-            )
+        # --------------------------------------------------------
+        # STEP 3: Execute ALL queries in parallel
+        list_of_lists = await asyncio.gather(
+            *[
+                cls.qdrant_search(
+                    query_embedding=emb,
+                    qdrant_client=qdrant_client,
+                    limit=limit
+                )
+                for emb in query_embeddings
+            ]
+        )
 
         # ------------------------------------------------------------
         # STEP 3: FLATTEN results
@@ -350,3 +325,24 @@ class VectorSearchService:
             length=chunk.metadata.length,
             cosine_score=chunk.cosine_score
         )
+
+    @staticmethod
+    async def qdrant_search(
+            qdrant_client:AsyncQdrantClient,
+            query_embedding: np.ndarray,
+            limit: int
+        ):
+            """
+            This function sends ONE query embedding to Qdrant
+            and returns the matching points.
+            """
+            response = await qdrant_client.query_points(
+                    collection_name="documents",   # Which collection to search in Qdrant
+                    query=query_embedding.tolist(), # Convert numpy vector -> Python list (Qdrant format)
+                    limit=limit,                    # Max number of results to return
+                    with_vectors=True               # Include stored vectors in the response (needed for reranking later)
+                )  
+              
+            return response.points 
+                                     # Extract only the list of matching points
+            

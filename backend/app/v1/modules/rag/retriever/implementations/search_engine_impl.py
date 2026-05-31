@@ -28,13 +28,13 @@ class RetrieverImpl(RetrieverInterface):
         self.container = container
         self.embedding_service = embedding_service
 
-    def search_similar_documents(
+    async def search_similar_documents(
             self, 
             query: str, 
             top_k: int = 3
         )-> RetrievalResponseDTO:
 
-        diversified:List[RetrievalChunkDTO] = self.execute_pipeline(
+        diversified:List[RetrievalChunkDTO] = await self.execute_pipeline(
             query=query,
             top_k=top_k
         )
@@ -86,13 +86,13 @@ class RetrieverImpl(RetrieverInterface):
     # ---------------------------------------------------------
     # MAIN RETRIEVAL PIPELINE
     # ---------------------------------------------------------
-    def execute_pipeline(
+    async def execute_pipeline(
         self,
         query: str,
         top_k: int
     ) -> List[RetrievalChunkDTO]:
         
-        candidates: List[RetrievalChunkDTO] = self.retrieve_qdrant_candidates(query=query)
+        candidates: List[RetrievalChunkDTO] = await self.retrieve_qdrant_candidates(query=query)
 
         if not candidates:
             return []
@@ -136,7 +136,7 @@ class RetrieverImpl(RetrieverInterface):
             query_embeddings
         )
 
-    def retrieve_qdrant_candidates(
+    async def retrieve_qdrant_candidates(
         self,
         query: str
     ) -> List[RetrievalChunkDTO]:
@@ -154,20 +154,20 @@ class RetrieverImpl(RetrieverInterface):
             expanded_queries = [query]
         
         # 2. embed
-        start = time.perf_counter()
+    
         query_embeddings: List[np.ndarray] = (
             self.embedding_service.embed_expanded_queries(
                 expanded_queries
             )
         )
-        print("Perfoamnce check=====\n",  time.perf_counter() - start)
+      
         # 3. vector search
-        return VectorSearchService.multi_query_qdrant_vector_search(
+        return await VectorSearchService.multi_query_qdrant_vector_search(
             query=query,
             query_embeddings=query_embeddings,
             qdrant_client=self.container.qdrant.client
         )
-    
+   
     # ---------------------------------------------------------
     # POST PROCESSING
     # ---------------------------------------------------------

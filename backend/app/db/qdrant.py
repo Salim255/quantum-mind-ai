@@ -1,30 +1,30 @@
-import numpy as np
-from qdrant_client import QdrantClient
+import logging
+from qdrant_client import AsyncQdrantClient
 from app.core.settings import Settings
 from qdrant_client.models import Distance, VectorParams
 
+logger = logging.getLogger(__name__)
 
 class QdrantService:
     def __init__(self, settings: Settings):
         self.settings = settings
     
-        self._client = QdrantClient(url=self.settings.QDRANT_URL, timeout=120) # CREATE ONCE
+        self._client = AsyncQdrantClient(url=self.settings.QDRANT_URL, timeout=120) # CREATE ONCE
 
-        self.create_collection()
-
-    def create_collection(self):
+    async def create_collection(self):
         try:
-            self._client.create_collection(
+            await self._client.create_collection(
                 collection_name=self.settings.COLLECTION_NAME,
                 vectors_config=VectorParams(
                     size=self.settings.VECTOR_SIZE,  # your embedding model size
                     distance=Distance.COSINE
                 )
             )
-        except Exception as e:
-            print(e)
+
+        except Exception:
+            logger.exception("Create doc failed")
       
     @property
-    def client(self)-> QdrantClient:
+    def client(self)-> AsyncQdrantClient:
 
         return self._client

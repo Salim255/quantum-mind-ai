@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Generator
+from typing import Optional, AsyncGenerator
 from app.v1.modules.conversation.dto.conversation_dto import ConversationResponse
 
 class ConversationService(ABC):
@@ -10,7 +10,7 @@ class ConversationService(ABC):
         user_id: str, 
         message: str, 
         conversation_id: Optional[str] = None
-        )-> Generator[str, None, None]:
+        )-> AsyncGenerator[str, None]:
         pass
     
     @abstractmethod

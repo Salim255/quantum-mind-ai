@@ -1,5 +1,5 @@
 import time
-from typing import (List, Generator)
+from typing import (List, Generator, AsyncGenerator)
 from pydantic import BaseModel
 import json
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
@@ -26,10 +26,10 @@ class RAGServiceImpl(RAGService):
         self.container = container
         self.retriever_service =  retriever_service
 
-   def rag_stream_pipeline(
+   async def rag_stream_pipeline(
         self,
         payload: QueryRequest
-    ) -> Generator[str, None, None]:
+    ) -> AsyncGenerator[str, None]:
     """
     Execute the full RAG pipeline.
 
@@ -56,7 +56,7 @@ class RAGServiceImpl(RAGService):
     # search_similar_documents()
     # ---------------------------------------------------------------
         
-    retrieval_output: RetrievalResponseDTO = self.retriever_service.search_similar_documents(payload.query)
+    retrieval_output: RetrievalResponseDTO = await self.retriever_service.search_similar_documents(payload.query)
 
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS

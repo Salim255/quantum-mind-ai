@@ -1,4 +1,4 @@
-from typing import (List, Generator,  Any)
+from typing import (List, Generator)
 import json
 import time
 from groq import Groq

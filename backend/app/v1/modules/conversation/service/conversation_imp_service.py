@@ -1,4 +1,4 @@
-from typing import Generator, Optional
+from typing import AsyncGenerator, Optional
 import json
 import logging
 from app.v1.modules.conversation.service.conversation_service import ConversationService
@@ -18,19 +18,21 @@ class ConversationServiceImpl(ConversationService):
         self.memory = memory
         self.rag_service = rag_service
 
-    def stream_message(  self, 
+    async def stream_message(  self, 
             user_id: str,
             message: str, 
             conversation_id: Optional[str] = None
-            )-> Generator[str, None, None]:
+            )-> AsyncGenerator[str, None]:
+
+            stream = None
 
             try:
                 # 2. Run your existing RAG pipeline
-                stream: Generator[str, None, None] = self.rag_service.rag_stream_pipeline(
+                stream: AsyncGenerator[str, None] =  self.rag_service.rag_stream_pipeline(
                     QueryRequest(query=message, top_k=3)
                 )
         
-                for chunk in stream:
+                async for chunk in stream:
                     yield f"data: {json.dumps(chunk)}\n\n"
     
             except Exception:
@@ -42,7 +44,7 @@ class ConversationServiceImpl(ConversationService):
 
             finally:
                 if stream:
-                    stream.close() # stop and clean up a generator or stream early
+                   await stream.aclose() # stop and clean up a generator or stream early
     
     async def handle_message(
             self, 

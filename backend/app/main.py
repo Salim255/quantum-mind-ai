@@ -5,7 +5,7 @@ from app.v1.modules.conversation.controller.controller import router as conversa
 from app.core.cors import setup_cors
 from app.core.exceptions.global_exception_handler import ExceptionsHandler
 from app.core.container import Container
-
+from contextlib import asynccontextmanager
 
 # --------------------------------------------------------
 # CREATE SINGLE CONTAINER INSTANCE (ONCE)
@@ -36,6 +36,17 @@ setup_cors(app)
 
 app.include_router(conversation_router)
 app.include_router(rag_router)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    # Startup
+    await container.qdrant.create_collection()
+
+    yield
+
+    # Shutdown
+    await container.qdrant.close()
 
 ExceptionsHandler(app, settings=container.settings)
 @app.get("/health")

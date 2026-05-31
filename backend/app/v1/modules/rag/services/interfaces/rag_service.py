@@ -10,7 +10,7 @@ class QueryRequest(BaseModel):
     
 class RAGService(ABC):
     @abstractmethod
-    def rag_stream_pipeline(self, payload: QueryRequest) -> StreamingResponseDto:
+    async def rag_stream_pipeline(self, payload: QueryRequest) -> StreamingResponseDto:
         pass
         
     @abstractmethod
