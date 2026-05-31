@@ -4,7 +4,7 @@ import logging
 from app.v1.modules.conversation.service.conversation_service import ConversationService
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from pydantic import BaseModel
-from app.v1.modules.conversation.dto.conversation_schema import ConversationResponse
+from app.v1.modules.conversation.dto.conversation_dto import ConversationResponse
 
 
 class QueryRequest(BaseModel):
@@ -25,7 +25,7 @@ class ConversationServiceImpl(ConversationService):
             )-> Generator[str, None, None]:
 
             try:
-                # 2. Run your existing RAG pipeline (correct call)
+                # 2. Run your existing RAG pipeline
                 stream: Generator[str, None, None] = self.rag_service.rag_stream_pipeline(
                     QueryRequest(query=message, top_k=3)
                 )

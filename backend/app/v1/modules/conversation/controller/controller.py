@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from typing import Annotated, Generator
 from app.v1.modules.conversation.dependencies import get_conversation_service
 from app.v1.modules.conversation.service.conversation_service import ConversationService
-from app.v1.modules.conversation.dto.conversation_schema import ConversationRequest, ConversationResponse
+from app.v1.modules.conversation.dto.conversation_dto import ConversationRequest, ConversationResponse
 from app.core.dtos.response_dto import ResponseDTO
 from fastapi.responses import StreamingResponse
 
@@ -29,9 +29,14 @@ async def send_message(
 
 @router.post(
     "/messages/stream",
-    status_code=200
+    status_code=200,
+     response_class=StreamingResponse,
+    response_description="Streams AI response chunks",
+    responses={
+        500: {"description": "Streaming failed"}
+    }
 )
-def stream_message(
+async def stream_message(
     payload: ConversationRequest,
     conversation_service: Annotated[
         ConversationService,

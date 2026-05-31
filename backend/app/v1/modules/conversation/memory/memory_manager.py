@@ -1,7 +1,7 @@
 import time
 from typing import Dict, List
 
-from app.v1.modules.conversation.dto.conversation_schema import ConversationSession, MemoryMessage
+from app.v1.modules.conversation.dto.conversation_dto import ConversationSession, MemoryMessage
 
 class MemoryManager:
     def __init__(self):
