@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Literal, Optional
-from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.dto.rag_response_schema import RAGQueryResponseSchema
 
 class MemoryMessage(BaseModel):
     role: Literal["user", "assistant"] = Field(..., description="The role of the user in the message")

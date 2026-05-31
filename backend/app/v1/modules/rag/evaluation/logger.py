@@ -54,7 +54,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-from app.ai_core.structured_outputs.schemas.rag_eval_schema import (
+from app.v1.modules.rag.dto.rag_eval_schema import (
     RAGEvaluationLog
 )
 

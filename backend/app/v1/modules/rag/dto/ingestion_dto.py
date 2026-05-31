@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class IngestionResponseSchema(BaseModel):
+class IngestionResponseDto(BaseModel):
     """
     Response returned after ingesting a document into the vector store.
     """

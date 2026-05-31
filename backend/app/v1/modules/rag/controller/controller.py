@@ -1,10 +1,10 @@
 from fastapi import (APIRouter, Depends, File, UploadFile)
 from typing import Annotated
 from pydantic import BaseModel
-from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.dto.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.dependencies import get_rag_service
-from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema
+from app.v1.modules.rag.dto.ingestion_dto import IngestionResponseDto
 from app.v1.modules.rag.dependencies import get_loader_service
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 
@@ -29,5 +29,5 @@ def rag_query(
 async def ingest_pdf(
     file: Annotated[UploadFile, File(...)],
     loader_service: Annotated[LoaderService, Depends(get_loader_service)]
-) -> IngestionResponseSchema:
+) -> IngestionResponseDto:
     return await loader_service.upload_and_ingest_pdf(file)

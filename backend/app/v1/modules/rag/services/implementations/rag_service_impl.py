@@ -3,10 +3,10 @@ from typing import (List, Generator)
 from pydantic import BaseModel
 import json
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
-from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.dto.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.generator.generator_service import (generate_answer, generate_streaming_answer)
-from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog
+from app.v1.modules.rag.dto.rag_eval_schema import RAGEvaluationLog
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 from app.v1.modules.rag.retriever.implementations.search_engine_impl import RetrieverImpl

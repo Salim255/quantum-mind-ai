@@ -10,7 +10,7 @@ from app.v1.modules.rag.loader.cleaner import clean_text
 from app.v1.modules.rag.loader.pdf_loader import load_pdf
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
-from app.ai_core.structured_outputs.schemas.ingestion_schema import IngestionResponseSchema  # your existing function
+from app.v1.modules.rag.dto.ingestion_dto import IngestionResponseDto  # your existing function
 from app.core.exceptions.custom_exceptions import LoaderException
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class LoaderServiceImpl(LoaderService):
     async def upload_and_ingest_pdf(
         self,
         file: UploadFile,
-        ) -> IngestionResponseSchema:
+        ) -> IngestionResponseDto:
         """
         Receive a PDF file from the client (Postman, UI, etc.),
         save it asynchronously, then ingest it into the vector store.
@@ -108,7 +108,7 @@ class LoaderServiceImpl(LoaderService):
             # - what the original filename was
             logger.info("PDF ingestion completed successfully")
 
-            return IngestionResponseSchema(
+            return IngestionResponseDto(
                 status="ok",
                 chunks_added=len(chunks),
                  source=file.filename
@@ -119,7 +119,7 @@ class LoaderServiceImpl(LoaderService):
             logger.exception("Exception in load doc", e)
             raise e
                     
-    def process_pdf(self, path: str, source: str) -> IngestionResponseSchema:
+    def process_pdf(self, path: str, source: str) -> IngestionResponseDto:
         """
         Load a PDF, chunk it, embed each chunk, and store in VECTOR_DB.
          """

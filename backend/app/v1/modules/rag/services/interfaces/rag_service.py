@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
-from app.ai_core.structured_outputs.schemas.rag_response_schema import RAGQueryResponseSchema
+from app.v1.modules.rag.dto.rag_response_schema import RAGQueryResponseSchema
 from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
 
 class QueryRequest(BaseModel):
