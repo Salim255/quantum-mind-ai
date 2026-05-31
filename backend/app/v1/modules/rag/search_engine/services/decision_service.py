@@ -1,6 +1,7 @@
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from enum import Enum
+
 # ------------------------------------------------------------
 # CONFIDENCE THRESHOLDS (DECISION LAYER)
 # ------------------------------------------------------------
