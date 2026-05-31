@@ -90,10 +90,9 @@ class RetrieverImpl(RetrieverInterface):
         query: str,
         top_k: int
     ) -> List[RetrievalChunkDTO]:
-
-        # candidates = self.retrieve_candidates(query)
-
+        
         candidates: List[RetrievalChunkDTO] = self.retrieve_qdrant_candidates(query=query)
+        
         if not candidates:
             return []
     

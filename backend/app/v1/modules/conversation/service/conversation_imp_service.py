@@ -33,17 +33,16 @@ class ConversationServiceImpl(ConversationService):
                 for chunk in stream:
                     yield f"data: {json.dumps(chunk)}\n\n"
     
-            except Exception as e:
+            except Exception:
                 logger.exception("Streaming failed")
 
                 message = "Streaming failed"
 
                 yield f"data: {json.dumps(message)}\n\n"
-                 
-            # optional cleanup if stream supports it
+
             finally:
-                if stream and hasattr(stream, "close"):
-                    stream.close()
+                if stream:
+                    stream.close() # stop and clean up a generator or stream early
     
     async def handle_message(
             self, 

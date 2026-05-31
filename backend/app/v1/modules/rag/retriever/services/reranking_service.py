@@ -17,41 +17,6 @@ class RerankingService:
         self.container = container
 
     def rerank_candidates(
-            self,
-            query: str,
-            candidates: List[RetrievalChunkDTO]
-        )-> List[RetrievalChunkDTO]:
-        """
-        Improve retrieval precision using cross-encoder reranking.
-
-        WHY IMPORTANT?
-        --------------
-        Dense retrieval:
-            excellent recall
-
-        Cross-encoder:
-            excellent precision
-
-        The reranker evaluates:
-            (query, chunk)
-
-        together inside the SAME transformer model.
-        """
-        
-        reranked: List[RetrievalChunkDTO] = self.rerank(
-            query,
-            candidates
-        )
-
-        reranked.sort(
-            key=lambda chunk: chunk.hybrid_score,
-            reverse=True
-        )
-
-        return reranked
-    
-
-    def rerank(
         self,
         query: str,
         docs: List[RetrievalChunkDTO]

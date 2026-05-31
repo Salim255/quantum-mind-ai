@@ -18,14 +18,18 @@ class QueryRequest(BaseModel):
     top_k: int = 3
 
 class RAGServiceImpl(RAGService):
-   def __init__(self, container: Container, retriever_service: RetrieverImpl):
+   def __init__(
+        self,
+        container: Container, 
+        retriever_service: RetrieverImpl
+        ):
         self.container = container
         self.retriever_service =  retriever_service
 
    def rag_stream_pipeline(
         self,
         payload: QueryRequest
-        ) -> Generator[str, None, None]:
+    ) -> Generator[str, None, None]:
     """
     Execute the full RAG pipeline.
 
@@ -49,18 +53,7 @@ class RAGServiceImpl(RAGService):
     # 1. SEMANTIC RETRIEVAL + RERANKING
     # ---------------------------------------------------------------
     #
-    # search_similar_documents():
-    #
-    # - embeds the query
-    # - performs cosine similarity search
-    # - selects top candidates
-    # - reranks using cross-encoder
-    #
-    # RETURNS:
-    # {
-    #   "results": [...],
-    #   "sources": [...]
-    # }
+    # search_similar_documents()
     # ---------------------------------------------------------------
         
     retrieval_output: RetrievalResponseDTO = self.retriever_service.search_similar_documents(payload.query)
@@ -168,7 +161,7 @@ class RAGServiceImpl(RAGService):
     # }
     # ---------------------------------------------------------------
         
-    retrieval_output: RetrievalResponseDTO = self.search_engine_service.search_similar_documents(payload.query)
+    retrieval_output: RetrievalResponseDTO = self.retriever_service.search_similar_documents(payload.query)
 
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS
