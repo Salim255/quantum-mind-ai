@@ -187,7 +187,7 @@ def generate_answer(
     # NEVER ask the LLM to invent an answer.
     # --------------------------------------------------------------
     if not chunks:
-        return RAGResponseSchema(
+        return RAGResponseDto(
             answer="I don't know based on the provided context",
             analogy="",
             confidence=0.0,
@@ -227,8 +227,7 @@ def generate_answer(
     # - anti-hallucination
     # - concise explanations
     # --------------------------------------------------------------
-    general_start_anser = time.perf_counter()
-
+   
     response = groq_llm_call(
         client=client,
         prompt=prompt
@@ -245,4 +244,4 @@ def generate_answer(
     # before returning the final answer.
     # --------------------------------------------------------------
 
-    return  RAGResponseSchema.model_validate(data)
+    return  RAGResponseDto.model_validate(data)

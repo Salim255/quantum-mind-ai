@@ -4,7 +4,7 @@ import logging
 from app.v1.modules.conversation.service.conversation_service import ConversationService
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from pydantic import BaseModel
-from app.v1.modules.conversation.schema.conversation_schema import ConversationResponse
+from app.v1.modules.conversation.dto.conversation_schema import ConversationResponse
 
 
 class QueryRequest(BaseModel):

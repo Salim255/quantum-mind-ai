@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Generator
-from app.v1.modules.conversation.schema.conversation_schema import ConversationResponse
+from app.v1.modules.conversation.dto.conversation_schema import ConversationResponse
 
 class ConversationService(ABC):
     

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from typing import Annotated, Generator
 from app.v1.modules.conversation.dependencies import get_conversation_service
 from app.v1.modules.conversation.service.conversation_service import ConversationService
-from app.v1.modules.conversation.schema.conversation_schema import ConversationRequest, ConversationResponse
+from app.v1.modules.conversation.dto.conversation_schema import ConversationRequest, ConversationResponse
 from app.core.dtos.response_dto import ResponseDTO
 from fastapi.responses import StreamingResponse
 
