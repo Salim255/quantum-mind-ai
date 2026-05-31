@@ -92,7 +92,7 @@ class RetrieverImpl(RetrieverInterface):
     ) -> List[RetrievalChunkDTO]:
         
         candidates: List[RetrievalChunkDTO] = self.retrieve_qdrant_candidates(query=query)
-        
+
         if not candidates:
             return []
     
@@ -192,9 +192,7 @@ class RetrieverImpl(RetrieverInterface):
         )
 
         # 6. context roles
-        ContextRoleService.assign_reasoning_roles(
-            diversified
-        )
+        ContextRoleService.assign_reasoning_roles(diversified)
   
         return diversified
     # ---------------------------------------------------------

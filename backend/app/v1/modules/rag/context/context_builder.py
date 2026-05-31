@@ -40,7 +40,7 @@ from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 # This file implements a clean educational RAG context builder.
 # ------------------------------------------------------------------
 
-def assign_context_role(chunk: RetrievalChunkDTO, index: int) -> str:
+def assign_context_role(index: int) -> str:
     """
     Assigns reasoning role based on ranking position.
     """

@@ -24,7 +24,4 @@ class ContextRoleService:
    
         for index, chunk in enumerate(chunks):
 
-            chunk.context_role = assign_context_role(
-                chunk,
-                index
-            )
+            chunk.context_role = assign_context_role(index)

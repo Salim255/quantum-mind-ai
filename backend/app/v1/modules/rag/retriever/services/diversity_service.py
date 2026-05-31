@@ -80,7 +80,9 @@ class DiversityService:
             # 3. ACCEPT CHUNK
             # --------------------------------------------------------
             selected.append(chunk)
+
             seen_texts.add(text_key)
+            
             concept_count[concept] = concept_count.get(concept, 0) + 1
 
             # --------------------------------------------------------

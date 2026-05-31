@@ -1,7 +1,7 @@
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from enum import Enum
-
+from app.core.constants import(HIGH_CONFIDENCE, MEDIUM_CONFIDENCE, LOW_CONFIDENCE)
 # ------------------------------------------------------------
 # CONFIDENCE THRESHOLDS (DECISION LAYER)
 # ------------------------------------------------------------
@@ -10,10 +10,6 @@ from enum import Enum
 # They replace simple "if score < threshold" logic
 # with multi-level reasoning.
 # ------------------------------------------------------------
-HIGH_CONFIDENCE = 5.0
-MEDIUM_CONFIDENCE = 2.5
-LOW_CONFIDENCE = 1.0
-
 
 class RetrievalAction(str, Enum):
     """
