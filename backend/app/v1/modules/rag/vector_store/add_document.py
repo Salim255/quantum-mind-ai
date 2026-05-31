@@ -21,7 +21,7 @@ class RAGAddDocument:
     def __init__(self, container: Container):
         self.container:Container = container
     
-    def add_qdrant_document(self, chunk: ChunkDTO, source: str = "document"):
+    async def add_qdrant_document(self, chunk: ChunkDTO, source: str = "document"):
         """
         Add a document to the QuantumMind AI vector store.
 
@@ -66,7 +66,7 @@ class RAGAddDocument:
 
 
         # --- 3. Save the entry in the in-memory vector DB -----------------------
-        self.container.qdrant.client.upsert(
+        await self.container.qdrant.client.upsert(
             collection_name="documents",
             points=[
                 QdrantMapper.to_point(

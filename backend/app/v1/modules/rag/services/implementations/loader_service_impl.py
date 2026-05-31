@@ -21,9 +21,13 @@ class LoaderServiceImpl(LoaderService):
             container: Container, 
             add_document_service: RAGAddDocument
         ):
+
         self.container:Container = container
+
         self.add_document_service: RAGAddDocument = add_document_service
 
+        self.sem = asyncio.Semaphore(5)
+        
     async def upload_and_ingest_pdf(
         self,
         file: UploadFile,
@@ -85,13 +89,117 @@ class LoaderServiceImpl(LoaderService):
             # 3. Split into smaller chunks.
             chunks = RAGChunker.semantic_chunk_text(normalized_text=full_text)
             
+            # ------------------------------------------------------------------
+            # STORE CHUNKS CONCURRENTLY
+            # ------------------------------------------------------------------
+            #
+            # Each chunk must:
+            #   1. Generate an embedding
+            #   2. Be inserted into Qdrant
+            #
+            # Both operations are I/O-bound and support async execution.
+            #
+            # Instead of processing chunks one-by-one:
+            #
+            #   for chunk in chunks:
+            #       await add_qdrant_document(...)
+            #
+            # we process multiple chunks concurrently to reduce total ingestion
+            # time.
+            #
+            # ------------------------------------------------------------------
+            # CONCURRENCY LIMIT
+            # ------------------------------------------------------------------
+            #
+            # A semaphore limits the number of active insert operations.
+            #
+            # Without a semaphore:
+            #
+            #   await asyncio.gather(...)
+            #
+            # all chunk insertions would start immediately.
+            #
+            # For large documents this could create hundreds of simultaneous
+            # embedding and database operations, potentially overwhelming:
+            #
+            #   - Qdrant
+            #   - the embedding model
+            #   - memory usage
+            #
+            # Semaphore(5) means:
+            #
+            #   Maximum 5 chunk insertions may run at the same time.
+            #
+            # When one finishes, the next waiting task is allowed to start.
+            #
+            # ------------------------------------------------------------------
+            # SAFE WRAPPER
+            # ------------------------------------------------------------------
+            #
+            # Every task must acquire a semaphore permit before performing the
+            # insertion.
+            #
+            # This ensures that the concurrency limit is respected by all tasks.
+            # ------------------------------------------------------------------
             sem = asyncio.Semaphore(5)
+
             async def safe_add(chunk):
                 async with sem:
-                    return self.add_document_service.add_qdrant_document(chunk, source=file.filename)
-    
-          
-            await asyncio.gather(*(safe_add(c) for c in chunks))
+                    return await self.add_document_service.add_qdrant_document(
+                        chunk,
+                        source=file.filename
+                    )
+
+            # ------------------------------------------------------------------
+            # CREATE TASKS
+            # ------------------------------------------------------------------
+            #
+            # create_task() schedules all chunk insertions immediately.
+            #
+            # Each task runs independently and waits for a semaphore slot before
+            # performing the actual work.
+            # ------------------------------------------------------------------
+            tasks = [
+                asyncio.create_task(safe_add(chunk))
+                for chunk in chunks
+            ]
+
+            # ------------------------------------------------------------------
+            # WAIT FOR ALL TASKS
+            # ------------------------------------------------------------------
+            #
+            # gather() waits until every task completes.
+            #
+            # The * operator unpacks the list:
+            #
+            #   [task1, task2, task3]
+            #
+            # becomes:
+            #
+            #   gather(task1, task2, task3)
+            #
+            # gather() expects separate awaitables, not a list.
+            #
+            # Therefore:
+            #
+            #   gather(*tasks)   ✅
+            #
+            # while:
+            #
+            #   gather(tasks)    ❌
+            #
+            # would pass a single list object instead of individual tasks.
+            #
+            # return_exceptions=True prevents one failed chunk from cancelling
+            # all remaining chunk insertions.
+            # ------------------------------------------------------------------
+            await asyncio.gather(
+                *tasks,
+                return_exceptions=True
+            )
+
+        
+                    
             
             # 4. Add each chunk to the vector DB.
             #for chunk in chunks:
