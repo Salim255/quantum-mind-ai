@@ -62,8 +62,11 @@ def generate_streaming_answer(
     # NEVER ask the LLM to invent an answer.
     # --------------------------------------------------------------
     if not chunks:
-        message =  "I could not find reliable information, to answer this question."
-        yield f"data: {json.dumps(message)}\n\n"
+        message = (
+            "I could not find enough relevant information to answer your question. "
+            "Please ask a question related to quantum computing."
+        )
+        yield message
         return
 
     # --------------------------------------------------------------
@@ -188,7 +191,7 @@ def generate_answer(
     # --------------------------------------------------------------
     if not chunks:
         return RAGResponseDto(
-            answer="I don't know based on the provided context",
+            answer= "Please ask a question related to quantum computing.",
             analogy="",
             confidence=0.0,
             sources=[]

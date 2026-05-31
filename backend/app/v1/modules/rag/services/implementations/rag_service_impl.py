@@ -71,8 +71,11 @@ class RAGServiceImpl(RAGService):
     # ---------------------------------------------------------------
     # Final answer (must be grounded in context)
     if not chunks:
-        message =  "I could not find reliable information, to answer this question."
-        yield f"data: {json.dumps(message)}\n\n"
+        message = (
+                "I could not find enough relevant information to answer your question. "
+                "Please ask a question related to quantum computing."
+            )
+        yield message
         return
 
     # ---------------------------------------------------------------
