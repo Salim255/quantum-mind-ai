@@ -9,7 +9,7 @@ from app.v1.modules.rag.generator.generator_service import (generate_answer, gen
 from app.ai_core.structured_outputs.schemas.rag_eval_schema import RAGEvaluationLog
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
-from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
+from app.v1.modules.rag.search_engine.implementations.search_engine_impl import RetrieverImpl
 from app.core.container import Container
 
 
@@ -18,9 +18,9 @@ class QueryRequest(BaseModel):
     top_k: int = 3
 
 class RAGServiceImpl(RAGService):
-   def __init__(self, container: Container, search_engine_service: SearchEngineImpl):
+   def __init__(self, container: Container, retriever_service: RetrieverImpl):
         self.container = container
-        self.search_engine_service = search_engine_service
+        self.retriever_service =  retriever_service
 
    def rag_stream_pipeline(
         self,
@@ -63,7 +63,7 @@ class RAGServiceImpl(RAGService):
     # }
     # ---------------------------------------------------------------
         
-    retrieval_output: RetrievalResponseDTO = self.search_engine_service.search_similar_documents(payload.query)
+    retrieval_output: RetrievalResponseDTO = self.retriever_service.search_similar_documents(payload.query)
 
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS

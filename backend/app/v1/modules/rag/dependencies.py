@@ -5,7 +5,7 @@ from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
 from app.v1.modules.rag.services.implementations.loader_service_impl import LoaderServiceImpl
 from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
-from app.v1.modules.rag.search_engine.implementations.search_engine_impl import SearchEngineImpl
+from app.v1.modules.rag.search_engine.implementations.search_engine_impl import  RetrieverImpl
 from app.v1.modules.rag.search_engine.services.reranking_service import RerankingService
 from app.core.container import Container
 from fastapi import Request
@@ -35,12 +35,12 @@ def get_embedding_service(
         container=container
     )
 
-def get_search_engine_service(
+def get_retriever_service(
         container: Annotated[Container, Depends(get_container)],
         reranking_service: Annotated[RerankingService, Depends(get_ranking_service)],
         embedding_service: Annotated[EmbeddingService, Depends(get_embedding_service)]
-) -> SearchEngineImpl:
-    return SearchEngineImpl(
+) -> RetrieverImpl:
+    return RetrieverImpl(
         container=container,
         reranking_service=reranking_service,
         embedding_service=embedding_service
@@ -48,7 +48,7 @@ def get_search_engine_service(
 
 def get_rag_service(
         container: Annotated[Container, Depends(get_container)],
-        search_engine_service: Annotated[SearchEngineImpl, Depends(get_search_engine_service)]
+        search_engine_service: Annotated[RetrieverImpl, Depends(get_retriever_service)]
         ) -> RAGService:
     return RAGServiceImpl(
         search_engine_service=search_engine_service,

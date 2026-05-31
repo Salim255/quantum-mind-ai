@@ -8,14 +8,14 @@ from app.v1.modules.rag.search_engine.services.diversity_service import Diversit
 from app.v1.modules.rag.search_engine.services.context_role_service import ContextRoleService
 from app.v1.modules.rag.search_engine.services.decision_service import DecisionService
 from app.v1.modules.rag.search_engine.services.embedding_service import EmbeddingService
-from app.v1.modules.rag.search_engine.interfaces.search_engine_interface import SearchEngineInterface
+from app.v1.modules.rag.search_engine.interfaces.search_engine_interface import RetrieverInterface
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.dto.query_analysis_result_dto import QueryAnalysisResultDto
 from app.v1.modules.rag.retriever.decision_engine import RetrievalAction
 from app.core.container import Container
 from app.v1.modules.rag.search_engine.services.query_analysis_service import QueryAnalysisService
 
-class SearchEngineImpl(SearchEngineInterface):
+class RetrieverImpl(RetrieverInterface):
     def __init__(
             self, 
             container: Container,

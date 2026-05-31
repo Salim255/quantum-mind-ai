@@ -1,7 +1,7 @@
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
 from abc import ABC, abstractmethod
 
-class SearchEngineInterface(ABC):
+class RetrieverInterface(ABC):
     @abstractmethod
     def search_similar_documents(
             self,

@@ -47,7 +47,7 @@ class VectorSearchService:
             limit=100
             )
         
-        print("Retrieved candidates:======\n", candidates)
+  
         # --------------------------------------------------------
         # STEP 2: PREPARE QUERY MATRIX
         # --------------------------------------------------------

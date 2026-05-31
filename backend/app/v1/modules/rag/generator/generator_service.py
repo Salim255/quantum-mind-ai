@@ -233,7 +233,7 @@ def generate_answer(
         client=client,
         prompt=prompt
     )
-    print("general_start_anser_timer___:\n",  time.perf_counter() - general_start_anser)
+
 
     # Parse raw JSON string into dict
     data = json.loads(response)
