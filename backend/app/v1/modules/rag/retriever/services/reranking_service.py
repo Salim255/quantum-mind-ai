@@ -1,15 +1,6 @@
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
-
-# ------------------------------------------------------------
-# CONFIGURATION
-# ------------------------------------------------------------
-# Controls batching size for inference safety.
-# Large batches can cause:
-# - memory spikes
-# - GPU/CPU saturation
-# ------------------------------------------------------------
-BATCH_SIZE = 32
+from app.core.constants import BATCH_SIZE
 
 class RerankingService:
     def __init__(self, container):
