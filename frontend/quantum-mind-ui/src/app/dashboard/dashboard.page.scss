@@ -11,12 +11,10 @@
     app-header {
       position: fixed;
       width: 100%;
-      z-index: 10;
     }
   }
   &__aside {
     width: 300px;
-    background-color: blue;
     height: 100%;
   }
 }
