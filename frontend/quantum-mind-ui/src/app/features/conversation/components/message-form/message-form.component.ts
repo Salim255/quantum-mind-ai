@@ -21,8 +21,17 @@ export class MessageFormComponent {
     await this.conservationService.sendStreamMessage(payload);
   }
 
-  autoResize(textarea: HTMLTextAreaElement) {
+    autoResize(textarea: HTMLTextAreaElement): void {
+    // Reset height so the browser recalculates scrollHeight
     textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
+
+    // If empty, return to the initial one-row height
+    if (!textarea.value.trim()) {
+      textarea.style.height = '';
+      return;
+    }
+
+    // Grow to fit content
+    textarea.style.height = `${textarea.scrollHeight}px`;
   }
 }

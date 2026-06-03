@@ -13,7 +13,7 @@
   margin: auto;
   border-radius: 2rem;
   margin-bottom: 1rem;
-  //padding: $space-sm 0;
+  padding: $space-sm;
   &__group {
     flex: 1;
     display: flex;
@@ -23,7 +23,7 @@
   &__textarea {
     flex: 1;
     min-height: 22px; /* thinner */
-    padding: $space-xs $space-sm;
+    //padding: $space-xs $space-sm;
     border: none;
     background-color: transparent;
     resize: none;
@@ -40,6 +40,5 @@
     padding: $space-xs $space-sm;
     border-radius: 16px; /* more radius */
     font-size: 1rem;
-    margin-right: 1rem;
   }
 }
