@@ -7,4 +7,20 @@ import { Component } from "@angular/core";
   standalone: false
 })
 
-export class ProgressPage {}
+export class ProgressPage {
+  /* Progress
+
+  For tracking growth.
+
+  Learning Progress
+  Performance Analytics
+  Strengths & Weaknesses
+  Achievements
+  Learning History
+  Progress
+  ├── Overview
+  ├── Analytics
+  ├── Achievements
+  ├── Learning History
+  └── Recommendations */
+}

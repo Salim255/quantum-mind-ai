@@ -6,4 +6,22 @@ import { Component } from "@angular/core";
   styleUrls: ["./explore.page.scss"],
   standalone: false
 })
-export class ExplorePage {}
+export class ExplorePage {
+  /* Explore
+
+  For discovering content.
+
+  Quantum Algorithms
+  Quantum Hardware
+  Quantum Gates
+  Quantum Physics Fundamentals
+  Quantum Machine Learning
+  Industry Applications
+  Explore
+  ├── Algorithms
+  ├── Gates
+  ├── Circuits
+  ├── Hardware
+  ├── Physics
+  └── Applications */
+}

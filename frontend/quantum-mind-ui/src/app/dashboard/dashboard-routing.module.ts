@@ -15,6 +15,22 @@ const routes: Routes = [
       {
         path: "conversation",
         loadChildren: () => import("../features/conversation/conversation.module").then(m => m.ConversationModule)
+      },
+      {
+        path: "learn",
+        loadChildren: () => import("../features/learn/learn.module").then(m => m.LearnModule)
+      },
+      {
+        path: "explore",
+        loadChildren: () => import("../features/explore/explore.module").then(m => m.ExploreModule)
+      },
+      {
+        path: "practice",
+        loadChildren: () => import("../features/practice/practice.module").then(m => m.PracticeModule)
+      },
+      {
+        path: "progress",
+        loadChildren: () => import("../features/progress/progress.module").then(m => m.ProgressModule)
       }
     ]
   }
