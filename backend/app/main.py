@@ -7,6 +7,7 @@ from app.core.exceptions.global_exception_handler import ExceptionsHandler
 from app.core.container import Container
 from contextlib import asynccontextmanager
 
+logger = logging.getLogger(__name__)
 # --------------------------------------------------------
 # CREATE SINGLE CONTAINER INSTANCE (ONCE)
 # --------------------------------------------------------
@@ -16,13 +17,13 @@ container = Container()
 async def lifespan(app: FastAPI):
 
     # Startup
-    print("Starting up QuantumMind AI backend...")
+    logger.info("Starting up QuantumMind AI backend...")
     await container.qdrant.create_collection()
 
     yield
 
     # Shutdown
-    print("Shutting down QuantumMind AI backend...")
+    logger.info("Shutting down QuantumMind AI backend...")
     await container.qdrant.close()
 
 app = FastAPI(
