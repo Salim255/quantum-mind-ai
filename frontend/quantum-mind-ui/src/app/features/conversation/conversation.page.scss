@@ -3,24 +3,18 @@
 @use "../../../styles/typography.scss" as *;
 
 .conversation {
+  flex: 1;
   display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background: $color-bg;
-  padding: 0 2rem;
-
+  justify-content: center;
   app-messages {
-    flex: 1;
-    align-self: center;
+    padding: 0 20rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: $space-xl $space-lg;
-    overflow-y: auto;
-
+    flex-direction: column;
   }
+
   app-message-form {
-    position: sticky;
+    position: fixed;
+    width: 100%;
     bottom: 0;
   }
 }

@@ -1,0 +1,22 @@
+.dashboard-page {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  height: 100vh;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    background-color: red;
+    app-header {
+      position: fixed;
+      width: 100%;
+      z-index: 10;
+    }
+  }
+  &__aside {
+    width: 300px;
+    background-color: blue;
+    height: 100%;
+  }
+}

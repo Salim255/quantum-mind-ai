@@ -17,7 +17,7 @@ container = Container()
 async def lifespan(app: FastAPI):
 
     # Startup
-    logger.info("Starting up QuantumMind AI backend...")
+    logger.info("Starting up QuantumMind AI backend...✅✅")
     await container.qdrant.create_collection()
 
     yield

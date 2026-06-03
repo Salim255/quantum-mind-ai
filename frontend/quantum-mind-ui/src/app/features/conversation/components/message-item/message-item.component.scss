@@ -3,6 +3,7 @@
 @use "../../../../../styles/typography.scss" as *;
 
 .message-item {
+
   &__paragraph {
     font-size: 1.2rem;
     color: $color-text-soft;
