@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { ConversationService } from "../../services/conversation.service";
 import { ConversationPayload } from "../../services/conversation-http.service";
 
+
 @Component({
   selector: "app-message-form",
   templateUrl: "./message-form.component.html",
@@ -18,5 +19,10 @@ export class MessageFormComponent {
   async submit(){
     const payload: ConversationPayload = {user_id: "", conversation_id: "", message: this.user_message}
     await this.conservationService.sendStreamMessage(payload);
+  }
+
+  autoResize(textarea: HTMLTextAreaElement) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
   }
 }

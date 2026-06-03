@@ -1,10 +1,14 @@
 <form class="msg-form" (ngSubmit)="submit()">
   <div class="msg-form__group">
     <textarea
+      rows="1"
+      maxlength="100"
       name="user_name"
       [(ngModel)]="user_message"
       class="msg-form__textarea"
       placeholder="Ask me quantum..."
+      #textarea
+      (input)="autoResize(textarea)"
       >
     </textarea>
   </div>
