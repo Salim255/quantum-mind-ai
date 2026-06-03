@@ -8,8 +8,10 @@ const routes: Routes = [
     component: ExplorePage
   }
 ]
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
+
 export class ExploreRoutingModule{}
