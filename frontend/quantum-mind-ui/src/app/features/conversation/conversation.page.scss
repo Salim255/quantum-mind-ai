@@ -3,12 +3,11 @@
 @use "../../../styles/typography.scss" as *;
 
 .conversation {
-  flex: 1;
   display: flex;
   justify-content: center;
   height: 100vh;
   overflow: auto;
-
+  position: relative;
   app-messages {
     display: flex;
     flex-direction: column;
@@ -18,5 +17,6 @@
     position: fixed;
     width: 100%;
     bottom: 0;
+    background-color: $color-surface;
   }
 }
