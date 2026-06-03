@@ -104,6 +104,53 @@ class RetrieverImpl(RetrieverInterface):
         )
         
     # ---------------------------------------------------------
+    # POST PROCESSING
+    # ---------------------------------------------------------
+    def post_process_candidates(
+        self,
+        query: str,
+        candidates: List[RetrievalChunkDTO],
+        top_k: int
+    ) -> List[RetrievalChunkDTO]:
+        
+
+        # 4. rerank
+        reranked: List[RetrievalChunkDTO] = self.reranking_service.rerank_candidates(
+                query,
+                candidates=candidates
+            )
+      
+        # 5. diversity
+        diversified: List[RetrievalChunkDTO] = (
+            DiversityService.diversify(
+                reranked,
+                top_k
+            )
+        )
+
+        # 6. context roles
+        ContextRoleService.assign_reasoning_roles(diversified)
+  
+        return diversified
+    # ---------------------------------------------------------
+    # RETRY HANDLER
+    # ---------------------------------------------------------
+    def handle_retry(
+        self,
+        query: str,
+        top_k: int
+    ) -> RetrievalResponseDTO:
+
+        retry_results = self.execute_pipeline(
+            query=query,
+            top_k=top_k * 2
+        )
+
+        return RetrievalResponseDTO(
+            results=retry_results
+        )
+    
+        # ---------------------------------------------------------
     # RETRIEVAL
     # ---------------------------------------------------------
     def retrieve_candidates(
@@ -168,49 +215,3 @@ class RetrieverImpl(RetrieverInterface):
             qdrant_client=self.container.qdrant.client
         )
    
-    # ---------------------------------------------------------
-    # POST PROCESSING
-    # ---------------------------------------------------------
-    def post_process_candidates(
-        self,
-        query: str,
-        candidates: List[RetrievalChunkDTO],
-        top_k: int
-    ) -> List[RetrievalChunkDTO]:
-        
-
-        # 4. rerank
-        reranked: List[RetrievalChunkDTO] = self.reranking_service.rerank_candidates(
-                query,
-                candidates=candidates
-            )
-      
-        # 5. diversity
-        diversified: List[RetrievalChunkDTO] = (
-            DiversityService.diversify(
-                reranked,
-                top_k
-            )
-        )
-
-        # 6. context roles
-        ContextRoleService.assign_reasoning_roles(diversified)
-  
-        return diversified
-    # ---------------------------------------------------------
-    # RETRY HANDLER
-    # ---------------------------------------------------------
-    def handle_retry(
-        self,
-        query: str,
-        top_k: int
-    ) -> RetrievalResponseDTO:
-
-        retry_results = self.execute_pipeline(
-            query=query,
-            top_k=top_k * 2
-        )
-
-        return RetrievalResponseDTO(
-            results=retry_results
-        )
