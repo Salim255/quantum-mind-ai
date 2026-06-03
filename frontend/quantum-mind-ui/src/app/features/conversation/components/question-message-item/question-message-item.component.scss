@@ -2,11 +2,8 @@
 @use "../../../../../styles/layout.scss" as *;
 @use "../../../../../styles/typography.scss" as *;
 
-.qs-msg-item{
+.qs-msg-item {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* or 100% if parent controls height */
-  overflow-y: auto; /* the whole container scrolls */
-  padding-top: 10rem;
   gap: $space-md;
 }

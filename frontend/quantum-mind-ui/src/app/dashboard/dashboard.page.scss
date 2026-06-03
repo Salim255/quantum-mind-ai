@@ -8,14 +8,14 @@
   grid-template-columns: auto 1fr;
   height: 100vh;
   width: 100vw;
-
-  &__content {}
-
-  &__header {
+  overflow: hidden;
+  app-header {
     position: sticky;
     top: 0;
   }
+  &__content {
 
+  }
   &__aside {
     width: 16rem;
     border-right: 1px solid $color-border;
@@ -34,6 +34,5 @@
         display: none;
       }
     }
-    &__content {}
   }
 }
