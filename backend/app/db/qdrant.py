@@ -2,6 +2,7 @@ import logging
 from qdrant_client import AsyncQdrantClient
 from app.core.settings import Settings
 from qdrant_client.models import Distance, VectorParams
+from qdrant_client.http.exceptions import UnexpectedResponse
 
 logger = logging.getLogger(__name__)
 
@@ -21,9 +22,17 @@ class QdrantService:
                 )
             )
 
-        except Exception:
-            logger.exception("Create doc failed")
-      
+        except UnexpectedResponse as e:
+            if "already exists" in str(e):
+                logger.info(f"Collection '{self.settings.COLLECTION_NAME}' already exists. Skipping creation.")
+            else:
+                logger.exception(f"Create doc failed: {e}")
+                raise 
+        
+        except Exception as e:
+            logger.exception(f"Unexpected error occurred: {e}")
+            raise
+
     @property
     def client(self)-> AsyncQdrantClient:
 
