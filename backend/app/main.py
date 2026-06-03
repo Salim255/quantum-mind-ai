@@ -12,7 +12,21 @@ from contextlib import asynccontextmanager
 # --------------------------------------------------------
 container = Container()
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    # Startup
+    print("Starting up QuantumMind AI backend...")
+    await container.qdrant.create_collection()
+
+    yield
+
+    # Shutdown
+    print("Shutting down QuantumMind AI backend...")
+    await container.qdrant.close()
+
 app = FastAPI(
+    lifespan=lifespan,
     title="QuantumMind AI - Python Core",
     description="AI Core for quantum research assistant (RAG, embeddings, vector search, quantum math)",
     version="0.1.0",
@@ -37,16 +51,6 @@ setup_cors(app)
 app.include_router(conversation_router)
 app.include_router(rag_router)
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-
-    # Startup
-    await container.qdrant.create_collection()
-
-    yield
-
-    # Shutdown
-    await container.qdrant.close()
 
 ExceptionsHandler(app, settings=container.settings)
 @app.get("/health")

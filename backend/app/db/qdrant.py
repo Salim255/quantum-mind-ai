@@ -28,3 +28,6 @@ class QdrantService:
     def client(self)-> AsyncQdrantClient:
 
         return self._client
+    
+    async def close(self):
+        await self._client.close()
