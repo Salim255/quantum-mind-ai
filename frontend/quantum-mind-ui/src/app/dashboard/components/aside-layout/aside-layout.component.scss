@@ -1,5 +1,10 @@
+@use "../../../../styles/queries.scss" as *;
+
 .aside-layout {
-  position: fixed;
-  background-color: blue;
-  width: 100%;
+
+  //width: 100%;
+}
+
+@include respond("tablet") {
+
 }
