@@ -1,9 +1,13 @@
 import { Injectable } from "@angular/core";
 
-export interface LinkItem {
+export interface NavItem {
+  name: string;
   path: string;
-  name: string
+  icon?: string;
+  description?: string;
+  children?: NavItem[];
 }
+
 export const Nav_Data = {
   learn: {
     links: [
