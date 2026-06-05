@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { NAVIGATION } from "./data";
 import { NavigationEnd, Router } from "@angular/router";
 import { BehaviorSubject, filter, Observable } from "rxjs";
+import { BreadcrumbService } from "./bread-crumbs.service";
 
 export interface NavItem {
   name: string;
@@ -16,9 +17,14 @@ export interface NavItem {
 export class AsideNavService {
   private currentPageUrlSubject = new BehaviorSubject<NavItem | null >(null)
 
+  constructor(private breadcrumbService: BreadcrumbService){}
+
   setCurrentPageUrl(url: string){
     const pageNavs: NavItem | null = this.getAsideNav(url) ?? null;
     this.currentPageUrlSubject.next(pageNavs);
+
+    // Bread crumbs
+    this.breadcrumbService.setAppBreadCrumbs(url);
   }
 
   get getCurrentPageNav$():Observable<NavItem | null> {

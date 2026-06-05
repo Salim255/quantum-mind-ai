@@ -15,6 +15,7 @@ export class BreadcrumbService {
 
   setAppBreadCrumbs(url: string){
     const breadcrumb: Breadcrumb[] = this.buildBreadcrumbs(url);
+    console.log(breadcrumb);
     this.appBreadCrumbSubject.next(breadcrumb);
   }
 
