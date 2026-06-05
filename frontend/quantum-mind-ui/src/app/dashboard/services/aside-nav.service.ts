@@ -1,4 +1,7 @@
 import { Injectable } from "@angular/core";
+import { NAVIGATION } from "./data";
+import { NavigationEnd, Router } from "@angular/router";
+import { BehaviorSubject, filter, Observable } from "rxjs";
 
 export interface NavItem {
   name: string;
@@ -8,33 +11,23 @@ export interface NavItem {
   children?: NavItem[];
 }
 
-export const Nav_Data = {
-  learn: {
-    links: [
-      {
-        path: "",
-        name: ""
-      }
-    ]
-  },
-  home: {},
-  explore: {},
-  practice: {},
-  progress: {},
-  resources: {}
-}
-export enum PageName {
-  LEARN="learn",
-  HOME="home",
-  EXPLORE="explore",
-  PRACTICE="practice",
-  PROGRESS="progress"
-}
 
 @Injectable({providedIn: "root"})
 export class AsideNavService {
+  private currentPageUrlSubject = new BehaviorSubject<NavItem | null >(null)
 
-  built_links_by_page(page: PageName){
+  setCurrentPageUrl(url: string){
+    const pageNavs: NavItem | null = this.getAsideNav(url) ?? null;
+    this.currentPageUrlSubject.next(pageNavs);
+  }
 
+  get currentPageNav():Observable<NavItem | null> {
+    return this.currentPageUrlSubject.asObservable()
+  }
+
+  private getAsideNav(currentRoute: string): NavItem | undefined {
+    return NAVIGATION.find(item =>
+      currentRoute.startsWith(item.path)
+    );
   }
 }

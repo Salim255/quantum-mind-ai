@@ -6,12 +6,24 @@ export const NAVIGATION: NavItem[] = [
     path: '/home',
     children: [
       {
-        name: 'Overview',
-        path: '/home/overview'
+        name: 'Home',
+        path: '/home',
       },
       {
-        name: 'Getting Started',
-        path: '/home/getting-started'
+        name: 'Learn',
+        path: '/learn'
+      },
+      {
+        name: 'Practice',
+        path: '/practice'
+      },
+      {
+        name: 'Progress',
+        path: '/progress'
+      },
+      {
+        name: 'Explore',
+        path: '/explore '
       }
     ]
   },

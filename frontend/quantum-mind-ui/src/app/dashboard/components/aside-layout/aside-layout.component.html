@@ -1,10 +1,7 @@
 <nav class="aside-layout">
   <ul>
-    <li><a routerLink="/conversation">Home</a></li>
-    <li><a routerLink="/learn">Learn</a></li>
-    <li><a routerLink="/practice">Practice</a></li>
-    <li><a routerLink="/progress">Progress</a></li>
-    <li><a routerLink="/explore">Explore </a></li>
-    <li><a>Resources</a></li>
+    @for(nav of items()?.children; track $index) {
+       <li><a [routerLink]="[nav.path]">{{ nav.name }}</a></li>
+    }
   </ul>
 </nav>
