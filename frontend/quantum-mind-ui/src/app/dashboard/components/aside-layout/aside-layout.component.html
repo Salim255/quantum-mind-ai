@@ -1,7 +1,7 @@
 <nav class="aside-layout">
   <ul>
     @for(nav of items()?.children; track $index) {
-       <li><a [routerLink]="[nav.path]">{{ nav.name }}</a></li>
+      <li><a [routerLink]="[nav.path]">{{ nav.name }}</a></li>
     }
   </ul>
 </nav>
