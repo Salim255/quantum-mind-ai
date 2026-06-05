@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NAVIGATION } from "./data";
+import { BehaviorSubject, Observable } from "rxjs";
 
 export interface Breadcrumb {
   name: string;
@@ -8,9 +9,20 @@ export interface Breadcrumb {
 
 @Injectable({providedIn: 'root'})
 export class BreadcrumbService {
+  private appBreadCrumbSubject = new BehaviorSubject< Breadcrumb[]>([]);
+
   constructor(){}
 
-  buildBreadcrumbs(url: string): Breadcrumb[] {
+  setAppBreadCrumbs(url: string){
+    const breadcrumb: Breadcrumb[] = this.buildBreadcrumbs(url);
+    this.appBreadCrumbSubject.next(breadcrumb);
+  }
+
+  get getAppBreadCrumbs$(): Observable<Breadcrumb[]>{
+    return this.appBreadCrumbSubject.asObservable();
+  }
+
+  private buildBreadcrumbs(url: string): Breadcrumb[] {
     const breadcrumbs: Breadcrumb[] = [
       {
         name: 'Home',
