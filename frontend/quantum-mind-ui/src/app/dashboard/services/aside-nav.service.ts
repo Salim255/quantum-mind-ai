@@ -21,7 +21,7 @@ export class AsideNavService {
     this.currentPageUrlSubject.next(pageNavs);
   }
 
-  get currentPageNav():Observable<NavItem | null> {
+  get getCurrentPageNav$():Observable<NavItem | null> {
     return this.currentPageUrlSubject.asObservable()
   }
 
