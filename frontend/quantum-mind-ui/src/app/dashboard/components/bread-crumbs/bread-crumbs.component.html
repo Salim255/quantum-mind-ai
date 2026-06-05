@@ -1,0 +1,8 @@
+<nav class="bread-crumbs">
+  @for(crumb of breadcrumbs(); track $index) {
+    <a [routerLink]="normalizeUrl(crumb.path)">{{ crumb.name }}</a>
+    @if(!$last){
+      <span>/</span>
+    }
+  }
+</nav>

@@ -5,13 +5,20 @@
 
 /* FIXED HEADER */
 .dash-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: $space-sm;
-  background: $color-surface;
-  border-bottom: 1px solid $color-border;
 
+  border-bottom: 1px solid $color-border;
+  &__content {
+    display: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $space-sm;
+    background: $color-surface;
+  }
+
+  &__breadcrumb{
+    padding: $space-sm;
+  }
   &__brand {
     font-size: 1.4rem;
     font-weight: 600;
