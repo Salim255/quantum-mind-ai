@@ -18,7 +18,7 @@ class DbSettingsService:
             scheme="postgresql+psycopg",
             username=self.settings.DB_USERNAME,
             password=self.settings.DB_PASSWORD,
-            host=self.settings.DB_NAME,
+            host=self.settings.DB_HOST,
             port=self.settings.DB_PORT,
-            path=self.settings.DB_URL,
+            path=self.settings.DB_NAME,
         )

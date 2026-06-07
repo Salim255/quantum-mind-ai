@@ -6,6 +6,12 @@ from app.db.qdrant import QdrantService
 from groq import Groq
 from app.db.db_engine import DBEngineService
 from app.db.db_settings import DbSettingsService
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+)
 
 class Container:
     def __init__(self):
