@@ -18,6 +18,8 @@ class Settings(BaseSettings):
 
     VECTOR_SIZE: int
     
+    DB_URL: str
+    
     model_config = SettingsConfigDict(env_file=".env")
 
     @property

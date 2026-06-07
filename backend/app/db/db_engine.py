@@ -1,11 +1,13 @@
 from sqlmodel import create_engine
+from app.core.settings import Settings
 
 class DBEngineService:
-    db_url = ""
-
+    def __init__(self, settings: Settings):
+        self.settings = settings
+  
     connect_args = {"check_same_thread": False}
 
-    @classmethod
-    def get_engin(cls):
 
-        return create_engine(cls.db_url, connect_args=cls.connect_args)
+    def get_engin(self):
+
+        return create_engine(self.settings.DB_URL, connect_args=self.connect_args)

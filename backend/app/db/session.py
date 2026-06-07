@@ -1,4 +1,5 @@
 from sqlmodel import Session
+
 class DBSessionService:
     def __init__(self, engin):
         self.engin = engin
