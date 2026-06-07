@@ -4,6 +4,8 @@ from app.core.settings import Settings, get_settings
 from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
 from app.db.qdrant import QdrantService
 from groq import Groq
+from app.db.db_engine import DBEngineService
+from app.db.db_settings import DbSettingsService
 
 class Container:
     def __init__(self):
@@ -46,3 +48,6 @@ class Container:
         # VECTOR DB CLIENT (example)
         # QdrantClient(...)
         self.qdrant = QdrantService(settings=self.settings)
+
+        self.db_url = DbSettingsService(settings=self.settings)
+        self.db_engine = DBEngineService(db_url=self.db_url.get_sql_db_url)
