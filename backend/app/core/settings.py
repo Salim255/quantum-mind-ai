@@ -19,7 +19,17 @@ class Settings(BaseSettings):
     VECTOR_SIZE: int
     
     DB_URL: str
+
+    DB_HOST: str
+
+    DB_PORT: int
+
+    DB_NAME: str
+
+    DB_USERNAME: str
     
+    DB_PASSWORD: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
     @property

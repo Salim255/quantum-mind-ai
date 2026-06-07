@@ -5,6 +5,6 @@ class DBSessionService:
         self.engin = engin
     
     def get_session(self):
-        with Session(self.engine):
-            yield 
+        with Session(self.engine) as session:
+            yield  session
     
