@@ -1,25 +1,28 @@
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
-from app.core.application import container
+from app.core.container import Container
 
 logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """
-    Handles application startup and shutdown.
-    """
+class LifespanService:
 
-    logger.info("Starting up QuantumMind AI backend... ✅")
+    @staticmethod
+    def create(container: Container):
 
-    await container.qdrant.create_collection()
+        @asynccontextmanager
+        async def lifespan(app: FastAPI):
+            logger.info("Starting up QuantumMind AI backend... ✅")
 
-    container.db_init_service.create_tables()
+            await container.qdrant.create_collection()
 
-    yield
+            container.db_init_service.create_tables()
 
-    logger.info("Shutting down QuantumMind AI backend...")
+            yield
 
-    await container.qdrant.close()
+            logger.info("Shutting down QuantumMind AI backend...")
+
+            await container.qdrant.close()
+
+        return lifespan
