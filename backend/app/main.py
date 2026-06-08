@@ -2,6 +2,8 @@ from fastapi import FastAPI
 import logging
 from app.v1.modules.rag.controller.controller import router as rag_router
 from app.v1.modules.conversation.controller.controller import router as conversation_router
+from app.v1.modules.learn.controller.controller import router as learn_router
+
 from app.core.cors import setup_cors
 from app.core.exceptions.global_exception_handler import ExceptionsHandler
 from app.core.container import Container
@@ -21,7 +23,7 @@ async def lifespan(app: FastAPI):
     await container.qdrant.create_collection()
 
     container.db_init_service.create_tables()
-    
+
     yield
 
     # Shutdown
@@ -51,6 +53,7 @@ app.state.container = container
 
 setup_cors(app)
 
+app.include_router(learn_router)
 app.include_router(conversation_router)
 app.include_router(rag_router)
 
