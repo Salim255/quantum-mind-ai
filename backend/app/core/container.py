@@ -8,7 +8,7 @@ from app.db.db_settings import DbSettingsService
 from app.db.db_session import DBSessionService
 from sentence_transformers import SentenceTransformer
 from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
-
+from app.db.db_init import DBInitService
 
 logging.basicConfig(
     level=logging.INFO,
@@ -36,11 +36,14 @@ class Container:
         # ============================================================
         # DATABASE ENGINE
         # ============================================================
-        self.db_engine = DBEngineService(
+        self.db_engine_service = DBEngineService(
             db_url=self.db_settings.sql_db_url
         )
 
         self.db_session =  DBSessionService()
+
+        self.db_init_service = DBInitService(engine=self.db_engine_service.get_engine)
+
         # --------------------------------------------------------
         # GROQ CLIENT (IMPORTANT: SINGLETON)
         # --------------------------------------------------------
