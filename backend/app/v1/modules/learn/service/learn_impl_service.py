@@ -1,4 +1,4 @@
-from app.v1.modules.learn import LearnService
+from app.v1.modules.learn.service.learn_service import LearnService
 
 class LearnImplService(LearnService):
     def __int__(self):
@@ -6,4 +6,4 @@ class LearnImplService(LearnService):
         pass
 
     def create_topic(self):
-        return ""
+        return "Hello from create topic"
