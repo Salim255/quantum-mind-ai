@@ -1,7 +1,8 @@
 from sqlmodel import Session
+from sqlalchemy.engine import Engine
 
 class DBSessionService:
-    def __init__(self, engin):
+    def __init__(self, engin: Engine):
         self.engin = engin
     
     def get_session(self):

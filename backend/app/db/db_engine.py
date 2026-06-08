@@ -4,6 +4,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy import text
 import logging
 
+
 logger = logging.getLogger(__name__)
 
 class DBEngineService:
@@ -58,16 +59,20 @@ class DBEngineService:
             Engine: Configured SQLAlchemy engine instance.
         """
         try:
-            print("Creating engine...===", str(self.db_url))
+
             engine = create_engine(str(self.db_url))
+
             with engine.connect() as conn:
                 conn.execute(text("SELECT 1"))
 
-            print("Connecting...===")
             logger.info("Database connection established successfully. ✅✅")
+
             return engine
+        
         except Exception as e:
+
             logger.exception(e)
+
             raise e
     
     def get_engine(self) -> Engine:
@@ -79,4 +84,5 @@ class DBEngineService:
         Returns:
             Engine: Active SQLAlchemy engine.
         """
+        
         return self.engine
