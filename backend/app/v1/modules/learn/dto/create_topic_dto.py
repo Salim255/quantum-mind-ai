@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field
 
-
 class TopicDefinitionDTO(BaseModel):
     """
     Defines a single topic to be extracted from a PDF.
@@ -26,4 +25,15 @@ class TopicDefinitionDTO(BaseModel):
     end_page: int = Field(
         ge=1,
         description="Last page belonging to this topic.",
+    )
+
+class CreateTopicsFromPdfDTO(BaseModel):
+    """
+    Defines all topics that should be created
+    from the uploaded PDF.
+    """
+
+    topics: list[TopicDefinitionDTO] = Field(
+        min_length=1,
+        description="List of topics to create from the PDF.",
     )
