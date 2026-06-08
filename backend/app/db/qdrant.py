@@ -1,13 +1,13 @@
 import logging
 from qdrant_client import AsyncQdrantClient
-from app.core.settings import Settings
+from app.core.settings import SettingsService
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.http.exceptions import UnexpectedResponse
 
 logger = logging.getLogger(__name__)
 
 class QdrantService:
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: SettingsService):
         self.settings = settings
     
         self._client = AsyncQdrantClient(url=self.settings.QDRANT_URL, timeout=120) # CREATE ONCE

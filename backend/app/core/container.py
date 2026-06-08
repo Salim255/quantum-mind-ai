@@ -1,7 +1,6 @@
 from sentence_transformers import CrossEncoder
 from sentence_transformers import SentenceTransformer
-from app.core.settings import Settings, get_settings
-from app.db.db_settings import get_sql_db_url
+from app.core.settings import SettingsService
 from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
 from app.db.qdrant import QdrantService
 from groq import Groq
@@ -19,11 +18,25 @@ class Container:
         # ============================================================
         # CORE CONFIG (SINGLE SOURCE OF TRUTH)
         # ============================================================
-        self.settings: Settings = get_settings()
 
-        self.db_url = DbSettingsService(settings=self.settings) = get_sql_db_url()
-        
-        self.db_engine = DBEngineService(db_url=self.db_url.get_sql_db_url)
+        # ============================================================
+        # APPLICATION SETTINGS
+        # ============================================================
+        self.settings = SettingsService()
+
+        # ============================================================
+        # DATABASE CONFIGURATION
+        # ============================================================
+        self.db_settings = DbSettingsService(
+            settings=self.settings
+        )
+
+        # ============================================================
+        # DATABASE ENGINE
+        # ============================================================
+        self.db_engine = DBEngineService(
+            db_url=self.db_settings.sql_db_url
+        )
 
         # --------------------------------------------------------
         # GROQ CLIENT (IMPORTANT: SINGLETON)

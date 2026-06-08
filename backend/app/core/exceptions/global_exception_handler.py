@@ -4,13 +4,13 @@ from fastapi import(FastAPI, Request)
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import  RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from app.core.settings import Settings
+from app.core.settings import SettingsService
 from app.core.exceptions.base_exception import AppException
 
 logger = logging.getLogger(__name__)
 
 class ExceptionsHandler:
-    def __init__(self, app: FastAPI, settings: Settings):
+    def __init__(self, app: FastAPI, settings: SettingsService):
         self.app = app
         self.settings = settings
         self.register_handler()

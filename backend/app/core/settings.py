@@ -1,8 +1,6 @@
-from functools import lru_cache
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Settings(BaseSettings):
+class SettingsService(BaseSettings):
     
     API_PREFIX: str = "/api/v1"
 
@@ -27,7 +25,7 @@ class Settings(BaseSettings):
     DB_NAME: str
 
     DB_USERNAME: str
-    
+
     DB_PASSWORD: str
 
     model_config = SettingsConfigDict(env_file=".env")
@@ -35,7 +33,3 @@ class Settings(BaseSettings):
     @property
     def is_dev(self):
         return self.ENV.lower() == "development"
-
-@lru_cache
-def get_settings() -> Settings:
-    return Settings()

@@ -1,6 +1,6 @@
 from pydantic import PostgresDsn
 
-from app.core.settings import Settings
+from app.core.settings import SettingsService
 
 
 class DbSettingsService:
@@ -26,7 +26,7 @@ class DbSettingsService:
         PostgreSQL
     """
 
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: SettingsService):
         self.settings = settings
 
     @property
