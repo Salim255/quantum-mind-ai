@@ -7,3 +7,10 @@ class LearnImplService(LearnService):
 
     def create_topic(self):
         return "Hello from create topic"
+    
+
+    def update_topic(self):
+        return "hello from update topic"
+
+    def get_topics(self):
+        return "hello from get topics"

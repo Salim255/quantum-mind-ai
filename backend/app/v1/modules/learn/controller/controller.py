@@ -9,10 +9,10 @@ router = APIRouter(
 )
 
 @router.get(
-    "/",
+    "/topics",
     status_code=200
 )
 async def get_learn_topic(
     learn_service:  Annotated[LearnService, Depends(get_learn_service)]
 ):
-    return  learn_service.create_topic()
+    return  learn_service.get_topics()
