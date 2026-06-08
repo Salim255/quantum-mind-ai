@@ -20,6 +20,8 @@ async def lifespan(app: FastAPI):
     logger.info("Starting up QuantumMind AI backend...✅✅")
     await container.qdrant.create_collection()
 
+    container.db_init_service.create_tables()
+    
     yield
 
     # Shutdown

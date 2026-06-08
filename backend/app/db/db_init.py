@@ -1,4 +1,6 @@
 from sqlmodel import SQLModel
+import app.models
+
 from sqlalchemy.engine import Engine
 import logging
 
@@ -18,6 +20,7 @@ class DBInitService:
 
     def __init__(self, engine: Engine):
         self.engine = engine
+        # Constructors should initialize state, not perform significant work
 
     def create_tables(self) -> None:
         """
@@ -35,6 +38,7 @@ class DBInitService:
             Exception: Re-raises any database initialization errors.
         """
         try:
+            logger.info(f"Registered tables: {SQLModel.metadata.tables.keys()}")
             SQLModel.metadata.create_all(self.engine)
 
             logger.info(

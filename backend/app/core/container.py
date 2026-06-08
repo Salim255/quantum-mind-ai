@@ -40,9 +40,9 @@ class Container:
             db_url=self.db_settings.sql_db_url
         )
 
-        self.db_session =  DBSessionService()
+        self.db_session =  DBSessionService(engine=self.db_engine_service.get_engine())
 
-        self.db_init_service = DBInitService(engine=self.db_engine_service.get_engine)
+        self.db_init_service = DBInitService(engine=self.db_engine_service.get_engine())
 
         # --------------------------------------------------------
         # GROQ CLIENT (IMPORTANT: SINGLETON)
