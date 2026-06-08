@@ -7,22 +7,19 @@ logger = logging.getLogger(__name__)
 
 
 class LifespanService:
+    def __init__(self, container: Container):
+        self.container = container
 
-    @staticmethod
-    def create(container: Container):
+    @asynccontextmanager
+    async def lifespan(self, app: FastAPI):
+        logger.info("Starting up QuantumMind AI backend... ✅")
 
-        @asynccontextmanager
-        async def lifespan(app: FastAPI):
-            logger.info("Starting up QuantumMind AI backend... ✅")
+        await self.container.qdrant.create_collection()
 
-            await container.qdrant.create_collection()
+        self.container.db_init_service.create_tables()
 
-            container.db_init_service.create_tables()
+        yield
 
-            yield
+        logger.info("Shutting down QuantumMind AI backend...")
 
-            logger.info("Shutting down QuantumMind AI backend...")
-
-            await container.qdrant.close()
-
-        return lifespan
+        await self.container.qdrant.close()

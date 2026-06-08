@@ -24,8 +24,10 @@ class ApplicationService:
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         )
 
+        lifespan_service = LifespanService(container=self.container)
+
         app = FastAPI(
-            lifespan=LifespanService.create(container=self.container),
+            lifespan=lifespan_service.lifespan,
             title="QuantumMind AI - Python Core",
             description=(
                 "AI Core for quantum research assistant "
