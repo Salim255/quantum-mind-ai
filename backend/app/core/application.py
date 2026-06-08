@@ -8,7 +8,8 @@ from app.core.lifespan import lifespan, container
 from app.core.router_registry import register_routers
 
 class ApplicationService:
-    def create_app(self) -> FastAPI:
+    @staticmethod
+    def create_app() -> FastAPI:
         """
         Creates and configures the FastAPI application.
         """
