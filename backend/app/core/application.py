@@ -1,15 +1,21 @@
 import logging
-
 from fastapi import FastAPI
-
 from app.core.cors import setup_cors
 from app.core.exceptions.global_exception_handler import ExceptionsHandler
-from app.core.lifespan import lifespan, container
-from app.core.router_registry import register_routers
+from app.core.lifespan import lifespan
+from app.core.router_registry import RouterService
+from app.core.container import Container
+from app.core.health import register_health_check
 
 class ApplicationService:
-    @staticmethod
-    def create_app() -> FastAPI:
+    def __init__(self):
+        # --------------------------------------------------------
+        # CREATE SINGLE CONTAINER INSTANCE (ONCE)
+        # --------------------------------------------------------  
+        self.container = Container()
+
+    @classmethod
+    def create_app(cls) -> FastAPI:
         """
         Creates and configures the FastAPI application.
         """
@@ -27,17 +33,17 @@ class ApplicationService:
                 "(RAG, embeddings, vector search, quantum math)"
             ),
             version="0.1.0",
-            root_path=container.settings.API_PREFIX,
+            root_path=cls.container.settings.API_PREFIX,
         )
 
         # Make DI container available everywhere
-        app.state.container = container
+        app.state.container = cls.container
 
         setup_cors(app)
 
-        register_routers(app)
+        RouterService.register_routers(app)
 
-        ExceptionsHandler(app, settings=container.settings)
+        ExceptionsHandler(app, settings=cls.container.settings)
 
         register_health_check(app)
 

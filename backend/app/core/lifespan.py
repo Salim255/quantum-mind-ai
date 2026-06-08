@@ -1,12 +1,9 @@
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
-
-from app.core.container import Container
+from app.core.application import container
 
 logger = logging.getLogger(__name__)
-
-container = Container()
 
 
 @asynccontextmanager

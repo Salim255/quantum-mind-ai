@@ -8,6 +8,7 @@ from app.core.cors import setup_cors
 from app.core.exceptions.global_exception_handler import ExceptionsHandler
 from app.core.container import Container
 from contextlib import asynccontextmanager
+from app.core.application import ApplicationService
 
 logger = logging.getLogger(__name__)
 # --------------------------------------------------------
