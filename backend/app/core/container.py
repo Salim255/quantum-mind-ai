@@ -1,12 +1,14 @@
-from sentence_transformers import CrossEncoder
-from sentence_transformers import SentenceTransformer
-from app.core.settings import SettingsService
-from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
-from app.db.qdrant import QdrantService
+import logging
 from groq import Groq
+from app.db.qdrant import QdrantService
+from sentence_transformers import CrossEncoder
+from app.core.settings import SettingsService
 from app.db.db_engine import DBEngineService
 from app.db.db_settings import DbSettingsService
-import logging
+from app.db.db_session import DBSessionService
+from sentence_transformers import SentenceTransformer
+from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -38,6 +40,7 @@ class Container:
             db_url=self.db_settings.sql_db_url
         )
 
+        self.db_session =  DBSessionService()
         # --------------------------------------------------------
         # GROQ CLIENT (IMPORTANT: SINGLETON)
         # --------------------------------------------------------
