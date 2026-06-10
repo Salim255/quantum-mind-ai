@@ -6,6 +6,8 @@ from app.v1.modules.learn.dto.text_dto import TextDTO
 from app.v1.modules.learn.dto.image_dto import ImageDTO
 from fastapi import UploadFile
 import logging
+import re
+
 logger = logging.getLogger(__name__)
 
 class DocIngestionImplService(DocIngestionService):
@@ -22,13 +24,13 @@ class DocIngestionImplService(DocIngestionService):
             # 4 extract_sections
             extracted_sections = self.extract_sections(reader=reader, bookmarks=extracted_bookmarks)
 
-            #extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
+            extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
             #extracted_images = self.extract_images()
             # 7 persist_to_database
             # return extracted_bookmarks
-            return extracted_sections
-            # return extracted_texts
+            #return extracted_sections
+            return extracted_texts
         
         except Exception:
             logger.exception("Error in pdf ingestion")
@@ -103,59 +105,41 @@ class DocIngestionImplService(DocIngestionService):
 
         sections: list[SectionDTO] = []
 
-        # STEP 1: flatten all outline items into (title, page)
-        flat_items = []
+        outline = reader.outline
 
-        def walk(items):
-            for item in items:
-                if isinstance(item, dict):
-                    title = item.get("/Title")
-                    page = reader.get_page_number(item["/Page"]) + 1
+        current_bookmark = None
 
-                    if title and page:
-                        flat_items.append({
-                            "title": title,
-                            "page": page
-                        })
+        for item in outline:
 
-                elif isinstance(item, list):
-                    walk(item)
+            if isinstance(item, dict):
+                current_bookmark = item.get("/Title")
 
-        walk(reader.outline)
+            elif isinstance(item, list):
 
-        # STEP 2: assign sections to bookmarks by page range
-        for bookmark in bookmarks:
+                for i, section in enumerate(item):
 
-            # get sections inside this bookmark range
-            bookmark_sections = [
-                x for x in flat_items
-                if bookmark.start_page <= x["page"] <= bookmark.end_page
-                and x["title"] != bookmark.title
-            ]
+                    title = section.get("/Title")
+                    start_page = reader.get_page_number(section["/Page"]) + 1
 
-            # STEP 3: build SectionDTOs
-            for i, sec in enumerate(bookmark_sections):
-
-                next_section_title = None
-                next_section_page = None
-                next_bookmark_title = None
-
-                if i < len(bookmark_sections) - 1:
-                    next_section_title = bookmark_sections[i + 1]["title"]
-                    next_section_page = bookmark_sections[i + 1]["page"]
-                else:
-                    next_bookmark_title = self._get_next_bookmark_title(bookmark, bookmarks)
-
-                sections.append(
-                    SectionDTO(
-                        bookmark_title=bookmark.title,
-                        title=sec["title"],
-                        start_page=sec["page"],
-                        next_section_title=next_section_title,
-                        next_section_page=next_section_page,
-                        next_bookmark_title=next_bookmark_title,
+                    sections.append(
+                        SectionDTO(
+                            bookmark_title=current_bookmark,
+                            title=title,
+                            start_page=start_page,
+                            end_page=0,  # temp
+                        )
                     )
-                )
+
+        # sort (VERY IMPORTANT)
+        sections.sort(key=lambda s: s.start_page)
+
+        # compute end_page using NEXT section
+        for i in range(len(sections)):
+
+            if i < len(sections) - 1:
+                sections[i].end_page = sections[i + 1].start_page - 1
+            else:
+                sections[i].end_page = max(b.end_page for b in bookmarks if b.title == sections[i].bookmark_title)
 
         return sections
 
@@ -166,45 +150,74 @@ class DocIngestionImplService(DocIngestionService):
                 return bookmarks[i + 1].title
         return None
 
+    def extract_between_titles(
+        self,
+        text: str,
+        current_title: str,
+        next_title: str | None,
+    ) -> str:
+
+        start = text.find(current_title)
+
+        if start == -1:
+            return ""
+
+        text = text[start:]
+
+        if next_title:
+            end = text.find(next_title)
+
+            if end != -1:
+                text = text[:end]
+
+        return text.strip()
+
     def extract_text(
         self,
         reader: PdfReader,
-        sections: list[SectionDTO],
+        sections: list[SectionDTO]
     ) -> list[TextDTO]:
-        """
-        Extracts the exact text belonging to each section.
-        """
-            
+
         texts: list[TextDTO] = []
+        total_pages = len(reader.pages)
+
+        sections = sorted(sections, key=lambda s: s.start_page)
 
         for section in sections:
 
-            content_parts: list[str] = []
+            start_page = max(1, min(section.start_page, total_pages))
+            end_page = max(start_page, min(section.end_page, total_pages))
 
-            for page_number in range(
-                section.start_page,
-                section.end_page + 1,
-            ):
+            page_texts: list[str] = []
 
-                page = reader.pages[page_number - 1]
+            # Extract raw text from the section pages
+            for page_num in range(start_page, end_page + 1):
+                page = reader.pages[page_num - 1]
 
-                page_text = page.extract_text()
+                text = page.extract_text()
 
-                if page_text:
-                    content_parts.append(page_text)
+                if text:
+                    page_texts.append(text)
+
+            raw_text = "\n".join(page_texts)
+
+            # Use the next section title already stored in the DTO
+            clean_text = self.extract_between_titles(
+                text=raw_text,
+                current_title=section.title,
+                next_title=section.next_section_title,
+            )
 
             texts.append(
                 TextDTO(
                     bookmark_title=section.bookmark_title,
                     section_title=section.title,
-                    content="\n".join(content_parts),
+                    content=clean_text,
                 )
             )
 
-        logger.info("Extracted text for %s sections.", len(texts))
-
         return texts
-        
+    
     def extract_images(
         self,
         pdf_bytes: bytes,
