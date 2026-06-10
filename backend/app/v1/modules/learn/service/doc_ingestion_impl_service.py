@@ -102,44 +102,137 @@ class DocIngestionImplService(DocIngestionService):
         reader: PdfReader,
         bookmarks: list[BookmarkDTO],
     ) -> list[SectionDTO]:
+        """
+        Extract all inner sections from the PDF outline and enrich them
+        with:
+        - end_page
+        - next_section_title
+        - next_bookmark_title
+
+        Pages provide coarse boundaries.
+        Titles provide precise boundaries.
+        """
 
         sections: list[SectionDTO] = []
 
         outline = reader.outline
 
-        current_bookmark = None
+        current_bookmark: str | None = None
 
+        # --------------------------------------------------
+        # PASS 1: Extract raw sections
+        # --------------------------------------------------
         for item in outline:
 
+            # Top-level bookmark
             if isinstance(item, dict):
                 current_bookmark = item.get("/Title")
 
+            # Nested sections under the bookmark
             elif isinstance(item, list):
 
-                for i, section in enumerate(item):
+                for section in item:
 
                     title = section.get("/Title")
-                    start_page = reader.get_page_number(section["/Page"]) + 1
+
+                    if not title:
+                        continue
+
+                    start_page = (
+                        reader.get_page_number(section["/Page"]) + 1
+                    )
 
                     sections.append(
                         SectionDTO(
                             bookmark_title=current_bookmark,
                             title=title,
                             start_page=start_page,
-                            end_page=0,  # temp
+                            end_page=0,  # temporary
+                            next_section_title=None,
+                            next_bookmark_title=None,
                         )
                     )
 
-        # sort (VERY IMPORTANT)
-        sections.sort(key=lambda s: s.start_page)
+        # --------------------------------------------------
+        # PASS 2: Group sections by bookmark
+        # --------------------------------------------------
+        grouped_sections: dict[str, list[SectionDTO]] = {}
 
-        # compute end_page using NEXT section
-        for i in range(len(sections)):
+        for section in sections:
+            grouped_sections.setdefault(
+                section.bookmark_title,
+                [],
+            ).append(section)
 
-            if i < len(sections) - 1:
-                sections[i].end_page = sections[i + 1].start_page - 1
-            else:
-                sections[i].end_page = max(b.end_page for b in bookmarks if b.title == sections[i].bookmark_title)
+        bookmark_lookup = {
+            bookmark.title: bookmark
+            for bookmark in bookmarks
+        }
+
+        bookmark_titles = [
+            bookmark.title
+            for bookmark in bookmarks
+        ]
+
+        # --------------------------------------------------
+        # PASS 3: Compute boundaries
+        # --------------------------------------------------
+        for bookmark_title, bookmark_sections in grouped_sections.items():
+
+            # Preserve PDF order
+            bookmark_sections.sort(
+                key=lambda section: section.start_page
+            )
+
+            for index, section in enumerate(bookmark_sections):
+
+                # ------------------------------------------
+                # Normal case:
+                # next section in same bookmark
+                # ------------------------------------------
+                if index < len(bookmark_sections) - 1:
+
+                    next_section = bookmark_sections[index + 1]
+
+                    section.next_section_title = (
+                        next_section.title
+                    )
+
+                    # DO NOT subtract 1.
+                    # Multiple sections can share a page.
+                    section.end_page = (
+                        next_section.start_page
+                    )
+
+                # ------------------------------------------
+                # Last section of bookmark
+                # ------------------------------------------
+                else:
+
+                    bookmark = bookmark_lookup[
+                        bookmark_title
+                    ]
+
+                    section.end_page = (
+                        bookmark.end_page
+                    )
+
+                    current_index = bookmark_titles.index(
+                        bookmark_title
+                    )
+
+                    if current_index < len(bookmark_titles) - 1:
+
+                        section.next_bookmark_title = (
+                            bookmark_titles[
+                                current_index + 1
+                            ]
+                        )
+
+        logger.info(
+            "Extracted %s sections.",
+            len(sections),
+        )
 
         return sections
 
@@ -156,19 +249,38 @@ class DocIngestionImplService(DocIngestionService):
         current_title: str,
         next_title: str | None,
     ) -> str:
+        """
+        Extract text starting from the current section title
+        and ending just before the next section title.
+        """
 
-        start = text.find(current_title)
+        # -----------------------------
+        # Find current section header
+        # -----------------------------
+        start_pattern = (
+            rf"(?im)^\s*{re.escape(current_title)}\s*$"
+        )
 
-        if start == -1:
+        start_match = re.search(start_pattern, text)
+
+        if not start_match:
             return ""
 
-        text = text[start:]
+        text = text[start_match.start():]
 
+        # -----------------------------
+        # Find next section header
+        # -----------------------------
         if next_title:
-            end = text.find(next_title)
 
-            if end != -1:
-                text = text[:end]
+            end_pattern = (
+                rf"(?im)^\s*{re.escape(next_title)}\s*$"
+            )
+
+            end_match = re.search(end_pattern, text)
+
+            if end_match:
+                text = text[:end_match.start()]
 
         return text.strip()
 
