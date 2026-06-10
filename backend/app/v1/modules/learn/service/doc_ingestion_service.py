@@ -1,7 +1,16 @@
 from abc import ABC, abstractmethod
 from pypdf import PdfReader
+from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
+from app.v1.modules.learn.dto.section_dto import SectionDTO
+from app.v1.modules.learn.dto.text_dto import TextDTO
+from app.v1.modules.learn.dto.image_dto import ImageDTO
+from fastapi import UploadFile
 
 class DocIngestionService(ABC):
+    @abstractmethod
+    def extract_file(self, file:UploadFile)-> PdfReader:
+        raise NotImplementedError
+
     @abstractmethod
     def extract_bookmarks(self, reader: PdfReader) -> list[BookmarkDTO]:
         """
@@ -27,7 +36,7 @@ class DocIngestionService(ABC):
         self,
         reader: PdfReader,
         sections: list[SectionDTO],
-    ) -> list[SectionTextDTO]:
+    ) -> list[TextDTO]:
         """
         Extracts the exact text belonging to each section.
         """
@@ -38,7 +47,7 @@ class DocIngestionService(ABC):
         self,
         pdf_bytes: bytes,
         sections: list[SectionDTO],
-    ) -> list[SectionImageDTO]:
+    ) -> list[ImageDTO]:
         """
         Extracts figures, equations, and circuit images
         associated with each section.
