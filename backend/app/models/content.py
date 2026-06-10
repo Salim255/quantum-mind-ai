@@ -5,15 +5,15 @@ from uuid import UUID, uuid4
 class Content(SQLModel, table=True):
     """
     Raw extracted PDF text.
-    Always tied to a BookmarkSection.
+    Always tied to a section.
     """
 
-    __tablename__ = "bookmark_section_contents"
+    __tablename__ = "contents"
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
 
     section_id: UUID = Field(
-        foreign_key="bookmark_sections.id",
+        foreign_key="sections.id",
         unique=True,
         index=True
     )
