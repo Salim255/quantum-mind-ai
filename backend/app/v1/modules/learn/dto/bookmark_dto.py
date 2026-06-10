@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 
-
 class BookmarkDTO(BaseModel):
     """
     Top-level bookmark extracted from PDF.
