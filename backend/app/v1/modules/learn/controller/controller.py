@@ -1,23 +1,26 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, Form
 from typing import Annotated
 from app.v1.modules.learn.dependencies import get_learn_service, get_topic_ingestion_service
 from app.v1.modules.learn.service.learn_service import LearnService
 from app.v1.modules.learn.service.topic_ingestion_service import TopicIngestionService
-
+from app.v1.modules.learn.dto.create_topic_dto import CreateTopicsFromPdfDTO
 
 router = APIRouter(
     prefix="/learns",
     tags=["Learns"]
 )
 
-@router.post("/upload-pdf")
+@router.post("/create-topics")
 async def upload_pdf_topic(
     file: Annotated[UploadFile, File(...)],
-    topic_ingestion_service: Annotated[TopicIngestionService, get_topic_ingestion_service]
+    topics: Annotated[str, Form(...)],
+    topic_ingestion_service: Annotated[TopicIngestionService, Depends(get_topic_ingestion_service)]
 ):  
+    dto = CreateTopicsFromPdfDTO.model_validate_json(topics)
+    
     return await topic_ingestion_service.create_topic_from_pdf(
         file=file,
-        category=category,
+        topics=dto,
     )
 
 @router.get(

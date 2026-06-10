@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 from app.v1.modules.rag.dto.ingestion_dto import IngestionResponseDto
+from fastapi import UploadFile
 
 class LoaderService(ABC):
     @abstractmethod
-    async def upload_and_ingest_pdf(self, path: str, source: str) -> IngestionResponseDto:
+    async def upload_and_ingest_pdf(self, file: UploadFile) -> IngestionResponseDto:
         """
         Abstract method to ingest a PDF into the system.
 

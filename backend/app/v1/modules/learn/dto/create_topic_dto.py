@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 class TopicDefinitionDTO(BaseModel):
     """
@@ -26,6 +26,15 @@ class TopicDefinitionDTO(BaseModel):
         ge=1,
         description="Last page belonging to this topic.",
     )
+
+    @model_validator(mode="after")
+    def validate_page_range(self):
+        if self.start_page > self.end_page:
+            raise ValueError(
+                "start_page must be less than or equal to end_page"
+            )
+
+        return self
 
 class CreateTopicsFromPdfDTO(BaseModel):
     """
