@@ -9,8 +9,10 @@ class SectionDTO(BaseModel):
 
     title: str
 
-    order: int
-
     start_page: int
 
-    end_page: int
+    next_section_title: str | None = None
+
+    next_section_page: int | None = None
+
+    next_bookmark_title: str | None = None

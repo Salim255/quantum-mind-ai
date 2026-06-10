@@ -22,13 +22,14 @@ class DocIngestionImplService(DocIngestionService):
             # 4 extract_sections
             extracted_sections = self.extract_sections(reader=reader, bookmarks=extracted_bookmarks)
 
-            # extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
+            #extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
             #extracted_images = self.extract_images()
             # 7 persist_to_database
             # return extracted_bookmarks
             return extracted_sections
             # return extracted_texts
+        
         except Exception:
             logger.exception("Error in pdf ingestion")
             raise
@@ -99,76 +100,71 @@ class DocIngestionImplService(DocIngestionService):
         reader: PdfReader,
         bookmarks: list[BookmarkDTO],
     ) -> list[SectionDTO]:
-        """
-        Converts bookmark hierarchy into explicit sections
-        with page boundaries.
-        """
+
         sections: list[SectionDTO] = []
 
-        outline = reader.outline
+        # STEP 1: flatten all outline items into (title, page)
+        flat_items = []
 
-        current_bookmark = None
+        def walk(items):
+            for item in items:
+                if isinstance(item, dict):
+                    title = item.get("/Title")
+                    page = reader.get_page_number(item["/Page"]) + 1
 
-        for item in outline:
+                    if title and page:
+                        flat_items.append({
+                            "title": title,
+                            "page": page
+                        })
 
-            if isinstance(item, dict):
+                elif isinstance(item, list):
+                    walk(item)
 
-                current_bookmark = item.get("/Title")
+        walk(reader.outline)
 
-            elif isinstance(item, list):
+        # STEP 2: assign sections to bookmarks by page range
+        for bookmark in bookmarks:
 
-                order = 1
+            # get sections inside this bookmark range
+            bookmark_sections = [
+                x for x in flat_items
+                if bookmark.start_page <= x["page"] <= bookmark.end_page
+                and x["title"] != bookmark.title
+            ]
 
-                for section in item:
+            # STEP 3: build SectionDTOs
+            for i, sec in enumerate(bookmark_sections):
 
-                    title = section.get("/Title")
+                next_section_title = None
+                next_section_page = None
+                next_bookmark_title = None
 
-                    start_page = (
-                        reader.get_page_number(section["/Page"]) + 1
-                    )
-
-                    sections.append(
-                        SectionDTO(
-                            bookmark_title=current_bookmark,
-                            title=title,
-                            order=order,
-                            start_page=start_page,
-                            end_page=0,
-                        )
-                    )
-
-                    order += 1
-
-        # Compute section end pages
-        grouped: dict[str, list[SectionDTO]] = {}
-
-        for section in sections:
-            grouped.setdefault(
-                section.bookmark_title,
-                [],
-            ).append(section)
-
-        bookmark_lookup = {
-            b.title: b
-            for b in bookmarks
-        }
-
-        for bookmark_title, group in grouped.items():
-
-            for i in range(len(group)):
-
-                if i < len(group) - 1:
-                    group[i].end_page = (
-                        group[i + 1].start_page - 1
-                    )
+                if i < len(bookmark_sections) - 1:
+                    next_section_title = bookmark_sections[i + 1]["title"]
+                    next_section_page = bookmark_sections[i + 1]["page"]
                 else:
-                    group[i].end_page = (
-                        bookmark_lookup[bookmark_title].end_page
-                    )
+                    next_bookmark_title = self._get_next_bookmark_title(bookmark, bookmarks)
 
-        logger.info("Extracted %s sections.", len(sections))
+                sections.append(
+                    SectionDTO(
+                        bookmark_title=bookmark.title,
+                        title=sec["title"],
+                        start_page=sec["page"],
+                        next_section_title=next_section_title,
+                        next_section_page=next_section_page,
+                        next_bookmark_title=next_bookmark_title,
+                    )
+                )
 
         return sections
+
+
+    def _get_next_bookmark_title(self, current, bookmarks):
+        for i, b in enumerate(bookmarks):
+            if b.title == current.title and i < len(bookmarks) - 1:
+                return bookmarks[i + 1].title
+        return None
 
     def extract_text(
         self,
@@ -178,8 +174,37 @@ class DocIngestionImplService(DocIngestionService):
         """
         Extracts the exact text belonging to each section.
         """
-        return ""
-    
+            
+        texts: list[TextDTO] = []
+
+        for section in sections:
+
+            content_parts: list[str] = []
+
+            for page_number in range(
+                section.start_page,
+                section.end_page + 1,
+            ):
+
+                page = reader.pages[page_number - 1]
+
+                page_text = page.extract_text()
+
+                if page_text:
+                    content_parts.append(page_text)
+
+            texts.append(
+                TextDTO(
+                    bookmark_title=section.bookmark_title,
+                    section_title=section.title,
+                    content="\n".join(content_parts),
+                )
+            )
+
+        logger.info("Extracted text for %s sections.", len(texts))
+
+        return texts
+        
     def extract_images(
         self,
         pdf_bytes: bytes,
