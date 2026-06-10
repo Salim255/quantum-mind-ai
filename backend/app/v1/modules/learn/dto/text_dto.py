@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class SectionTextDTO(BaseModel):
+class TextDTO(BaseModel):
     """
     Extracted text belonging to a section.
     """
