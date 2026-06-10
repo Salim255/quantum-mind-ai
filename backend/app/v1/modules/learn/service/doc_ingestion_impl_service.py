@@ -9,14 +9,44 @@ import logging
 logger = logging.getLogger(__name__)
 
 class DocIngestionImplService(DocIngestionService):
-    def extract_file(self, file:UploadFile) -> PdfReader:
+    def pdf_ingestion_pipeline(self, file:UploadFile):
         try:
-            reader:PdfReader = PdfReader(file.file)
-            return reader
+            # 1 extract the file
+            reader:PdfReader = self.extract_file(file=file)
+
+            # 2 Save doc to database
+
+            # 3 extract_bookmarks
+            extracted_bookmarks: list[BookmarkDTO] =   self.extract_bookmarks(reader=reader)
+
+            # 4 extract_sections
+            extracted_sections =  self.extract_sections(reader=reader, bookmarks=extracted_bookmarks)
+
+            # 5 extract_text
+            extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
+            # 6 extract_images
+            #extracted_images = self.extract_images()
+            # 7 persist_to_database
         except Exception:
-            logger.exception("Error in reading file")
+            logger.exception("Error in pdf ingestion")
             raise
+
+    def extract_file(self, file:UploadFile) -> PdfReader:
+        """
+        Loads the uploaded PDF into memory.
+        """
+
+        file.file.seek(0)
+
+        reader = PdfReader(file.file)
+
+        logger.info("PDF loaded successfully.")
+        logger.info("Pages: %s", len(reader.pages))
+
+        return reader
         
+
+
     def extract_bookmarks(self, reader: PdfReader) -> list[BookmarkDTO]:
         """
         Extracts the top-level bookmarks (chapters)
