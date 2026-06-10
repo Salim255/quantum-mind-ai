@@ -20,11 +20,15 @@ class DocIngestionImplService(DocIngestionService):
             extracted_bookmarks: list[BookmarkDTO] =   self.extract_bookmarks(reader=reader)
 
             # 4 extract_sections
-            ##extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
+            extracted_sections = self.extract_sections(reader=reader, bookmarks=extracted_bookmarks)
+
+            # extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
             #extracted_images = self.extract_images()
             # 7 persist_to_database
-            return extracted_bookmarks
+            # return extracted_bookmarks
+            return extracted_sections
+            # return extracted_texts
         except Exception:
             logger.exception("Error in pdf ingestion")
             raise
@@ -99,7 +103,72 @@ class DocIngestionImplService(DocIngestionService):
         Converts bookmark hierarchy into explicit sections
         with page boundaries.
         """
-        return ""
+        sections: list[SectionDTO] = []
+
+        outline = reader.outline
+
+        current_bookmark = None
+
+        for item in outline:
+
+            if isinstance(item, dict):
+
+                current_bookmark = item.get("/Title")
+
+            elif isinstance(item, list):
+
+                order = 1
+
+                for section in item:
+
+                    title = section.get("/Title")
+
+                    start_page = (
+                        reader.get_page_number(section["/Page"]) + 1
+                    )
+
+                    sections.append(
+                        SectionDTO(
+                            bookmark_title=current_bookmark,
+                            title=title,
+                            order=order,
+                            start_page=start_page,
+                            end_page=0,
+                        )
+                    )
+
+                    order += 1
+
+        # Compute section end pages
+        grouped: dict[str, list[SectionDTO]] = {}
+
+        for section in sections:
+            grouped.setdefault(
+                section.bookmark_title,
+                [],
+            ).append(section)
+
+        bookmark_lookup = {
+            b.title: b
+            for b in bookmarks
+        }
+
+        for bookmark_title, group in grouped.items():
+
+            for i in range(len(group)):
+
+                if i < len(group) - 1:
+                    group[i].end_page = (
+                        group[i + 1].start_page - 1
+                    )
+                else:
+                    group[i].end_page = (
+                        bookmark_lookup[bookmark_title].end_page
+                    )
+
+        logger.info("Extracted %s sections.", len(sections))
+
+        return sections
 
     def extract_text(
         self,
