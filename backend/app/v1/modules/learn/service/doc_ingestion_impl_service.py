@@ -20,13 +20,11 @@ class DocIngestionImplService(DocIngestionService):
             extracted_bookmarks: list[BookmarkDTO] =   self.extract_bookmarks(reader=reader)
 
             # 4 extract_sections
-            extracted_sections =  self.extract_sections(reader=reader, bookmarks=extracted_bookmarks)
-
-            # 5 extract_text
-            extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
+            ##extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
             #extracted_images = self.extract_images()
             # 7 persist_to_database
+            return extracted_bookmarks
         except Exception:
             logger.exception("Error in pdf ingestion")
             raise
@@ -52,7 +50,45 @@ class DocIngestionImplService(DocIngestionService):
         Extracts the top-level bookmarks (chapters)
         and their nested sections from the PDF outline.
         """
-        return ""
+        bookmarks: list[BookmarkDTO] = []
+
+        outline = reader.outline
+
+        order = 1
+
+        for item in outline:
+
+            if isinstance(item, dict):
+
+                title = item.get("/Title")
+
+                if not title:
+                    continue
+
+                start_page = reader.get_page_number(item["/Page"]) + 1
+
+                bookmarks.append(
+                    BookmarkDTO(
+                        title=title,
+                        order=order,
+                        start_page=start_page,
+                        end_page=0,
+                    )
+                )
+
+                order += 1
+
+        # Determine end pages
+        for i in range(len(bookmarks)):
+
+            if i < len(bookmarks) - 1:
+                bookmarks[i].end_page = bookmarks[i + 1].start_page - 1
+            else:
+                bookmarks[i].end_page = len(reader.pages)
+
+        logger.info("Extracted %s bookmarks.", len(bookmarks))
+        print("Bookmarks====\n", bookmarks)
+        return bookmarks
     
     def extract_sections(
         self,

@@ -8,6 +8,10 @@ from fastapi import UploadFile
 
 class DocIngestionService(ABC):
     @abstractmethod
+    def pdf_ingestion_pipeline(self, file:UploadFile ):
+        raise NotImplementedError
+        
+    @abstractmethod
     def extract_file(self, file:UploadFile)-> PdfReader:
         raise NotImplementedError
 

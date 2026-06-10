@@ -20,7 +20,7 @@ async def upload_pdf_doc(
     file: Annotated[UploadFile, File(...)],
     doc_ingestion_service: Annotated[DocIngestionService, Depends(get_doc_ingestion_service)]
 ):
-    return doc_ingestion_service.extract_file(file=file)
+    return doc_ingestion_service.pdf_ingestion_pipeline(file=file)
 
 @router.post("/create-topics")
 async def upload_pdf_topic(
