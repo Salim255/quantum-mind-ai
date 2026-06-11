@@ -60,6 +60,78 @@ class DocIngestionImplServiceV2:
 
     return pypdf_reader, pymupdf_doc
    
+
+   def extract_sections(
+        self,
+        reader: PdfReader,
+        bookmarks: list[BookmarkDTO],
+    ) -> list[SectionDTO]:
+
+        sections: list[SectionDTO] = []
+
+        outline = reader.outline
+
+        current_bookmark = None
+
+        for item in outline:
+
+            if isinstance(item, dict):
+                current_bookmark = item.get("/Title")
+
+            elif isinstance(item, list):
+
+                for section in item:
+
+                    title = section.get("/Title")
+
+                    start_page = (
+                        reader.get_page_number(section["/Page"]) + 1
+                    )
+
+                    sections.append(
+                        SectionDTO(
+                            bookmark_title=current_bookmark,
+                            title=title,
+                            start_page=start_page,
+                            end_page=0,  # temporary
+                        )
+                    )
+
+        sections.sort(key=lambda s: s.start_page)
+
+        for i in range(len(sections)):
+
+            current = sections[i]
+
+            if i < len(sections) - 1:
+
+                next_section = sections[i + 1]
+
+                current.end_page = max(
+                    current.start_page,
+                    next_section.start_page,
+                )
+
+                current.next_section_title = next_section.title
+
+            else:
+
+                bookmark = next(
+                    (
+                        b
+                        for b in bookmarks
+                        if b.title == current.bookmark_title
+                    ),
+                    None,
+                )
+
+                if bookmark:
+                    current.end_page = bookmark.end_page
+                else:
+                    current.end_page = current.start_page
+
+        return sections
+   
    def merge_section_content(
         self,
         texts: list[ContentBlockDTO],
