@@ -202,6 +202,75 @@ class DocIngestionImplServiceV2:
 
         return blocks
    
+   def render_section_pages(
+        self,
+        pdf: fitz.Document,
+        sections: list[SectionDTO],
+    ) -> list[ImageDTO]:
+
+        images: list[ImageDTO] = []
+
+        total_pages = len(pdf)
+
+        os.makedirs(
+            "extracted_pages",
+            exist_ok=True,
+        )
+
+        for section in sections:
+
+            paths: list[str] = []
+
+            start_page = max(
+                1,
+                min(section.start_page, total_pages),
+            )
+
+            end_page = max(
+                start_page,
+                min(section.end_page, total_pages),
+            )
+
+            for page_num in range(
+                start_page,
+                end_page + 1,
+            ):
+
+                page = pdf.load_page(page_num - 1)
+
+                pix = page.get_pixmap()
+
+                filename = (
+                    f"{section.bookmark_title}_"
+                    f"{section.title}_"
+                    f"{page_num}.png"
+                )
+
+                filename = re.sub(
+                    r"[^\w\-\.]",
+                    "_",
+                    filename,
+                )
+
+                path = os.path.join(
+                    "extracted_pages",
+                    filename,
+                )
+
+                pix.save(path)
+
+                paths.append(path)
+
+            images.append(
+                ImageDTO(
+                    bookmark_title=section.bookmark_title,
+                    section_title=section.title,
+                    image_paths=paths,
+                )
+            )
+
+        return images
+   
    def merge_section_content(
         self,
         texts: list[ContentBlockDTO],
