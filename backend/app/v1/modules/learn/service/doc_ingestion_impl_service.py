@@ -29,11 +29,14 @@ class DocIngestionImplService(DocIngestionService):
             extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
             extracted_images = self.extract_images(file=file, sections=extracted_sections)
+
+            merged_contents = self.merge_content_blocks(texts=extracted_texts, images=extracted_images)
             # 7 persist_to_database
             # return extracted_bookmarks
             #return extracted_sections
             # return extracted_texts
-            return  extracted_images
+            # return  extracted_images
+            return  merged_contents
         
         except Exception:
             logger.exception("Error in pdf ingestion")
@@ -411,13 +414,15 @@ class DocIngestionImplService(DocIngestionService):
     def merge_content_blocks(
         self,
         texts: list[ContentBlockDTO],
-        images: list[dict]
+        images: list[ImageDTO]
     ) -> list[ContentBlockDTO]:
 
+            
         image_map = {}
 
         for img in images:
-            key = (img["bookmark_title"], img["section_title"])
+
+            key = (img.bookmark_title, img.section_title)
 
             image_map.setdefault(key, []).append(img)
 
@@ -425,9 +430,19 @@ class DocIngestionImplService(DocIngestionService):
 
         for text_block in texts:
 
-            key = (text_block.bookmark_title, text_block.section_title)
+            base_order = text_block.order * 10  # expand space
 
-            merged.append(text_block)
+            merged.append(
+                ContentBlockDTO(
+                    bookmark_title=text_block.bookmark_title,
+                    section_title=text_block.section_title,
+                    type="text",
+                    order=base_order,
+                    content=text_block.content,
+                )
+            )
+
+            key = (text_block.bookmark_title, text_block.section_title)
 
             if key in image_map:
 
@@ -438,13 +453,12 @@ class DocIngestionImplService(DocIngestionService):
                             bookmark_title=text_block.bookmark_title,
                             section_title=text_block.section_title,
                             type="figure",
-                            order=text_block.order + 0.1 * (i + 1),
-                            image_path=img["image_path"],
-                            content=None
+                            order=base_order + i + 1,
+                            image_path=img.image_path,
+                            content=None,
                         )
                     )
 
-        # final stable ordering
         merged.sort(key=lambda x: x.order)
 
         return merged
