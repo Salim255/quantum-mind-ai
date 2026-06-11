@@ -26,11 +26,12 @@ class DocIngestionImplService(DocIngestionService):
 
             extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
-            #extracted_images = self.extract_images()
+            extracted_images = self.extract_images(reader=reader, sections=extracted_sections)
             # 7 persist_to_database
             # return extracted_bookmarks
             #return extracted_sections
-            return extracted_texts
+            # return extracted_texts
+            return  extracted_images
         
         except Exception:
             logger.exception("Error in pdf ingestion")
@@ -332,13 +333,42 @@ class DocIngestionImplService(DocIngestionService):
     
     def extract_images(
         self,
-        pdf_bytes: bytes,
+        reader: PdfReader,
         sections: list[SectionDTO],
     ) -> list[ImageDTO]:
         """
         Extracts figures, equations, and circuit images
         associated with each section.
         """
+        images: list[ImageDTO] = []
+
+        for section in sections:
+
+            image_index = 1
+
+            for page_num in range(
+                section.start_page,
+                section.end_page + 1,
+            ):
+
+                page = reader.pages[page_num - 1]
+
+                for image in page.images:
+
+                    images.append(
+                        ImageDTO(
+                            bookmark_title=section.bookmark_title,
+                            section_title=section.title,
+                            page_number=page_num,
+                            image_index=image_index,
+                            image_name=image.name,
+                            image_bytes=image.data,
+                        )
+                    )
+
+                    image_index += 1
+
+        return images
     
     def persist_to_database(self):
         return ""
