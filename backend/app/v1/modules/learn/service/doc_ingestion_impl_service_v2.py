@@ -4,6 +4,8 @@ import logging
 from app.v1.modules.learn.service.doc_ingestion_service_v2 import DocIngestionServiceV2
 from fastapi import UploadFile
 import fitz
+from bs4 import BeautifulSoup
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -48,14 +50,14 @@ class DocIngestionImplServiceV2(DocIngestionServiceV2):
 
         pdf_obj = self.load_pdf(raw)
         html = self.convert_pdf_to_html(pdf_obj)
-       # sections = self._chunk_html(html)
+        sections = self.chunk_html(html)
 
        # return IngestionResult(
        #     document_id=raw.document_id,
        #     sections=sections
         #)
         print(html)
-        return  html
+        return sections
 
     # -------------------------
     # PRIVATE PIPELINE STAGES
@@ -102,6 +104,55 @@ class DocIngestionImplServiceV2(DocIngestionServiceV2):
 
     def chunk_html(self, html: str) -> List[DocumentSection]:
         """
-        TODO: Implement HTML chunking (headings, figures, math blocks)
+        Chunk HTML into semantic sections based on headings.
+        Handles cases where PyMuPDF returns HTML fragments without <body>.
         """
-        return "hello"
+
+        soup = BeautifulSoup(html, "html.parser")
+
+        # If no <body>, treat the entire soup as the root
+        root = soup.body if soup.body else soup
+
+        sections = []
+        current_section_title = None
+        current_section_html = []
+        order = 0
+
+        heading_tags = ["h1", "h2", "h3"]
+
+        for element in root.descendants:
+            if not hasattr(element, "name"):
+                continue
+
+            if element.name in heading_tags:
+                if current_section_html:
+                    section_id = str(uuid.uuid4())
+                    sections.append(
+                        DocumentSection(
+                            section_id=section_id,
+                            title=current_section_title,
+                            html="".join(current_section_html),
+                            order=order,
+                        )
+                    )
+                    order += 1
+
+                current_section_title = element.get_text(strip=True)
+                current_section_html = [str(element)]
+                continue
+
+            current_section_html.append(str(element))
+
+        if current_section_html:
+            section_id = str(uuid.uuid4())
+            sections.append(
+                DocumentSection(
+                    section_id=section_id,
+                    title=current_section_title,
+                    html="".join(current_section_html),
+                    order=order,
+                )
+            )
+
+        return sections
+
