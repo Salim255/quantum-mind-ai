@@ -1,319 +1,185 @@
-from pypdf import PdfReader
-from app.v1.modules.learn.service.doc_ingestion_service import DocIngestionService
-from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
-from app.v1.modules.learn.dto.section_dto import SectionDTO
-from app.v1.modules.learn.dto.text_dto import ContentBlockDTO
-from app.v1.modules.learn.dto.image_dto import ImageDTO
-from fastapi import UploadFile
+from typing import List, Literal
+from pydantic import BaseModel
+import fitz  # PyMuPDF
 import logging
-import re
-import fitz
-import os
-
+from app.v1.modules.learn.service.doc_ingestion_service_v2 import DocIngestionServiceV2
 logger = logging.getLogger(__name__)
 
-class DocIngestionImplServiceV2:
-   
-   def pdf_ingestion_pipeline(
-        self,
-        file: UploadFile,
-    ):
 
-        reader, pdf = self.create_readers(file)
+# =========================
+# DTOs (your final output)
+# =========================
 
-        bookmarks = self.extract_bookmarks(reader)
+class ContentBlockDTO(BaseModel):
+    bookmark_title: str
+    section_title: str
+    type: Literal["text", "visual"]
+    order: int
+    content: str | None = None
+    image_path: list[str] | None = None
+    caption: str | None = None
 
-        sections = self.extract_sections(
-            reader=reader,
-            bookmarks=bookmarks,
-        )
 
-        texts = self.extract_text_blocks(
-            reader=reader,
-            sections=sections,
-        )
+class SectionDTO(BaseModel):
+    bookmark_title: str
+    title: str
+    start_page: int
+    end_page: int
 
-        images = self.render_section_pages(
-            pdf=pdf,
-            sections=sections,
-        )
 
-        contents = self.merge_section_content(
-            texts=texts,
-            images=images,
-        )
+# =========================
+# SERVICE
+# =========================
 
-        return contents
-   
-   def create_readers(
-    self,
-    file: UploadFile,
-):
-    pdf_bytes = file.file.read()
+class DocIngestionImplServiceV2(DocIngestionServiceV2):
 
-    pypdf_reader = PdfReader(io.BytesIO(pdf_bytes))
+    # -------------------------
+    # MAIN PIPELINE
+    # -------------------------
+    def pdf_ingestion_pipeline(self, file) -> list[ContentBlockDTO]:
 
-    pymupdf_doc = fitz.open(
-        stream=pdf_bytes,
-        filetype="pdf",
-    )
+        pdf_bytes = file.file.read()
+        pdf = fitz.open(stream=pdf_bytes, filetype="pdf")
 
-    return pypdf_reader, pymupdf_doc
-   
+        sections = self.extract_sections(pdf)
+        #text_blocks = self.extract_text_blocks(pdf, sections)
+        #visual_blocks = self.extract_visual_blocks(pdf, sections)
 
-   def extract_sections(
-        self,
-        reader: PdfReader,
-        bookmarks: list[BookmarkDTO],
-    ) -> list[SectionDTO]:
-
-        sections: list[SectionDTO] = []
-
-        outline = reader.outline
-
-        current_bookmark = None
-
-        for item in outline:
-
-            if isinstance(item, dict):
-                current_bookmark = item.get("/Title")
-
-            elif isinstance(item, list):
-
-                for section in item:
-
-                    title = section.get("/Title")
-
-                    start_page = (
-                        reader.get_page_number(section["/Page"]) + 1
-                    )
-
-                    sections.append(
-                        SectionDTO(
-                            bookmark_title=current_bookmark,
-                            title=title,
-                            start_page=start_page,
-                            end_page=0,  # temporary
-                        )
-                    )
-
-        sections.sort(key=lambda s: s.start_page)
-
-        for i in range(len(sections)):
-
-            current = sections[i]
-
-            if i < len(sections) - 1:
-
-                next_section = sections[i + 1]
-
-                current.end_page = max(
-                    current.start_page,
-                    next_section.start_page,
-                )
-
-                current.next_section_title = next_section.title
-
-            else:
-
-                bookmark = next(
-                    (
-                        b
-                        for b in bookmarks
-                        if b.title == current.bookmark_title
-                    ),
-                    None,
-                )
-
-                if bookmark:
-                    current.end_page = bookmark.end_page
-                else:
-                    current.end_page = current.start_page
+        # return self.merge_content_blocks(text_blocks, visual_blocks)
 
         return sections
-   
-   def extract_text_blocks(
+    # =========================================================
+    # 1. SECTION EXTRACTION (simple + safe fallback)
+    # =========================================================
+    def extract_sections(self, pdf: fitz.Document) -> List[SectionDTO]:
+
+        outline = pdf.get_toc(simple=True)
+        sections: List[SectionDTO] = []
+
+        for item in outline:
+            level, title, page = item
+
+            if level == 1:  # main sections only
+                sections.append(
+                    SectionDTO(
+                        bookmark_title="root",
+                        title=title,
+                        start_page=page,
+                        end_page=0,  # fixed later
+                    )
+                )
+
+        # compute end pages
+        for i in range(len(sections)):
+            if i < len(sections) - 1:
+                sections[i].end_page = sections[i + 1].start_page - 1
+            else:
+                sections[i].end_page = len(pdf)
+
+        return sections
+
+
+    # =========================================================
+    # 2. TEXT BLOCKS (ORDER PRESERVED)
+    # =========================================================
+    def extract_text_blocks(
         self,
-        reader: PdfReader,
-        sections: list[SectionDTO],
-    ) -> list[ContentBlockDTO]:
+        pdf: fitz.Document,
+        sections: List[SectionDTO],
+    ) -> List[ContentBlockDTO]:
 
-        blocks: list[ContentBlockDTO] = []
-
-        total_pages = len(reader.pages)
-
+        blocks: List[ContentBlockDTO] = []
         order = 0
 
         for section in sections:
 
-            start_page = max(
-                1,
-                min(section.start_page, total_pages),
-            )
+            for page_num in range(section.start_page, section.end_page + 1):
 
-            end_page = max(
-                start_page,
-                min(section.end_page, total_pages),
-            )
+                page = pdf.load_page(page_num - 1)
 
-            page_texts: list[str] = []
+                data = page.get_text("blocks")  # IMPORTANT
 
-            for page_num in range(
-                start_page,
-                end_page + 1,
-            ):
+                # sort by visual order (top → bottom)
+                data.sort(key=lambda b: (b[1], b[0]))
 
-                page = reader.pages[page_num - 1]
+                for b in data:
 
-                text = page.extract_text()
+                    x0, y0, x1, y1, text, block_no, block_type = b
 
-                if text:
-                    page_texts.append(text)
+                    if not text.strip():
+                        continue
 
-            raw_text = "\n".join(page_texts)
+                    # skip headers that repeat section title
+                    if section.title.lower() in text.lower().strip():
+                        continue
 
-            clean_text = self.extract_between_titles(
-                text=raw_text,
-                current_title=section.title,
-                next_title=section.next_section_title,
-            )
+                    blocks.append(
+                        ContentBlockDTO(
+                            bookmark_title=section.bookmark_title,
+                            section_title=section.title,
+                            type="text",
+                            order=order,
+                            content=text.strip(),
+                        )
+                    )
 
-            clean_text = clean_text.replace(
-                section.title,
-                "",
-                1,
-            ).strip()
+                    order += 1
 
-            clean_text = self.clean_pdf_noise(
-                text=clean_text,
-            )
+        return blocks
+
+
+    # =========================================================
+    # 3. VISUAL BLOCKS (PAGE RENDERING)
+    # =========================================================
+    def extract_visual_blocks(
+        self,
+        pdf: fitz.Document,
+        sections: List[SectionDTO],
+    ) -> List[ContentBlockDTO]:
+
+        blocks: List[ContentBlockDTO] = []
+        order = 10_000  # ensure visuals come AFTER text in default ordering
+
+        for section in sections:
+
+            image_paths = []
+
+            for page_num in range(section.start_page, section.end_page + 1):
+
+                page = pdf.load_page(page_num - 1)
+
+                pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))  # HD render
+
+                path = f"page_{section.title}_{page_num}.png"
+                pix.save(path)
+
+                image_paths.append(path)
 
             blocks.append(
                 ContentBlockDTO(
                     bookmark_title=section.bookmark_title,
                     section_title=section.title,
-                    type="text",
+                    type="visual",
                     order=order,
-                    content=clean_text,
+                    image_path=image_paths,
                 )
             )
 
             order += 1
 
         return blocks
-   
-   def render_section_pages(
+
+
+    # =========================================================
+    # 4. MERGE FINAL OUTPUT
+    # =========================================================
+    def merge_content_blocks(
         self,
-        pdf: fitz.Document,
-        sections: list[SectionDTO],
-    ) -> list[ImageDTO]:
+        text_blocks: List[ContentBlockDTO],
+        visual_blocks: List[ContentBlockDTO],
+    ) -> List[ContentBlockDTO]:
 
-        images: list[ImageDTO] = []
-
-        total_pages = len(pdf)
-
-        os.makedirs(
-            "extracted_pages",
-            exist_ok=True,
+        return sorted(
+            text_blocks + visual_blocks,
+            key=lambda b: b.order,
         )
-
-        for section in sections:
-
-            paths: list[str] = []
-
-            start_page = max(
-                1,
-                min(section.start_page, total_pages),
-            )
-
-            end_page = max(
-                start_page,
-                min(section.end_page, total_pages),
-            )
-
-            for page_num in range(
-                start_page,
-                end_page + 1,
-            ):
-
-                page = pdf.load_page(page_num - 1)
-
-                pix = page.get_pixmap()
-
-                filename = (
-                    f"{section.bookmark_title}_"
-                    f"{section.title}_"
-                    f"{page_num}.png"
-                )
-
-                filename = re.sub(
-                    r"[^\w\-\.]",
-                    "_",
-                    filename,
-                )
-
-                path = os.path.join(
-                    "extracted_pages",
-                    filename,
-                )
-
-                pix.save(path)
-
-                paths.append(path)
-
-            images.append(
-                ImageDTO(
-                    bookmark_title=section.bookmark_title,
-                    section_title=section.title,
-                    image_paths=paths,
-                )
-            )
-
-        return images
-   
-   def merge_section_content(
-        self,
-        texts: list[ContentBlockDTO],
-        images: list[ImageDTO],
-    ):
-        merged = []
-
-        image_lookup = {
-            (
-                img.bookmark_title,
-                img.section_title,
-            ): img
-            for img in images
-        }
-
-        order = 0
-
-        for text in texts:
-
-            text.order = order
-            merged.append(text)
-
-            order += 1
-
-            key = (
-                text.bookmark_title,
-                text.section_title,
-            )
-
-            image = image_lookup.get(key)
-
-            if image:
-
-                merged.append(
-                    ContentBlockDTO(
-                        bookmark_title=image.bookmark_title,
-                        section_title=image.section_title,
-                        type="figure",
-                        order=order,
-                        image_paths=image.image_paths,
-                    )
-                )
-
-                order += 1
-
-        return merged
