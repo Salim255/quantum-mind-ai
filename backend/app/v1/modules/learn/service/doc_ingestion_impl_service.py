@@ -7,6 +7,8 @@ from app.v1.modules.learn.dto.image_dto import ImageDTO
 from fastapi import UploadFile
 import logging
 import re
+import fitz
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +28,7 @@ class DocIngestionImplService(DocIngestionService):
 
             extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
-            extracted_images = self.extract_images(reader=reader, sections=extracted_sections)
+            extracted_images = self.extract_images(file=file, sections=extracted_sections)
             # 7 persist_to_database
             # return extracted_bookmarks
             #return extracted_sections
@@ -333,40 +335,63 @@ class DocIngestionImplService(DocIngestionService):
     
     def extract_images(
         self,
-        reader: PdfReader,
+        file: UploadFile,
         sections: list[SectionDTO],
     ) -> list[ImageDTO]:
-        """
-        Extracts figures, equations, and circuit images
-        associated with each section.
-        """
+
         images: list[ImageDTO] = []
+
+        file.file.seek(0) 
+        
+        pdf = fitz.open(stream=file.file.read(), filetype="pdf")
+
+        print("PyMuPDF pages:", pdf.page_count)
+
+        for section in sections:
+            print(
+                section.title,
+                section.start_page,
+                section.end_page,
+            )
+
+        os.makedirs("extracted_pages", exist_ok=True)
 
         for section in sections:
 
-            image_index = 1
-
-            for page_num in range(
+            for page_number in range(
                 section.start_page,
                 section.end_page + 1,
             ):
 
-                page = reader.pages[page_num - 1]
+                page = pdf.load_page(page_number - 1)
 
-                for image in page.images:
+                pix = page.get_pixmap(dpi=300)
 
-                    images.append(
-                        ImageDTO(
-                            bookmark_title=section.bookmark_title,
-                            section_title=section.title,
-                            page_number=page_num,
-                            image_index=image_index,
-                            image_name=image.name,
-                            image_bytes=image.data,
-                        )
+                image_path = (
+                    f"extracted_pages/"
+                    f"{section.bookmark_title}_"
+                    f"{section.title}_"
+                    f"{page_number}.png"
+                )
+
+                image_path = (
+                    image_path
+                    .replace(" ", "_")
+                    .replace("/", "-")
+                )
+
+                pix.save(image_path)
+
+                images.append(
+                    ImageDTO(
+                        bookmark_title=section.bookmark_title,
+                        section_title=section.title,
+                        page_number=page_number,
+                        image_path=image_path,
                     )
+                )
 
-                    image_index += 1
+        pdf.close()
 
         return images
     
