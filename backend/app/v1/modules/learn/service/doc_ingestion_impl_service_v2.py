@@ -13,6 +13,38 @@ import os
 logger = logging.getLogger(__name__)
 
 class DocIngestionImplServiceV2:
+   
+   def pdf_ingestion_pipeline(
+        self,
+        file: UploadFile,
+    ):
+
+        reader, pdf = self.create_readers(file)
+
+        bookmarks = self.extract_bookmarks(reader)
+
+        sections = self.extract_sections(
+            reader=reader,
+            bookmarks=bookmarks,
+        )
+
+        texts = self.extract_text_blocks(
+            reader=reader,
+            sections=sections,
+        )
+
+        images = self.render_section_pages(
+            pdf=pdf,
+            sections=sections,
+        )
+
+        contents = self.merge_section_content(
+            texts=texts,
+            images=images,
+        )
+
+        return contents
+   
    def create_readers(
     self,
     file: UploadFile,
