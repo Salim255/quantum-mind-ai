@@ -7,9 +7,12 @@ class ImageDTO(BaseModel):
     """
 
     bookmark_title: str
-
     section_title: str
 
-    image_path: str
-
     page_number: int
+
+    image_index: int
+
+    image_name: str
+
+    image_bytes: bytes
