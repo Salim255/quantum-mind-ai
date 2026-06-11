@@ -47,15 +47,15 @@ class DocIngestionImplServiceV2(DocIngestionServiceV2):
         )
 
         pdf_obj = self.load_pdf(raw)
-        #html = self._convert_pdf_to_html(pdf_obj)
+        html = self.convert_pdf_to_html(pdf_obj)
        # sections = self._chunk_html(html)
 
        # return IngestionResult(
        #     document_id=raw.document_id,
        #     sections=sections
         #)
-        print(pdf_obj)
-        return  "hello world"
+        print(html)
+        return  html
 
     # -------------------------
     # PRIVATE PIPELINE STAGES
@@ -75,9 +75,30 @@ class DocIngestionImplServiceV2(DocIngestionServiceV2):
 
     def convert_pdf_to_html(self, pdf_obj) -> str:
         """
-        TODO: Implement PDF → HTML conversion (pdf2htmlEX, Grobid, etc.)
+        Convert PDF to HTML using PyMuPDF (fitz).
+        This preserves:
+        - figures
+        - math equations (as images)
+        - tables
+        - layout
         """
-        return "hello"
+
+        try:
+            html_parts = []
+
+            for page_number, page in enumerate(pdf_obj, start=1):
+                page_html = page.get_text("html")
+                html_parts.append(f"<!-- PAGE {page_number} -->\n{page_html}")
+
+            full_html = "\n".join(html_parts)
+
+            logger.info("PDF successfully converted to HTML")
+            return full_html
+
+        except Exception:
+            logger.exception("Failed to convert PDF to HTML")
+            raise 
+
 
     def chunk_html(self, html: str) -> List[DocumentSection]:
         """
