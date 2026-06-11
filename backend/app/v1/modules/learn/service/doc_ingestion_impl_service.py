@@ -28,12 +28,12 @@ class DocIngestionImplService(DocIngestionService):
 
             extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
-            #extracted_images = self.extract_images(file=file, sections=extracted_sections)
+            extracted_images = self.extract_images(file=file, sections=extracted_sections)
             # 7 persist_to_database
             # return extracted_bookmarks
             #return extracted_sections
-            return extracted_texts
-            #return  extracted_images
+            # return extracted_texts
+            return  extracted_images
         
         except Exception:
             logger.exception("Error in pdf ingestion")
@@ -288,29 +288,6 @@ class DocIngestionImplService(DocIngestionService):
         return text.strip()
 
 
-    def clean_pdf_noise(self, text: str) -> str:
-        lines = text.split("\n")
-        out = []
-
-        for l in lines:
-            s = l.strip()
-
-            # remove figure captions
-            if re.match(r"^Figure\s+\d+", s):
-                continue
-
-            # remove diagram artifacts
-            if re.fullmatch(r"[SN\s]{3,}", s):
-                continue
-
-            # remove footer-like lines
-            if re.match(r"^[A-Za-z]+\s+\d+$", s):
-                continue
-
-            out.append(s)
-
-        return "\n".join(out).strip()
-
     def extract_text(
         self,
         reader: PdfReader,
@@ -354,7 +331,7 @@ class DocIngestionImplService(DocIngestionService):
 
             # NEW STEP (safe place for cleanup section.title)
             clean_text = clean_text.replace(section.title, "", 1).strip()
-
+            
             texts.append(
                 ContentBlockDTO(
                     bookmark_title=section.bookmark_title,
@@ -431,5 +408,46 @@ class DocIngestionImplService(DocIngestionService):
 
         return images
     
+    def merge_content_blocks(
+        self,
+        texts: list[ContentBlockDTO],
+        images: list[dict]
+    ) -> list[ContentBlockDTO]:
+
+        image_map = {}
+
+        for img in images:
+            key = (img["bookmark_title"], img["section_title"])
+
+            image_map.setdefault(key, []).append(img)
+
+        merged = []
+
+        for text_block in texts:
+
+            key = (text_block.bookmark_title, text_block.section_title)
+
+            merged.append(text_block)
+
+            if key in image_map:
+
+                for i, img in enumerate(image_map[key]):
+
+                    merged.append(
+                        ContentBlockDTO(
+                            bookmark_title=text_block.bookmark_title,
+                            section_title=text_block.section_title,
+                            type="figure",
+                            order=text_block.order + 0.1 * (i + 1),
+                            image_path=img["image_path"],
+                            content=None
+                        )
+                    )
+
+        # final stable ordering
+        merged.sort(key=lambda x: x.order)
+
+        return merged
+
     def persist_to_database(self):
         return ""
