@@ -2,7 +2,7 @@ from pypdf import PdfReader
 from app.v1.modules.learn.service.doc_ingestion_service import DocIngestionService
 from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
 from app.v1.modules.learn.dto.section_dto import SectionDTO
-from app.v1.modules.learn.dto.text_dto import TextDTO
+from app.v1.modules.learn.dto.text_dto import ContentBlockDTO
 from app.v1.modules.learn.dto.image_dto import ImageDTO
 from fastapi import UploadFile
 import logging
@@ -28,12 +28,12 @@ class DocIngestionImplService(DocIngestionService):
 
             extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
             # 6 extract_images
-            extracted_images = self.extract_images(file=file, sections=extracted_sections)
+            #extracted_images = self.extract_images(file=file, sections=extracted_sections)
             # 7 persist_to_database
             # return extracted_bookmarks
             #return extracted_sections
-            # return extracted_texts
-            return  extracted_images
+            return extracted_texts
+            #return  extracted_images
         
         except Exception:
             logger.exception("Error in pdf ingestion")
@@ -287,23 +287,52 @@ class DocIngestionImplService(DocIngestionService):
 
         return text.strip()
 
+
+    def clean_pdf_noise(self, text: str) -> str:
+        lines = text.split("\n")
+        out = []
+
+        for l in lines:
+            s = l.strip()
+
+            # remove figure captions
+            if re.match(r"^Figure\s+\d+", s):
+                continue
+
+            # remove diagram artifacts
+            if re.fullmatch(r"[SN\s]{3,}", s):
+                continue
+
+            # remove footer-like lines
+            if re.match(r"^[A-Za-z]+\s+\d+$", s):
+                continue
+
+            out.append(s)
+
+        return "\n".join(out).strip()
+
     def extract_text(
         self,
         reader: PdfReader,
         sections: list[SectionDTO]
-    ) -> list[TextDTO]:
+    ) -> list[ContentBlockDTO]:
 
-        texts: list[TextDTO] = []
+        texts: list[ContentBlockDTO] = []
+
         total_pages = len(reader.pages)
 
         sections = sorted(sections, key=lambda s: s.start_page)
 
+        order = 0
+        
         for section in sections:
 
             start_page = max(1, min(section.start_page, total_pages))
             end_page = max(start_page, min(section.end_page, total_pages))
 
             page_texts: list[str] = []
+
+            
 
             # Extract raw text from the section pages
             for page_num in range(start_page, end_page + 1):
@@ -323,13 +352,20 @@ class DocIngestionImplService(DocIngestionService):
                 next_title=section.next_section_title,
             )
 
+            # NEW STEP (safe place for cleanup section.title)
+            clean_text = clean_text.replace(section.title, "", 1).strip()
+
             texts.append(
-                TextDTO(
+                ContentBlockDTO(
                     bookmark_title=section.bookmark_title,
                     section_title=section.title,
+                    type="text",
+                    order=order,
                     content=clean_text,
                 )
             )
+
+            order += 1
 
         return texts
     
@@ -342,7 +378,7 @@ class DocIngestionImplService(DocIngestionService):
         images: list[ImageDTO] = []
 
         file.file.seek(0) 
-        
+
         pdf = fitz.open(stream=file.file.read(), filetype="pdf")
 
         print("PyMuPDF pages:", pdf.page_count)

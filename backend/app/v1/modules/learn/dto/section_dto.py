@@ -1,16 +1,6 @@
 from pydantic import BaseModel
 
-class ContentBlockDTO(BaseModel):
-    type: Literal["text", "figure", "equation", "circuit"]
 
-    order: int
-
-    content: str | None = None
-
-    image_path: str | None = None
-
-    caption: str | None = None
-    
 class SectionDTO(BaseModel):
     bookmark_title: str
 
