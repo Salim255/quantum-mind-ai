@@ -1,84 +1,59 @@
-from typing import List, Literal
+from typing import List, Optional
 from pydantic import BaseModel
-import fitz  # PyMuPDF
-import logging
 from abc import ABC, abstractmethod
+import logging
+from fastapi import UploadFile
+
 logger = logging.getLogger(__name__)
 
 
 # =========================
-# DTOs (your final output)
+# DOMAIN MODELS
 # =========================
 
-class ContentBlockDTO(BaseModel):
-    bookmark_title: str
-    section_title: str
-    type: Literal["text", "visual"]
+class DocumentSection(BaseModel):
+    section_id: str
+    title: Optional[str] = ""
+    html: str
     order: int
-    content: str | None = None
-    image_path: list[str] | None = None
-    caption: str | None = None
 
 
-class SectionDTO(BaseModel):
-    bookmark_title: str
-    title: str
-    start_page: int
-    end_page: int
+class IngestionResult(BaseModel):
+    document_id: str
+    sections: List[DocumentSection]
+
+
+class RawDocument(BaseModel):
+    document_id: str
+    bytes_data: bytes
+    filename: str
+    mime_type: str = "application/pdf"
 
 
 # =========================
-# SERVICE
+# ABSTRACT CONTRACT
 # =========================
 
 class DocIngestionServiceV2(ABC):
 
-    # -------------------------
-    # MAIN PIPELINE
-    # -------------------------
+    # ---- PUBLIC ENTRYPOINT ----
     @abstractmethod
-    def pdf_ingestion_pipeline(self, file) -> list[ContentBlockDTO]:
+    async def ingest(self, file: UploadFile):
+        """Full pipeline: load → convert → chunk → return."""
         raise NotImplementedError
 
-    # =========================================================
-    # 1. SECTION EXTRACTION (simple + safe fallback)
-    # =========================================================
+    # ---- PIPELINE STAGES ----
     @abstractmethod
-    def extract_sections(self, pdf: fitz.Document) -> List[SectionDTO]:
+    def load_pdf(self, raw: RawDocument):
+        """Load PDF bytes into a backend-specific PDF object."""
         raise NotImplementedError
 
-
-    # =========================================================
-    # 2. TEXT BLOCKS (ORDER PRESERVED)
-    # =========================================================
     @abstractmethod
-    def extract_text_blocks(
-        self,
-        pdf: fitz.Document,
-        sections: List[SectionDTO],
-    ) -> List[ContentBlockDTO]:
-        raise NotImplementedError
-        
-
-
-    # =========================================================
-    # 3. VISUAL BLOCKS (PAGE RENDERING)
-    # =========================================================
-    @abstractmethod
-    def extract_visual_blocks(
-        self,
-        pdf: fitz.Document,
-        sections: List[SectionDTO],
-    ) -> List[ContentBlockDTO]:
+    def convert_pdf_to_html(self, pdf_obj) -> str:
+        """Convert PDF to HTML while preserving layout, figures, math, tables."""
         raise NotImplementedError
 
-    # =========================================================
-    # 4. MERGE FINAL OUTPUT
-    # =========================================================
     @abstractmethod
-    def merge_content_blocks(
-        self,
-        text_blocks: List[ContentBlockDTO],
-        visual_blocks: List[ContentBlockDTO],
-    ) -> List[ContentBlockDTO]:
+    def chunk_html(self, html: str) -> List[DocumentSection]:
+        """Split HTML into semantic sections."""
         raise NotImplementedError
