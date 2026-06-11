@@ -1,3 +1,18 @@
 <div class="mathematics-page" >
   <h1>hello from MathematicsPage</h1>
+
+  <form>
+    <input type="file" accept="application/pdf" (change)="onFileSelected($event)" />
+  </form>
+
+  @for(section of htmlSections(); track $index) {
+    <div class="pdf-page">
+      <h3>{{ section.title }}</h3>
+      <div [innerHTML]="section.html"></div>
+      <hr>
+    </div>
+  }
 </div>
+
+
+

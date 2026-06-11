@@ -1,0 +1,68 @@
+<h1>Single‑Qubit Gates and a Simple Circuit</h1>
+
+<p>
+In quantum computing, gates are unitary operations applied to qubits.
+A common gate is the Hadamard gate, which maps basis states as:
+</p>
+
+<p>
+$$
+H|0\rangle = \frac{1}{\sqrt{2}} (|0\rangle + |1\rangle), \quad
+H|1\rangle = \frac{1}{\sqrt{2}} (|0\rangle - |1\rangle)
+$$
+</p>
+
+<p>
+A simple one‑qubit circuit that prepares the state
+\( \frac{1}{\sqrt{2}} (|0\rangle + |1\rangle) \)
+starts from \( |0\rangle \) and applies a Hadamard gate:
+</p>
+
+<h2>Quantum Circuit</h2>
+
+<!-- Simple SVG circuit: one wire + H gate -->
+<svg width="400" height="120" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Qubit label -->
+  <text x="10" y="40" font-family="monospace" font-size="16">|0⟩</text>
+
+  <!-- Horizontal wire -->
+  <line x1="60" y1="35" x2="360" y2="35"
+        stroke="black" stroke-width="2" />
+
+  <!-- H gate box -->
+  <rect x="150" y="15" width="40" height="40"
+        fill="white" stroke="black" stroke-width="2" />
+  <text x="170" y="40"
+        font-family="monospace" font-size="18"
+        text-anchor="middle" dominant-baseline="middle">
+    H
+  </text>
+
+  <!-- Input arrow -->
+  <line x1="40" y1="35" x2="60" y2="35"
+        stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Output arrow -->
+  <line x1="360" y1="35" x2="380" y2="35"
+        stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Arrowhead definition -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10"
+            refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="black" />
+    </marker>
+  </defs>
+
+</svg>
+
+<p>
+After the Hadamard gate, the qubit is in the superposition:
+</p>
+
+<p>
+$$
+|\psi\rangle = \frac{1}{\sqrt{2}} (|0\rangle + |1\rangle)
+$$
+</p>

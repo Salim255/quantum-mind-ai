@@ -88,14 +88,20 @@ class DocIngestionImplServiceV2(DocIngestionServiceV2):
         try:
             html_parts = []
 
-            for page_number, page in enumerate(pdf_obj, start=1):
+            for i in range(pdf_obj.page_count):
+                page = pdf_obj.load_page(i)
                 page_html = page.get_text("html")
-                html_parts.append(f"<!-- PAGE {page_number} -->\n{page_html}")
 
-            full_html = "\n".join(html_parts)
+                wrapped = f"""
+                <div class="pdf-page" data-page="{i+1}">
+                    <!-- PAGE {i+1} -->
+                    {page_html}
+                </div>
+                """
 
-            logger.info("PDF successfully converted to HTML")
-            return full_html
+                html_parts.append(wrapped)
+
+            return "\n".join(html_parts)
 
         except Exception:
             logger.exception("Failed to convert PDF to HTML")
@@ -103,56 +109,24 @@ class DocIngestionImplServiceV2(DocIngestionServiceV2):
 
 
     def chunk_html(self, html: str) -> List[DocumentSection]:
-        """
-        Chunk HTML into semantic sections based on headings.
-        Handles cases where PyMuPDF returns HTML fragments without <body>.
-        """
-
         soup = BeautifulSoup(html, "html.parser")
 
-        # If no <body>, treat the entire soup as the root
-        root = soup.body if soup.body else soup
+        # Select each page wrapper
+        pages = soup.select(".pdf-page")
 
         sections = []
-        current_section_title = None
-        current_section_html = []
-        order = 0
-
-        heading_tags = ["h1", "h2", "h3"]
-
-        for element in root.descendants:
-            if not hasattr(element, "name"):
-                continue
-
-            if element.name in heading_tags:
-                if current_section_html:
-                    section_id = str(uuid.uuid4())
-                    sections.append(
-                        DocumentSection(
-                            section_id=section_id,
-                            title=current_section_title,
-                            html="".join(current_section_html),
-                            order=order,
-                        )
-                    )
-                    order += 1
-
-                current_section_title = element.get_text(strip=True)
-                current_section_html = [str(element)]
-                continue
-
-            current_section_html.append(str(element))
-
-        if current_section_html:
+        for order, page in enumerate(pages):
             section_id = str(uuid.uuid4())
+
             sections.append(
                 DocumentSection(
                     section_id=section_id,
-                    title=current_section_title,
-                    html="".join(current_section_html),
-                    order=order,
+                    title=f"Page {order + 1}",
+                    html=str(page),
+                    order=order
                 )
             )
 
         return sections
+
 
