@@ -132,6 +132,76 @@ class DocIngestionImplServiceV2:
 
         return sections
    
+   def extract_text_blocks(
+        self,
+        reader: PdfReader,
+        sections: list[SectionDTO],
+    ) -> list[ContentBlockDTO]:
+
+        blocks: list[ContentBlockDTO] = []
+
+        total_pages = len(reader.pages)
+
+        order = 0
+
+        for section in sections:
+
+            start_page = max(
+                1,
+                min(section.start_page, total_pages),
+            )
+
+            end_page = max(
+                start_page,
+                min(section.end_page, total_pages),
+            )
+
+            page_texts: list[str] = []
+
+            for page_num in range(
+                start_page,
+                end_page + 1,
+            ):
+
+                page = reader.pages[page_num - 1]
+
+                text = page.extract_text()
+
+                if text:
+                    page_texts.append(text)
+
+            raw_text = "\n".join(page_texts)
+
+            clean_text = self.extract_between_titles(
+                text=raw_text,
+                current_title=section.title,
+                next_title=section.next_section_title,
+            )
+
+            clean_text = clean_text.replace(
+                section.title,
+                "",
+                1,
+            ).strip()
+
+            clean_text = self.clean_pdf_noise(
+                text=clean_text,
+            )
+
+            blocks.append(
+                ContentBlockDTO(
+                    bookmark_title=section.bookmark_title,
+                    section_title=section.title,
+                    type="text",
+                    order=order,
+                    content=clean_text,
+                )
+            )
+
+            order += 1
+
+        return blocks
+   
    def merge_section_content(
         self,
         texts: list[ContentBlockDTO],
