@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from "@angular/core";
 import { LearnService } from "../../services/learn.service";
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
+
 
 @Component({
   selector: "app-mathematics",
@@ -37,4 +38,7 @@ export class MathematicsPage implements OnInit {
       error: (err) => console.log(err)
     });
   }
+
+  equation =
+    'H|0\\rangle = \\frac{1}{\\sqrt{2}} (|0\\rangle + |1\\rangle)';
 }
