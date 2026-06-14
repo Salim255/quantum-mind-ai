@@ -1,21 +1,15 @@
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit } from "@angular/core";
 import * as katex from "katex";
 
 @Component({
   selector: "app-circuits",
-  template: `
-  <div [innerHTML]="html"></div>`,
+  templateUrl: "./circuits.component.html",
   standalone: false
 })
-export class CircuitsComponent implements OnChanges {
-  @Input() latex = '';
+export class CircuitsComponent implements OnInit {
 
-  html = '';
+  ngOnInit(): void {
 
-  ngOnChanges(): void {
-    this.html = katex.renderToString(this.latex, {
-      throwOnError: false,
-      displayMode: true
-    });
   }
+
 }

@@ -41,4 +41,12 @@ export class MathematicsPage implements OnInit {
 
   equation =
     'H|0\\rangle = \\frac{1}{\\sqrt{2}} (|0\\rangle + |1\\rangle)';
+
+    qubitVector = String.raw`
+      \begin{bmatrix}
+      \alpha \\
+      \beta
+      \end{bmatrix}
+      `;
+   polynomial = String.raw`x^2 + 4x + 4 = 0`;
 }

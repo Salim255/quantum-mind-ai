@@ -1,5 +1,28 @@
 <div class="mathematics-page" >
   <h1>hello from MathematicsPage</h1>
+  <p>
+    Quantum mechanics is based on linear algebra. The general theory uses
+infinite dimensional vector spaces. Fortunately for us, to describe spin or
+polarization we need only finite dimensions, which makes things much
+easier. In fact, we need only a few tools. At the end of this chapter I have
+given a list. The rest of the chapter explains how to use these tools and what
+the calculations mean. There are many examples. It is important to work
+carefully through all of them. The mathematics introduced here is essential
+to everything that follows. Like much mathematics, it can seem complicated
+when it is first introduced, but it becomes almost second nature with
+practice. The actual computations only involve addition and multiplication
+of numbers, along with an occasional square root and trigonometric
+function.
+We will be using Paul Dirac’s notation. Dirac was one of the founders
+of quantum mechanics, and his notation is used extensively throughout
+both quantum mechanics and quantum computing. It is not widely
+used outside these disciplines, which is surprising given how elegant and
+useful it is.
+But first, we begin with a brief description of the numbers we will be
+using. These are real numbers—the standard decimal numbers with which
+we are all familiar. Practically every other book on quantum computation
+uses complex numbers—these involve the square root of
+  </p>
 
   <form>
     <input type="file" accept="application/pdf" (change)="onFileSelected($event)" />
@@ -12,9 +35,12 @@
       <hr>
     </div>
   }
-  <app-circuits
-  [latex]="equation">
-</app-circuits>
+
+  <app-equation [latex]="equation"></app-equation>
+
+  <app-equation [latex]="qubitVector"></app-equation>
+
+  <app-equation [latex]="polynomial"></app-equation>
 </div>
 
 

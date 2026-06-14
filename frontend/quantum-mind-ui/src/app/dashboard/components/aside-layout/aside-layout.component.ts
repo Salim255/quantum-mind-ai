@@ -33,6 +33,7 @@ export class AsideLayoutComponent {
         this.asideNavService.setCurrentPageUrl(url);
         return
       }
+      console.log(value)
       this.items.set(value);
     })
   }
