@@ -1,0 +1,10 @@
+.learn-page {
+  display: grid;
+  grid-template-columns:  1fr auto;
+  height: 100vh;
+  overflow-y: auto;
+  app-content-aside {
+    height: 100%;
+    overflow-y: auto;
+  }
+}

@@ -13,7 +13,7 @@ const routes: Routes = [
         component: LearnHomePage
       },
       {
-        path: "mathematics",
+        path: "linear-algebra",
         loadChildren: () => import("./pages/mathematics/mathematics.module").then(m => m.MathematicsModule)
       },
       {

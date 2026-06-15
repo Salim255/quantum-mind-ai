@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NAVIGATION } from "./data";
-import { NavigationEnd, Router } from "@angular/router";
-import { BehaviorSubject, filter, Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { BreadcrumbService } from "./bread-crumbs.service";
 
 export interface NavItem {
