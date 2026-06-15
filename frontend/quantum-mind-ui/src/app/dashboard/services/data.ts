@@ -45,12 +45,16 @@ export const NAVIGATION: NavItem[] = [
         path: '/learn/spin-qubits'
       },
       {
-        name: 'entanglement',
+        name: 'Entanglement',
         path: '/learn/entanglement'
       },
       {
         name: 'Bell’s Inequality',
         path: '/learn/bell-Inequality'
+      },
+      {
+        name: 'Classical Logic',
+        path: '/learn/classical-logic'
       },
       {
         name: 'Quantum Computing',

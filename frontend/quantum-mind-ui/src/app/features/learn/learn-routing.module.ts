@@ -33,6 +33,10 @@ const routes: Routes = [
         loadChildren: () => import("./pages/bell-inequality/bell-inequality.module").then((m) => m.BellInequalityModule)
       },
       {
+        path: "classical-logic",
+        loadChildren: () => import("./pages/classical-logic/classical-logic.module").then((m) => m.ClassicalLogicModule)
+      },
+      {
         path: "quantum-computing",
         loadChildren: () => import("./pages/quantum-computing/quantum-computing.module").then(m => m.QuantumComputingModule)
       },
