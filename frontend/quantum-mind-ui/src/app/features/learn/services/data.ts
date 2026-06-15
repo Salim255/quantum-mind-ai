@@ -150,3 +150,34 @@ export const ENTANGLEMENT =   [
       name: 'Entangled Quantum Clocks'
     }
 ]
+
+// Bell’s Inequality
+export const BELL_INEQUALITY =   [
+    {
+      name: "Entangled Qubits in Different Bases"
+    },
+    {
+      name: 'Einstein and Local Realism',
+    },
+    {
+      name: 'Einstein and Hidden Variables'
+    },
+    {
+      name: 'A Classical Explanation of Entanglement',
+    },
+    {
+      name: 'Bell’s Inequality',
+    },
+    {
+      name: 'The Answer of Quantum Mechanics'
+    },
+    {
+      name: 'The Classical Answer',
+    },
+    {
+      name: 'Measurement'
+    },
+    {
+      name: 'The Ekert Protocol for Quantum Key Distribution'
+    }
+]
