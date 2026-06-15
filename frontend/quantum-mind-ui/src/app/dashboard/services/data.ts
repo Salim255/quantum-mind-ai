@@ -38,79 +38,79 @@ export const NAVIGATION: NavItem[] = [
         children: [
           {
             name: 'Linear Algebra',
-            path: '/learn/mathematics/linear-Algebra',
+            path: '/linear-Algebra',
           },
            {
             name: 'Complex Numbers versus Real Numbers',
-            path: '/learn/mathematics/complex-versus-vs-real-numbers',
+            path: '/complex-versus-vs-real-numbers',
           },
            {
             name: 'Vectors',
-            path: '/learn/mathematics/vectors',
+            path: '/vectors',
           },
            {
             name: 'Diagrams of Vectors',
-            path: '/learn/mathematics/diagrams-of-vectors',
+            path: '/diagrams-of-vectors',
           },
           {
             name: 'Lengths of Vectors',
-            path: '/learn/mathematics/lengths-of-Vectors',
+            path: '/lengths-of-Vectors',
           },
           {
             name: 'Scalar Multiplication',
-            path: '/learn/mathematics/scalar-multiplication',
+            path: '/scalar-multiplication',
           },
           {
             name: 'Vector Addition',
-            path: '/learn/mathematics/vector-Addition',
+            path: '/vector-Addition',
           },
           {
             name: 'Orthogonal Vectors',
-            path: '/learn/mathematics/orthogonal-vectors',
+            path: '/orthogonal-vectors',
           },
           {
             name: 'Multiplying a Bra by a Ket',
-            path: '/learn/mathematics/m-bra-Ket',
+            path: '/m-bra-Ket',
           },
           {
             name: 'Bra-kets and Lengths',
-            path: '/learn/mathematics/bra-kets-lengths',
+            path: '/bra-kets-lengths',
           },
           {
             name: 'Bra-kets and Orthogonality',
-            path: '/learn/mathematics/bra-kets-orthogonality',
+            path: '/bra-kets-orthogonality',
           },
           {
             name: 'Orthonormal Bases',
-            path: '/learn/mathematics/orthonormal-bases',
+            path: '/orthonormal-bases',
           },
           {
             name: 'Vectors as Linear Combinations of Basis Vectors',
-            path: '/learn/mathematics/vectors-li-co-of-ba-vectors',
+            path: '/vectors-li-co-of-ba-vectors',
           },
           {
             name: 'Ordered Bases',
-            path: '/learn/mathematics/ordered-bases',
+            path: '/ordered-bases',
           },
           {
             name: 'Length of Vectors',
-            path: '/learn/mathematics/length-of-Vectors',
+            path: '/length-of-Vectors',
           },
           {
             name: 'Matrices',
-            path: '/learn/mathematics/matrices',
+            path: '/matrices',
           },
           {
             name: 'Matrix Computations',
-            path: '/learn/mathematics/matrix-computations',
+            path: '/matrix-computations',
           },
           {
             name: 'Orthogonal and Unitary Matrices',
-            path: '/learn/mathematics/or-and-uni-ma',
+            path: '/or-and-uni-ma',
           },
           {
             name: 'Linear Algebra Toolbox',
-            path: '/learn/mathematics/linear-algebra-toolbox',
+            path: '/linear-algebra-toolbox',
           }
         ]
       },
