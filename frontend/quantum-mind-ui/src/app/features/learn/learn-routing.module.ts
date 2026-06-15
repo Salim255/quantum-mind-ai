@@ -13,6 +13,10 @@ const routes: Routes = [
         component: LearnHomePage
       },
       {
+        path: "spin",
+        loadChildren: () => import("./pages/spin/spin.module").then((m) => m.SpinModule)
+      },
+      {
         path: "linear-algebra",
         loadChildren: () => import("./pages/mathematics/mathematics.module").then(m => m.MathematicsModule)
       },
