@@ -29,6 +29,10 @@ const routes: Routes = [
         loadChildren: () => import("./pages/entanglement/entanglement.module").then((m) => m.EntanglementModule)
       },
       {
+        path: "bell-Inequality",
+        loadChildren: () => import("./pages/bell-inequality/bell-inequality.module").then((m) => m.BellInequalityModule)
+      },
+      {
         path: "quantum-computing",
         loadChildren: () => import("./pages/quantum-computing/quantum-computing.module").then(m => m.QuantumComputingModule)
       },
