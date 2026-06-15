@@ -21,8 +21,8 @@ export class AsideNavService {
 
   setCurrentPageUrl(url: string){
     const pageNavs: NavItem | null = this.getAsideNav(url) ?? null;
-    this.currentPageUrlSubject.next(pageNavs);
 
+    this.currentPageUrlSubject.next(pageNavs);
     // Bread crumbs
     this.breadcrumbService.setAppBreadCrumbs(url);
   }

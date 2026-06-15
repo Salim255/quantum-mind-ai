@@ -33,7 +33,6 @@ export class AsideLayoutComponent {
         this.asideNavService.setCurrentPageUrl(url);
         return
       }
-      console.log(value)
       this.items.set(value);
     })
   }
@@ -42,8 +41,8 @@ export class AsideLayoutComponent {
      this.router.events.pipe(
         filter(event => event.type === EventType.NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
-          console.log('Router Event:', event);
           const url = event.url === '/' ? '/home' : this.router.url;
+
           this.asideNavService.setCurrentPageUrl(url)
       });
   }
