@@ -25,6 +25,10 @@ const routes: Routes = [
         loadChildren: () => import("./pages/spin-and-qubits/spin-qubits.module").then(m => m.SpinQubitsModule)
       },
       {
+        path: "entanglement",
+        loadChildren: () => import("./pages/entanglement/entanglement.module").then((m) => m.EntanglementModule)
+      },
+      {
         path: "quantum-computing",
         loadChildren: () => import("./pages/quantum-computing/quantum-computing.module").then(m => m.QuantumComputingModule)
       },
