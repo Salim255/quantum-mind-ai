@@ -63,6 +63,10 @@ export const NAVIGATION: NavItem[] = [
       {
         name: 'Quantum Algorithms',
         path: '/learn/quantum-algos'
+      },
+      {
+        name: 'Quantum Computing Impact',
+        path: '/learn/quantum-impact'
       }
     ]
   },

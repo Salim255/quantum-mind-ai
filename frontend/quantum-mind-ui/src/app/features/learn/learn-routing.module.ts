@@ -41,9 +41,13 @@ const routes: Routes = [
         path: "quantum-logic",
         loadChildren: () => import("./pages/quantum-logic/quantum-logic.module").then(m => m.QuantumLogicModule)
       },
+       {
+        path: "quantum-algos",
+        loadChildren: () => import("./pages/quantum-algos/quantum-algos.module").then(m => m.QuantumAlgosModule)
+      },
       {
-        path: "algorithms",
-        loadChildren: () => import("./pages/algorithms/algorithms.module").then(m => m.AlgorithmsModule)
+        path: "quantum-impact",
+        loadChildren: () => import("./pages/quantum-impact/quantum-impact.module").then(m => m.QuantumImpactModule)
       }
     ]
   },
