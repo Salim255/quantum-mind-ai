@@ -1,4 +1,3 @@
-
 export const SPIN = [
   {
     name: "The Quantum Clock"
@@ -22,9 +21,6 @@ export const SPIN = [
 
 export const LINEAR_ALGEBRA = [
   {
-
-  },
-    {
     name: 'Complex Numbers versus Real Numbers',
   },
     {

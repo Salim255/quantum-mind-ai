@@ -1,3 +1,4 @@
+import { BELL_INEQUALITY, CLASSICAL_LOGIC, ENTANGLEMENT, LINEAR_ALGEBRA, QUANTUM_ALGOS, QUANTUM_IMPACT, QUANTUM_LOGIC, SPIN, SPIN_QUBITS } from "../../features/learn/services/data";
 import { NavItem } from "./aside-nav.service";
 
 export const NAVIGATION: NavItem[] = [
@@ -35,38 +36,47 @@ export const NAVIGATION: NavItem[] = [
       {
         name: 'Spin',
         path: '/learn/spin',
+        sections: SPIN
       },
       {
         name: 'Linear Algebra',
         path: '/learn/linear-algebra',
+        sections: LINEAR_ALGEBRA
       },
       {
         name: 'Spin and Qubits',
-        path: '/learn/spin-qubits'
+        path: '/learn/spin-qubits',
+        sections: SPIN_QUBITS
       },
       {
         name: 'Entanglement',
-        path: '/learn/entanglement'
+        path: '/learn/entanglement',
+        sections: ENTANGLEMENT
       },
       {
         name: 'Bell’s Inequality',
-        path: '/learn/bell-Inequality'
+        path: '/learn/bell-Inequality',
+        sections: BELL_INEQUALITY
       },
       {
         name: 'Classical Logic',
-        path: '/learn/classical-logic'
+        path: '/learn/classical-logic',
+        sections: CLASSICAL_LOGIC
       },
       {
         name: 'Quantum logic',
-        path: '/learn/quantum-logic'
+        path: '/learn/quantum-logic',
+        sections: QUANTUM_LOGIC,
       },
       {
         name: 'Quantum Algorithms',
-        path: '/learn/quantum-algos'
+        path: '/learn/quantum-algos',
+        sections: QUANTUM_ALGOS
       },
       {
         name: 'Quantum Computing Impact',
-        path: '/learn/quantum-impact'
+        path: '/learn/quantum-impact',
+        sections: QUANTUM_IMPACT
       }
     ]
   },

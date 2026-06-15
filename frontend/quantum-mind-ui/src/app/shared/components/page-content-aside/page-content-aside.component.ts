@@ -1,4 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit, signal } from "@angular/core";
+import { EventType, NavigationEnd, Router } from "@angular/router";
+import { filter } from "rxjs";
+import { ContentService } from "../../../features/learn/services/content.service";
 
 @Component({
   selector: "app-content-aside",
@@ -7,85 +10,24 @@ import { Component, OnInit } from "@angular/core";
   standalone: false
 })
 export class PageContentAsideComponent implements OnInit {
-  list =   [
-          {
-            name: 'Linear Algebra',
-            path: '/learn/mathematics/linear-Algebra'
-          },
-           {
-            name: 'Complex Numbers versus Real Numbers',
-            path: '/learn/mathematics/complex-versus-vs-real-numbers',
-          },
-           {
-            name: 'Vectors',
-            path: '/learn/mathematics/vectors',
-          },
-           {
-            name: 'Diagrams of Vectors',
-            path: '/learn/mathematics/diagrams-of-vectors',
-          },
-          {
-            name: 'Lengths of Vectors',
-            path: '/learn/mathematics/lengths-of-Vectors',
-          },
-          {
-            name: 'Scalar Multiplication',
-            path: '/learn/mathematics/scalar-multiplication',
-          },
-          {
-            name: 'Vector Addition',
-            path: '/learn/mathematics/vector-Addition',
-          },
-          {
-            name: 'Orthogonal Vectors',
-            path: '/learn/mathematics/orthogonal-vectors',
-          },
-          {
-            name: 'Multiplying a Bra by a Ket',
-            path: '/learn/mathematics/m-bra-Ket',
-          },
-          {
-            name: 'Bra-kets and Lengths',
-            path: '/learn/mathematics/bra-kets-lengths',
-          },
-          {
-            name: 'Bra-kets and Orthogonality',
-            path: '/learn/mathematics/bra-kets-orthogonality',
-          },
-          {
-            name: 'Orthonormal Bases',
-            path: '/learn/mathematics/orthonormal-bases',
-          },
-          {
-            name: 'Vectors as Linear Combinations of Basis Vectors',
-            path: '/learn/mathematics/vectors-li-co-of-ba-vectors',
-          },
-          {
-            name: 'Ordered Bases',
-            path: '/learn/mathematics/ordered-bases',
-          },
-          {
-            name: 'Length of Vectors',
-            path: '/learn/mathematics/length-of-Vectors',
-          },
-          {
-            name: 'Matrices',
-            path: '/learn/mathematics/matrices',
-          },
-          {
-            name: 'Matrix Computations',
-            path: '/learn/mathematics/matrix-computations',
-          },
-          {
-            name: 'Orthogonal and Unitary Matrices',
-            path: '/learn/mathematics/or-and-uni-ma',
-          },
-          {
-            name: 'Linear Algebra Toolbox',
-            path: '/learn/mathematics/linear-algebra-toolbox',
-          }
-        ]
-  ngOnInit(): void {
+  list = signal<any []>([])
 
+  constructor(
+    private contentService: ContentService,
+    private router: Router
+  ){}
+  ngOnInit(): void {
+    this.listenToRouter()
   }
+
+  listenToRouter(): void {
+     this.router.events.pipe(
+        filter(event => event.type === EventType.NavigationEnd)
+      ).subscribe((event: NavigationEnd) => {
+          const url = event.url === '/' ? '/home' : this.router.url;
+          console.log(url);
+          this.list.set(this.contentService.getAsideContent()) ;
+      });
+  }
+
 }

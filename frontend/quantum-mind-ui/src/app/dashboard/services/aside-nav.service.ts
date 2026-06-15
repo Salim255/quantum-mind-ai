@@ -7,6 +7,7 @@ export interface NavItem {
   name: string;
   path: string;
   icon?: string;
+  sections?: any [];
   description?: string;
   children?: NavItem[];
 }
