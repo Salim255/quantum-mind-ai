@@ -41,8 +41,8 @@ export const NAVIGATION: NavItem[] = [
         path: '/learn/linear-algebra',
       },
       {
-        name: 'Physics',
-        path: '/learn/physics'
+        name: 'Spin and Qubits',
+        path: '/learn/spin-qubits'
       },
       {
         name: 'Quantum Computing',

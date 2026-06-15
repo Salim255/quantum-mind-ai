@@ -21,7 +21,7 @@ const routes: Routes = [
         loadChildren: () => import("./pages/mathematics/mathematics.module").then(m => m.MathematicsModule)
       },
       {
-        path: "physics",
+        path: "spin-qubits",
         loadChildren: () => import("./pages/spin-and-qubits/spin-qubits.module").then(m => m.SpinQubitsModule)
       },
       {
