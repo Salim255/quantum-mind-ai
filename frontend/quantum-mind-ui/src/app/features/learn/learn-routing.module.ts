@@ -22,7 +22,7 @@ const routes: Routes = [
       },
       {
         path: "physics",
-        loadChildren: () => import("./pages/physics/physics.module").then(m => m.PhysicsModule)
+        loadChildren: () => import("./pages/spin-and-qubits/spin-qubits.module").then(m => m.SpinQubitsModule)
       },
       {
         path: "quantum-computing",

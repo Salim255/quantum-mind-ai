@@ -33,6 +33,10 @@ export const NAVIGATION: NavItem[] = [
     path: '/learn',
     children: [
       {
+        name: 'Spin',
+        path: '/learn/spin',
+      },
+      {
         name: 'Linear Algebra',
         path: '/learn/linear-algebra',
       },

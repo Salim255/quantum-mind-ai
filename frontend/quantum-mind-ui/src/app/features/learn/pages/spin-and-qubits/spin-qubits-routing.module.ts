@@ -1,11 +1,11 @@
 import { RouterModule, Routes } from "@angular/router";
-import { PhysicsPage } from "./physics.page";
+import { SpinQubitsPage } from "./spin-qubits.page";
 import { NgModule } from "@angular/core";
 
 const routes:Routes = [
   {
     path: "",
-    component: PhysicsPage
+    component: SpinQubitsPage
   }
 ]
 
@@ -14,4 +14,4 @@ const routes:Routes = [
   exports: [RouterModule]
 })
 
-export class PhysicsRoutingModule {}
+export class SpinQubitsRoutingModule {}
