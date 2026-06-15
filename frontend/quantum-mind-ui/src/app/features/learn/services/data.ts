@@ -79,3 +79,74 @@ export const LINEAR_ALGEBRA =   [
       name: 'Linear Algebra Toolbox'
     }
 ]
+
+// 3 Spin and Qubits
+export const SPIN_QUBITS =   [
+    {
+      name: "Probability"
+    },
+    {
+      name: 'Mathematics of Quantum Spin',
+    },
+    {
+      name: 'Equivalent State Vectors'
+    },
+      {
+      name: 'The Basis Associated with a Given Spin Direction',
+    },
+    {
+      name: 'Rotating the Apparatus through 60°',
+    },
+    {
+      name: 'The Mathematical Model for Photon Polarization'
+    },
+     {
+      name: 'The Basis Associated with a Given Polarization Direction',
+    },
+     {
+      name: 'The Polarized Filters Experiments'
+    },
+     {
+      name: 'Qubits'
+    },
+     {
+      name: 'Alice, Bob, and Eve'
+    },
+     {
+      name: 'Probability Amplitudes and Interference'
+    },
+     {
+      name: 'Alice, Bob, Eve, and the BB84 Protocol'
+    },
+     {
+      name: 'The Mathematical Model for Photon Polarization'
+    }
+]
+
+/// 4 Entanglement
+export const ENTANGLEMENT =   [
+    {
+      name: "Alice and Bob’s Qubits Are Not Entangled"
+    },
+    {
+      name: 'Unentangled Qubits Calculation',
+    },
+    {
+      name: 'Entangled Qubits Calculation'
+    },
+    {
+      name: 'Superluminal Communication',
+    },
+    {
+      name: 'The Standard Basis for Tensor Products',
+    },
+    {
+      name: 'How Do You Entangle Qubits?'
+    },
+    {
+      name: 'Using the CNOT Gate to Entangle Qubits',
+    },
+    {
+      name: 'Entangled Quantum Clocks'
+    }
+]
