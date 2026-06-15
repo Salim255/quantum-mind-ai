@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ContentService } from "./services/content.service";
 
 @Component({
   selector: "app-learn-page",
@@ -6,7 +7,13 @@ import { Component } from "@angular/core";
   styleUrls: ["./learn.page.scss"],
   standalone: false
 })
-export class LearnPage {
+export class LearnPage implements OnInit, OnDestroy{
+
+  constructor(private contentService: ContentService){}
+
+  ngOnInit(): void {
+
+  }
   /*   Learn
 
   For consuming knowledge.
@@ -65,4 +72,8 @@ export class LearnPage {
     ├── Chemistry
     ├── Machine Learning
     └── Finance */
+
+    ngOnDestroy(): void {
+      this.contentService.clearStorage()
+    }
 }
