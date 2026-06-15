@@ -57,8 +57,8 @@ export const NAVIGATION: NavItem[] = [
         path: '/learn/classical-logic'
       },
       {
-        name: 'Quantum Computing',
-        path: '/learn/quantum-computing'
+        name: 'Quantum logic',
+        path: '/learn/quantum-logic'
       },
       {
         name: 'Algorithms',

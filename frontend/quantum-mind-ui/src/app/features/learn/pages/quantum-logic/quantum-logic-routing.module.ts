@@ -1,11 +1,11 @@
 import { RouterModule, Routes } from "@angular/router";
-import { QuantumComputingPage } from "./quantum-computing.page";
 import { NgModule } from "@angular/core";
+import { QuantumLogicPage } from "./quantum-logic.page";
 
 const routes: Routes= [
   {
       path: "",
-      component: QuantumComputingPage
+      component: QuantumLogicPage
   }
 ]
 
@@ -13,4 +13,4 @@ const routes: Routes= [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class QuantumComputingRoutingModule {}
+export class QuantumLogicRoutingModule {}

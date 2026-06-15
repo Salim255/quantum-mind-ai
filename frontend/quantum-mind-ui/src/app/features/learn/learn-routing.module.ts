@@ -36,9 +36,10 @@ const routes: Routes = [
         path: "classical-logic",
         loadChildren: () => import("./pages/classical-logic/classical-logic.module").then((m) => m.ClassicalLogicModule)
       },
+
       {
-        path: "quantum-computing",
-        loadChildren: () => import("./pages/quantum-computing/quantum-computing.module").then(m => m.QuantumComputingModule)
+        path: "quantum-logic",
+        loadChildren: () => import("./pages/quantum-logic/quantum-logic.module").then(m => m.QuantumLogicModule)
       },
       {
         path: "algorithms",
