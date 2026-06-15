@@ -1,6 +1,6 @@
 
-<div class="page-content-aside">
-  @for(item of list(); track $index){
-    <div>{{ item.name }}</div>
+<ul class="page-content-aside">
+  @for(item of sections(); track $index){
+    <li class="page-content-aside__link">{{ item.name }}</li>
   }
-</div>
+</ul>

@@ -1,3 +1,9 @@
 .page-content-aside {
   padding: 1rem;
+
+  &__link {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
