@@ -1,14 +1,10 @@
 .learn-page {
   display: grid;
   grid-template-columns:  1fr auto;
-  //height: 100vh;
+  gap: 2rem;
   &__content {
     overflow: auto;
-    background-color: red;
     height: 100dvh;
-  }
-  app-content-aside {
-    background-color: red;
   }
 }
 

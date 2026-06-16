@@ -111,7 +111,7 @@ export class LearnPage implements OnInit, OnDestroy{
   scrollToId(id: string) {
     const container = document.querySelector('.learn-page__content');
     const el = document.getElementById(id);
-
+    console.log(el)
     if (!container || !el) return;
 
     const top = el.getBoundingClientRect().top + container.scrollTop;
