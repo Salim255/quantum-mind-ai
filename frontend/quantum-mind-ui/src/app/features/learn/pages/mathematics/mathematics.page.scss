@@ -1,6 +1,14 @@
 .mathematics-page {
   height: 100vh;
   overflow-y: auto;
+
+  section {
+    padding: 2rem;
+  }
+  section:last-child{
+    background-color: red;
+    padding-bottom: 20rem;
+  }
 }
 
 .pdf-page {

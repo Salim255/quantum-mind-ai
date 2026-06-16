@@ -1,6 +1,6 @@
 
 <ul class="page-content-aside">
   @for(item of sections(); track $index){
-    <li class="page-content-aside__link">{{ item.name }}</li>
+    <li class="page-content-aside__link" (click)="onNavigate(item.name)">{{ item.name }}</li>
   }
 </ul>

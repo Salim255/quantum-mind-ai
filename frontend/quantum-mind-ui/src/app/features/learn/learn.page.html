@@ -1,4 +1,8 @@
 <div class="learn-page">
-  <div><router-outlet></router-outlet></div>
-  <app-content-aside></app-content-aside>
+  <div class="learn-page__content">
+    <router-outlet></router-outlet>
+  </div>
+  @if(closeAside()){
+    <app-content-aside></app-content-aside>
+  }
 </div>

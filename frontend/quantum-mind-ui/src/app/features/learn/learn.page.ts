@@ -1,5 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ContentService } from "./services/content.service";
+import { EventType, NavigationEnd, Router } from "@angular/router";
+import { filter } from "rxjs";
 
 @Component({
   selector: "app-learn-page",
@@ -8,11 +10,15 @@ import { ContentService } from "./services/content.service";
   standalone: false
 })
 export class LearnPage implements OnInit, OnDestroy{
+  closeAside = signal<boolean>(JSON.parse(localStorage.getItem("asideIsClose") ?? 'false'));
 
-  constructor(private contentService: ContentService){}
+  constructor(
+    private router: Router,
+    private contentService: ContentService
+  ){}
 
   ngOnInit(): void {
-
+    this.listenToRouter()
   }
   /*   Learn
 
@@ -73,7 +79,21 @@ export class LearnPage implements OnInit, OnDestroy{
     ├── Machine Learning
     └── Finance */
 
-    ngOnDestroy(): void {
-      this.contentService.clearStorage()
-    }
+  listenToRouter(): void {
+     this.router.events.pipe(
+        filter(event => event.type === EventType.NavigationEnd)
+      ).subscribe((event: NavigationEnd) => {
+          const url =  event.url;
+          if (url === '/learn') {
+            this.closeAside.set(false);
+            localStorage.setItem("asideIsClose", JSON.stringify(false));
+          } else {
+            this.closeAside.set(true);
+            localStorage.setItem("asideIsClose", JSON.stringify(true));
+          }
+      });
+  }
+  ngOnDestroy(): void {
+    this.contentService.clearStorage()
+  }
 }
