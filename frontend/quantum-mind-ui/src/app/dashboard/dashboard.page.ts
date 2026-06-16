@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, signal } from "@angular/core";
 
 @Component({
   selector: "app-dashboard",
@@ -7,6 +7,8 @@ import { Component } from "@angular/core";
   standalone:false
 })
 export class DashboardPage {
+
+  closeAside = signal<boolean>(JSON.parse(localStorage.getItem("asideIsClose") ?? 'true'));
   constructor() {}
 
  /*  Minimal v1 Navigation

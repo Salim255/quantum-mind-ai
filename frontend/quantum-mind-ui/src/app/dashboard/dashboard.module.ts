@@ -7,9 +7,10 @@ import { WrapperLayoutComponent } from "./components/wrapper-layout/wrapper-layo
 import { AsideLayoutComponent } from "./components/aside-layout/aside-layout.component";
 import { BreadCrumbsComponent } from "./components/bread-crumbs/bread-crumbs.component";
 import { AsideNavLinkComponent } from "./components/aide-nav-link/aside-nav-link.component";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
-  imports: [CommonModule, DashboardRoutingModule],
+  imports: [SharedModule, CommonModule, DashboardRoutingModule],
   declarations: [
     AsideNavLinkComponent,
     BreadCrumbsComponent,

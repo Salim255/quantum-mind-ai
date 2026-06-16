@@ -1,13 +1,11 @@
 .mathematics-page {
-  height: 100vh;
-  overflow-y: auto;
-
+  //height: 100vh;
   section {
     padding: 2rem;
   }
   section:last-child{
     background-color: red;
-    padding-bottom: 20rem;
+    //padding-bottom: 20rem;
   }
 }
 

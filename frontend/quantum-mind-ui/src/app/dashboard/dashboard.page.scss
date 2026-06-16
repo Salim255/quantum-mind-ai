@@ -5,17 +5,23 @@
 
 .dashboard-page {
   display: grid;
-  grid-template-columns: auto 1fr;
-  height: 100vh;
+  grid-template-columns: auto 1fr auto;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
 
   app-header {
     position: sticky;
     top: 0;
+    z-index: 10;
+    display: block;
+    background-color: black;
   }
-  &__content {
-    //padding-top: 10rem;
+
+  app-content-aside {
+    background-color: blue;
+
+
   }
   &__aside {
     width: 16rem;
@@ -25,7 +31,7 @@
     z-index: 10;
     app-aside-layout {
       position: fixed;
-      height: 100vh;
+      height: 100dvh;
     }
   }
 

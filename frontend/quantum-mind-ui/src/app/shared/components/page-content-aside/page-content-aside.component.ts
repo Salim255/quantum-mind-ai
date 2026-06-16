@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, signal } from "@angular/core";
-import { EventType, NavigationEnd, Router } from "@angular/router";
-import { filter, Subscription } from "rxjs";
+import { Component, OnInit, signal } from "@angular/core";
+import { Subscription, take } from "rxjs";
 import { ContentService } from "../../../features/learn/services/content.service";
-import { PageAsideService } from "../../service/page-aside.service";
+import { NgZone } from '@angular/core';
+import { PageAsideService } from "../../service/page-aside-content.service";
+
 
 @Component({
   selector: "app-content-aside",
@@ -14,10 +15,10 @@ export class PageContentAsideComponent implements OnInit {
   private pageAsideContentSubscription!: Subscription;
   sections = signal<any []>([])
 
+
   constructor(
     private pageAsideService: PageAsideService,
-    private contentService: ContentService
-  ){}
+    private contentService: ContentService){}
 
   ngOnInit(): void {
     this.subscribeToPageAsideContent();
@@ -31,6 +32,7 @@ export class PageContentAsideComponent implements OnInit {
 
   onNavigate(id: string){
     console.log(id)
+    this.pageAsideService.setCurrentId(id);
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ContentService } from "./services/content.service";
 import { EventType, NavigationEnd, Router } from "@angular/router";
-import { filter } from "rxjs";
+import { filter, Subscription } from "rxjs";
+import { PageAsideService } from "../../shared/service/page-aside-content.service";
 
 @Component({
   selector: "app-learn-page",
@@ -11,14 +12,17 @@ import { filter } from "rxjs";
 })
 export class LearnPage implements OnInit, OnDestroy{
   closeAside = signal<boolean>(JSON.parse(localStorage.getItem("asideIsClose") ?? 'false'));
+  private currentSectionIdSubscription!: Subscription;
 
   constructor(
+    private pageAsideService: PageAsideService,
     private router: Router,
     private contentService: ContentService
   ){}
 
   ngOnInit(): void {
-    this.listenToRouter()
+    this.listenToRouter();
+    this.subscribeToSectionId();
   }
   /*   Learn
 
@@ -79,6 +83,16 @@ export class LearnPage implements OnInit, OnDestroy{
     ├── Machine Learning
     └── Finance */
 
+  subscribeToSectionId(){
+    this.currentSectionIdSubscription = this.pageAsideService.getCurrentId$.subscribe(
+      id => {
+        if(id) {
+          this.scrollToId(id)
+        }
+      }
+    )
+  }
+
   listenToRouter(): void {
      this.router.events.pipe(
         filter(event => event.type === EventType.NavigationEnd)
@@ -93,7 +107,23 @@ export class LearnPage implements OnInit, OnDestroy{
           }
       });
   }
+
+  scrollToId(id: string) {
+    const container = document.querySelector('.learn-page__content');
+    const el = document.getElementById(id);
+
+    if (!container || !el) return;
+
+    const top = el.getBoundingClientRect().top + container.scrollTop;
+
+    container.scrollTo({
+      top: top, // header offset
+      behavior: 'smooth'
+    });
+  }
+
   ngOnDestroy(): void {
-    this.contentService.clearStorage()
+    this.contentService.clearStorage();
+    this.currentSectionIdSubscription?.unsubscribe()
   }
 }
