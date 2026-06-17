@@ -60,11 +60,14 @@ ANSWER STRUCTURE
 ========================
 OUTPUT RULES
 ========================
+- Output MUST be in Markdown format.
+- Use Markdown for:
+  - inline math: $...$
+  - block math: $$...$$
+  - code blocks: ```python ... ```
+  - lists when helpful
+  - bold/italic for emphasis
 - Do NOT output JSON.
-- Do NOT use markdown.
-- Do NOT use headings.
-- Do NOT use bullet points.
-- Write naturally as plain text.
 - Keep the response concise and beginner-friendly.
 """
 
