@@ -9,6 +9,10 @@ export class MessageService {
 
   constructor(){}
 
+  completeStreamResponseSubject():void{
+    this.streamingResponseSubject.complete();
+  }
+
   setMessage(message: AnswerPayload){
     this.messageSubject.next(message)
   }

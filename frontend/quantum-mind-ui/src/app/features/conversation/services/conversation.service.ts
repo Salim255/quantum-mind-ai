@@ -35,7 +35,10 @@ export class ConversationService {
 
       const { value, done } = await reader.read();
 
-      if (done) break;
+      if (done)  {
+        this.messageService.completeStreamResponseSubject()
+        break;
+      }
 
       const chunk = decoder.decode(value, { stream: true });
 

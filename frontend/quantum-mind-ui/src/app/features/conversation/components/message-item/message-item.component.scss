@@ -3,10 +3,114 @@
 @use "../../../../../styles/typography.scss" as *;
 
 .message-item {
-  &__paragraph {
-    font-size: 1.2rem;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  padding: $space-lg;
+  box-shadow: $shadow-soft;
+  color: $color-text;
+  font-family: $font-main;
+  line-height: 1.6;
+
+  /* Paragraphs */
+  p {
+    margin: 0 0 $space-md 0;
     color: $color-text-soft;
-    line-height: 1.6;
-    white-space: pre-line;
+    font-size: 1.05rem;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4 {
+    margin: $space-md 0 $space-sm 0;
+    font-weight: 600;
+    color: $color-text;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 1.3rem; }
+
+  /* Lists */
+  ul, ol {
+    margin: $space-sm 0 $space-md $space-md;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: $space-xs;
+    color: $color-text-soft;
+  }
+
+  /* Inline code */
+  code {
+    background: $color-primary-soft;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: $color-primary;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* Code blocks */
+  pre {
+    background: $color-primary-soft;
+    padding: $space-md;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: $space-md 0;
+
+    code {
+      background: none;
+      padding: 0;
+      color: $color-primary;
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Blockquotes */
+  blockquote {
+    border-left: 4px solid $color-primary;
+    padding-left: $space-md;
+    margin: $space-md 0;
+    color: $color-text-soft;
+    font-style: italic;
+  }
+
+  /* Images */
+  img {
+    max-width: 100%;
+    border-radius: 12px;
+    margin: $space-md 0;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: $space-md 0;
+  }
+
+  th, td {
+    border: 1px solid $color-border;
+    padding: $space-sm;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+
+  th {
+    background: $color-primary-soft;
+    color: $color-text;
+    font-weight: 600;
+  }
+
+  /* MathJax block equations */
+  mjx-container[display="true"] {
+    margin: $space-md 0;
+    overflow-x: auto;
+  }
+
+  /* Inline math */
+  mjx-container[display="false"] {
+    margin: 0 4px;
   }
 }
