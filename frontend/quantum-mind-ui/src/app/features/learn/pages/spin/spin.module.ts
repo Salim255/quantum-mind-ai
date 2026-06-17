@@ -8,10 +8,12 @@ import { SamDirectionComponent } from "./components/same-direction/same-directio
 import { DifferentDirectionComponent } from "./components/different-direction/different-direction.component";
 import { MeasurementComponent } from "./components/measurement/measurement.component";
 import { RandomnessComponent } from "./components/randomness/randomness.component";
+import { PhotonsPolarizationComponent } from "./components/photons-polarization/photons-polarization.component";
 
 @NgModule({
   imports: [CommonModule, SpinRoutingModule],
   declarations: [
+    PhotonsPolarizationComponent,
     RandomnessComponent,
     MeasurementComponent,
     DifferentDirectionComponent,
