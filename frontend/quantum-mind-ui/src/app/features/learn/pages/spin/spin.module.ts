@@ -5,10 +5,12 @@ import { SpinRoutingModule } from "./spin-routing.module";
 import { SpinHomeComponent } from "./components/spin-home/spin-home.component";
 import { QuantumClockComponent } from "./components/quantum-clock/quantum-clock.component";
 import { SamDirectionComponent } from "./components/same-direction/same-direction.component";
+import { DifferentDirectionComponent } from "./components/different-direction/different-direction.component";
 
 @NgModule({
   imports: [CommonModule, SpinRoutingModule],
   declarations: [
+    DifferentDirectionComponent,
     SamDirectionComponent,
     QuantumClockComponent,
     SpinHomeComponent,
