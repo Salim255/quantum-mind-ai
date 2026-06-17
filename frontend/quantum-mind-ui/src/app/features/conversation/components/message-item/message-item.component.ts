@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, signal, SimpleChanges } from "@angular/core";
 import { MessageSchema } from "../../model/conversation.model";
+import { marked } from 'marked';
 import { FinalAnswer } from "../../services/conversation-http.service";
 import { MessageService } from "../../services/message.service";
 import { Subscription } from "rxjs";
@@ -15,7 +16,9 @@ export class MessageItemComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() message: FinalAnswer | undefined;
   private streamResponseSubject!: Subscription;
-  response = signal<string | null>(null)
+  response = signal<string>("")
+  private fullResponse: string | null =  null;
+
   constructor(private messageService: MessageService){}
 
   ngOnInit(): void {
@@ -30,7 +33,19 @@ export class MessageItemComponent implements OnInit, OnChanges, OnDestroy {
 
   subscribeToStreamResponse(){
     this.streamResponseSubject = this.messageService.getStreamResponse$.subscribe(
-      response=> this.response.set(response)
+      async response => {
+        // accumulate chunks
+        this.fullResponse = response;
+
+        // convert Markdown → HTML
+        const html = await marked(this.fullResponse ?? "");
+
+        // update your signal
+        this.response.set(html);
+
+        // optional: render MathJax for equations
+        // MathJax.typesetPromise();
+      }
     )
   }
 
