@@ -7,10 +7,12 @@ import { QuantumClockComponent } from "./components/quantum-clock/quantum-clock.
 import { SamDirectionComponent } from "./components/same-direction/same-direction.component";
 import { DifferentDirectionComponent } from "./components/different-direction/different-direction.component";
 import { MeasurementComponent } from "./components/measurement/measurement.component";
+import { RandomnessComponent } from "./components/randomness/randomness.component";
 
 @NgModule({
   imports: [CommonModule, SpinRoutingModule],
   declarations: [
+    RandomnessComponent,
     MeasurementComponent,
     DifferentDirectionComponent,
     SamDirectionComponent,
