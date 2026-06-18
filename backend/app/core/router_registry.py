@@ -5,6 +5,7 @@ from app.v1.modules.conversation.controller.controller import (
     router as conversation_router,
 )
 from app.v1.modules.learn.controller.controller import router as learn_router
+from app.v1.modules.ingestion.controller.controller import router as ingestion_router
 
 class RouterService:
     @staticmethod
@@ -12,7 +13,7 @@ class RouterService:
         """
         Register all application routers.
         """
-
+        app.include_router(ingestion_router)
         app.include_router(learn_router)
         app.include_router(conversation_router)
         app.include_router(rag_router)

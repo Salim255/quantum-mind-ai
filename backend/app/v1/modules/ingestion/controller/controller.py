@@ -1,14 +1,17 @@
 from fastapi import(APIRouter, Depends, File, UploadFile)
 from typing import Annotated
 from app.v1.modules.ingestion.dto.ingestion_dto import IngestionResponseDto
+from app.v1.modules.ingestion.dependencies import DocIngestionService, get_doc_ingestion_service
+
 router = APIRouter(
-    prefix="/ingestion",
+    prefix="/ingestions",
     tags=["Ingestion"]
 )
 
-@router.post("/")
+@router.post("/ingest-pdf")
 async def ingest_pdf(
     file: Annotated[UploadFile, File(...)],
-    loader_service: Annotated[LoaderService, Depends(get_loader_service)]
-) -> IngestionResponseDto:
-    return await loader_service.upload_and_ingest_pdf(file=file)
+    doc_ingestion_service: Annotated[DocIngestionService, Depends(get_doc_ingestion_service)]
+):
+    return await doc_ingestion_service.pdf_ingestion_pipeline(file=file)
+ 

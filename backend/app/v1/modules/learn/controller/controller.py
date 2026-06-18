@@ -17,7 +17,10 @@ router = APIRouter(
     tags=["Learns"]
 )
 
-@router.post("/ingest-pdf")
+@router.post(
+    "/ingest-pdf",
+    status_code=204
+    )
 async def upload_pdf_doc(
     file: Annotated[UploadFile, File(...)],
     doc_ingestion_service: Annotated[DocIngestionServiceV2, Depends(get_doc_ingestion_service_v2)]

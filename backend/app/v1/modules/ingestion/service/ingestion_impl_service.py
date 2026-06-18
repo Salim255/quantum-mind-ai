@@ -1,249 +1,372 @@
-import os
-import asyncio
-import uuid
+from pypdf import PdfReader
+from app.v1.modules.ingestion.service.ingestion_service import DocIngestionService
+from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
+from app.v1.modules.learn.dto.section_dto import SectionDTO
+from app.v1.modules.ingestion.dto.text_dto import ContentBlockDTO
+from fastapi import UploadFile
 import logging
-from fastapi import  UploadFile
-import aiofiles
-from app.core.container import Container
-from app.v1.modules.rag.loader.chunker import RAGChunker
-from app.v1.modules.rag.loader.cleaner import clean_text
-from app.v1.modules.rag.loader.pdf_loader import load_pdf
-from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
-from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
-from app.v1.modules.rag.dto.ingestion_dto import IngestionResponseDto  # your existing function
+import re
+
 
 logger = logging.getLogger(__name__)
 
-class IngestionServiceImpl(LoaderService):
-    def __init__(
-            self, 
-            container: Container, 
-            add_document_service: RAGAddDocument
-        ):
-
-        self.container:Container = container
-
-        self.add_document_service: RAGAddDocument = add_document_service
-        
-        ## You are creating a semaphore that allows at most 5 concurrent 
-        # tasks to run at the same time.
-        self.sem = asyncio.Semaphore(5)
-
-    async def upload_and_ingest_pdf_v2(
-            self,
-            file: UploadFile,
-            ) -> str:
-        return ""
-
-    async def upload_and_ingest_pdf(
-        self,
-        file: UploadFile,
-        ) -> IngestionResponseDto:
-        """
-        Receive a PDF file from the client (Postman, UI, etc.),
-        save it asynchronously, then ingest it into the vector store.
-
-        Parameters
-        ----------
-        file : UploadFile
-            The uploaded PDF file sent by the client.
-
-        Returns
-        -------
-        IngestionResponseSchema
-            A structured response confirming ingestion and showing how many chunks were added.
-        """
-
+class DocIngestionImplService(DocIngestionService):
+    async def pdf_ingestion_pipeline(self, file:UploadFile):
         try:
-            # -----------------------------------------------------------------------
-            # 1. Generate a unique temporary filename
-            # -----------------------------------------------------------------------
-            # uuid4() ensures no filename collisions, even with concurrent uploads.
-            # /tmp is the correct directory for temporary files in containers.
-            temp_filename = f"{uuid.uuid4()}.pdf"
-            temp_path = os.path.join("/tmp", temp_filename)
+            # 1 extract the file
+            reader:PdfReader = self.extract_file(file=file)
 
+            # 2 Save doc to database
+
+            # 3 extract_bookmarks
+            extracted_bookmarks: list[BookmarkDTO] =   self.extract_bookmarks(reader=reader)
+
+            # 4 extract_sections
+            extracted_sections = self.extract_sections(reader=reader, bookmarks=extracted_bookmarks)
+
+            extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
+            # 6 extract_images
+    
+
+            #merged_contents = self.merge_content_blocks(texts=extracted_texts, images=extracted_images)
+            # 7 persist_to_database
+            # return extracted_bookmarks
+            #return extracted_sections
+            return extracted_texts
+            # return  extracted_images
+            #return  merged_contents
         
-            # -----------------------------------------------------------------------
-            # 2. Save the uploaded file asynchronously
-            # -----------------------------------------------------------------------
-            # aiofiles ensures we do NOT block the FastAPI event loop.
-            # This is the modern, recommended way to handle file writes in async apps.
-            async with aiofiles.open(temp_path, "wb") as out_file:
-                # Read the uploaded file content asynchronously
-                content = await file.read()
-                # Write the content asynchronously to the temp file
-                await out_file.write(content)
+        except Exception:
+            logger.exception("Error in pdf ingestion")
+            raise
 
+    def extract_file(self, file:UploadFile) -> PdfReader:
+        """
+        Loads the uploaded PDF into memory.
+        """
 
-            # -----------------------------------------------------------------------
-            # 3. Ingest the PDF into your vector database
-            # -----------------------------------------------------------------------
-            # ingest_pdf() handles:
-            # - extracting text
-            # - chunking
-            # - embedding
-            # - storing chunks in VECTOR_DB
+        file.file.seek(0)
+
+        reader = PdfReader(file.file)
+
+        logger.info("PDF loaded successfully.")
+        logger.info("Pages: %s", len(reader.pages))
+
+        return reader
         
-            # We run this in a separate thread to avoid blocking the event loop,
-            # since ingest_pdf is CPU-bound and not async.
-            full_text: str = await asyncio.to_thread(
-                self.process_pdf,
-                temp_path,
-                source=file.filename
+
+
+    def extract_bookmarks(self, reader: PdfReader) -> list[BookmarkDTO]:
+        """
+        Extracts the top-level bookmarks (chapters)
+        and their nested sections from the PDF outline.
+        """
+        bookmarks: list[BookmarkDTO] = []
+
+        outline = reader.outline
+
+        order = 1
+
+        for item in outline:
+
+            if isinstance(item, dict):
+
+                title = item.get("/Title")
+
+                if not title:
+                    continue
+
+                start_page = reader.get_page_number(item["/Page"]) + 1
+
+                bookmarks.append(
+                    BookmarkDTO(
+                        title=title,
+                        order=order,
+                        start_page=start_page,
+                        end_page=0,
+                    )
                 )
 
-            # 3. Split into smaller chunks.
-            chunks = RAGChunker.semantic_chunk_text(normalized_text=full_text)
-            
-            # ------------------------------------------------------------------
-            # STORE CHUNKS CONCURRENTLY
-            # ------------------------------------------------------------------
-            #
-            # Each chunk must:
-            #   1. Generate an embedding
-            #   2. Be inserted into Qdrant
-            #
-            # Both operations are I/O-bound and support async execution.
-            #
-            # Instead of processing chunks one-by-one:
-            #
-            #   for chunk in chunks:
-            #       await add_qdrant_document(...)
-            #
-            # we process multiple chunks concurrently to reduce total ingestion
-            # time.
-            #
-            # ------------------------------------------------------------------
-            # CONCURRENCY LIMIT
-            # ------------------------------------------------------------------
-            #
-            # A semaphore limits the number of active insert operations.
-            #
-            # Without a semaphore:
-            #
-            #   await asyncio.gather(...)
-            #
-            # all chunk insertions would start immediately.
-            #
-            # For large documents this could create hundreds of simultaneous
-            # embedding and database operations, potentially overwhelming:
-            #
-            #   - Qdrant
-            #   - the embedding model
-            #   - memory usage
-            #
-            # Semaphore(5) means:
-            #
-            #   Maximum 5 chunk insertions may run at the same time.
-            #
-            # When one finishes, the next waiting task is allowed to start.
-            #
-            # ------------------------------------------------------------------
-            # SAFE WRAPPER
-            # ------------------------------------------------------------------
-            #
-            # Every task must acquire a semaphore permit before performing the
-            # insertion.
-            #
-            # This ensures that the concurrency limit is respected by all tasks.
-            # ------------------------------------------------------------------
-            sem = asyncio.Semaphore(5)
+                order += 1
 
-            async def safe_add(chunk):
-                async with sem:
-                    return await self.add_document_service.add_qdrant_document(
-                        chunk,
-                        source=file.filename
+        # Determine end pages
+        for i in range(len(bookmarks)):
+
+            if i < len(bookmarks) - 1:
+                bookmarks[i].end_page = bookmarks[i + 1].start_page - 1
+            else:
+                bookmarks[i].end_page = len(reader.pages)
+
+        logger.info("Extracted %s bookmarks.", len(bookmarks))
+        print("Bookmarks====\n", bookmarks)
+        return bookmarks
+    
+    def extract_sections(
+        self,
+        reader: PdfReader,
+        bookmarks: list[BookmarkDTO],
+    ) -> list[SectionDTO]:
+        """
+        Extract all inner sections from the PDF outline and enrich them
+        with:
+        - end_page
+        - next_section_title
+        - next_bookmark_title
+
+        Pages provide coarse boundaries.
+        Titles provide precise boundaries.
+        """
+
+        sections: list[SectionDTO] = []
+
+        outline = reader.outline
+
+        current_bookmark: str | None = None
+
+        # --------------------------------------------------
+        # PASS 1: Extract raw sections
+        # --------------------------------------------------
+        for item in outline:
+
+            # Top-level bookmark
+            if isinstance(item, dict):
+                current_bookmark = item.get("/Title")
+
+            # Nested sections under the bookmark
+            elif isinstance(item, list):
+
+                for section in item:
+
+                    title = section.get("/Title")
+
+                    if not title:
+                        continue
+
+                    start_page = (
+                        reader.get_page_number(section["/Page"]) + 1
                     )
 
-            # ------------------------------------------------------------------
-            # CREATE TASKS
-            # ------------------------------------------------------------------
-            #
-            # create_task() schedules all chunk insertions immediately.
-            #
-            # Each task runs independently and waits for a semaphore slot before
-            # performing the actual work.
-            # ------------------------------------------------------------------
-            tasks = [
-                asyncio.create_task(safe_add(chunk))
-                for chunk in chunks
-            ]
+                    sections.append(
+                        SectionDTO(
+                            bookmark_title=current_bookmark,
+                            title=title,
+                            start_page=start_page,
+                            end_page=0,  # temporary
+                            next_section_title=None,
+                            next_bookmark_title=None,
+                        )
+                    )
 
-            # ------------------------------------------------------------------
-            # WAIT FOR ALL TASKS
-            # ------------------------------------------------------------------
-            #
-            # gather() waits until every task completes.
-            #
-            # The * operator unpacks the list:
-            #
-            #   [task1, task2, task3]
-            #
-            # becomes:
-            #
-            #   gather(task1, task2, task3)
-            #
-            # gather() expects separate awaitables, not a list.
-            #
-            # Therefore:
-            #
-            #   gather(*tasks)   ✅
-            #
-            # while:
-            #
-            #   gather(tasks)    ❌
-            #
-            # would pass a single list object instead of individual tasks.
-            #
-            # return_exceptions=True prevents one failed chunk from cancelling
-            # all remaining chunk insertions.
-            # ------------------------------------------------------------------
-            await asyncio.gather(
-                *tasks,
-                return_exceptions=True
+        # --------------------------------------------------
+        # PASS 2: Group sections by bookmark
+        # --------------------------------------------------
+        grouped_sections: dict[str, list[SectionDTO]] = {}
+
+        for section in sections:
+            grouped_sections.setdefault(
+                section.bookmark_title,
+                [],
+            ).append(section)
+
+        bookmark_lookup = {
+            bookmark.title: bookmark
+            for bookmark in bookmarks
+        }
+
+        bookmark_titles = [
+            bookmark.title
+            for bookmark in bookmarks
+        ]
+
+        # --------------------------------------------------
+        # PASS 3: Compute boundaries
+        # --------------------------------------------------
+        for bookmark_title, bookmark_sections in grouped_sections.items():
+
+            # Preserve PDF order
+            bookmark_sections.sort(
+                key=lambda section: section.start_page
             )
 
-        
-                    
-            
-            # 4. Add each chunk to the vector DB.
-            #for chunk in chunks:
-            #    self.add_document_service.add_document(
-            #        chunk=chunk,
-            #        source=file.filename
-            #    )
+            for index, section in enumerate(bookmark_sections):
 
-            # 4. Return a clean JSON response
-            # -----------------------------------------------------------------------
-            # This tells the client:
-            # - ingestion succeeded
-            # - how many chunks were added
-            # - what the original filename was
-            logger.info("PDF ingestion completed successfully")
+                # ------------------------------------------
+                # Normal case:
+                # next section in same bookmark
+                # ------------------------------------------
+                if index < len(bookmark_sections) - 1:
 
-            return IngestionResponseDto(
-                status="ok",
-                chunks_added=len(chunks),
-                 source=file.filename
-            )
-           
-        
-        except Exception as e:
-            logger.exception("Exception in load doc", e)
-            raise e
-                    
-    def process_pdf(self, path: str, source: str) -> IngestionResponseDto:
+                    next_section = bookmark_sections[index + 1]
+
+                    section.next_section_title = (
+                        next_section.title
+                    )
+
+                    # DO NOT subtract 1.
+                    # Multiple sections can share a page.
+                    section.end_page = (
+                        next_section.start_page
+                    )
+
+                # ------------------------------------------
+                # Last section of bookmark
+                # ------------------------------------------
+                else:
+
+                    bookmark = bookmark_lookup[
+                        bookmark_title
+                    ]
+
+                    section.end_page = (
+                        bookmark.end_page
+                    )
+
+                    current_index = bookmark_titles.index(
+                        bookmark_title
+                    )
+
+                    if current_index < len(bookmark_titles) - 1:
+
+                        section.next_bookmark_title = (
+                            bookmark_titles[
+                                current_index + 1
+                            ]
+                        )
+
+        logger.info(
+            "Extracted %s sections.",
+            len(sections),
+        )
+
+        return sections
+
+
+    def _get_next_bookmark_title(self, current, bookmarks):
+        for i, b in enumerate(bookmarks):
+            if b.title == current.title and i < len(bookmarks) - 1:
+                return bookmarks[i + 1].title
+        return None
+
+    def extract_between_titles(
+        self,
+        text: str,
+        current_title: str,
+        next_title: str | None,
+    ) -> str:
         """
-        Load a PDF, chunk it, embed each chunk, and store in VECTOR_DB.
-         """
+        Extract text starting from the current section title
+        and ending just before the next section title.
+        """
 
-        # 1. Extract raw text from the PDF.
-        full_text = load_pdf(path)
+        # -----------------------------
+        # Find current section header
+        # -----------------------------
+        start_pattern = (
+            rf"(?im)^\s*{re.escape(current_title)}\s*$"
+        )
 
-        # 2. CLEAN THE TEXT BEFORE CHUNKING
-        full_text: str = clean_text(text=full_text)
+        start_match = re.search(start_pattern, text)
 
-        return  full_text
+        if not start_match:
+            return ""
+
+        text = text[start_match.start():]
+
+        # -----------------------------
+        # Find next section header
+        # -----------------------------
+        if next_title:
+
+            end_pattern = (
+                rf"(?im)^\s*{re.escape(next_title)}\s*$"
+            )
+
+            end_match = re.search(end_pattern, text)
+
+            if end_match:
+                text = text[:end_match.start()]
+
+        return text.strip()
+
+
+    def extract_text(
+        self,
+        reader: PdfReader,
+        sections: list[SectionDTO]
+    ) -> list[ContentBlockDTO]:
+
+        texts: list[ContentBlockDTO] = []
+
+        total_pages = len(reader.pages)
+
+        sections = sorted(sections, key=lambda s: s.start_page)
+
+        order = 1
+        
+        for section in sections:
+
+            start_page = max(1, min(section.start_page, total_pages))
+            end_page = max(start_page, min(section.end_page, total_pages))
+
+            page_texts: list[str] = []
+
+            
+
+            # Extract raw text from the section pages
+            for page_num in range(start_page, end_page + 1):
+                page = reader.pages[page_num - 1]
+
+                text = page.extract_text()
+
+                if text:
+                    page_texts.append(text)
+
+            raw_text = "\n".join(page_texts)
+
+            # Use the next section title already stored in the DTO
+            clean_text = self.extract_between_titles(
+                text=raw_text,
+                current_title=section.title,
+                next_title=section.next_section_title,
+            )
+
+            # NEW STEP (safe place for cleanup section.title)
+            clean_text = clean_text.replace(section.title, "", 1).strip()
+            
+            texts.append(
+                ContentBlockDTO(
+                    bookmark_title=section.bookmark_title,
+                    section_title=section.title,
+                    type="text",
+                    order=order,
+                    content=clean_text,
+                )
+            )
+
+            order += 1
+
+        return texts
     
+    def merge_content_blocks(
+        self,
+        texts: list[ContentBlockDTO]
+    ) -> list[ContentBlockDTO]:
+
+            
+        merged = []
+
+        for text_block in texts:
+
+            merged.append(
+                ContentBlockDTO(
+                    bookmark_title=text_block.bookmark_title,
+                    section_title=text_block.section_title,
+                    content=text_block.content,
+                )
+            )
+
+    
+        return merged
+
+    def persist_to_database(self):
+        return ""
