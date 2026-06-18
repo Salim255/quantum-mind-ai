@@ -21,12 +21,11 @@
 
   /* Headings */
   h1, h2, h3, h4 {
-    margin: $space-md 0 $space-sm 0;
+    margin: $space-md !important;
     font-weight: 600;
     color: $color-text;
   }
 
-  h1 { font-size: 2rem; }
   h2 { font-size: 1.6rem; }
   h3 { font-size: 1.3rem; }
 

@@ -64,7 +64,7 @@ export class MessageItemComponent implements OnInit, OnChanges, AfterViewInit, O
   }
 
    ngAfterViewInit() {
-    // Wait for Angular to finish rendering
+    // Wait for Angular to finish rendering//
     this.ngZone.onStable.subscribe(() => {
       if (MathJax?.typesetPromise) {
         MathJax.typesetPromise();

@@ -33,7 +33,7 @@ class ConversationServiceImpl(ConversationService):
                 )
         
                 async for chunk in stream:
-                    yield f"data: {json.dumps(chunk)}\n\n"
+                    yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
     
             except Exception:
                 logger.exception("Streaming failed")

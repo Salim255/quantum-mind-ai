@@ -110,7 +110,6 @@ def groq_llm_call_streaming(
                 "content": prompt
             }
         ],
-        max_tokens=300,
         timeout=10,
         stream=True
     )
