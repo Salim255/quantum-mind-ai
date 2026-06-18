@@ -1,0 +1,249 @@
+import os
+import asyncio
+import uuid
+import logging
+from fastapi import  UploadFile
+import aiofiles
+from app.core.container import Container
+from app.v1.modules.rag.loader.chunker import RAGChunker
+from app.v1.modules.rag.loader.cleaner import clean_text
+from app.v1.modules.rag.loader.pdf_loader import load_pdf
+from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
+from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
+from app.v1.modules.rag.dto.ingestion_dto import IngestionResponseDto  # your existing function
+
+logger = logging.getLogger(__name__)
+
+class IngestionServiceImpl(LoaderService):
+    def __init__(
+            self, 
+            container: Container, 
+            add_document_service: RAGAddDocument
+        ):
+
+        self.container:Container = container
+
+        self.add_document_service: RAGAddDocument = add_document_service
+        
+        ## You are creating a semaphore that allows at most 5 concurrent 
+        # tasks to run at the same time.
+        self.sem = asyncio.Semaphore(5)
+
+    async def upload_and_ingest_pdf_v2(
+            self,
+            file: UploadFile,
+            ) -> str:
+        return ""
+
+    async def upload_and_ingest_pdf(
+        self,
+        file: UploadFile,
+        ) -> IngestionResponseDto:
+        """
+        Receive a PDF file from the client (Postman, UI, etc.),
+        save it asynchronously, then ingest it into the vector store.
+
+        Parameters
+        ----------
+        file : UploadFile
+            The uploaded PDF file sent by the client.
+
+        Returns
+        -------
+        IngestionResponseSchema
+            A structured response confirming ingestion and showing how many chunks were added.
+        """
+
+        try:
+            # -----------------------------------------------------------------------
+            # 1. Generate a unique temporary filename
+            # -----------------------------------------------------------------------
+            # uuid4() ensures no filename collisions, even with concurrent uploads.
+            # /tmp is the correct directory for temporary files in containers.
+            temp_filename = f"{uuid.uuid4()}.pdf"
+            temp_path = os.path.join("/tmp", temp_filename)
+
+        
+            # -----------------------------------------------------------------------
+            # 2. Save the uploaded file asynchronously
+            # -----------------------------------------------------------------------
+            # aiofiles ensures we do NOT block the FastAPI event loop.
+            # This is the modern, recommended way to handle file writes in async apps.
+            async with aiofiles.open(temp_path, "wb") as out_file:
+                # Read the uploaded file content asynchronously
+                content = await file.read()
+                # Write the content asynchronously to the temp file
+                await out_file.write(content)
+
+
+            # -----------------------------------------------------------------------
+            # 3. Ingest the PDF into your vector database
+            # -----------------------------------------------------------------------
+            # ingest_pdf() handles:
+            # - extracting text
+            # - chunking
+            # - embedding
+            # - storing chunks in VECTOR_DB
+        
+            # We run this in a separate thread to avoid blocking the event loop,
+            # since ingest_pdf is CPU-bound and not async.
+            full_text: str = await asyncio.to_thread(
+                self.process_pdf,
+                temp_path,
+                source=file.filename
+                )
+
+            # 3. Split into smaller chunks.
+            chunks = RAGChunker.semantic_chunk_text(normalized_text=full_text)
+            
+            # ------------------------------------------------------------------
+            # STORE CHUNKS CONCURRENTLY
+            # ------------------------------------------------------------------
+            #
+            # Each chunk must:
+            #   1. Generate an embedding
+            #   2. Be inserted into Qdrant
+            #
+            # Both operations are I/O-bound and support async execution.
+            #
+            # Instead of processing chunks one-by-one:
+            #
+            #   for chunk in chunks:
+            #       await add_qdrant_document(...)
+            #
+            # we process multiple chunks concurrently to reduce total ingestion
+            # time.
+            #
+            # ------------------------------------------------------------------
+            # CONCURRENCY LIMIT
+            # ------------------------------------------------------------------
+            #
+            # A semaphore limits the number of active insert operations.
+            #
+            # Without a semaphore:
+            #
+            #   await asyncio.gather(...)
+            #
+            # all chunk insertions would start immediately.
+            #
+            # For large documents this could create hundreds of simultaneous
+            # embedding and database operations, potentially overwhelming:
+            #
+            #   - Qdrant
+            #   - the embedding model
+            #   - memory usage
+            #
+            # Semaphore(5) means:
+            #
+            #   Maximum 5 chunk insertions may run at the same time.
+            #
+            # When one finishes, the next waiting task is allowed to start.
+            #
+            # ------------------------------------------------------------------
+            # SAFE WRAPPER
+            # ------------------------------------------------------------------
+            #
+            # Every task must acquire a semaphore permit before performing the
+            # insertion.
+            #
+            # This ensures that the concurrency limit is respected by all tasks.
+            # ------------------------------------------------------------------
+            sem = asyncio.Semaphore(5)
+
+            async def safe_add(chunk):
+                async with sem:
+                    return await self.add_document_service.add_qdrant_document(
+                        chunk,
+                        source=file.filename
+                    )
+
+            # ------------------------------------------------------------------
+            # CREATE TASKS
+            # ------------------------------------------------------------------
+            #
+            # create_task() schedules all chunk insertions immediately.
+            #
+            # Each task runs independently and waits for a semaphore slot before
+            # performing the actual work.
+            # ------------------------------------------------------------------
+            tasks = [
+                asyncio.create_task(safe_add(chunk))
+                for chunk in chunks
+            ]
+
+            # ------------------------------------------------------------------
+            # WAIT FOR ALL TASKS
+            # ------------------------------------------------------------------
+            #
+            # gather() waits until every task completes.
+            #
+            # The * operator unpacks the list:
+            #
+            #   [task1, task2, task3]
+            #
+            # becomes:
+            #
+            #   gather(task1, task2, task3)
+            #
+            # gather() expects separate awaitables, not a list.
+            #
+            # Therefore:
+            #
+            #   gather(*tasks)   ✅
+            #
+            # while:
+            #
+            #   gather(tasks)    ❌
+            #
+            # would pass a single list object instead of individual tasks.
+            #
+            # return_exceptions=True prevents one failed chunk from cancelling
+            # all remaining chunk insertions.
+            # ------------------------------------------------------------------
+            await asyncio.gather(
+                *tasks,
+                return_exceptions=True
+            )
+
+        
+                    
+            
+            # 4. Add each chunk to the vector DB.
+            #for chunk in chunks:
+            #    self.add_document_service.add_document(
+            #        chunk=chunk,
+            #        source=file.filename
+            #    )
+
+            # 4. Return a clean JSON response
+            # -----------------------------------------------------------------------
+            # This tells the client:
+            # - ingestion succeeded
+            # - how many chunks were added
+            # - what the original filename was
+            logger.info("PDF ingestion completed successfully")
+
+            return IngestionResponseDto(
+                status="ok",
+                chunks_added=len(chunks),
+                 source=file.filename
+            )
+           
+        
+        except Exception as e:
+            logger.exception("Exception in load doc", e)
+            raise e
+                    
+    def process_pdf(self, path: str, source: str) -> IngestionResponseDto:
+        """
+        Load a PDF, chunk it, embed each chunk, and store in VECTOR_DB.
+         """
+
+        # 1. Extract raw text from the PDF.
+        full_text = load_pdf(path)
+
+        # 2. CLEAN THE TEXT BEFORE CHUNKING
+        full_text: str = clean_text(text=full_text)
+
+        return  full_text
+    
