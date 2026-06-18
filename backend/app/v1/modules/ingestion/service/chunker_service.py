@@ -110,7 +110,7 @@ class RAGChunker:
             # STEP 2:
             # Build semantic chunks from sentence groups.
             # --------------------------------------------------------------
-            print("Here is the paragraph:====\n", paragraphs)
+
             chunks.extend(cls.build_semantic_chunks(
                 paragraphs,
                 max_chars,
@@ -244,7 +244,7 @@ class RAGChunker:
     @classmethod
     def build_semantic_chunks(
         cls,
-        paragraphs: List[str],
+        content_blocks: List[ContentBlockDTO],
         max_chars: int,
         overlap_sentences: int
     ) -> List[ChunkDTO]:
@@ -283,7 +283,7 @@ class RAGChunker:
         # --------------------------------------------------------------
         # Process every paragraph.
         # --------------------------------------------------------------
-        for paragraph in paragraphs:
+        for content_block in content_blocks:
 
             # Split paragraph into sentences.
             # Split a long text into a list of clean sentences
@@ -295,7 +295,7 @@ class RAGChunker:
             # - Keeps semantic meaning intact
             # - Prevents breaking sentences in the middle
             # - Produces cleaner chunks for embedding and retrieval
-            sentences = sent_tokenize(paragraph)
+            sentences = sent_tokenize(content_block.content)
 
             # ----------------------------------------------------------
             # Process every sentence.
@@ -319,6 +319,7 @@ class RAGChunker:
                 if exceeds_limit and current_chunk_sentences:
 
                     chunk = cls.finalize_chunk(
+                        content_block,
                         current_chunk_sentences
                     )
 
@@ -326,9 +327,12 @@ class RAGChunker:
                     if chunk:
                         chunks.append(
                             ChunkDTO(
-                                text=chunk,
-                                concept=detect_concept(chunk),
-                                length=len(chunk)
+                                content=chunk,
+                                concept=content_block.section_title,
+                                bookmark_title=content_block.bookmark_title,
+                                order=content_block.order,
+                                length=len(chunk),
+                                source_name=content_block.source_name
                                 )
                             )
 
@@ -362,8 +366,8 @@ class RAGChunker:
         if final_chunk:
             chunks.append(
                 ChunkDTO(
-                    text=final_chunk,
-                    concept=detect_concept(final_chunk),
+                    content=final_chunk,
+                    concept=content_block.section_title,
                     length=len(final_chunk)
                 )
             )
@@ -438,13 +442,28 @@ class RAGChunker:
     # CHUNK FINALIZATION
     # ------------------------------------------------------------------
     @staticmethod
-    def finalize_chunk(sentences: List[str]) -> str:
+    def finalize_chunk(
+        length: int,
+        content_block: ContentBlockDTO,
+        sentences: List[str]
+    ) -> ChunkDTO | None:
         """
         Convert sentence list into a final chunk string.
-        """
+        """ 
+        
+        chunk =  " ".join(sentences).strip()
 
-        return " ".join(sentences).strip()
-
+        if len(chunk) == 0:
+            return None
+        
+        return ChunkDTO(
+            content=chunk,
+            concept=content_block.section_title,
+            length=length,
+            bookmark_title=content_block.bookmark_title,
+            order=content_block.order,
+            source_name=content_block.source_name
+        )
 
     # ------------------------------------------------------------------
     # SEMANTIC OVERLAP
