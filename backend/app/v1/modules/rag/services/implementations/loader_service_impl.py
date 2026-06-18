@@ -27,7 +27,13 @@ class LoaderServiceImpl(LoaderService):
         self.add_document_service: RAGAddDocument = add_document_service
 
         self.sem = asyncio.Semaphore(5)
-        
+
+    async def upload_and_ingest_pdf_v2(
+            self,
+            file: UploadFile,
+            ) -> str:
+        return ""
+
     async def upload_and_ingest_pdf(
         self,
         file: UploadFile,

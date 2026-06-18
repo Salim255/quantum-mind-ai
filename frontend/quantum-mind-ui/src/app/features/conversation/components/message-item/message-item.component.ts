@@ -27,12 +27,24 @@ export class MessageItemComponent implements OnInit, OnChanges, AfterViewInit, O
 
   ngOnInit(): void {
     this.subscribeToStreamResponse();
+    // Wait for Angular to finish rendering//
+    this.ngZone.onStable.subscribe(() => {
+      if (MathJax?.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes) {
       console.log(this.message);
     }
+    // Wait for Angular to finish rendering//
+    this.ngZone.onStable.subscribe(() => {
+      if (MathJax?.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    });
   }
 
   subscribeToStreamResponse(){
