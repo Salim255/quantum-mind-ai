@@ -55,7 +55,8 @@ nltk.download("punkt")
 nltk.download("punkt_tab")
 
 from app.v1.modules.rag.loader.concept_tagger import detect_concept
-from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
+from app.v1.modules.ingestion.dto.chunker_dto import ChunkDTO
+from app.v1.modules.ingestion.dto.text_dto import ContentBlockDTO
 
 class RAGChunker:
     @classmethod
@@ -64,7 +65,7 @@ class RAGChunker:
     # ------------------------------------------------------------------
     def semantic_chunk_text(
         cls,
-        normalized_text: str,
+        extracted__sections_texts: list[ContentBlockDTO],
         max_chars: int = 600,
         overlap_sentences: int = 2
     ) -> List[ChunkDTO]:
@@ -94,27 +95,32 @@ class RAGChunker:
         3. Build semantic chunks
         4. Clean final chunks
         """
+        chunks: list[ChunkDTO] = []
+        paragraphs: list[ContentBlockDTO] = []
 
-        # --------------------------------------------------------------
-        # STEP 1:
-        # Split into semantic paragraphs.
-        # --------------------------------------------------------------
-        paragraphs: List[str] = cls.split_into_paragraphs(normalized_text)
+        for section_text in  extracted__sections_texts:
 
-        # --------------------------------------------------------------
-        # STEP 2:
-        # Build semantic chunks from sentence groups.
-        # --------------------------------------------------------------
-        chunks = cls.build_semantic_chunks(
-            paragraphs,
-            max_chars,
-            overlap_sentences
-        )
+            # --------------------------------------------------------------
+            # STEP 1:
+            # Split into semantic paragraphs.
+            # --------------------------------------------------------------
+            paragraphs.extend(cls.split_into_paragraphs(section_text.content))
+           
+            # --------------------------------------------------------------
+            # STEP 2:
+            # Build semantic chunks from sentence groups.
+            # --------------------------------------------------------------
+            print("Here is the paragraph:====\n", paragraphs)
+            chunks.extend(cls.build_semantic_chunks(
+                paragraphs,
+                max_chars,
+                overlap_sentences
+            ))
 
-        # --------------------------------------------------------------
-        # STEP 4:
-        # Final cleanup + noise filtering.
-        # --------------------------------------------------------------
+            # --------------------------------------------------------------
+            # STEP 4:
+            # Final cleanup + noise filtering.
+            # --------------------------------------------------------------
         return cls.cleanup_chunks(chunks)
 
         # ------------------------------------------------------------------
@@ -144,7 +150,7 @@ class RAGChunker:
     # PARAGRAPH SPLITTING
     # ------------------------------------------------------------------
     @staticmethod
-    def split_into_paragraphs(text: str) -> List[str]:
+    def split_into_paragraphs(content_block: ContentBlockDTO) -> List[ContentBlockDTO]:
         """
         PARAGRAPH SPLITTER FOR RAG PIPELINE
         ====================================
@@ -191,8 +197,23 @@ class RAGChunker:
         # - no paragraph structure
         # - chunking becomes arbitrary
         # - embeddings lose semantic grouping
-        paragraphs = re.split(r"\n\s*\n", text)
+        section_paragraphs: List[ContentBlockDTO] = []
 
+        paragraphs: list[str] = re.split(r"\n\s*\n", content_block.content)
+
+        for text in  paragraphs:
+            cleaned = text.strip()
+
+            if not cleaned:
+                continue
+
+            section_paragraphs.append(ContentBlockDTO(
+                bookmark_title=content_block.bookmark_title,
+                section_title=content_block.section_title,
+                order=content_block.order,
+                content=text,
+                source_name=content_block.source_name
+            ))
         # ------------------------------------------------------------
         # 2. CLEAN AND FILTER EMPTY PARAGRAPHS
         # ------------------------------------------------------------
@@ -215,11 +236,7 @@ class RAGChunker:
         # - empty chunks
         # - useless embeddings
         # - degraded retrieval quality
-        return [
-            p.strip()
-            for p in paragraphs
-            if len(p.strip()) > 0
-        ]
+        return section_paragraphs
 
     # ------------------------------------------------------------------
     # SEMANTIC CHUNK CONSTRUCTION

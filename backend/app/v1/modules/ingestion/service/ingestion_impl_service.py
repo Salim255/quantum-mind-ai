@@ -3,14 +3,16 @@ from app.v1.modules.ingestion.service.ingestion_service import DocIngestionServi
 from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
 from app.v1.modules.learn.dto.section_dto import SectionDTO
 from app.v1.modules.ingestion.dto.text_dto import ContentBlockDTO
+from app.v1.modules.ingestion.dto.chunker_dto import ChunkDTO
+from app.v1.modules.ingestion.dto.document_dto import (DocumentDTO, AddedDocResponseDto, MetadataDTO)
+from app.core.container import Container
+from app.db.qdrant_mapper import QdrantMapper
+from app.v1.modules.ingestion.service.chunker_service import RAGChunker
 from fastapi import UploadFile
 import logging
 import re
 from uuid import uuid4
-from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
-from app.v1.modules.ingestion.dto.document_dto import (DocumentDTO, AddedDocResponseDto, MetadataDTO)
-from app.core.container import Container
-from app.db.qdrant_mapper import QdrantMapper
+
 
 
 logger = logging.getLogger(__name__)
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 class DocIngestionImplService(DocIngestionService):
     def __init__(self, container: Container):
         self.container:Container = container
-        
+
     async def pdf_ingestion_pipeline(self, file:UploadFile):
         try:
             # 1 extract the file
@@ -40,9 +42,14 @@ class DocIngestionImplService(DocIngestionService):
             # 7 persist_to_database
             # return extracted_bookmarks
             #return extracted_sections
-            return extracted_texts
+            chunks = RAGChunker.semantic_chunk_text(extracted__sections_texts=extracted_texts)
+
+            return chunks
+            #return extracted_texts
             # return  extracted_images
             #return  merged_contents
+
+            
         
         except Exception:
             logger.exception("Error in pdf ingestion")
@@ -355,26 +362,6 @@ class DocIngestionImplService(DocIngestionService):
 
         return texts
     
-    def merge_content_blocks(
-        self,
-        texts: list[ContentBlockDTO]
-    ) -> list[ContentBlockDTO]:
-
-            
-        merged = []
-
-        for text_block in texts:
-
-            merged.append(
-                ContentBlockDTO(
-                    bookmark_title=text_block.bookmark_title,
-                    section_title=text_block.section_title,
-                    content=text_block.content,
-                )
-            )
-
-    
-        return merged
 
     async def add_qdrant_document(self, chunk: ChunkDTO, source: str = "document"):
         """
