@@ -8,8 +8,11 @@ class ContentBlockDTO(BaseModel):
     """
 
     bookmark_title: str
+    
     section_title: str
 
     order: int
 
     content: str | None = None
+
+    source_name: str | None = None
