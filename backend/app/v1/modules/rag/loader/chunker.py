@@ -55,7 +55,7 @@ nltk.download("punkt")
 nltk.download("punkt_tab")
 
 from app.v1.modules.rag.loader.concept_tagger import detect_concept
-from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
+from app.v1.modules.ingestion.dto.chunker_dto import ChunkDTO
 
 class RAGChunker:
     @classmethod

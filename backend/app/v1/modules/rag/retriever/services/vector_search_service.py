@@ -6,7 +6,7 @@ from qdrant_client import AsyncQdrantClient
 from app.v1.modules.rag.retriever.services.scoring_service import ScoringService
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from qdrant_client.models import ScoredPoint
-from app.v1.modules.rag.dto.document_dto import DocumentDTO, MetadataDTO
+from app.v1.modules.ingestion.dto.document_dto import DocumentDTO, MetadataDTO
 
 MIN_SIMILARITY_SCORE = 0.25
 
@@ -224,8 +224,8 @@ class VectorSearchService:
             text=payload["text"],
             embedding=point.vector,
             metadata=MetadataDTO(
-                difficulty=payload.get("difficulty", "unknown"),
                 source=payload.get("source", "unknown"),
+                section_title=payload.get("section_title", "unknown"),
                 concept=payload.get("concept", "unknown"),
                 length=payload.get("length", 0)
             )

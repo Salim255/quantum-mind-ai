@@ -4,7 +4,7 @@ from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
 from app.v1.modules.learn.dto.section_dto import SectionDTO
 from app.v1.modules.learn.dto.text_dto import TextDTO
 from fastapi import UploadFile
-from app.v1.modules.rag.dto.chunk_dto import ChunkDTO
+from app.v1.modules.ingestion.dto.chunker_dto import ChunkDTO
 
 class DocIngestionService(ABC):
     @abstractmethod
