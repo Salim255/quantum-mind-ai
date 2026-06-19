@@ -3,8 +3,6 @@ from fastapi import Depends
 from app.v1.modules.rag.services.implementations.rag_service_impl import RAGServiceImpl
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
-from app.v1.modules.rag.services.implementations.loader_service_impl import LoaderServiceImpl
-from app.v1.modules.rag.services.interfaces.loader_service import LoaderService
 from app.v1.modules.rag.retriever.implementations.search_engine_impl import  RetrieverImpl
 from app.v1.modules.rag.retriever.services.reranking_service import RerankingService
 from app.core.container import Container
@@ -54,12 +52,3 @@ def get_rag_service(
         retriever_service=retriever_service,
         container=container
         )
-
-def get_loader_service(
-        container: Annotated[Container, Depends(get_container)],
-        add_document_service: Annotated[RAGAddDocument, Depends(get_add_document_service)]
-) -> LoaderService:
-    return LoaderServiceImpl(
-        container=container,
-        add_document_service=add_document_service
-    )

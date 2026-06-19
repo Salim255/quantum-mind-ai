@@ -96,15 +96,15 @@ class RAGChunker:
         4. Clean final chunks
         """
         chunks: list[ChunkDTO] = []
-        paragraphs: list[ContentBlockDTO] = []
+        
 
         for section_text in  extracted__sections_texts:
-
+           
             # --------------------------------------------------------------
             # STEP 1:
             # Split into semantic paragraphs.
             # --------------------------------------------------------------
-            paragraphs.extend(cls.split_into_paragraphs(section_text.content))
+            paragraphs: list[ContentBlockDTO] = cls.split_into_paragraphs(section_text)
            
             # --------------------------------------------------------------
             # STEP 2:
@@ -280,6 +280,7 @@ class RAGChunker:
         # Current chunk size tracker.
         current_chunk_length = 0
 
+        current_content_block: ContentBlockDTO | None = None
         # --------------------------------------------------------------
         # Process every paragraph.
         # --------------------------------------------------------------
@@ -326,14 +327,7 @@ class RAGChunker:
                     # Never store empty chunks.
                     if chunk:
                         chunks.append(
-                            ChunkDTO(
-                                content=chunk,
-                                concept=content_block.section_title,
-                                bookmark_title=content_block.bookmark_title,
-                                order=content_block.order,
-                                length=len(chunk),
-                                source_name=content_block.source_name
-                                )
+                            chunk
                             )
 
                     # --------------------------------------------------
@@ -358,18 +352,16 @@ class RAGChunker:
 
                     current_chunk_length += sentence_length
 
+                    current_content_block = content_block
+
         # --------------------------------------------------------------
         # Add the final chunk.
         # --------------------------------------------------------------
-        final_chunk = cls.finalize_chunk(current_chunk_sentences)
+        final_chunk = cls.finalize_chunk(current_content_block, current_chunk_sentences)
 
         if final_chunk:
             chunks.append(
-                ChunkDTO(
-                    content=final_chunk,
-                    concept=content_block.section_title,
-                    length=len(final_chunk)
-                )
+               final_chunk
             )
 
         return chunks
@@ -379,7 +371,7 @@ class RAGChunker:
     # FINAL CLEANUP
     # ------------------------------------------------------------------
     @staticmethod
-    def cleanup_chunks(chunks: List["ChunkDTO"]) -> List["ChunkDTO"]:
+    def cleanup_chunks(chunks: List[ChunkDTO]) -> List[ChunkDTO]:
         """
         FINAL QUALITY GATE FOR CHUNKS
         =============================
@@ -394,12 +386,10 @@ class RAGChunker:
         It only filters or lightly normalizes.
         """
 
-        cleaned: List["ChunkDTO"] = []
+        cleaned: list[ChunkDTO] = []
 
         for chunk in chunks:
-
-            text = chunk.text
-
+            
             # --------------------------------------------------------
             # 1. LIGHT NORMALIZATION (SAFE ONLY)
             # --------------------------------------------------------
@@ -408,7 +398,8 @@ class RAGChunker:
             #
             # NOTE:
             # We do NOT collapse newlines fully here anymore
-            text = re.sub(r"[ \t]+", " ", text)
+            
+            normalized_content = re.sub(r"[ \t]+", " ", chunk.content)
 
             # --------------------------------------------------------
             # 2. LENGTH FILTER (QUALITY CONTROL)
@@ -420,7 +411,7 @@ class RAGChunker:
             #
             # BUT WARNING:
             # threshold must be carefully tuned
-            if len(text) < 60:
+            if len(normalized_content) < 60:
                 continue
 
             # --------------------------------------------------------
@@ -430,9 +421,12 @@ class RAGChunker:
             # Avoid recomputation bugs and inconsistencies
             cleaned.append(
                 ChunkDTO(
-                    text=text,
-                    concept=chunk.concept,
-                    length=len(text)
+                    content=normalized_content,
+                    section_title=chunk.section_title,
+                    length=len(normalized_content),
+                    chapter_title=chunk.chapter_title,
+                    order=chunk.order,
+                    source_name=chunk.source_name
                 )
             )
 
@@ -443,7 +437,6 @@ class RAGChunker:
     # ------------------------------------------------------------------
     @staticmethod
     def finalize_chunk(
-        length: int,
         content_block: ContentBlockDTO,
         sentences: List[str]
     ) -> ChunkDTO | None:
@@ -458,9 +451,9 @@ class RAGChunker:
         
         return ChunkDTO(
             content=chunk,
-            concept=content_block.section_title,
-            length=length,
-            bookmark_title=content_block.bookmark_title,
+            section_title=content_block.section_title,
+            length=len(chunk),
+            chapter_title=content_block.bookmark_title,
             order=content_block.order,
             source_name=content_block.source_name
         )

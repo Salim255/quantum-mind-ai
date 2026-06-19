@@ -1,9 +1,10 @@
 from pypdf import PdfReader
 from app.v1.modules.ingestion.service.ingestion_service import DocIngestionService
-from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
-from app.v1.modules.learn.dto.section_dto import SectionDTO
+from app.v1.modules.ingestion.dto.bookmark_dto import BookmarkDTO 
+from app.v1.modules.ingestion.dto.section_dto import SectionDTO 
 from app.v1.modules.ingestion.dto.text_dto import ContentBlockDTO
 from app.v1.modules.ingestion.dto.chunker_dto import ChunkDTO
+from app.v1.modules.ingestion.dto.ingestion_dto import IngestionResponseDto
 from app.v1.modules.ingestion.dto.document_dto import (DocumentDTO, AddedDocResponseDto, MetadataDTO)
 from app.core.container import Container
 from app.db.qdrant_mapper import QdrantMapper
@@ -11,6 +12,7 @@ from app.v1.modules.ingestion.service.chunker_service import RAGChunker
 from fastapi import UploadFile
 import logging
 import re
+import asyncio
 from uuid import uuid4
 
 
@@ -26,26 +28,166 @@ class DocIngestionImplService(DocIngestionService):
             # 1 extract the file
             reader:PdfReader = self.extract_file(file=file)
 
+            print("Get pages====\n",len(reader.pages))
+            logger.info("Pages: %d", len(reader.pages))
             # 2 Save doc to database
 
             # 3 extract_bookmarks
             extracted_bookmarks: list[BookmarkDTO] =   self.extract_bookmarks(reader=reader)
-
+        
             # 4 extract_sections
             extracted_sections = self.extract_sections(reader=reader, bookmarks=extracted_bookmarks)
 
-            extracted_texts = self.extract_text(reader=reader, sections=extracted_sections)
+            extracted_texts = self.extract_text(
+                file_name=file.filename,
+                reader=reader,
+                sections=extracted_sections
+                )
+            
             # 6 extract_images
-    
-
             #merged_contents = self.merge_content_blocks(texts=extracted_texts, images=extracted_images)
             # 7 persist_to_database
             # return extracted_bookmarks
-            #return extracted_sections
+            # return extracted_sections
+
             chunks = RAGChunker.semantic_chunk_text(extracted__sections_texts=extracted_texts)
 
-            return chunks
+            # return chunks
+
+            # ------------------------------------------------------------------
+            # STORE CHUNKS CONCURRENTLY
+            # ------------------------------------------------------------------
+            #
+            # Each chunk must:
+            #   1. Generate an embedding
+            #   2. Be inserted into Qdrant
+            #
+            # Both operations are I/O-bound and support async execution.
+            #
+            # Instead of processing chunks one-by-one:
+            #
+            #   for chunk in chunks:
+            #       await add_qdrant_document(...)
+            #
+            # we process multiple chunks concurrently to reduce total ingestion
+            # time.
+            #
+            # ------------------------------------------------------------------
+            # CONCURRENCY LIMIT
+            # ------------------------------------------------------------------
+            #
+            # A semaphore limits the number of active insert operations.
+            #
+            # Without a semaphore:
+            #
+            #   await asyncio.gather(...)
+            #
+            # all chunk insertions would start immediately.
+            #
+            # For large documents this could create hundreds of simultaneous
+            # embedding and database operations, potentially overwhelming:
+            #
+            #   - Qdrant
+            #   - the embedding model
+            #   - memory usage
+            #
+            # Semaphore(5) means:
+            #
+            #   Maximum 5 chunk insertions may run at the same time.
+            #
+            # When one finishes, the next waiting task is allowed to start.
+            #
+            # ------------------------------------------------------------------
+            # SAFE WRAPPER
+            # ------------------------------------------------------------------
+            #
+            # Every task must acquire a semaphore permit before performing the
+            # insertion.
+            #
+            # This ensures that the concurrency limit is respected by all tasks.
+            # ------------------------------------------------------------------
+            sem = asyncio.Semaphore(5)
+           
+            async def safe_add(chunk):
+                async with sem:
+                    return await self.add_qdrant_document(
+                        chunk,
+                        source=file.filename
+                    )
+
+            # ------------------------------------------------------------------
+            # CREATE TASKS
+            # ------------------------------------------------------------------
+            #
+            # create_task() schedules all chunk insertions immediately.
+            #
+            # Each task runs independently and waits for a semaphore slot before
+            # performing the actual work.
+            # ------------------------------------------------------------------
+            tasks = [
+                asyncio.create_task(safe_add(chunk))
+                for chunk in chunks
+            ]
+
+            # ------------------------------------------------------------------
+            # WAIT FOR ALL TASKS
+            # ------------------------------------------------------------------
+            #
+            # gather() waits until every task completes.
+            #
+            # The * operator unpacks the list:
+            #
+            #   [task1, task2, task3]
+            #
+            # becomes:
+            #
+            #   gather(task1, task2, task3)
+            #
+            # gather() expects separate awaitables, not a list.
+            #
+            # Therefore:
+            #
+            #   gather(*tasks)   ✅
+            #
+            # while:
+            #
+            #   gather(tasks)    ❌
+            #
+            # would pass a single list object instead of individual tasks.
+            #
+            # return_exceptions=True prevents one failed chunk from cancelling
+            # all remaining chunk insertions.
+            # ------------------------------------------------------------------
+            await asyncio.gather(
+                *tasks,
+                return_exceptions=True
+            )
+
+        
+                    
+            
+            # 4. Add each chunk to the vector DB.
+            #for chunk in chunks:
+            #    self.add_document_service.add_document(
+            #        chunk=chunk,
+            #        source=file.filename
+            #    )
+
+            # 4. Return a clean JSON response
+            # -----------------------------------------------------------------------
+            # This tells the client:
+            # - ingestion succeeded
+            # - how many chunks were added
+            # - what the original filename was
+            logger.info("PDF ingestion completed successfully")
+
+            return IngestionResponseDto(
+                status="ok",
+                chunks_added=len(chunks),
+                 source=file.filename
+            )
             #return extracted_texts
+            # return  extracted_bookmarks
             # return  extracted_images
             #return  merged_contents
 
@@ -81,7 +223,7 @@ class DocIngestionImplService(DocIngestionService):
         outline = reader.outline
 
         order = 1
-
+        
         for item in outline:
 
             if isinstance(item, dict):
@@ -306,6 +448,7 @@ class DocIngestionImplService(DocIngestionService):
 
     def extract_text(
         self,
+        file_name: str,
         reader: PdfReader,
         sections: list[SectionDTO]
     ) -> list[ContentBlockDTO]:
@@ -352,14 +495,15 @@ class DocIngestionImplService(DocIngestionService):
                 ContentBlockDTO(
                     bookmark_title=section.bookmark_title,
                     section_title=section.title,
-                    type="text",
                     order=order,
                     content=clean_text,
+                    source_name=file_name
                 )
             )
 
-            order += 1
-
+            """ order += 1
+            if order==10:
+                return texts """
         return texts
     
 
@@ -391,17 +535,18 @@ class DocIngestionImplService(DocIngestionService):
         # We extract only the vector because that's what we store in the DB.
         # 1. Extract text safely
         # text = chunk["text"] if isinstance(chunk, dict) else chunk
-        embedding_result = self.container.rag_embedder.embed_text(text=chunk.text, source=source)
+        embedding_result = self.container.rag_embedder.embed_text(text=chunk.content, source=chunk.source_name)
+
         emb = embedding_result["embedding"]
 
 
         # --- 2. Build the document entry ----------------------------------------
         document_entry = DocumentDTO(
-            text=chunk.text,
+            text=chunk.content,
             embedding=emb,
             metadata=MetadataDTO(
                 source=source,
-                concept=chunk.concept,
+                concept=chunk.section_title,
                 length=chunk.length
             )
         )
@@ -429,6 +574,6 @@ class DocIngestionImplService(DocIngestionService):
         # The agent_core expects a JSON-serializable response.
         return AddedDocResponseDto(
                 status="ok",
-                stored_text_length=len(chunk.text),
+                stored_text_length=len(chunk.content),
                 source=source
             )
