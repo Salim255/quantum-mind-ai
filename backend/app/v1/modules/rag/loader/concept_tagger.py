@@ -15,74 +15,267 @@ from typing import Dict
 # - enables filtering / reranking
 # - helps debugging RAG behavior
 CONCEPTS: Dict[str, dict] = {
-    "entanglement": {
+    "spin": {
         "anchors": [
-            "entanglement", "entangled", "bell state",
-            "bell inequality", "epr", "non-local correlation"
+            "spin", "spin state", "spin up", "spin down",
+            "stern-gerlach", "quantum clock"
         ],
         "keywords_soft": [
-            "spooky action", "instant correlation", "linked qubits"
+            "angular momentum",
+            "spin measurement"
         ]
     },
 
-    "teleportation": {
+    "measurement": {
         "anchors": [
-            "teleportation", "quantum teleport", "state transfer"
+            "measurement",
+            "measurements",
+            "observable",
+            "measurement basis",
+            "same direction",
+            "different directions"
         ],
         "keywords_soft": [
-            "send qubit", "transfer quantum state"
+            "collapse",
+            "measurement outcome",
+            "state reduction"
         ]
     },
 
-    "superdense-coding": {
+    "linear-algebra": {
         "anchors": [
-            "superdense", "dense coding"
+            "vector", "vectors",
+            "matrix", "matrices",
+            "basis", "bases",
+            "orthogonal",
+            "orthonormal",
+            "unitary",
+            "bra", "ket",
+            "bra-ket",
+            "inner product",
+            "tensor product",
+            "state vector"
         ],
         "keywords_soft": [
-            "send two bits", "one qubit encoding"
+            "linear combination",
+            "vector space",
+            "complex numbers"
         ]
     },
 
     "qubits": {
         "anchors": [
-            "qubit", "qubits", "bloch sphere", "state vector"
+            "qubit", "qubits",
+            "quantum state",
+            "state vector",
+            "basis state",
+            "bloch sphere"
         ],
         "keywords_soft": [
-            "two-level system", "quantum state"
+            "two-level system",
+            "superposition"
         ]
     },
 
-    "algorithms": {
+    "probability-and-interference": {
         "anchors": [
-            "grover", "shor", "qft",
-            "quantum algorithm", "fourier transform"
+            "probability",
+            "probability amplitude",
+            "interference",
+            "randomness"
         ],
         "keywords_soft": [
-            "speedup", "factoring", "search algorithm"
+            "amplitude",
+            "quantum probability"
         ]
     },
 
-    "quantum-fundamentals": {
+    "polarization": {
         "anchors": [
-            "superposition", "measurement",
-            "decoherence", "collapse"
+            "photon",
+            "photons",
+            "polarization",
+            "polarized filter",
+            "polarized filters"
         ],
         "keywords_soft": [
-            "wave function", "probability amplitude"
+            "polarized light"
+        ]
+    },
+
+    "quantum-cryptography": {
+        "anchors": [
+            "bb84",
+            "ekert",
+            "quantum key distribution",
+            "qkd",
+            "alice",
+            "bob",
+            "eve"
+        ],
+        "keywords_soft": [
+            "secure communication",
+            "cryptography"
+        ]
+    },
+
+    "entanglement": {
+        "anchors": [
+            "entanglement",
+            "entangled",
+            "bell state",
+            "epr",
+            "tensor product"
+        ],
+        "keywords_soft": [
+            "nonlocal correlation",
+            "spooky action",
+            "linked qubits"
+        ]
+    },
+
+    "bells-inequality": {
+        "anchors": [
+            "bell inequality",
+            "bell's inequality",
+            "local realism",
+            "hidden variables"
+        ],
+        "keywords_soft": [
+            "einstein",
+            "classical explanation",
+            "local hidden variables"
+        ]
+    },
+
+    "quantum-gates": {
+        "anchors": [
+            "quantum gate",
+            "cnot",
+            "controlled not",
+            "hadamard",
+            "pauli",
+            "universal quantum gates"
+        ],
+        "keywords_soft": [
+            "unitary operation",
+            "gate operation"
+        ]
+    },
+
+    "quantum-circuits": {
+        "anchors": [
+            "quantum circuit",
+            "bell circuit",
+            "circuit model"
+        ],
+        "keywords_soft": [
+            "quantum computation",
+            "circuit"
+        ]
+    },
+
+    "teleportation": {
+        "anchors": [
+            "teleportation",
+            "quantum teleportation",
+            "teleport quantum state"
+        ],
+        "keywords_soft": [
+            "state transfer"
+        ]
+    },
+
+    "superdense-coding": {
+        "anchors": [
+            "superdense coding",
+            "superdense",
+            "dense coding"
+        ],
+        "keywords_soft": [
+            "send two bits",
+            "one qubit encoding"
+        ]
+    },
+
+    "error-correction": {
+        "anchors": [
+            "error correction",
+            "quantum error correction"
+        ],
+        "keywords_soft": [
+            "fault tolerance",
+            "error recovery"
+        ]
+    },
+
+    "no-cloning": {
+        "anchors": [
+            "no cloning theorem",
+            "no-cloning theorem"
+        ],
+        "keywords_soft": [
+            "cannot copy quantum state",
+            "cloning quantum states"
+        ]
+    },
+
+    "quantum-algorithms": {
+        "anchors": [
+            "quantum algorithm",
+            "deutsch algorithm",
+            "deutsch-jozsa",
+            "simon algorithm",
+            "shor algorithm",
+            "grover algorithm",
+            "qft",
+            "quantum fourier transform"
+        ],
+        "keywords_soft": [
+            "speedup",
+            "factoring",
+            "search algorithm"
+        ]
+    },
+
+    "complexity-theory": {
+        "anchors": [
+            "complexity class",
+            "complexity classes",
+            "query complexity",
+            "p",
+            "np"
+        ],
+        "keywords_soft": [
+            "computational complexity"
         ]
     },
 
     "quantum-computing": {
         "anchors": [
-            "quantum computing", "quantum computer",
-            "quantum advantage", "supremacy"
+            "quantum computing",
+            "quantum computer",
+            "quantum computation",
+            "quantum advantage",
+            "quantum supremacy"
         ],
         "keywords_soft": [
-            "quantum processor", "qubit system"
+            "quantum processor"
+        ]
+    },
+
+    "quantum-hardware": {
+        "anchors": [
+            "quantum hardware",
+            "hardware",
+            "quantum processor"
+        ],
+        "keywords_soft": [
+            "physical qubits",
+            "hardware implementation"
         ]
     }
 }
-
 
 # ------------------------------------------------------------
 # TEXT NORMALIZATION

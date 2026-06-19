@@ -5,10 +5,14 @@ from pydantic import BaseModel
 class ChunkDTO(BaseModel):
     chapter_title: str
 
+   
+
     section_title: str
-    
+
     content: str
 
+    concept: str
+    
     length: int
 
     order: int

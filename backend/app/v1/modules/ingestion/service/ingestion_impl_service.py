@@ -52,7 +52,7 @@ class DocIngestionImplService(DocIngestionService):
 
             chunks = RAGChunker.semantic_chunk_text(extracted__sections_texts=extracted_texts)
 
-            # return chunks
+            return chunks
 
             # ------------------------------------------------------------------
             # STORE CHUNKS CONCURRENTLY
@@ -181,11 +181,11 @@ class DocIngestionImplService(DocIngestionService):
             # - what the original filename was
             logger.info("PDF ingestion completed successfully")
 
-            return IngestionResponseDto(
+            """ return IngestionResponseDto(
                 status="ok",
                 chunks_added=len(chunks),
                  source=file.filename
-            )
+            ) """
             #return extracted_texts
             # return  extracted_bookmarks
             # return  extracted_images
@@ -501,9 +501,9 @@ class DocIngestionImplService(DocIngestionService):
                 )
             )
 
-            """ order += 1
-            if order==10:
-                return texts """
+            order += 1
+            if order==5:
+                return texts
         return texts
     
 

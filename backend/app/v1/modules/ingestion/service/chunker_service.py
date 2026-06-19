@@ -422,6 +422,7 @@ class RAGChunker:
             cleaned.append(
                 ChunkDTO(
                     content=normalized_content,
+                    concept=detect_concept(normalized_content),
                     section_title=chunk.section_title,
                     length=len(normalized_content),
                     chapter_title=chunk.chapter_title,
@@ -451,6 +452,7 @@ class RAGChunker:
         
         return ChunkDTO(
             content=chunk,
+            concept=detect_concept(chunk),
             section_title=content_block.section_title,
             length=len(chunk),
             chapter_title=content_block.bookmark_title,
