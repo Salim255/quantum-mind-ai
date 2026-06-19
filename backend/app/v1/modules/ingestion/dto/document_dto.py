@@ -4,8 +4,11 @@ from pydantic import BaseModel
 
 class MetadataDTO(BaseModel):
     source: str
+
+    section_title: str
+
     concept: str
-    difficulty: str = "beginner"
+
     length: int
 
 

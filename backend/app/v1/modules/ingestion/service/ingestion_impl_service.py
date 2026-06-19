@@ -28,8 +28,6 @@ class DocIngestionImplService(DocIngestionService):
             # 1 extract the file
             reader:PdfReader = self.extract_file(file=file)
 
-            print("Get pages====\n",len(reader.pages))
-            logger.info("Pages: %d", len(reader.pages))
             # 2 Save doc to database
 
             # 3 extract_bookmarks
@@ -52,7 +50,7 @@ class DocIngestionImplService(DocIngestionService):
 
             chunks = RAGChunker.semantic_chunk_text(extracted__sections_texts=extracted_texts)
 
-            return chunks
+            # return chunks
 
             # ------------------------------------------------------------------
             # STORE CHUNKS CONCURRENTLY
@@ -181,11 +179,11 @@ class DocIngestionImplService(DocIngestionService):
             # - what the original filename was
             logger.info("PDF ingestion completed successfully")
 
-            """ return IngestionResponseDto(
+            return IngestionResponseDto(
                 status="ok",
                 chunks_added=len(chunks),
                  source=file.filename
-            ) """
+            )
             #return extracted_texts
             # return  extracted_bookmarks
             # return  extracted_images
@@ -501,9 +499,9 @@ class DocIngestionImplService(DocIngestionService):
                 )
             )
 
-            order += 1
+            """ order += 1
             if order==5:
-                return texts
+                return texts """
         return texts
     
 
@@ -546,22 +544,28 @@ class DocIngestionImplService(DocIngestionService):
             embedding=emb,
             metadata=MetadataDTO(
                 source=source,
-                concept=chunk.section_title,
+                concept=chunk.concept,
+                section_title=chunk.section_title,
                 length=chunk.length
             )
         )
 
-
         # --- 3. Save the entry in the in-memory vector DB -----------------------
-        await self.container.qdrant.client.upsert(
-            collection_name="documents",
-            points=[
-                QdrantMapper.to_point(
-                    doc=document_entry,
-                    point_id = str(uuid4())
-                )
-            ]
-        )
+        try:
+
+            await self.container.qdrant.client.upsert(
+                collection_name="documents",
+                points=[
+                    QdrantMapper.to_point(
+                        doc=document_entry,
+                        point_id = str(uuid4())
+                    )
+                ]
+            )
+        except Exception as e:
+            logger.exception(f"Unexpected error occurred: {e}")
+            
+            raise
 
         #self.container.qdrant.client.scroll(
         #    collection_name="documents",

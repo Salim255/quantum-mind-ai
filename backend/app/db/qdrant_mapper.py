@@ -1,4 +1,4 @@
-from app.v1.modules.rag.dto.document_dto import DocumentDTO
+from app.v1.modules.ingestion.dto.document_dto import DocumentDTO
 
 class QdrantMapper:
     @staticmethod
@@ -10,7 +10,7 @@ class QdrantMapper:
                 "text": doc.text,
                 "source": doc.metadata.source,
                 "concept": doc.metadata.concept,
-                "difficulty": doc.metadata.difficulty,
+                "section_title": doc.metadata.section_title,
                 "length": doc.metadata.length
             }
         }
