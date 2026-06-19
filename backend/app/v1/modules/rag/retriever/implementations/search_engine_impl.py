@@ -1,6 +1,5 @@
 from typing import List
 import numpy as np
-import time
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalResponseDTO
 from app.v1.modules.rag.retriever.services.query_expansion_service import QueryExpansionService
 from app.v1.modules.rag.retriever.services.vector_search_service import VectorSearchService
