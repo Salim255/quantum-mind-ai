@@ -1,7 +1,6 @@
 import time
 from typing import (List, Generator, AsyncGenerator)
 from pydantic import BaseModel
-import json
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
@@ -296,8 +295,11 @@ class RAGServiceImpl(RAGService):
     # - debuggable
     # ---------------------------------------------------------------
     start = time.perf_counter()
+
     log_rag_evaluation(evaluation_log)
+
     print("log_rag_evaluation_timer___:\n",  time.perf_counter() - start)
+    
     # ---------------------------------------------------------------
     # 8. RETURN API RESPONSE
     # ---------------------------------------------------------------

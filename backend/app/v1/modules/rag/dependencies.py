@@ -2,7 +2,6 @@ from typing import Annotated
 from fastapi import Depends
 from app.v1.modules.rag.services.implementations.rag_service_impl import RAGServiceImpl
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
-from app.v1.modules.rag.vector_store.add_document import RAGAddDocument
 from app.v1.modules.rag.retriever.implementations.search_engine_impl import  RetrieverImpl
 from app.v1.modules.rag.retriever.services.reranking_service import RerankingService
 from app.core.container import Container
@@ -16,10 +15,6 @@ from app.v1.modules.rag.retriever.services.embedding_service import EmbeddingSer
 def get_container(request: Request) -> Container:
     return request.app.state.container
 
-def get_add_document_service(
-        container: Annotated[Container, Depends(get_container)]
-    ) -> RAGAddDocument:
-    return  RAGAddDocument(container=container)
 
 def get_ranking_service(
         container: Annotated[Container, Depends(get_container)]
