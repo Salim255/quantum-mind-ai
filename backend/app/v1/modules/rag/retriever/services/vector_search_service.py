@@ -247,17 +247,17 @@ class VectorSearchService:
             query_embedding: np.ndarray,
             limit: int
         ):
-            """
-            This function sends ONE query embedding to Qdrant
-            and returns the matching points.
-            """
-            response = await qdrant_client.query_points(
-                    collection_name="documents",   # Which collection to search in Qdrant
-                    query=query_embedding.tolist(), # Convert numpy vector -> Python list (Qdrant format)
-                    limit=limit,                    # Max number of results to return
-                    with_vectors=True               # Include stored vectors in the response (needed for reranking later)
-                )  
-              
-            return response.points 
-                                     # Extract only the list of matching points
+        """
+        This function sends ONE query embedding to Qdrant
+        and returns the matching points.
+        """
+        response = await qdrant_client.query_points(
+                collection_name="documents",   # Which collection to search in Qdrant
+                query=query_embedding.tolist(), # Convert numpy vector -> Python list (Qdrant format)
+                limit=limit,                    # Max number of results to return
+                with_vectors=True               # Include stored vectors in the response (needed for reranking later)
+            )  
+            
+        return response.points 
+        # Extract only the list of matching points
             

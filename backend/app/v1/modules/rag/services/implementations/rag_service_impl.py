@@ -10,7 +10,7 @@ from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
 from app.v1.modules.rag.retriever.implementations.search_engine_impl import RetrieverImpl
 from app.core.container import Container
-
+from app.v1.modules.rag.retriever.services.spell_corrector_service import(SpellCorrectorService, SpellCorrectionResult)
 
 class QueryRequest(BaseModel):
     query: str
@@ -54,8 +54,14 @@ class RAGServiceImpl(RAGService):
     #
     # search_similar_documents()
     # ---------------------------------------------------------------
-        
-    retrieval_output: RetrievalResponseDTO = await self.retriever_service.search_similar_documents(payload.query)
+    # Correct spell:words
+    spell_correction_result:SpellCorrectionResult  =  SpellCorrectorService.correct(query=payload.query)
+
+    print("Corrected corrected_query ===\n", spell_correction_result.corrected_query)
+    
+    retrieval_output: RetrievalResponseDTO = await self.retriever_service.search_similar_documents(
+       spell_correction_result.corrected_query
+       )
 
     # ---------------------------------------------------------------
     # EXTRACT RETRIEVED CHUNKS
@@ -93,7 +99,7 @@ class RAGServiceImpl(RAGService):
     # 4. GENERATE FINAL STRUCTURED ANSWER
     # ---------------------------------------------------------------
     final_answer: Generator[str, None, None] = generate_streaming_answer(
-        payload.query,
+        spell_correction_result.corrected_query,
         rich_context_chunks,
         client
     )

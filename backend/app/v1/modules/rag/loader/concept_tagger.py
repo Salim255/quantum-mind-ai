@@ -62,7 +62,21 @@ CONCEPTS: Dict[str, dict] = {
             "complex numbers"
         ]
     },
-
+    "schrodinger-equation": {
+        "anchors": [
+            "schrodinger equation",
+            "schrödinger equation",
+            "wave function",
+            "wavefunction",
+            "time evolution",
+            "hamiltonian"
+        ],
+        "keywords_soft": [
+            "quantum state evolution",
+            "dynamics",
+            "energy operator"
+        ]
+    },
     "qubits": {
         "anchors": [
             "qubit", "qubits",

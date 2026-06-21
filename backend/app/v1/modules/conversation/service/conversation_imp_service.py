@@ -24,16 +24,17 @@ class ConversationServiceImpl(ConversationService):
             conversation_id: Optional[str] = None
             )-> AsyncGenerator[str, None]:
 
-            stream = None
+            stream: AsyncGenerator[str, None] | None = None
 
             try:
                 # 2. Run your existing RAG pipeline
-                stream: AsyncGenerator[str, None] =  self.rag_service.rag_stream_pipeline(
+                stream = self.rag_service.rag_stream_pipeline(
                     QueryRequest(query=message, top_k=3)
                 )
         
                 async for chunk in stream:
                     yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
+                
     
             except Exception:
                 logger.exception("Streaming failed")

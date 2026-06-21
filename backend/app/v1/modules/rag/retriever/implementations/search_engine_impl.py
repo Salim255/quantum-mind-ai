@@ -15,6 +15,7 @@ from app.v1.modules.rag.retriever.services.decision_service import RetrievalActi
 from app.core.container import Container
 from app.v1.modules.rag.retriever.services.query_analysis_service import QueryAnalysisService
 
+
 class RetrieverImpl(RetrieverInterface):
     def __init__(
             self, 
@@ -93,12 +94,13 @@ class RetrieverImpl(RetrieverInterface):
         
         candidates: List[RetrievalChunkDTO] = await self.retrieve_qdrant_candidates(query=query)
 
+        
         if not candidates:
             return []
     
         return self.post_process_candidates(
             query=query,
-            candidates=candidates[:10],
+            candidates=candidates,
             top_k=top_k
         )
         

@@ -46,17 +46,46 @@ export class ConversationHttpService {
     return this.http.post<ConversationResponse>(`${this.baseUrl}/messages`,payload)
   }
 
-  async sendStreamMessage(payload: ConversationPayload): Promise<ReadableStreamDefaultReader<Uint8Array> | null >{
+  private controller: AbortController | null = null;
 
-    const response =  await fetch(`${this.baseUrl}/messages/stream`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
+  async sendStreamMessage(
+    payload: ConversationPayload
+  ): Promise<ReadableStreamDefaultReader<Uint8Array> | null> {
 
-    if (!response.body) return null
+    // ------------------------------------------------------------
+    // 1. Cancel any previous streaming request
+    // ------------------------------------------------------------
+    if (this.controller) {
+      this.controller.abort();
+    }
+
+    // ------------------------------------------------------------
+    // 2. Create a fresh controller for THIS request
+    // ------------------------------------------------------------
+    this.controller = new AbortController();
+
+    let response: Response;
+
+    try {
+
+      response = await fetch(`${this.baseUrl}/messages/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        signal: this.controller.signal   // 🔥 CRITICAL FIX
+      });
+
+    } catch (err) {
+      console.error("Fetch failed:", err);
+      return null;
+    }
+
+    // ------------------------------------------------------------
+    // 3. Validate stream body
+    // ------------------------------------------------------------
+    if (!response.body) return null;
 
     return response.body.getReader();
   }
