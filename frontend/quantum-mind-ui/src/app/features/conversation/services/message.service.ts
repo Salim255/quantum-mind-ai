@@ -4,7 +4,7 @@ import { AnswerPayload } from "./conversation-http.service";
 
 @Injectable({providedIn: "root"})
 export class MessageService {
-  private streamingResponseSubject = new BehaviorSubject<string | null>(null)
+  private streamingResponseSubject = new BehaviorSubject<string | null>(this.loadFromSession())
   private messageSubject = new BehaviorSubject<AnswerPayload | null>(null)
 
   constructor(){}
@@ -33,5 +33,10 @@ export class MessageService {
 
   private saveMessageToSession(msg: string) {
     sessionStorage.setItem('currentMessage', JSON.stringify(msg));
+  }
+
+  private loadFromSession(): string | null {
+    const data = sessionStorage.getItem('currentMessage');
+    return data ? JSON.parse(data) : null;
   }
 }
