@@ -14,14 +14,14 @@ export class MessageFormComponent {
 
   constructor(private conservationService: ConversationService){}
   user_message: string = "";
-  ask(){}
 
-  async submit(){
+  submit(){
     const payload: ConversationPayload = {user_id: "", conversation_id: "", message: this.user_message}
-    await this.conservationService.sendStreamMessage(payload);
+    this.conservationService.sendStreamMessage(payload);
+    this.user_message = "";
   }
 
-    autoResize(textarea: HTMLTextAreaElement): void {
+  autoResize(textarea: HTMLTextAreaElement): void {
     // Reset height so the browser recalculates scrollHeight
     textarea.style.height = 'auto';
 

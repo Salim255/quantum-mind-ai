@@ -26,7 +26,7 @@ export class ConversationService {
     );
   }
 
-  sendStreamMessage(payload: ConversationPayload): void{
+  sendStreamMessage(payload: ConversationPayload): void {
     this.questionService.setQuestion(payload.message);
 
     this.conversationHttpService
