@@ -3,14 +3,14 @@ from typing import (List, AsyncGenerator)
 from pydantic import BaseModel
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
-from app.v1.modules.rag.services.interfaces.rag_service import RAGService
+from app.v1.modules.rag.services.rag_service import RAGService
 from app.v1.modules.rag.generator.generator_service import (generate_answer, generate_streaming_answer)
 from app.v1.modules.rag.dto.rag_eval_dto import RAGEvaluationLogDto
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
-from app.v1.modules.rag.retriever.implementations.search_engine_impl import RetrieverImpl
+from app.v1.modules.rag.services.retriever.search_engine_impl import RetrieverImpl
 from app.core.container import Container
-from app.v1.modules.rag.retriever.services.spell_corrector_service import(SpellCorrectorService, SpellCorrectionResult)
+from app.v1.modules.rag.services.retriever.spell_corrector_service import(SpellCorrectorService, SpellCorrectionResult)
 import logging
 import json
 

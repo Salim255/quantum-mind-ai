@@ -8,7 +8,7 @@ from app.v1.modules.rag.retriever.services.diversity_service import DiversitySer
 from app.v1.modules.rag.retriever.services.context_role_service import ContextRoleService
 from app.v1.modules.rag.retriever.services.decision_service import DecisionService
 from app.v1.modules.rag.retriever.services.embedding_service import EmbeddingService
-from app.v1.modules.rag.retriever.interfaces.search_engine_interface import RetrieverInterface
+from app.v1.modules.rag.retriever.search_engine_interface import RetrieverInterface
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from app.v1.modules.rag.dto.query_analysis_result_dto import QueryAnalysisResultDto
 from app.v1.modules.rag.retriever.services.decision_service import RetrievalAction

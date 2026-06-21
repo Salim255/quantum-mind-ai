@@ -2,7 +2,7 @@ from typing import AsyncGenerator, Optional
 import json
 import logging
 from app.v1.modules.conversation.service.conversation_service import ConversationService
-from app.v1.modules.rag.services.interfaces.rag_service import RAGService
+from app.v1.modules.rag.services.rag_service import RAGService
 from pydantic import BaseModel
 from app.v1.modules.conversation.dto.conversation_dto import ConversationResponse
 

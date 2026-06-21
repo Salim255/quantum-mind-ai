@@ -5,7 +5,7 @@ from app.v1.modules.conversation.service.conversation_service import Conversatio
 from app.v1.modules.rag.dependencies import get_rag_service
 from app.v1.modules.conversation.memory.memory_manager import MemoryManager
 from app.v1.modules.rag.dependencies import get_rag_service
-from app.v1.modules.rag.services.interfaces.rag_service import RAGService
+from app.v1.modules.rag.services.rag_service import RAGService
 
 memory_manager = MemoryManager()
 
