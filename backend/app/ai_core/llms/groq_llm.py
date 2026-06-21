@@ -71,7 +71,6 @@ async def groq_llm_call_streaming(
     - Focus specifically on answering the user's question.
     - Prefer direct explanations over long introductions.
     """
-
     # --------------------------------------------------------------
     # SEND REQUEST TO GROQ
     # --------------------------------------------------------------
@@ -80,7 +79,7 @@ async def groq_llm_call_streaming(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
- 
+
     stream: Stream[ChatCompletionChunk] = client.chat.completions.create(
 
         # ----------------------------------------------------------
@@ -129,14 +128,12 @@ async def groq_llm_call_streaming(
     # - use "for"
     # - NOT "async for"
     # ----------------------
-
     for chunk in stream:
         data: str | None = chunk.choices[0].delta.content
         # avoid None chunks
         if data:
             yield data
-    
-
+ 
 def groq_llm_call(
     client: Groq,
     prompt: str

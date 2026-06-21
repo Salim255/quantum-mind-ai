@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
 from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
-from app.v1.modules.conversation.dto.conversation_streaming_response_dto import StreamingResponseDto
+from app.v1.modules.rag.dto.conversation_dto import StreamingResponseDto
 
 class QueryRequest(BaseModel):
     query: str

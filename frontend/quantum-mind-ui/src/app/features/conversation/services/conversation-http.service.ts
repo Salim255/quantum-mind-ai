@@ -38,7 +38,7 @@ export interface FinalAnswer {
 @Injectable({providedIn: "root"})
 export class ConversationHttpService {
   private ENV = environment;
-  private baseUrl: string = `${this.ENV.apiBaseUrl}/conversations`;
+  private baseUrl: string = `${this.ENV.apiBaseUrl}/rag`;
 
   constructor(private http: HttpClient){}
 
@@ -46,47 +46,71 @@ export class ConversationHttpService {
     return this.http.post<ConversationResponse>(`${this.baseUrl}/messages`,payload)
   }
 
-  private controller: AbortController | null = null;
-
-  async sendStreamMessage(
+  sendStreamMessage(
     payload: ConversationPayload
-  ): Promise<ReadableStreamDefaultReader<Uint8Array> | null> {
+  ): Observable<string> {
 
-    // ------------------------------------------------------------
-    // 1. Cancel any previous streaming request
-    // ------------------------------------------------------------
-    if (this.controller) {
-      this.controller.abort();
-    }
+    return new Observable(observer => {
 
-    // ------------------------------------------------------------
-    // 2. Create a fresh controller for THIS request
-    // ------------------------------------------------------------
-    this.controller = new AbortController();
+      const controller = new AbortController();
 
-    let response: Response;
-
-    try {
-
-      response = await fetch(`${this.baseUrl}/messages/stream`, {
+      fetch(`${this.baseUrl}/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload),
-        signal: this.controller.signal   // 🔥 CRITICAL FIX
-      });
+        signal: controller.signal
+      })
+      .then(async response => {
 
-    } catch (err) {
-      console.error("Fetch failed:", err);
-      return null;
-    }
+        if (!response.body) {
+          //observer.error(new Error('No response body'));
+          return;
+        }
 
-    // ------------------------------------------------------------
-    // 3. Validate stream body
-    // ------------------------------------------------------------
-    if (!response.body) return null;
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let fullText = '';
 
-    return response.body.getReader();
+        try {
+
+          while (true) {
+
+            const { done, value } = await reader.read();
+
+            if (done) {
+              observer.complete();
+              break;
+            }
+
+            const chunk = decoder.decode(value, {
+              stream: true
+            });
+
+            for (const line of chunk.split('\n')) {
+
+              if (!line.startsWith('data:')) continue;
+
+              const content = line.replace('data:', '').trim();
+
+              const cleaned = content
+                .replace(/^"|"$/g, '')
+                .replace(/\\n/g, '\n');
+
+              fullText += cleaned;
+
+              observer.next(fullText);
+            }
+
+          }
+
+        } catch (err) {
+          observer.error(err);
+        }
+
+      })
+      .catch(err => observer.error(err));
+    });
   }
 }

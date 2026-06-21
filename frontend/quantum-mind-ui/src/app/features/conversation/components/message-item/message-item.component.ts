@@ -1,9 +1,18 @@
-import { AfterViewInit, Component, Input, NgZone, OnChanges, OnDestroy, OnInit, signal, SimpleChanges } from "@angular/core";
-import { MessageSchema } from "../../model/conversation.model";
+import {
+  Component,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  signal,
+  SimpleChanges
+} from "@angular/core";
 import { marked } from 'marked';
 import { FinalAnswer } from "../../services/conversation-http.service";
 import { MessageService } from "../../services/message.service";
 import { Subscription } from "rxjs";
+
 declare const MathJax: any;
 
 @Component({
@@ -13,7 +22,7 @@ declare const MathJax: any;
   standalone: false
 })
 
-export class MessageItemComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class MessageItemComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() message: FinalAnswer | undefined;
   private streamResponseSubject!: Subscription;
@@ -28,23 +37,15 @@ export class MessageItemComponent implements OnInit, OnChanges, AfterViewInit, O
   ngOnInit(): void {
     this.subscribeToStreamResponse();
     // Wait for Angular to finish rendering//
-    this.ngZone.onStable.subscribe(() => {
-      if (MathJax?.typesetPromise) {
-        MathJax.typesetPromise();
-      }
+    requestAnimationFrame(() => {
+      MathJax.typesetPromise?.();
     });
-  }
+}
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes) {
       console.log(this.message);
     }
-    // Wait for Angular to finish rendering//
-    this.ngZone.onStable.subscribe(() => {
-      if (MathJax?.typesetPromise) {
-        MathJax.typesetPromise();
-      }
-    });
   }
 
   subscribeToStreamResponse(){
@@ -61,27 +62,17 @@ export class MessageItemComponent implements OnInit, OnChanges, AfterViewInit, O
 
             // update your signal
             this.response.set(html);
-        },
 
-        complete: () => {
-            // optional: render MathJax for equations
-            //MathJax.typesetPromise();
-            console.log("Its complete")
-            setTimeout(() => {
-              MathJax.typesetPromise();
-            }, 0);
+            // Why requestAnimationFrame is better:
+            // runs after DOM paint
+            // more aligned with browser rendering cycle
+            // less fragile than timers
+            requestAnimationFrame(() => {
+              MathJax.typesetPromise?.();
+            });
         }
       }
     )
-  }
-
-   ngAfterViewInit() {
-    // Wait for Angular to finish rendering//
-    this.ngZone.onStable.subscribe(() => {
-      if (MathJax?.typesetPromise) {
-        MathJax.typesetPromise();
-      }
-    });
   }
 
   ngOnDestroy(): void {

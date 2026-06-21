@@ -51,7 +51,7 @@ class RAGServiceImpl(RAGService):
         - sources
         - latency
         """
-        final_answer: AsyncGenerator[str, None]
+        final_answer: AsyncGenerator[str, None] | None = None
         try:
             # Correct spell:words
             spell_correction_result:SpellCorrectionResult  =  SpellCorrectorService.correct(query=payload.query)
@@ -69,13 +69,13 @@ class RAGServiceImpl(RAGService):
             # EXTRACT RETRIEVED CHUNKS
             # ---------------------------------------------------------------
             chunks: List[RetrievalChunkDTO] = retrieval_output.results  # List of text chunks relevant to the query
-
+       
             if not chunks:
                 message = (
                         "I could not find enough relevant information to answer your question. "
                         "Please ask a question related to quantum computing."
                     )
-                yield message
+                yield f"data: {json.dumps(message, ensure_ascii=False)}\n\n"
                 return
 
             # ---------------------------------------------------------------
@@ -102,9 +102,8 @@ class RAGServiceImpl(RAGService):
             async for chunk in final_answer:
                 yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
 
-        except Exception:
+        except Exception as e:
             logger.exception("Streaming failed")
-
             message = "Streaming failed"
             yield f"data: {json.dumps(message, ensure_ascii=False )}\n\n"
 
