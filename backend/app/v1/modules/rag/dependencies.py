@@ -2,11 +2,11 @@ from typing import Annotated
 from fastapi import Depends
 from app.v1.modules.rag.services.rag_service_impl import RAGServiceImpl
 from app.v1.modules.rag.services.rag_service import RAGService
-from app.v1.modules.rag.retriever.search_engine_impl import  RetrieverImpl
-from app.v1.modules.rag.retriever.services.reranking_service import RerankingService
+from app.v1.modules.rag.services.retriever.retriever_engine_impl import  RetrieverImpl
+from app.v1.modules.rag.services.retriever.reranking_service import RerankingService
 from app.core.container import Container
 from fastapi import Request
-from app.v1.modules.rag.retriever.services.embedding_service import EmbeddingService
+from app.v1.modules.rag.services.retriever.embedding_service import EmbeddingService
 
 
 # ------------------------------------------------------------

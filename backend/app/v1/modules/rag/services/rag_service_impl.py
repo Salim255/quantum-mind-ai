@@ -8,7 +8,7 @@ from app.v1.modules.rag.generator.generator_service import (generate_answer, gen
 from app.v1.modules.rag.dto.rag_eval_dto import RAGEvaluationLogDto
 from app.v1.modules.rag.evaluation.logger import log_rag_evaluation
 from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, RetrievalChunkDTO)
-from app.v1.modules.rag.services.retriever.search_engine_impl import RetrieverImpl
+from app.v1.modules.rag.services.retriever.retriever_engine_impl import RetrieverImpl
 from app.core.container import Container
 from app.v1.modules.rag.services.retriever.spell_corrector_service import(SpellCorrectorService, SpellCorrectionResult)
 import logging
