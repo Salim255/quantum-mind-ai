@@ -1,5 +1,5 @@
 import time
-from typing import (List, Generator, AsyncGenerator)
+from typing import (List, AsyncGenerator)
 from pydantic import BaseModel
 from app.v1.modules.rag.context.context_builder import build_reasoned_context
 from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
@@ -11,7 +11,10 @@ from app.v1.modules.rag.dto.retrieval_dto import (RetrievalResponseDTO, Retrieva
 from app.v1.modules.rag.retriever.implementations.search_engine_impl import RetrieverImpl
 from app.core.container import Container
 from app.v1.modules.rag.retriever.services.spell_corrector_service import(SpellCorrectorService, SpellCorrectionResult)
+import logging
+import json
 
+logger = logging.getLogger(__name__)
 class QueryRequest(BaseModel):
     query: str
     top_k: int = 3
@@ -28,91 +31,86 @@ class RAGServiceImpl(RAGService):
    async def rag_stream_pipeline(
         self,
         payload: QueryRequest
-    ) -> AsyncGenerator[str, None]:
-    """
-    Execute the full RAG pipeline.
+        ) -> AsyncGenerator[str, None]:
+        """
+        Execute the full RAG pipeline.
 
-    INPUT
-    -----
-    payload.query:
-        User question
+        INPUT
+        -----
+        payload.query:
+            User question
 
-    payload.top_k:
-        Number of chunks to retrieve
+        payload.top_k:
+            Number of chunks to retrieve
 
-    OUTPUT
-    ------
-    - query
-    - retrieved chunks
-    - structured final answer
-    - sources
-    - latency
-    """
-    # ---------------------------------------------------------------
-    # 1. SEMANTIC RETRIEVAL + RERANKING
-    # ---------------------------------------------------------------
-    #
-    # search_similar_documents()
-    # ---------------------------------------------------------------
-    # Correct spell:words
-    spell_correction_result:SpellCorrectionResult  =  SpellCorrectorService.correct(query=payload.query)
+        OUTPUT
+        ------
+        - query
+        - retrieved chunks
+        - structured final answer
+        - sources
+        - latency
+        """
+        final_answer: AsyncGenerator[str, None] | None = None
+        try:
+            # Correct spell:words
+            spell_correction_result:SpellCorrectionResult  =  SpellCorrectorService.correct(query=payload.query)
 
-    print("Corrected corrected_query ===\n", spell_correction_result.corrected_query)
-    
-    retrieval_output: RetrievalResponseDTO = await self.retriever_service.search_similar_documents(
-       spell_correction_result.corrected_query
-       )
+            print("Corrected corrected_query ===\n", spell_correction_result.corrected_query)
+            
 
-    # ---------------------------------------------------------------
-    # EXTRACT RETRIEVED CHUNKS
-    # ---------------------------------------------------------------
-    chunks: List[RetrievalChunkDTO] = retrieval_output.results  # List of text chunks relevant to the query
-
-    # ---------------------------------------------------------------
-    # LOW CONFIDENCE RETRIEVAL GUARD
-    # ---------------------------------------------------------------
-    # If retrieval found no reliable chunks,
-    # avoid hallucinated generation.
-    # ---------------------------------------------------------------
-    # Final answer (must be grounded in context)
-    if not chunks:
-        message = (
-                "I could not find enough relevant information to answer your question. "
-                "Please ask a question related to quantum computing."
+            # ---------------------------------------------------------------
+            # 1. SEMANTIC RETRIEVAL + RERANKING
+            retrieval_output: RetrievalResponseDTO = await self.retriever_service.search_similar_documents(
+            spell_correction_result.corrected_query
             )
-        yield message
-        return
 
-    # ---------------------------------------------------------------
-    # 2. BUILD OPTIMIZED CONTEXT
-    # ---------------------------------------------------------------
-    rich_context_chunks: str = build_reasoned_context(retrieval_output.results)
+            # ---------------------------------------------------------------
+            # EXTRACT RETRIEVED CHUNKS
+            # ---------------------------------------------------------------
+            chunks: List[RetrievalChunkDTO] = retrieval_output.results  # List of text chunks relevant to the query
+
+            if not chunks:
+                message = (
+                        "I could not find enough relevant information to answer your question. "
+                        "Please ask a question related to quantum computing."
+                    )
+                yield message
+                return
+
+            # ---------------------------------------------------------------
+            # 2. BUILD OPTIMIZED CONTEXT
+            # ---------------------------------------------------------------
+            rich_context_chunks: str = build_reasoned_context(retrieval_output.results)
 
 
-    # ---------------------------------------------------------------
-    # 3. INITIALIZE LLM CLIENT
-    # ---------------------------------------------------------------  
-    client = self.container.groq_client
- 
-   
-    # ---------------------------------------------------------------
-    # 4. GENERATE FINAL STRUCTURED ANSWER
-    # ---------------------------------------------------------------
-    final_answer: Generator[str, None, None] = generate_streaming_answer(
-        spell_correction_result.corrected_query,
-        rich_context_chunks,
-        client
-    )
+            # ---------------------------------------------------------------
+            # 3. INITIALIZE LLM CLIENT
+            # ---------------------------------------------------------------  
+            client = self.container.groq_client
+        
+            # ---------------------------------------------------------------
+            # 4. GENERATE FINAL STRUCTURED ANSWER
+            # ---------------------------------------------------------------
+            final_answer = generate_streaming_answer(
+                spell_correction_result.corrected_query,
+                rich_context_chunks,
+                client
+            )
 
-    # ---------------------------------------------------------------
-    # 8. RETURN API RESPONSE
-    # ---------------------------------------------------------------
-    #
-    # model_dump():
-    # Converts Pydantic schema into JSON-serializable dict.
-    # ---------------------------------------------------------------
-    for chunk in final_answer:
-       yield chunk
+            # ---------------------------------------------------------------
+            for chunk in final_answer:
+                yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
+
+        except Exception:
+            logger.exception("Streaming failed")
+
+            message = "Streaming failed"
+            yield f"data: {json.dumps(message, ensure_ascii=False )}\n\n"
+
+        finally:
+            if final_answer:
+                await final_answer.aclose() # stop and clean up a generator or stream early
    
    def rag_pipeline(
         self,

@@ -3,7 +3,7 @@ from typing import Set
 
 from symspellpy import SymSpell, Verbosity
 
-from app.v1.modules.rag.loader.concept_tagger import CONCEPTS
+from app.v1.modules.rag.services.loader.concept_tagger import CONCEPTS
 
 
 @dataclass(slots=True)

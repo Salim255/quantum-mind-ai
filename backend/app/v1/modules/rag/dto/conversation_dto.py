@@ -1,6 +1,12 @@
 from pydantic import BaseModel, Field
 from typing import Literal, Optional
 from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
+from dataclasses import dataclass
+
+@dataclass
+class StreamingResponseDto:
+    message: str
+    response: str
 
 class MemoryMessage(BaseModel):
     role: Literal["user", "assistant"] = Field(..., description="The role of the user in the message")

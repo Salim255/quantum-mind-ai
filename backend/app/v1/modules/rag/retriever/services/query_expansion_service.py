@@ -1,5 +1,5 @@
 from typing import List
-from app.v1.modules.rag.loader.concept_tagger import CONCEPTS
+from app.v1.modules.rag.services.loader.concept_tagger import CONCEPTS
 
 class QueryExpansionService:   
     @staticmethod

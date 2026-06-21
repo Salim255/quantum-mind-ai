@@ -90,8 +90,6 @@ def generate_streaming_answer(
     for chunk in response:
         yield chunk
 
-
-
 # ------------------------------------------------------------------
 # FINAL GENERATION STEP OF THE RAG PIPELINE
 # ------------------------------------------------------------------

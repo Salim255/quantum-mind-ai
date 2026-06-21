@@ -2,6 +2,8 @@ from groq import Groq
 from typing import Generator
 import logging
 from app.core.exceptions.custom_exceptions import StreamException
+from groq import Stream
+from groq.types.chat import ChatCompletionChunk
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +80,8 @@ def groq_llm_call_streaming(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
-    stream = client.chat.completions.create(
+
+    stream: Stream[ChatCompletionChunk] = client.chat.completions.create(
 
         # ----------------------------------------------------------
         # MODEL

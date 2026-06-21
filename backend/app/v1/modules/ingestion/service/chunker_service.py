@@ -54,7 +54,7 @@ from typing import List
 nltk.download("punkt")
 nltk.download("punkt_tab")
 
-from app.v1.modules.rag.loader.concept_tagger import detect_concept
+from app.v1.modules.rag.services.loader.concept_tagger import detect_concept
 from app.v1.modules.ingestion.dto.chunker_dto import ChunkDTO
 from app.v1.modules.ingestion.dto.text_dto import ContentBlockDTO
 

@@ -81,7 +81,7 @@ class RetrieverImpl(RetrieverInterface):
             
             
             case _:
-                 return RetrievalResponseDTO(results=[])
+                return RetrievalResponseDTO(results=[])
             
     # ---------------------------------------------------------
     # MAIN RETRIEVAL PIPELINE

@@ -1,10 +1,14 @@
 from fastapi import (APIRouter, Depends)
-from typing import Annotated
+from typing import Annotated, Generator
 from pydantic import BaseModel
 from app.v1.modules.rag.dto.rag_finale_response_dto import RAGQueryFinaleResponseDto
 from app.v1.modules.rag.services.interfaces.rag_service import RAGService
 from app.v1.modules.rag.dependencies import get_rag_service
-from app.v1.modules.rag.dto.conversation_dto import (ConversationRequest, ConversationResponse)
+from app.v1.modules.rag.dto.conversation_dto import (
+    ConversationRequest,
+    ConversationResponse)
+from app.core.dtos.response_dto import ResponseDTO
+from fastapi.responses import StreamingResponse
 
 router = APIRouter(
     prefix="/rag",
@@ -17,9 +21,9 @@ class QueryRequest(BaseModel):
 
 async def send_message(
     payload: ConversationRequest,
-    conversation_service: Annotated[ConversationService, Depends(get_conversation_service)]
+    rag_service: Annotated[RAGService, Depends(get_rag_service)]
 ) -> ResponseDTO:
-    response: ConversationResponse = await conversation_service.handle_message(
+    response: ConversationResponse = await rag_service.handle_message(
         user_id=payload.user_id,
         message=payload.message,
         conversation_id=payload.conversation_id
@@ -28,7 +32,7 @@ async def send_message(
 
 
 @router.post(
-    "/messages/stream",
+    "/stream",
     status_code=200,
      response_class=StreamingResponse,
     response_description="Streams AI response chunks",
@@ -38,18 +42,16 @@ async def send_message(
 )
 async def stream_message(
     payload: ConversationRequest,
-    conversation_service: Annotated[
-        ConversationService,
-        Depends(get_conversation_service)
+    rag_service: Annotated[
+        RAGService,
+        Depends(get_rag_service)
     ]
 )-> StreamingResponse:
     # ------------------------------------------------------
     # STREAM EVENTS FROM SERVICE
     # ------------------------------------------------------
-    event_generator: Generator[str, None, None] = conversation_service.stream_message(
-        user_id=payload.user_id,
-        message=payload.message,
-        conversation_id=payload.conversation_id
+    event_generator: Generator[str, None, None] = rag_service.rag_stream_pipeline(
+        QueryRequest(query=payload.message, top_k=3)
     )
 
     return StreamingResponse(
