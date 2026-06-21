@@ -14,4 +14,5 @@ export class QuestionService {
   get getQuestion$(): Observable<string | null>{
     return this.questionSubject.asObservable()
   }
+
 }

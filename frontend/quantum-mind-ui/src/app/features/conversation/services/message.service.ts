@@ -19,6 +19,8 @@ export class MessageService {
 
   setStreamResponseSubject(response: string | null) {
     this.streamingResponseSubject.next(response);
+    if(!response) return
+    this.saveMessageToSession(response);
   }
 
   get getStreamResponse$(): Observable<string | null>{
@@ -27,5 +29,9 @@ export class MessageService {
 
   get getMessage$(): Observable<AnswerPayload | null>{
     return this.messageSubject.asObservable()
+  }
+
+  private saveMessageToSession(msg: string) {
+    sessionStorage.setItem('currentMessage', JSON.stringify(msg));
   }
 }
