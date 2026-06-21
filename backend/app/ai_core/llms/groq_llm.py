@@ -1,5 +1,5 @@
 from groq import Groq
-from typing import Generator
+from typing import AsyncGenerator
 import logging
 from app.core.exceptions.custom_exceptions import StreamException
 from groq import Stream
@@ -10,10 +10,10 @@ logger = logging.getLogger(__name__)
 # ------------------------------------------------------------------
 # LLM CALL
 # ------------------------------------------------------------------
-def groq_llm_call_streaming(
+async def groq_llm_call_streaming(
     client: Groq,
     prompt: str
-    )-> Generator[str, None, None]:
+    )->  AsyncGenerator[str, None]:
     """
     Call the Groq-hosted LLM for grounded RAG generation.
 
@@ -80,7 +80,7 @@ def groq_llm_call_streaming(
     # - system role → controls assistant behavior
     # - user role → contains the RAG prompt/context
     #
-
+ 
     stream: Stream[ChatCompletionChunk] = client.chat.completions.create(
 
         # ----------------------------------------------------------

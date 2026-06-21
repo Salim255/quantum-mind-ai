@@ -7,7 +7,7 @@ from app.db.db_engine import DBEngineService
 from app.db.db_settings import DbSettingsService
 from app.db.db_session import DBSessionService
 from sentence_transformers import SentenceTransformer
-from app.v1.modules.rag.embeddings.embedder import RAGEmbedder
+from app.v1.modules.rag.services.embeddings.embedder import RAGEmbedder
 from app.db.db_init import DBInitService
 
 logging.basicConfig(

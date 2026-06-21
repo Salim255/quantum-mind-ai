@@ -51,7 +51,7 @@ class RAGServiceImpl(RAGService):
         - sources
         - latency
         """
-        final_answer: AsyncGenerator[str, None] | None = None
+        final_answer: AsyncGenerator[str, None]
         try:
             # Correct spell:words
             spell_correction_result:SpellCorrectionResult  =  SpellCorrectorService.correct(query=payload.query)
@@ -99,7 +99,7 @@ class RAGServiceImpl(RAGService):
             )
 
             # ---------------------------------------------------------------
-            for chunk in final_answer:
+            async for chunk in final_answer:
                 yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
 
         except Exception:
@@ -110,6 +110,7 @@ class RAGServiceImpl(RAGService):
 
         finally:
             if final_answer:
+                print("We close with final====\n", final_answer)
                 await final_answer.aclose() # stop and clean up a generator or stream early
    
    def rag_pipeline(

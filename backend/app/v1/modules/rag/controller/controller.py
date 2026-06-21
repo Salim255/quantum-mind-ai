@@ -9,6 +9,7 @@ from app.v1.modules.rag.dto.conversation_dto import (
     ConversationResponse)
 from app.core.dtos.response_dto import ResponseDTO
 from fastapi.responses import StreamingResponse
+from collections.abc import AsyncIterable
 
 router = APIRouter(
     prefix="/rag",
@@ -50,7 +51,7 @@ async def stream_message(
     # ------------------------------------------------------
     # STREAM EVENTS FROM SERVICE
     # ------------------------------------------------------
-    event_generator: Generator[str, None, None] = rag_service.rag_stream_pipeline(
+    event_generator: AsyncIterable[str | None] = rag_service.rag_stream_pipeline(
         QueryRequest(query=payload.message, top_k=3)
     )
 
