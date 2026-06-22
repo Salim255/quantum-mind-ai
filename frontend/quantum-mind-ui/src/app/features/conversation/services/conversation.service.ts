@@ -33,15 +33,10 @@ export class ConversationService {
     .sendStreamMessage(payload)
     .subscribe({
       next: (chunk: string) => {
-        console.log(chunk)
-        //this.consumeStream()
-
         this.messageService.setStreamResponseSubject(chunk);
       },
       error: (err) => {console.log(err)},
-      complete: () => {
-        console.log("Complete====")
-      },
+      complete: () => {}
     });
   }
 

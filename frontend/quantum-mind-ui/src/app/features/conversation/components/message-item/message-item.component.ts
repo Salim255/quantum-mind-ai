@@ -67,9 +67,13 @@ export class MessageItemComponent implements OnInit, OnChanges, OnDestroy {
             // runs after DOM paint
             // more aligned with browser rendering cycle
             // less fragile than timers
-            requestAnimationFrame(() => {
+            //requestAnimationFrame(() => {
+              //MathJax.typesetPromise?.();
+            //});
+
+            setTimeout(() => {
               MathJax.typesetPromise?.();
-            });
+            }, 0)
         }
       }
     )

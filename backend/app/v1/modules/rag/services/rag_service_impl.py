@@ -109,7 +109,6 @@ class RAGServiceImpl(RAGService):
 
         finally:
             if final_answer:
-                print("We close with final====\n", final_answer)
                 await final_answer.aclose() # stop and clean up a generator or stream early
    
    def rag_pipeline(
