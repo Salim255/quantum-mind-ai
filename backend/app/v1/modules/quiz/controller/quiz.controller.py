@@ -16,12 +16,6 @@ router = APIRouter(
 )
 
 
-# =========================================================
-# Dependency Injection
-# =========================================================
-def get_quiz_service() -> QuizService:
-    return QuizService()
-
 
 # =========================================================
 # GENERATE QUIZ
