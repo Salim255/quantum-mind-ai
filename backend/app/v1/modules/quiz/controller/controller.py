@@ -17,14 +17,12 @@ router = APIRouter(
     tags=["Quiz"]
 )
 
-
-
 # =========================================================
 # GENERATE QUIZ
 # =========================================================
 @router.post(
     "/generate",
-    response_model=QuizResponse,
+    #response_model=QuizResponse,
     status_code=status.HTTP_201_CREATED
 )
 def generate_quiz(
