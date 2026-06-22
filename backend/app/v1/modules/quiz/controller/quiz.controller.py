@@ -6,12 +6,14 @@ from app.v1.modules.quiz.dto.quiz_dto import (
     QuizSubmitRequest,
     QuizResultResponse,
 )
-
 from app.v1.modules.quiz.service.quiz_service import QuizService
+from app.v1.modules.quiz.dependencies import get_quiz_service
+from app.v1.modules.quiz.service.quiz_service import QuizService
+from typing import Annotated
 
 
 router = APIRouter(
-    prefix="/quiz",
+    prefix="/quizs",
     tags=["Quiz"]
 )
 
@@ -27,17 +29,11 @@ router = APIRouter(
 )
 def generate_quiz(
     payload: QuizCreateRequest,
-    service: QuizService = Depends(get_quiz_service),
+    service: Annotated[QuizService, Depends(get_quiz_service)],
 ):
-    quiz = service.generate_quiz(payload)
+    #quiz = service.generate_quiz(payload)
 
-    if not quiz:
-        raise HTTPException(
-            status_code=400,
-            detail="Quiz generation failed"
-        )
-
-    return quiz
+    return "Hello from generate quiz"
 
 
 # =========================================================
@@ -49,17 +45,11 @@ def generate_quiz(
 )
 def get_quiz(
     quiz_id: str,
-    service: QuizService = Depends(get_quiz_service),
+    service: Annotated[QuizService, Depends(get_quiz_service)],
 ):
-    quiz = service.get_quiz(quiz_id)
+    #quiz = service.get_quiz(quiz_id)
 
-    if not quiz:
-        raise HTTPException(
-            status_code=404,
-            detail="Quiz not found"
-        )
-
-    return quiz
+    return  "Hello from get quiz"
 
 
 # =========================================================
@@ -71,11 +61,11 @@ def get_quiz(
 )
 def submit_quiz(
     payload: QuizSubmitRequest,
-    service: QuizService = Depends(get_quiz_service),
+    service: Annotated[QuizService, Depends(get_quiz_service)],
 ):
-    result = service.evaluate_quiz(payload)
+    #result = service.evaluate_quiz(payload)
 
-    return result
+    return "Hello from evaluate quiz"
 
 
 # =========================================================
@@ -86,7 +76,8 @@ def submit_quiz(
     response_model=QuizResponse
 )
 def random_quiz(
-    topic: str | None = None,
-    service: QuizService = Depends(get_quiz_service),
+    topic: str | None,
+    service: Annotated[ QuizService, Depends(get_quiz_service)],
 ):
-    return service.get_random_quiz(topic)
+    #return service.get_random_quiz(topic)
+    return "Hello from random quiz"
