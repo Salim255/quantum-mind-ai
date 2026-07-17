@@ -1,7 +1,4 @@
-@use "../../../../styles/colors.scss" as *;
-@use "../../../../styles/layout.scss" as *;
-@use "../../../../styles/typography.scss" as *;
-@use "../../../../styles/queries.scss" as *;
+@use "../../../../styles/abstracts/queries" as *;
 
 /* FIXED HEADER */
 .dash-header {
