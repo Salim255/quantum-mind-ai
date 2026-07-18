@@ -1,0 +1,77 @@
+@use "../abstracts/tokens/shadows" as shadow;
+
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   SEMANTIC ELEVATION
+
+   Components should use semantic elevation levels,
+   not raw shadow tokens.
+
+============================================================ */
+
+
+:root {
+
+
+  /* ================================
+     Base surfaces
+  ================================= */
+
+
+  --elevation-none:
+    none;
+
+
+
+  --elevation-card:
+    #{shadow.$shadow-xs};
+
+
+
+  --elevation-surface:
+    #{shadow.$shadow-sm};
+
+
+
+  /* ================================
+     Floating UI
+  ================================= */
+
+
+  --elevation-dropdown:
+    #{shadow.$shadow-md};
+
+
+
+  --elevation-popover:
+    #{shadow.$shadow-md};
+
+
+
+  /* ================================
+     Overlays
+  ================================= */
+
+
+  --elevation-modal:
+    #{shadow.$shadow-lg};
+
+
+
+  --elevation-overlay:
+    #{shadow.$shadow-xl};
+
+
+
+  /* ================================
+     Interaction
+  ================================= */
+
+
+  --elevation-focus:
+    #{shadow.$shadow-focus};
+
+
+}

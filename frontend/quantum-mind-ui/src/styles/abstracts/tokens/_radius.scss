@@ -1,0 +1,73 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   RADIUS TOKENS
+
+   Radius defines the softness and visual language
+   of the interface.
+
+   The system avoids excessive rounding.
+   Small radii create precision.
+   Larger radii are reserved for elevated surfaces.
+
+============================================================ */
+
+
+/* ============================================================
+   BASE SCALE
+============================================================ */
+
+
+$radius-none: 0;
+
+
+$radius-xs: .2rem;     // 2px
+$radius-sm: .4rem;     // 4px
+$radius-md: .6rem;     // 6px
+$radius-lg: .8rem;     // 8px
+$radius-xl: 1.2rem;    // 12px
+$radius-2xl: 1.6rem;   // 16px
+
+
+/* ============================================================
+   SPECIAL VALUES
+============================================================ */
+
+
+$radius-pill: 999px;
+
+$radius-circle:50%;
+
+
+
+/* ============================================================
+   COMPONENT INTENT VALUES
+
+   These are still tokens.
+   Semantic mapping happens later.
+
+============================================================ */
+
+
+$radius-input:
+  $radius-md;
+
+
+$radius-button:
+  $radius-md;
+
+
+$radius-card:
+  $radius-xl;
+
+
+$radius-panel:
+  $radius-xl;
+
+
+$radius-modal:
+  $radius-2xl;
+
+
+$radius-badge:
+  $radius-pill;

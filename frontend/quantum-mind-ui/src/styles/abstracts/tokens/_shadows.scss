@@ -1,0 +1,97 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   SHADOW TOKENS
+
+   Shadows define elevation and depth.
+
+   The system uses subtle neutral shadows
+   to maintain a premium enterprise aesthetic.
+
+   Avoid heavy shadows.
+   Elevation should feel natural, not decorative.
+
+============================================================ */
+
+
+/* ============================================================
+   BASE SHADOWS
+============================================================ */
+
+
+/*
+   Minimal separation.
+   Used for small controls and floating elements.
+*/
+
+$shadow-xs:
+  0 1px 2px rgba(0, 0, 0, .04);
+
+
+
+/*
+   Default component elevation.
+   Used for cards and small surfaces.
+*/
+
+$shadow-sm:
+  0 1px 3px rgba(0, 0, 0, .06),
+  0 1px 2px rgba(0, 0, 0, .04);
+
+
+
+/*
+   Medium elevation.
+   Used for dropdowns, popovers, menus.
+*/
+
+$shadow-md:
+  0 4px 12px rgba(0, 0, 0, .08),
+  0 2px 4px rgba(0, 0, 0, .04);
+
+
+
+/*
+   Large elevation.
+   Used for dialogs and overlays.
+*/
+
+$shadow-lg:
+  0 12px 32px rgba(0, 0, 0, .10),
+  0 4px 8px rgba(0, 0, 0, .05);
+
+
+
+/*
+   Maximum elevation.
+   Used rarely.
+*/
+
+$shadow-xl:
+  0 24px 48px rgba(0, 0, 0, .14),
+  0 8px 16px rgba(0, 0, 0, .06);
+
+
+
+/* ============================================================
+   SPECIAL PURPOSE
+============================================================ */
+
+
+/*
+   Focus ring shadow.
+   Used for accessibility states.
+*/
+
+$shadow-focus:
+  0 0 0 .4rem rgba(0, 0, 0, .08);
+
+
+
+/*
+   Inner subtle depth.
+   Used for inputs and inset areas.
+*/
+
+$shadow-inner:
+  inset 0 1px 2px rgba(0,0,0,.04);

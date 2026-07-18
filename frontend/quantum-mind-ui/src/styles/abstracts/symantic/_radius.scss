@@ -1,0 +1,68 @@
+@use "../abstracts/tokens/radius" as radius;
+
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   SEMANTIC RADIUS
+
+   Components consume these variables.
+
+   Changing the entire product softness only requires
+   changing this layer.
+
+============================================================ */
+
+
+:root {
+
+
+  /* ================================
+     Controls
+  ================================= */
+
+  --radius-input:
+    #{radius.$radius-input};
+
+
+  --radius-button:
+    #{radius.$radius-button};
+
+
+
+  /* ================================
+     Surfaces
+  ================================= */
+
+
+  --radius-card:
+    #{radius.$radius-card};
+
+
+  --radius-panel:
+    #{radius.$radius-panel};
+
+
+  --radius-modal:
+    #{radius.$radius-modal};
+
+
+
+  /* ================================
+     Small UI
+  ================================= */
+
+
+  --radius-badge:
+    #{radius.$radius-badge};
+
+
+  --radius-pill:
+    #{radius.$radius-pill};
+
+
+  --radius-circle:
+    #{radius.$radius-circle};
+
+
+}
