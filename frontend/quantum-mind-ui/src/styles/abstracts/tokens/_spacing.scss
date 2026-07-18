@@ -1,0 +1,112 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   SPACING TOKENS
+
+   These tokens define the spacing rhythm of the entire product.
+
+   Every margin, padding, gap and layout spacing should be
+   derived from this scale.
+
+   The system follows a consistent 4px baseline grid.
+
+============================================================ */
+
+
+/* ============================================================
+   BASE SCALE
+============================================================ */
+
+$space-0: 0;
+
+$space-1: .4rem;   // 4px
+$space-2: .8rem;   // 8px
+$space-3: 1.2rem;  // 12px
+$space-4: 1.6rem;  // 16px
+$space-5: 2rem;    // 20px
+$space-6: 2.4rem;  // 24px
+$space-7: 3.2rem;  // 32px
+$space-8: 4rem;    // 40px
+$space-9: 4.8rem;  // 48px
+$space-10: 5.6rem; // 56px
+$space-11: 6.4rem; // 64px
+$space-12: 8rem;   // 80px
+$space-13: 9.6rem; // 96px
+$space-14: 12rem;  // 120px
+
+
+
+/* ============================================================
+   CONTENT WIDTHS
+============================================================ */
+
+$content-xs: 48rem;
+$content-sm: 64rem;
+$content-md: 80rem;
+$content-lg: 96rem;
+$content-xl: 120rem;
+$content-2xl: 144rem;
+
+
+
+/* ============================================================
+   PAGE PADDING
+============================================================ */
+
+$page-padding-xs: $space-4;
+$page-padding-sm: $space-5;
+$page-padding-md: $space-6;
+$page-padding-lg: $space-8;
+
+
+
+/* ============================================================
+   SECTION SPACING
+============================================================ */
+
+$section-gap-sm: $space-6;
+$section-gap-md: $space-8;
+$section-gap-lg: $space-10;
+
+
+
+/* ============================================================
+   COMPONENT SPACING
+============================================================ */
+
+$component-gap-xs: $space-2;
+$component-gap-sm: $space-3;
+$component-gap-md: $space-4;
+$component-gap-lg: $space-6;
+
+
+
+/* ============================================================
+   FORM SPACING
+============================================================ */
+
+$form-gap: $space-6;
+
+$form-group-gap: $space-2;
+
+$form-actions-gap: $space-4;
+
+
+
+/* ============================================================
+   CARD SPACING
+============================================================ */
+
+$card-padding-sm: $space-4;
+$card-padding-md: $space-6;
+$card-padding-lg: $space-8;
+
+
+
+/* ============================================================
+   DIALOG SPACING
+============================================================ */
+
+$dialog-padding: $space-8;
+
+$dialog-gap: $space-6;
