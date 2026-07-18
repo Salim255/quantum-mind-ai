@@ -1,0 +1,212 @@
+@use "../tokens/spacing" as space;
+
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+
+   SEMANTIC SPACING
+
+   Components consume these variables.
+
+   Never use raw spacing tokens directly.
+
+============================================================ */
+
+
+
+:root {
+
+
+/* ============================================================
+   GLOBAL RHYTHM
+============================================================ */
+
+
+--space-none:
+  #{space.$space-0};
+
+
+--space-xs:
+  #{space.$space-1};
+
+
+--space-sm:
+  #{space.$space-2};
+
+
+--space-md:
+  #{space.$space-4};
+
+
+--space-lg:
+  #{space.$space-6};
+
+
+--space-xl:
+  #{space.$space-8};
+
+
+--space-2xl:
+  #{space.$space-10};
+
+
+--space-3xl:
+  #{space.$space-12};
+
+
+
+
+/* ============================================================
+   CONTENT WIDTH
+============================================================ */
+
+
+--content-width-xs:
+  #{space.$content-xs};
+
+
+--content-width-sm:
+  #{space.$content-sm};
+
+
+--content-width-md:
+  #{space.$content-md};
+
+
+--content-width-lg:
+  #{space.$content-lg};
+
+
+--content-width-xl:
+  #{space.$content-xl};
+
+
+--content-width-full:
+  #{space.$content-2xl};
+
+
+
+
+
+/* ============================================================
+   PAGE LAYOUT
+============================================================ */
+
+
+--page-padding-mobile:
+  #{space.$page-padding-xs};
+
+
+--page-padding-tablet:
+  #{space.$page-padding-sm};
+
+
+--page-padding-desktop:
+  #{space.$page-padding-md};
+
+
+--page-padding-large:
+  #{space.$page-padding-lg};
+
+
+
+
+
+/* ============================================================
+   SECTION
+============================================================ */
+
+
+--section-gap-sm:
+  #{space.$section-gap-sm};
+
+
+--section-gap-md:
+  #{space.$section-gap-md};
+
+
+--section-gap-lg:
+  #{space.$section-gap-lg};
+
+
+
+
+
+/* ============================================================
+   COMPONENTS
+============================================================ */
+
+
+--component-gap-xs:
+  #{space.$component-gap-xs};
+
+
+--component-gap-sm:
+  #{space.$component-gap-sm};
+
+
+--component-gap-md:
+  #{space.$component-gap-md};
+
+
+--component-gap-lg:
+  #{space.$component-gap-lg};
+
+
+
+
+
+/* ============================================================
+   FORMS
+============================================================ */
+
+
+--form-gap:
+  #{space.$form-gap};
+
+
+--form-group-gap:
+  #{space.$form-group-gap};
+
+
+--form-actions-gap:
+  #{space.$form-actions-gap};
+
+
+
+
+
+/* ============================================================
+   CARDS
+============================================================ */
+
+
+--card-padding-sm:
+  #{space.$card-padding-sm};
+
+
+--card-padding-md:
+  #{space.$card-padding-md};
+
+
+--card-padding-lg:
+  #{space.$card-padding-lg};
+
+
+
+
+
+/* ============================================================
+   DIALOGS
+============================================================ */
+
+
+--dialog-padding:
+  #{space.$dialog-padding};
+
+
+--dialog-gap:
+  #{space.$dialog-gap};
+
+
+}
