@@ -1,0 +1,288 @@
+@use "../tokens/typography" as type;
+
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+
+   SEMANTIC TYPOGRAPHY
+
+   Components should consume these variables.
+   Never use raw typography tokens directly.
+============================================================ */
+
+
+:root {
+
+
+  /* ==========================================================
+     FONT FAMILY
+  ========================================================== */
+
+
+  --font-family-base:
+    #{type.$font-family-base};
+
+
+  --font-family-mono:
+    #{type.$font-family-mono};
+
+
+
+
+  /* ==========================================================
+     DISPLAY
+  ========================================================== */
+
+
+  --text-display-lg-size:
+    #{type.$display-lg-size};
+
+  --text-display-lg-weight:
+    #{type.$display-lg-weight};
+
+  --text-display-lg-line:
+    #{type.$display-lg-line-height};
+
+  --text-display-lg-tracking:
+    #{type.$display-lg-tracking};
+
+
+
+  --text-display-md-size:
+    #{type.$display-md-size};
+
+  --text-display-md-weight:
+    #{type.$display-md-weight};
+
+  --text-display-md-line:
+    #{type.$display-md-line-height};
+
+  --text-display-md-tracking:
+    #{type.$display-md-tracking};
+
+
+
+  --text-display-sm-size:
+    #{type.$display-sm-size};
+
+  --text-display-sm-weight:
+    #{type.$display-sm-weight};
+
+  --text-display-sm-line:
+    #{type.$display-sm-line-height};
+
+  --text-display-sm-tracking:
+    #{type.$display-sm-tracking};
+
+
+
+
+
+  /* ==========================================================
+     HEADINGS
+  ========================================================== */
+
+
+  --text-heading-xl-size:
+    #{type.$heading-xl-size};
+
+  --text-heading-xl-weight:
+    #{type.$heading-xl-weight};
+
+  --text-heading-xl-line:
+    #{type.$heading-xl-line-height};
+
+  --text-heading-xl-tracking:
+    #{type.$heading-xl-tracking};
+
+
+
+
+  --text-heading-lg-size:
+    #{type.$heading-lg-size};
+
+  --text-heading-lg-weight:
+    #{type.$heading-lg-weight};
+
+  --text-heading-lg-line:
+    #{type.$heading-lg-line-height};
+
+  --text-heading-lg-tracking:
+    #{type.$heading-lg-tracking};
+
+
+
+
+  --text-heading-md-size:
+    #{type.$heading-md-size};
+
+  --text-heading-md-weight:
+    #{type.$heading-md-weight};
+
+  --text-heading-md-line:
+    #{type.$heading-md-line-height};
+
+  --text-heading-md-tracking:
+    #{type.$heading-md-tracking};
+
+
+
+
+  --text-heading-sm-size:
+    #{type.$heading-sm-size};
+
+  --text-heading-sm-weight:
+    #{type.$heading-sm-weight};
+
+  --text-heading-sm-line:
+    #{type.$heading-sm-line-height};
+
+  --text-heading-sm-tracking:
+    #{type.$heading-sm-tracking};
+
+
+
+
+
+  /* ==========================================================
+     BODY
+  ========================================================== */
+
+
+  --text-body-lg-size:
+    #{type.$body-lg-size};
+
+  --text-body-lg-weight:
+    #{type.$body-lg-weight};
+
+  --text-body-lg-line:
+    #{type.$body-lg-line-height};
+
+
+
+
+  --text-body-md-size:
+    #{type.$body-md-size};
+
+  --text-body-md-weight:
+    #{type.$body-md-weight};
+
+  --text-body-md-line:
+    #{type.$body-md-line-height};
+
+
+
+
+  --text-body-sm-size:
+    #{type.$body-sm-size};
+
+  --text-body-sm-weight:
+    #{type.$body-sm-weight};
+
+  --text-body-sm-line:
+    #{type.$body-sm-line-height};
+
+
+
+
+
+  /* ==========================================================
+     LABELS
+  ========================================================== */
+
+
+  --text-label-lg-size:
+    #{type.$label-lg-size};
+
+  --text-label-lg-weight:
+    #{type.$label-lg-weight};
+
+  --text-label-lg-line:
+    #{type.$label-lg-line-height};
+
+
+
+
+  --text-label-md-size:
+    #{type.$label-md-size};
+
+  --text-label-md-weight:
+    #{type.$label-md-weight};
+
+  --text-label-md-line:
+    #{type.$label-md-line-height};
+
+
+
+
+  --text-label-sm-size:
+    #{type.$label-sm-size};
+
+  --text-label-sm-weight:
+    #{type.$label-sm-weight};
+
+  --text-label-sm-line:
+    #{type.$label-sm-line-height};
+
+  --text-label-sm-tracking:
+    #{type.$label-sm-tracking};
+
+
+
+
+
+  /* ==========================================================
+     BUTTONS
+  ========================================================== */
+
+
+  --text-button-size:
+    #{type.$button-size};
+
+  --text-button-weight:
+    #{type.$button-weight};
+
+  --text-button-line:
+    #{type.$button-line-height};
+
+
+
+
+
+  /* ==========================================================
+     CAPTION
+  ========================================================== */
+
+
+  --text-caption-size:
+    #{type.$caption-size};
+
+  --text-caption-weight:
+    #{type.$caption-weight};
+
+  --text-caption-line:
+    #{type.$caption-line-height};
+
+  --text-caption-tracking:
+    #{type.$caption-tracking};
+
+
+
+
+
+  /* ==========================================================
+     CODE
+  ========================================================== */
+
+
+  --text-code-size:
+    #{type.$code-size};
+
+  --text-code-weight:
+    #{type.$code-weight};
+
+  --text-code-line:
+    #{type.$code-line-height};
+
+
+}

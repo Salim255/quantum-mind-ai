@@ -1,0 +1,163 @@
+@use "../tokens/colors" as color;
+
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+
+   SEMANTIC COLORS
+
+   Components consume these variables.
+
+============================================================ */
+
+
+:root {
+
+
+/* ============================================================
+   BACKGROUND
+============================================================ */
+
+
+--color-background:
+  #{color.$grey-25};
+
+
+--color-surface:
+  #{color.$white};
+
+
+--color-surface-subtle:
+  #{color.$grey-50};
+
+
+--color-surface-muted:
+  #{color.$grey-100};
+
+
+
+
+/* ============================================================
+   TEXT
+============================================================ */
+
+
+--color-text-primary:
+  #{color.$grey-900};
+
+
+--color-text-secondary:
+  #{color.$grey-600};
+
+
+--color-text-muted:
+  #{color.$grey-500};
+
+
+--color-text-disabled:
+  #{color.$grey-400};
+
+
+--color-text-inverse:
+  #{color.$white};
+
+
+
+
+/* ============================================================
+   BORDER
+============================================================ */
+
+
+--color-border:
+  #{color.$grey-200};
+
+
+--color-border-subtle:
+  #{color.$grey-100};
+
+
+--color-border-strong:
+  #{color.$grey-300};
+
+
+
+
+/* ============================================================
+   BRAND
+============================================================ */
+
+
+--color-primary:
+  #{color.$primary-600};
+
+
+--color-primary-hover:
+  #{color.$primary-700};
+
+
+--color-primary-soft:
+  #{color.$primary-50};
+
+
+--color-primary-border:
+  #{color.$primary-200};
+
+
+
+
+/* ============================================================
+   STATES
+============================================================ */
+
+
+--color-success:
+  #{color.$success-600};
+
+
+--color-success-soft:
+  #{color.$success-50};
+
+
+
+--color-warning:
+  #{color.$warning-600};
+
+
+--color-warning-soft:
+  #{color.$warning-50};
+
+
+
+--color-error:
+  #{color.$error-600};
+
+
+--color-error-soft:
+  #{color.$error-50};
+
+
+
+--color-info:
+  #{color.$info-600};
+
+
+--color-info-soft:
+  #{color.$info-50};
+
+
+
+
+/* ============================================================
+   CONTRAST
+============================================================ */
+
+
+--color-strong:
+  #{color.$ink-950};
+
+
+--color-inverse:
+  #{color.$white};
+
+}
