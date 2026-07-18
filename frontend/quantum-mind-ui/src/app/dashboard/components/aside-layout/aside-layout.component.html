@@ -1,7 +1,9 @@
 <nav class="aside-layout">
-  <ul>
+  <ul class="aside-layout__list">
     @for(nav of items()?.children; track $index) {
-      <li><app-aside-nav-link [nav]="nav"></app-aside-nav-link></li>
+      <li class="aside-layout__link">
+          <app-aside-nav-link [nav]="nav"></app-aside-nav-link>
+        </li>
     }
   </ul>
 </nav>

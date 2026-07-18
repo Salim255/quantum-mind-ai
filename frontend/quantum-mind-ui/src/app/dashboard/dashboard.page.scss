@@ -1,46 +1,28 @@
-@use "../../styles/typography.scss" as *;
-@use "../../styles/colors.scss" as *;
-@use "../../styles/layout.scss" as *;
-@use "../../styles/queries.scss" as *;
+@use "../../styles/mixins/_queries.scss" as *;
 
 .dashboard-page {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   height: 100dvh;
-  width: 100vw;
+  width: 100dvw;
   overflow: hidden;
-
+  &__wrapper{
+    background-color: yellow;
+  }
   app-header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    display: block;
-    background-color: black;
+    background-color: red;
   }
 
-  app-content-aside {
-    background-color: blue;
-
-
-  }
   &__aside {
-    width: 16rem;
-    border-right: 1px solid $color-border;
-    position: sticky;
-    top: 0;
-    z-index: 10;
     app-aside-layout {
-      position: fixed;
-      height: 100dvh;
+
     }
   }
 
-  @include respond("tablet") {
+  @include respond(tab-port) {
+    grid-template-columns: 0 1fr;
     &__aside {
-      width: 0;
-      app-aside-layout {
-        display: none;
-      }
+      //display: none;
     }
   }
 }

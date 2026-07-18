@@ -1,11 +1,22 @@
+@use "../../../styles/mixins/queries" as *;
+
 .learn-page {
   display: grid;
   grid-template-columns:  1fr auto;
   gap: 2rem;
+  min-height: 0;
+  height: 100vh;
+
   &__content {
     overflow: auto;
-    height: 100dvh;
+    min-height: 0;
+    height: 100%;
+  }
+
+  @include respond(tab-port) {
+    grid-template-columns: 1fr 0;
   }
 }
+
 
 

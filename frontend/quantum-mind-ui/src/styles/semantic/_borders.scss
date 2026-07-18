@@ -1,0 +1,71 @@
+@use "../tokens/borders" as border;
+
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   SEMANTIC BORDERS
+
+   Components consume semantic borders only.
+
+============================================================ */
+
+
+:root {
+
+
+  /* ================================
+     Global structure
+  ================================= */
+
+
+  --border-width-default:
+    #{border.$border-thin};
+
+
+  --border-width-emphasis:
+    #{border.$border-medium};
+
+
+
+  /* ================================
+     Component borders
+  ================================= */
+
+
+  --border-card:
+    #{border.$border-thin};
+
+
+  --border-input:
+    #{border.$border-thin};
+
+
+  --border-button:
+    #{border.$border-thin};
+
+
+
+  /* ================================
+     States
+  ================================= */
+
+
+  --border-focus:
+    #{border.$border-medium};
+
+
+  --border-selected:
+    #{border.$border-medium};
+
+
+
+  /* ================================
+     Dividers
+  ================================= */
+
+
+  --border-divider:
+    #{border.$border-thin};
+
+}

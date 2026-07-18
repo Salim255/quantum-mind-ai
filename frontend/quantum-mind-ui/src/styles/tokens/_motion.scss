@@ -1,0 +1,99 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   MOTION TOKENS
+
+   Motion defines interaction timing and transitions.
+
+   The system focuses on subtle, professional movement:
+   fast feedback, smooth surfaces and controlled elevation.
+
+============================================================ */
+
+
+/* ============================================================
+   DURATIONS
+============================================================ */
+
+
+$duration-instant:
+  0ms;
+
+
+$duration-fast:
+  120ms;
+
+
+$duration-normal:
+  200ms;
+
+
+$duration-slow:
+  300ms;
+
+
+$duration-slower:
+  450ms;
+
+
+
+/* ============================================================
+   EASING
+============================================================ */
+
+
+/*
+   Default UI interaction.
+   Buttons, inputs, toggles.
+*/
+
+$ease-standard:
+  cubic-bezier(.2, .0, .0, 1);
+
+
+
+/*
+   Smooth entrance and exit.
+   Dropdowns, panels, dialogs.
+*/
+
+$ease-smooth:
+  cubic-bezier(.4, 0, .2, 1);
+
+
+
+/*
+   Slightly premium feeling.
+   Cards and larger movements.
+*/
+
+$ease-emphasized:
+  cubic-bezier(.16, 1, .3, 1);
+
+
+
+/*
+   Linear movement.
+   Used for progress indicators.
+*/
+
+$ease-linear:
+  linear;
+
+
+
+/* ============================================================
+   TRANSITIONS
+============================================================ */
+
+
+$transition-fast:
+  $duration-fast $ease-standard;
+
+
+$transition-normal:
+  $duration-normal $ease-smooth;
+
+
+$transition-slow:
+  $duration-slow $ease-emphasized;

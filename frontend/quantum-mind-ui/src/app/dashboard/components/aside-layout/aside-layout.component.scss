@@ -1,10 +1,111 @@
-@use "../../../../styles/queries.scss" as *;
+@use "../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   ASIDE NAVIGATION LAYOUT
+============================================================ */
+
 
 .aside-layout {
 
-  //width: 100%;
-}
+  height:100%;
 
-@include respond("tablet") {
+  width:100%;
 
+  display:flex;
+
+  flex-direction:column;
+
+
+  padding: var(--space-md);
+
+  background: var(--color-surface);
+
+
+
+  border-right: 1px solid var(--border-width-default);
+
+
+
+  overflow:hidden;
+
+
+
+  transition:
+
+    background-color var(--motion-fast),
+
+    border-color var(--motion-fast);
+
+
+
+
+
+  /* ============================================================
+     LIST
+  ============================================================ */
+
+
+  &__list {
+    display:flex;
+    flex-direction:column;
+    gap: var(--space-sm);
+
+    width:100%;
+
+    margin:0;
+
+    padding:0;
+
+    list-style:none;
+
+    overflow-y:auto;
+
+    scrollbar-width:thin;
+  }
+
+
+
+
+
+  /* ============================================================
+     ITEM WRAPPER
+  ============================================================ */
+
+
+  &__link {
+    width:100%;
+    min-width:0;
+
+    font-size: var(--text-label-lg-size);
+  }
+
+
+
+
+
+
+
+
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+
+
+  @include respond(tablet) {
+
+
+    padding:
+      var(--space-3);
+
+
+  }
+
+
+
+  @include respond(phone) {
+    border-right:none;
+    border-bottom:
+      1px solid var(--border-default);
+  }
 }

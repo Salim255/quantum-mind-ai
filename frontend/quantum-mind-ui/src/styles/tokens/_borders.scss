@@ -1,0 +1,68 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   BORDER TOKENS
+
+   Borders define structure, separation and interaction states.
+
+   The system uses subtle neutral borders to maintain
+   a clean enterprise visual language.
+
+============================================================ */
+
+
+/* ============================================================
+   BORDER WIDTH
+============================================================ */
+
+
+$border-none:
+  0;
+
+
+$border-thin:
+  1px;
+
+
+$border-medium:
+  2px;
+
+
+$border-thick:
+  4px;
+
+
+
+/* ============================================================
+   BORDER STYLE
+============================================================ */
+
+
+$border-solid:
+  solid;
+
+
+$border-dashed:
+  dashed;
+
+
+
+/* ============================================================
+   BORDER RADIUS SUPPORT
+============================================================ */
+
+
+/*
+   Used when a component needs a complete border definition.
+*/
+
+$border-default:
+  $border-thin solid;
+
+
+/*
+   Used for stronger emphasis states.
+*/
+
+$border-emphasis:
+  $border-medium solid;

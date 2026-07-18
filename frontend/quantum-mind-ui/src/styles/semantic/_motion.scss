@@ -1,0 +1,68 @@
+@use "../tokens/motion" as motion;
+
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   SEMANTIC MOTION
+
+   Components consume semantic motion,
+   never raw durations.
+
+============================================================ */
+
+
+:root {
+
+
+  /* ================================
+     Interaction
+  ================================= */
+
+
+  --motion-hover:
+    #{motion.$transition-fast};
+
+
+
+  --motion-focus:
+    #{motion.$transition-fast};
+
+
+
+  --motion-press:
+    #{motion.$transition-fast};
+
+
+
+  /* ================================
+     Components
+  ================================= */
+
+
+  --motion-component:
+    #{motion.$transition-normal};
+
+
+
+  --motion-panel:
+    #{motion.$transition-normal};
+
+
+
+  --motion-overlay:
+    #{motion.$transition-slow};
+
+
+
+  /* ================================
+     Movement
+  ================================= */
+
+
+  --motion-progress:
+    #{motion.$ease-linear};
+
+
+
+}

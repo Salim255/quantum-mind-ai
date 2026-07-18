@@ -1,3 +1,34 @@
-@use "./styles/colors.scss" as *;
-@use "./styles/typography.scss" as *;
-@use "./styles/layout.scss" as *;
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   GLOBAL STYLE ENTRY
+============================================================ */
+
+/* ============================================================
+   SEMANTIC SYSTEM
+============================================================ */
+
+@use "./styles/semantic/colors";
+
+@use "./styles/semantic/typography";
+
+@use "./styles/semantic/spacing";
+
+@use "./styles/semantic/radius";
+
+@use "./styles/semantic/shadows";
+
+@use "./styles/semantic/borders";
+
+@use "./styles/semantic/motion";
+
+
+
+/* ============================================================
+   BASE
+============================================================ */
+
+@use "./styles/base/reset";
+
+@use "./styles/base/global";
+

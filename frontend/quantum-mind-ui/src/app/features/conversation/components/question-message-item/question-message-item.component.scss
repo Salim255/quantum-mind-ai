@@ -1,9 +1,4 @@
-@use "../../../../../styles/colors.scss" as *;
-@use "../../../../../styles/layout.scss" as *;
-@use "../../../../../styles/typography.scss" as *;
-
 .qs-msg-item {
   display: flex;
   flex-direction: column;
-  gap: $space-md;
 }

@@ -1,0 +1,52 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   BREAKPOINT TOKENS
+
+   Central responsive scale.
+
+   Components should never use raw values.
+   Always consume through responsive mixins.
+
+============================================================ */
+
+
+/* ============================================================
+   BREAKPOINT SCALE
+============================================================ */
+
+
+/*
+   Desktop First
+
+   The application is designed from large screens
+   and progressively adapts downward.
+*/
+
+
+$breakpoint-ultra:
+  120em; // 1920px
+
+
+$breakpoint-desktop:
+  96em; // 1536px
+
+
+$breakpoint-laptop:
+  80em; // 1280px
+
+
+$breakpoint-tablet-landscape:
+  64em; // 1024px
+
+
+$breakpoint-tablet:
+  48em; // 768px
+
+
+$breakpoint-phone:
+  40em; // 640px
+
+
+$breakpoint-phone-small:
+  30em; // 480px

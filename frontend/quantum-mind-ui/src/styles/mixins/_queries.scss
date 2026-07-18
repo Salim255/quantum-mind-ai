@@ -1,0 +1,63 @@
+/* ============================================
+   BREAKPOINT SYSTEM — DESKTOP FIRST
+============================================ */
+
+@mixin respond($breakpoint) {
+
+  /* Ultra-wide monitors (1920px and below) */
+  @if $breakpoint == desktop-xl {
+    @media (max-width: 120em) { // 1920px
+      @content;
+    }
+  }
+
+  /* Large desktop (1536px and below) */
+  @if $breakpoint == desktop-lg {
+    @media (max-width: 96em) { // 1536px
+      @content;
+    }
+  }
+
+  /* Standard desktop / Laptop (1280px and below) */
+  @if $breakpoint == desktop {
+    @media (max-width: 80em) { // 1280px
+      @content;
+    }
+  }
+
+  /* Tablet Landscape (1024px and below) */
+  @if $breakpoint == tab-land {
+    @media (max-width: 64em) { // 1024px
+      @content;
+    }
+  }
+
+  /* Tablet Portrait (768px and below) */
+  @if $breakpoint == tab-port {
+    @media (max-width: 48em) { // 768px
+      @content;
+    }
+  }
+
+  /* Large Phones (640px and below) */
+  @if $breakpoint == phone-lg {
+    @media (max-width: 40em) { // 640px
+      @content;
+    }
+  }
+
+  /* Phones (480px and below) */
+  @if $breakpoint == phone {
+    @media (max-width: 30em) { // 480px
+      @content;
+    }
+  }
+
+  /* Very large screens */
+  @if $breakpoint == big-desktop {
+    @media (min-width: 120em) { // 1920px+
+      @content;
+    }
+  }
+
+}

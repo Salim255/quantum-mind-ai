@@ -1,0 +1,154 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   GLOBAL FOUNDATION
+
+   Defines the application-wide identity:
+
+   - document behavior
+   - base colors
+   - font rendering
+   - selection
+   - scrollbar
+   - transitions
+
+   Components should consume semantic tokens,
+   never hardcoded values.
+
+============================================================ */
+@use "../mixins/queries" as *;
+@use "../tokens/typography" as type;
+
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   GLOBAL FOUNDATION
+============================================================ */
+
+
+:root {
+
+  color-scheme: light;
+
+
+  font-family: type.$font-family-base;
+
+
+  font-size: 62.5%;
+
+  @include respond(desktop) {
+    font-size: 56.25%;
+  }
+
+
+  @include respond(tab-land) {
+    font-size: 53.125%;
+  }
+
+
+  @include respond(tab-port) {
+    font-size: 50%;
+  }
+
+
+  @include respond(phone-lg) {
+    font-size: 46.875%;
+  }
+
+
+  @include respond(phone) {
+    font-size: 43.75%;
+  }
+
+
+  @include respond(big-desktop) {
+    font-size: 75%;
+  }
+
+
+  font-weight: type.$font-regular;
+
+  line-height: 1.5;
+
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+
+  width:100%;
+
+  min-height:100%;
+
+}
+
+body {
+  background: var(--background);
+  color: var(--color-text-primary);
+  font-size: var(--text-body-sm-size);
+}
+
+::selection {
+
+  background: var(--selection-background);
+
+  color: var(--selection-text);
+}
+
+::-webkit-scrollbar {
+
+  width: .8rem;
+  height: .8rem;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+::-webkit-scrollbar-thumb {
+
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media(prefers-reduced-motion:reduce) {
+
+  *,
+  *::before,
+  *::after {
+
+
+    animation-duration:
+      .01ms !important;
+
+
+    animation-iteration-count:
+      1 !important;
+
+
+    transition-duration:
+      .01ms !important;
+
+
+    scroll-behavior:
+      auto !important;
+
+  }
+
+}
