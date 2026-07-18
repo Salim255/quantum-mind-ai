@@ -1,39 +1,11 @@
 /* ============================================
    BFM TYPOGRAPHY SYSTEM
 ============================================ */
-@use "./colors.scss" as *;
-@use "./layout.scss" as *;
+:root {
+  --text-primary: var(--grey-900);
+  --text-secondary: var(--grey-600);
+  --text-muted: var(--grey-500);
+  --text-disabled: var(--grey-400);
 
-$font-main: 'Inter', 'SF Pro Display', sans-serif;
-
-/* Base text */
-body {
-  font-family: $font-main;
-  color: $color-text;
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Headings */
-h1, h2, h3 {
-  font-weight: 600;
-  letter-spacing: -0.5px;
-}
-
-h1 {
-  font-size: 3rem;
-  line-height: 1.1;
-}
-
-h2 {
-  font-size: 2rem;
-  line-height: 1.2;
-}
-
-/* Paragraphs */
-p {
-  font-size: 1.1rem;
-  color: $color-text-soft;
-  line-height: 1.6;
+  --text-inverse: var(--white);
 }
