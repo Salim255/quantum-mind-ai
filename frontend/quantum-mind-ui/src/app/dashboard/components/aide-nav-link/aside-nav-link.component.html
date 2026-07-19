@@ -1,1 +1,20 @@
-<a [routerLink]="[nav.path]" (click)="onNavigate(nav)">{{ nav.name }}</a>
+<a
+  class="aside-nav-link"
+  [routerLink]="nav.path"
+  routerLinkActive="aside-nav-link--active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  (click)="onNavigate(nav)"
+>
+
+  @if (nav.icon) {
+    <iconify-icon
+      class="aside-nav-link__icon"
+      [icon]="nav.icon">
+    </iconify-icon>
+  }
+
+  <span class="aside-nav-link__label">
+    {{ nav.name }}
+  </span>
+
+</a>

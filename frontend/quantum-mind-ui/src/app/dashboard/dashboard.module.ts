@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { DashboardPage } from "./dashboard.page";
 import { CommonModule } from "@angular/common";
 import { DashboardRoutingModule } from "./dashboard-routing.module";
@@ -19,5 +19,8 @@ import { SharedModule } from "../shared/shared.module";
     HeaderComponent,
     DashboardPage
   ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 export class DashboardModule {}

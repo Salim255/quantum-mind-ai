@@ -3,11 +3,15 @@ import { NAVIGATION } from "./data";
 import { BehaviorSubject, Observable } from "rxjs";
 import { BreadcrumbService } from "./bread-crumbs.service";
 
+export type Section  = {
+  name: string;
+}
 export interface NavItem {
+  id: string;
   name: string;
   path: string;
   icon?: string;
-  sections?: any [];
+  sections?: Section [];
   description?: string;
   children?: NavItem[];
 }

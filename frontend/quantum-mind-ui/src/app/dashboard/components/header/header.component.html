@@ -1,11 +1,32 @@
-  <header class="dash-header">
-    <div class="dash-header__content">
+<header class="dash-header">
+
+  <div class="dash-header__content">
+    <!-- LEFT IDENTITY -->
+    <div class="dash-header__identity">
+      <button
+        class="dash-header__menu"
+        type="button"
+        aria-label="Open navigation"
+      >
+        <iconify-icon
+          icon="lucide:panel-left">
+        </iconify-icon>
+
+      </button>
+
       <div class="dash-header__brand">
-        <p>Quantum Mind</p>
+        <span>
+          Quantum Mind
+        </span>
       </div>
-      <button class="dash-header__btn">guest</button>
     </div>
-    <div class="dash-header__breadcrumb">
-      <app-bread-crumbs></app-bread-crumbs>
-    </div>
-  </header>
+
+    <!-- USER -->
+    <button class="dash-header__btn">
+      Guest
+    </button>
+  </div>
+  <div class="dash-header__breadcrumb">
+    <app-bread-crumbs></app-bread-crumbs>
+  </div>
+</header>
