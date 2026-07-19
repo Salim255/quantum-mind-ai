@@ -3,15 +3,15 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({providedIn: "root"})
 export class PageAsideService {
-  private currentIdSubject = new BehaviorSubject<string | null>(null)
+  private currentSectionIdSubject = new BehaviorSubject<string | null>(null)
 
   constructor(){}
 
-  setCurrentId(id: string): void{
-    this.currentIdSubject.next(id);
+  setCurrentSectionId(id: string): void{
+    this.currentSectionIdSubject.next(id);
   }
 
-  get getCurrentId$(): Observable<string | null>{
-    return this.currentIdSubject.asObservable();
+  get getCurrentSectionId$(): Observable<string | null>{
+    return this.currentSectionIdSubject.asObservable();
   }
 }

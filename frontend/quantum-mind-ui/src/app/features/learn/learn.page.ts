@@ -21,8 +21,8 @@ export class LearnPage implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {
-    this.listenToRouter();
-    this.subscribeToSectionId();
+    //this.listenToRouter();
+    //this.subscribeToSectionId();
   }
   /*   Learn
 
@@ -84,7 +84,7 @@ export class LearnPage implements OnInit, OnDestroy{
     └── Finance */
 
   subscribeToSectionId(){
-    this.currentSectionIdSubscription = this.pageAsideService.getCurrentId$.subscribe(
+    this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
       id => {
         if(id) {
           this.scrollToId(id)

@@ -1,6 +1,33 @@
+<nav
+  class="page-content-nav"
+  aria-label="On this page"
+>
 
-<ul class="page-content-aside">
-  @for(item of sections(); track $index){
-    <li class="page-content-aside__link" (click)="onNavigate(item.name)">{{ item.name }}</li>
-  }
-</ul>
+  <h2 class="page-content-nav__title">
+    On this page
+  </h2>
+
+  <ul class="page-content-nav__list">
+
+    @for (item of sections(); track item.name) {
+
+      <li class="page-content-nav__item">
+
+        <button
+          type="button"
+          class="page-content-nav__link"
+           [class.page-content-nav__link--active]="activeSection() === item.name"
+          (click)="onNavigate(item.name)"
+        >
+          <span class="page-content-nav__label">
+            {{ item.name }}
+          </span>
+        </button>
+
+      </li>
+
+    }
+
+  </ul>
+
+</nav>

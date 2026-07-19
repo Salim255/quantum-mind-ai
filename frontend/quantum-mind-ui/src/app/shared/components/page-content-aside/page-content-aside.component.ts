@@ -13,8 +13,11 @@ import { PageAsideService } from "../../service/page-aside-content.service";
 })
 export class PageContentAsideComponent implements OnInit {
   private pageAsideContentSubscription!: Subscription;
-  sections = signal<any []>([])
+  private currentSectionIdSubscription!: Subscription;
 
+  sections = signal<any []>([]);
+
+  protected activeSection = signal<string>('');
 
   constructor(
     private pageAsideService: PageAsideService,
@@ -22,20 +25,42 @@ export class PageContentAsideComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscribeToPageAsideContent();
+    this. subscribeToSectionId();
   }
 
-  subscribeToPageAsideContent(): void{
+  private subscribeToSectionId(){
+    this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
+      id => {
+        console.log(id, "hello");
+        if(id) {
+          this.activeSection.set(id);
+        }
+      }
+    )
+  }
+
+  private subscribeToPageAsideContent(): void{
     this.pageAsideContentSubscription = this.contentService.getPageAsideContent$.subscribe(sections =>
       this.sections.set(sections)
     )
   }
 
-  onNavigate(id: string){
-    console.log(id)
-    this.pageAsideService.setCurrentId(id);
+  protected onNavigate(name: string){
+    //this.activeSection.set(name);
+    //this.pageAsideService.setCurrentSectionId(name);
+     document
+        .getElementById(name)
+        ?.scrollIntoView({
+
+            behavior: 'smooth',
+
+            block: 'end'
+
+        });
   }
 
   ngOnDestroy(): void {
     this.pageAsideContentSubscription?.unsubscribe();
+    this.currentSectionIdSubscription?.unsubscribe();
   }
 }
