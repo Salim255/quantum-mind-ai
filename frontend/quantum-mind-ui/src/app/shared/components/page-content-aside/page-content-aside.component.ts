@@ -31,7 +31,6 @@ export class PageContentAsideComponent implements OnInit {
   private subscribeToSectionId(){
     this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
       id => {
-        console.log(id, "hello");
         if(id) {
           this.activeSection.set(id);
         }
@@ -46,16 +45,11 @@ export class PageContentAsideComponent implements OnInit {
   }
 
   protected onNavigate(name: string){
-    //this.activeSection.set(name);
-    //this.pageAsideService.setCurrentSectionId(name);
      document
         .getElementById(name)
         ?.scrollIntoView({
-
             behavior: 'smooth',
-
-            block: 'end'
-
+            block: 'start'
         });
   }
 

@@ -6,15 +6,19 @@
   height: 100dvh;
   width: 100dvw;
   overflow: hidden;
+
+  &__content {
+    overflow: hidden;
+  }
   &__wrapper{
 
   }
   app-header {
-
+    //position: sticky;
   }
 
   &__aside {
-
+    position: sticky;
     app-aside-layout {
 
     }

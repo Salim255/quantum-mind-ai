@@ -1,4 +1,6 @@
 .entanglement-page {
-  height: 100vh;
+  min-height: 0;
   overflow-y: auto;
+  overflow: hidden;
+  scroll-margin-top: 90rem;
 }

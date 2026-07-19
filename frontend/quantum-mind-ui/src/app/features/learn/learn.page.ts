@@ -21,8 +21,8 @@ export class LearnPage implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {
-    //this.listenToRouter();
-    //this.subscribeToSectionId();
+    this.listenToRouter();
+    this.subscribeToSectionId();
   }
   /*   Learn
 

@@ -1,0 +1,289 @@
+/* ============================================================
+   QUANTUM AI DESIGN SYSTEM
+   ------------------------------------------------------------
+   BASE TYPOGRAPHY
+
+   Global typographic rules for native elements.
+
+   Typography values come from semantic typography tokens.
+
+============================================================ */
+
+
+@use "../semantic/typography" as type;
+
+
+
+/* ============================================================
+   HEADINGS
+============================================================ */
+
+
+h1 {
+
+  font-size:
+    type.$display-lg-size;
+
+  font-weight:
+    type.$display-lg-weight;
+
+  line-height:
+    type.$display-lg-line-height;
+
+  letter-spacing:
+    type.$display-lg-tracking;
+
+}
+
+
+
+h2 {
+
+  font-size:
+    type.$heading-xl-size;
+
+  font-weight:
+    type.$heading-xl-weight;
+
+  line-height:
+    type.$heading-xl-line-height;
+
+  letter-spacing:
+    type.$heading-xl-tracking;
+
+}
+
+
+
+h3 {
+
+  font-size:
+    type.$heading-lg-size;
+
+  font-weight:
+    type.$heading-lg-weight;
+
+  line-height:
+    type.$heading-lg-line-height;
+
+  letter-spacing:
+    type.$heading-lg-tracking;
+
+}
+
+
+
+h4 {
+
+  font-size:
+    type.$heading-md-size;
+
+  font-weight:
+    type.$heading-md-weight;
+
+  line-height:
+    type.$heading-md-line-height;
+
+  letter-spacing:
+    type.$heading-md-tracking;
+
+}
+
+
+
+h5,
+h6 {
+
+  font-size:
+    type.$heading-sm-size;
+
+  font-weight:
+    type.$heading-sm-weight;
+
+  line-height:
+    type.$heading-sm-line-height;
+
+  letter-spacing:
+    type.$heading-sm-tracking;
+
+}
+
+
+
+/* ============================================================
+   BODY
+============================================================ */
+
+
+p {
+
+  font-size:
+    type.$body-md-size;
+
+  font-weight:
+    type.$body-md-weight;
+
+  line-height:
+    type.$body-md-line-height;
+
+}
+
+
+
+/* ============================================================
+   LARGE BODY
+
+   Use for introductions, descriptions,
+   marketing/product sections.
+============================================================ */
+
+
+.text-large {
+
+
+  font-size:
+    type.$body-lg-size;
+
+
+  font-weight:
+    type.$body-lg-weight;
+
+
+  line-height:
+    type.$body-lg-line-height;
+
+
+}
+
+
+
+/* ============================================================
+   SMALL TEXT
+============================================================ */
+
+
+small {
+
+
+  font-size:
+    type.$body-sm-size;
+
+
+  font-weight:
+    type.$body-sm-weight;
+
+
+  line-height:
+    type.$body-sm-line-height;
+
+
+}
+
+
+
+/* ============================================================
+   LABELS
+============================================================ */
+
+
+label {
+
+
+  font-size:
+    type.$label-md-size;
+
+
+  font-weight:
+    type.$label-md-weight;
+
+
+  line-height:
+    type.$label-md-line-height;
+
+
+}
+
+
+
+/* ============================================================
+   BUTTON TYPOGRAPHY
+============================================================ */
+
+
+button {
+
+
+  font-size:
+    type.$button-size;
+
+
+  font-weight:
+    type.$button-weight;
+
+
+  line-height:
+    type.$button-line-height;
+
+
+  letter-spacing:
+    type.$button-tracking;
+
+
+}
+
+
+
+/* ============================================================
+   CAPTIONS
+============================================================ */
+
+
+.caption {
+
+
+  font-size:
+    type.$caption-size;
+
+
+  font-weight:
+    type.$caption-weight;
+
+
+  line-height:
+    type.$caption-line-height;
+
+
+  letter-spacing:
+    type.$caption-tracking;
+
+
+}
+
+
+
+/* ============================================================
+   CODE
+============================================================ */
+
+
+code,
+pre {
+
+
+  font-family:
+    var(--font-family-mono);
+
+
+  font-size:
+    type.$code-size;
+
+
+  font-weight:
+    type.$code-weight;
+
+
+  line-height:
+    type.$code-line-height;
+
+
+}
