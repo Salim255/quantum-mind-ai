@@ -14,7 +14,7 @@ export class AsideNavLinkComponent {
   constructor(private contentService: ContentService){}
 
   onNavigate(nav: NavItem){
-    if(nav.sections) {
+    if(nav?.sections) {
       this.contentService.setPageAsideContent(nav.sections);
     }
   }

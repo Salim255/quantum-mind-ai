@@ -12,13 +12,13 @@ export class ScrollToDirective {
   onClick(event: Event) {
     event.preventDefault();
 
+    console.log("hello from directive", this.targetId, this.scrollContainer)
     const container = this.scrollContainer;
     const target = document.getElementById(this.targetId) as HTMLElement | null;
 
     if (!container || !target) return;
-
-    const top = target.offsetTop - container.offsetTop;
-
+     //const top = target.getBoundingClientRect().top + container.scrollTop;
+    const top = target.offsetTop;
     container.scrollTo({
       top,
       behavior: 'smooth'

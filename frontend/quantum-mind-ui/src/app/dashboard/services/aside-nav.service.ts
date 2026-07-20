@@ -3,7 +3,8 @@ import { NAVIGATION } from "./data";
 import { BehaviorSubject, Observable } from "rxjs";
 import { BreadcrumbService } from "./bread-crumbs.service";
 
-export type Section  = {
+export type Section = {
+  id: string;
   name: string;
 }
 export interface NavItem {
@@ -26,6 +27,7 @@ export class AsideNavService {
   setCurrentPageUrl(url: string){
     const pageNavs: NavItem | null = this.getAsideNav(url) ?? null;
 
+    console.log(pageNavs);
     this.currentPageUrlSubject.next(pageNavs);
     // Bread crumbs
     this.breadcrumbService.setAppBreadCrumbs(url);

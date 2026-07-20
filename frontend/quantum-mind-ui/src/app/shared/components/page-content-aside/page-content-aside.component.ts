@@ -40,22 +40,14 @@ export class PageContentAsideComponent implements OnInit {
 
   private subscribeToPageAsideContent(): void{
     this.pageAsideContentSubscription = this.contentService.getPageAsideContent$.subscribe(sections =>
+    {
       this.sections.set(sections)
+    }
     )
   }
 
-  protected onNavigate(name: string){
-    const container = document.querySelector('.learn-page__content') as HTMLElement | null;
-    const target = document.getElementById(name);
-
-    if (!container || !target) return;
-
-    const top = target.offsetTop - container.offsetTop;
-    console.log(top)
-    container.scrollTo({
-      top,
-      behavior: 'smooth'
-    });
+  protected onNavigate(item: any ){
+    console.log(item)
   }
 
   ngOnDestroy(): void {

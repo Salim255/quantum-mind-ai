@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ContentService } from "./services/content.service";
 import { EventType, NavigationEnd, Router } from "@angular/router";
 import { filter, Subscription } from "rxjs";
-import { PageAsideService } from "../../shared/service/page-aside-content.service";
 
 @Component({
   selector: "app-learn-page",
@@ -15,14 +14,12 @@ export class LearnPage implements OnInit, OnDestroy{
   private currentSectionIdSubscription!: Subscription;
 
   constructor(
-    private pageAsideService: PageAsideService,
     private router: Router,
     private contentService: ContentService
   ){}
 
   ngOnInit(): void {
     this.listenToRouter();
-    this.subscribeToSectionId();
   }
   /*   Learn
 
@@ -83,15 +80,6 @@ export class LearnPage implements OnInit, OnDestroy{
     ├── Machine Learning
     └── Finance */
 
-  subscribeToSectionId(){
-    this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
-      id => {
-        if(id) {
-          this.scrollToId(id)
-        }
-      }
-    )
-  }
 
   listenToRouter(): void {
      this.router.events.pipe(
@@ -106,20 +94,6 @@ export class LearnPage implements OnInit, OnDestroy{
             localStorage.setItem("asideIsClose", JSON.stringify(true));
           }
       });
-  }
-
-  scrollToId(id: string) {
-    const container = document.querySelector('.learn-page__content');
-    const el = document.getElementById(id);
-    console.log(el)
-    if (!container || !el) return;
-
-    const top = el.getBoundingClientRect().top + container.scrollTop;
-
-    container.scrollTo({
-      top: top, // header offset
-      behavior: 'smooth'
-    });
   }
 
   ngOnDestroy(): void {
