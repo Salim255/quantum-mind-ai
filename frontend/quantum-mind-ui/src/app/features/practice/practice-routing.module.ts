@@ -6,11 +6,11 @@ const routes:Routes = [
   {
     path: "",
     component: PracticePage,
-   /*  children: [
+    children: [
       {
-        path: "quizes"
+        path: "quiz"
       }
-    ] */
+    ]
   }
 ]
 
