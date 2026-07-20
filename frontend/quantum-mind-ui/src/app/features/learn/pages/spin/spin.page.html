@@ -1,26 +1,155 @@
-<div class="spin-page  lesson">
+<div class="spin-page lesson">
   <header class="lesson__header">
     <h1 class="lesson__title">
-      Spin
+      Spin and the Stern–Gerlach Experiment
     </h1>
 
     <p class="lesson__summary">
-      summary
+      Classical computers store information using bits, which can be either 0 or 1.
+      Quantum computers use qubits, which can represent 0, 1, or a quantum combination of both states.
+      One way to create a qubit is by using the spin of an electron. Spin behaves like a tiny magnet with a north and south pole.
+      In the 1920s, physicists Otto Stern and Walther Gerlach designed an experiment to study this behavior. They sent a beam of silver atoms through a specially shaped magnetic field.
+      Classically, scientists expected the atoms to be deflected by different amounts, producing a continuous band on a screen. Instead, they observed only <strong>two distinct spots</strong>.
+      This surprising result showed that the magnetic orientation of the atoms was not continuous. When measured along a given direction,
+      the atoms could only be found in one of <strong>two possible states</strong>.
+      The same behavior is observed for electrons. If we measure an electron's spin in the vertical direction,
+      the result is always one of two outcomes:
+      <span>
+        <ul>
+          <li>Spin Up (↑)</li>
+          <li>Spin Down (↓)</li>
+        </ul>
+      </span>
+
+      These two states form the basis of a qubit.
+      The Stern–Gerlach experiment was one of the first demonstrations that nature behaves differently from classical expectations. Instead of allowing every possible orientation,
+      quantum measurements produce specific discrete outcomes.
+      This idea lies at the heart of quantum computing: information can be encoded in quantum states and manipulated in ways that have no classical equivalent.
     </p>
   </header>
 
+  <section
+    class="lesson__section"
+    #pageSection
+    id="quantum-clock">
+    <h2 class="lesson__heading"> The Quantum Clock </h2>
+    <p class="lesson__parageaph">
+      The quantum clock is a thought experiment used to understand how quantum systems behave when we measure them.
+      Instead of directly observing the direction of a pointer, we can only ask specific yes/no questions, such as whether it points in a given direction.
+      Unlike a classical system, the response is not based on revealing a hidden full state.
+      Each measurement only produces one of two possible outcomes: the direction asked about, or its exact opposite.
+      This shows a key idea in quantum physics: the result of a measurement depends on the question being asked, not on revealing a pre-existing classical value.
+    </p>
+  </section>
 
-  <app-spin-home></app-spin-home>
 
-  <app-quantum-clock></app-quantum-clock>
+  <section
+    #pageSection
+    class="lesson__section"
+    id="measurements-in-same-direction">
+    <h2 class="lesson__heading">Measurements in the Same Direction</h2>
+    <p class="lesson__paragraph">
+      In quantum systems, measurements are consistent when repeated in the same direction.
 
-  <app-same-direction></app-same-direction>
+      If we measure a particle’s property (like spin) and then immediately measure
+      it again in the same way, we always get the same result. The system behaves as if the first measurement “sets” the outcome for that direction.
 
-  <app-different-direction></app-different-direction>
+      For example, if a particle is measured as “up” in a given direction, a second measurement
+      in that exact same direction will also give “up”. The same applies if the first result is “down”.
 
-  <app-measurement></app-measurement>
+      This is not limited to one orientation. Any chosen measurement direction behaves the same way: once measured, repeating the same test produces identical outcomes.
+    </p>
+  </section>
 
-  <app-randomness></app-randomness>
+  <section
+    #pageSection
+    class="lesson__section"
+    id="measurements-different-directions">
+    <h2 class="lesson__heading">Measurements in Different Directions</h2>
+
+    <p class="lesson__paragraph">
+      In quantum systems, the outcome of a measurement depends strongly on the direction in which it is made.
+      When a particle’s spin is first measured in one direction (for example, vertical),
+      and then measured again in a different direction (for example, horizontal), the results are not predictable from the first measurement.
+      Even if the particle was fully determined in the first direction,
+      the second measurement behaves randomly: half of the results tend to align one way, and half the opposite way.
+      This shows that different measurement directions are independent, and knowing
+      the result in one direction does not determine the result in another.
+    </p>
+  </section>
+
+
+  <section
+    #pageSection
+    class="lesson__section"
+    id="measurements">
+    <h2 class="lesson__heading">Measurements in Quantum Systems</h2>
+    <p class="lesson__paragraph">
+      In classical mechanics, measurements are treated as external inputs to a system. We assume that we can measure quantities such as position or velocity without significantly affecting the system itself.
+      or example, measuring the speed of a thrown ball using light or radar does interact with the ball, but the effect is so small that it can be ignored. This justifies the classical idea that measurements do not meaningfully disturb the system being studied.
+      <strong>What changes in quantum mechanics</strong>
+      In quantum physics, we study very small systems such as atoms and electrons. At this scale, any measurement necessarily involves an interaction that significantly affects the system.
+      Because of this, we can no longer treat measurement as something external or negligible. It becomes part of the physical process being described.
+      Importantly, this effect is not modeled as a function of measurement strength (for example, stronger or weaker magnets). Instead,
+      the theory assumes that the act of measuring itself changes the system in a well-defined way, independent of how the measurement is physically implemented.
+      <strong>Key idea</strong>
+      In quantum mechanics, measurement is not just observation —
+        it is an interaction that changes the state of the system according to the rules of the theory.
+      <strong>Why it matters ?</strong>
+      This is a fundamental departure from classical physics and is essential for understanding why quantum systems behave differently,
+      especially when multiple measurements are performed in sequence.
+    </p>
+  </section>
+
+
+  <section
+    #pageSection
+    class="lesson__section"
+    id="randomness">
+    <h2 class="lesson__heading">Randomness in Quantum Mechanics</h2>
+    <p class="lesson__paragraph">Quantum mechanics introduces genuine randomness in the outcomes of measurements.
+
+      For example, if we measure the spin of electrons first in one direction and then in another, the results form a sequence of outcomes like Ns and Ss that appear completely random.
+       Each new measurement does not allow us to predict the next result with certainty.
+
+
+      This behavior is similar to classical randomness examples like coin tosses,
+      where we also get unpredictable sequences of heads and tails.
+
+    <strong>Classical randomness (coin toss)</strong>
+
+      In classical physics, a coin toss is not truly random.
+      If we knew all the exact initial conditions (force, angle, position,
+      air resistance, etc.), we could in principle predict the result exactly.
+
+    The randomness we observe comes from small variations we cannot control or measure precisely — not from the system itself.
+    So classical randomness is apparent randomness, caused by sensitivity to initial conditions.
+
+    <strong>Quantum randomness</strong>
+   In quantum mechanics, randomness is fundamentally different.
+
+      Even with complete knowledge of the system, the outcome of a measurement cannot be predicted exactly. The result is inherently probabilistic.
+
+
+      This means the sequence of measurement outcomes is considered truly random, not just unpredictable due to missing information.
+
+    <strong>Interpretation question</strong>
+
+      This idea led to deep debate in physics. Einstein believed that quantum randomness
+      might hide deeper unknown variables that would make outcomes deterministic.
+
+
+      This is known as the <strong>hidden variable hypothesis</strong>.
+
+
+      <strong>What we know today</strong>
+      Experiments designed to test hidden variable theories have been performed many times.
+      The results strongly support the idea that quantum randomness is real and cannot be explained by simple hidden hidden variables
+
+      <strong>Why it matters ?</strong>
+      This randomness is a core feature of quantum systems like electron spin and photon polarization, which are used to define the concept of a qubit.
+    </p>
+  </section>
 
   <app-photons-polarization></app-photons-polarization>
 </div>
