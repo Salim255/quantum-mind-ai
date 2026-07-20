@@ -1,0 +1,43 @@
+<section class="quiz-question">
+
+    <header class="quiz-question__header">
+
+        <p class="quiz-question__label">
+            Question
+        </p>
+
+        <h2 class="quiz-question__title">
+            {{ question.text }}
+        </h2>
+
+    </header>
+
+    <section class="quiz-question__answers">
+
+        @switch (question.type) {
+
+            @case ('single') {
+
+                <app-quiz-single-choice
+                    [answers]="question.answers"
+                    [selectedAnswerId]="selectedAnswerId"
+                    (selected)="answerSelected.emit($event)">
+                </app-quiz-single-choice>
+
+            }
+
+            @case ('multiple') {
+
+                <app-quiz-multiple-choice
+                    [answers]="question.answers"
+                    [selectedIds]="selectedIds"
+                    (selectionChanged)="selectionChanged.emit($event)">
+                </app-quiz-multiple-choice>
+
+            }
+
+        }
+
+    </section>
+
+</section>
