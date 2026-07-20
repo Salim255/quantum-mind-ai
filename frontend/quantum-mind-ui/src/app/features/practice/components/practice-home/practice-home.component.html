@@ -1,0 +1,74 @@
+<div class="practice-home">
+
+  <header class="practice-home__header">
+
+    <h1 class="practice-home__title">
+      Practice
+    </h1>
+
+    <p class="practice-home__description">
+      Reinforce your understanding of quantum computing through interactive quizzes.
+      Choose to review every topic or focus on a specific concept.
+    </p>
+
+  </header>
+
+  <section class="practice-home__options">
+
+    <button
+      (click)="onNavigate('general')"
+      class="practice-option"
+      type="button">
+
+      <div class="practice-option__icon">
+        <iconify-icon icon="lucide:brain-circuit"></iconify-icon>
+      </div>
+
+      <div class="practice-option__content">
+
+        <h2 class="practice-option__title">
+          General Quiz
+        </h2>
+
+        <p class="practice-option__description">
+          Practice with a balanced mix of questions covering every quantum topic.
+        </p>
+
+      </div>
+
+      <div class="practice-option__arrow">
+        <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+      </div>
+
+    </button>
+
+    <button
+      (click)="onNavigate('topic')"
+      class="practice-option"
+      type="button">
+
+      <div class="practice-option__icon">
+        <iconify-icon icon="lucide:book-open"></iconify-icon>
+      </div>
+
+      <div class="practice-option__content">
+
+        <h2 class="practice-option__title">
+          Practice by Topic
+        </h2>
+
+        <p class="practice-option__description">
+          Choose a lesson and strengthen your understanding one concept at a time.
+        </p>
+
+      </div>
+
+      <div class="practice-option__arrow">
+        <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+      </div>
+
+    </button>
+
+  </section>
+
+</div>

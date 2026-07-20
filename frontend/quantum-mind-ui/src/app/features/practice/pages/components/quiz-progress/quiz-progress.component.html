@@ -1,0 +1,24 @@
+<section class="quiz-progress">
+
+    <div class="quiz-progress__header">
+
+        <span class="quiz-progress__label">
+            Question {{ current }} of {{ total }}
+        </span>
+
+        <span class="quiz-progress__percentage">
+            {{ progress | number:'1.0-0' }}%
+        </span>
+
+    </div>
+
+    <div class="quiz-progress__track">
+
+        <div
+            class="quiz-progress__fill"
+            [style.width.%]="progress">
+        </div>
+
+    </div>
+
+</section>
