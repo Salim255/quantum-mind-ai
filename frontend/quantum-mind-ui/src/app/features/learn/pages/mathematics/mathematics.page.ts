@@ -1,6 +1,5 @@
-import { Component, OnInit, signal } from "@angular/core";
-import { LearnService } from "../../services/learn.service";
-import { DomSanitizer } from "@angular/platform-browser";
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, signal, ViewChildren } from "@angular/core";
+import { PageAsideService } from "../../../../shared/service/page-aside-content.service";
 
 
 @Component({
@@ -9,35 +8,21 @@ import { DomSanitizer } from "@angular/platform-browser";
   styleUrls: ["./mathematics.page.scss"],
   standalone: false
 })
-export class MathematicsPage implements OnInit {
+export class MathematicsPage implements AfterViewInit {
+  @ViewChildren('pageSection')
+  private sections!: QueryList<ElementRef<HTMLElement>>;
+  private observer?: IntersectionObserver;
   htmlSections = signal<any[]>([]);
 
   constructor(
-    private sanitizer: DomSanitizer,
-    private learnService: LearnService
-  ){}
+    private pageAsideService: PageAsideService){}
 
-  ngOnInit(): void {}
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (!file) return;
 
-    this.learnService.getDoc(file).subscribe({
-      next: (res) => {
-        const html = res.html;
-        console.log(html, res);
-      // res is an array of sections
-          const safeSections = res.map((section: any) => ({
-            ...section,
-            html: this.sanitizer.bypassSecurityTrustHtml(section.html)
-          }));
-
-          this.htmlSections.set(safeSections);
-      },
-      error: (err) => console.log(err)
-    });
+  ngAfterViewInit(): void {
+    this.observeSections();
   }
+
 
   equation =
     'H|0\\rangle = \\frac{1}{\\sqrt{2}} (|0\\rangle + |1\\rangle)';
@@ -49,4 +34,42 @@ export class MathematicsPage implements OnInit {
       \end{bmatrix}
       `;
    polynomial = String.raw`x^2 + 4x + 4 = 0`;
+
+
+
+  private observeSections(): void {
+
+      this.observer = new IntersectionObserver(
+        entries => {
+
+            const visibleEntry = entries.find(
+              entry => entry.isIntersecting
+            );
+
+            if (!visibleEntry) {
+              return;
+            }
+            this.pageAsideService.setCurrentSectionId(
+              visibleEntry.target.id
+            );
+        },
+
+        {
+          root: null,
+          rootMargin: "-80px 0px -60% 0px",
+          threshold: 0
+        }
+
+      );
+
+      this.sections?.forEach(section => {
+        this.observer!.observe(
+          section.nativeElement
+        );
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
+  }
 }

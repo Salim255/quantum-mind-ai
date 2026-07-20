@@ -31,7 +31,9 @@ export class PageContentAsideComponent implements OnInit {
   private subscribeToSectionId(){
     this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
       id => {
+        console.log(id, "hello")
         if(id) {
+
           this.activeSection.set(id);
         }
       }

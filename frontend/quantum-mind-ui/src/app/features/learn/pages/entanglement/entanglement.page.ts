@@ -46,7 +46,7 @@ export class EntanglementPage implements AfterViewInit {
 
       );
 
-      this.sections.forEach(section => {
+      this.sections?.forEach(section => {
           this.observer!.observe(
               section.nativeElement
           );
