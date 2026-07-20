@@ -16,12 +16,9 @@ export class MathematicsPage implements AfterViewInit {
 
   constructor(private pageAsideService: PageAsideService){}
 
-
-
   ngAfterViewInit(): void {
     this.observeSections();
   }
-
 
   equation =
     'H|0\\rangle = \\frac{1}{\\sqrt{2}} (|0\\rangle + |1\\rangle)';
@@ -33,8 +30,6 @@ export class MathematicsPage implements AfterViewInit {
       \end{bmatrix}
       `;
    polynomial = String.raw`x^2 + 4x + 4 = 0`;
-
-
 
   private observeSections(): void {
 
