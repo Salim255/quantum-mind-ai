@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, QueryList, ViewChildren } from "@angular/core";
 
 @Component({
   selector: "app-bell-inequality-page",
@@ -6,4 +6,8 @@ import { Component } from "@angular/core";
   styleUrl: "./bell-inequality.page.scss",
   standalone: false
 })
-export class BellInequalityPage {}
+export class BellInequalityPage {
+  @ViewChildren('pageSection')
+  private sections!: QueryList<ElementRef<HTMLElement>>;
+  private observer?: IntersectionObserver;
+}
