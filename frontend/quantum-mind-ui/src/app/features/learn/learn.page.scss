@@ -5,13 +5,15 @@
   grid-template-columns:  1fr auto;
   gap: 2rem;
   min-height: 0;
-  height: 100vh;
+  height: 100dvh;
 
   &__content {
-    scroll-margin-top: 90rem;
+
     overflow: auto;
     min-height: 0;
     height: 100%;
+    overscroll-behavior: contain;
+    scroll-margin-top: 0;
   }
 
   @include respond(tab-port) {

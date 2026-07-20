@@ -1,0 +1,339 @@
+/* ============================================================
+   QUANTUM MIND
+
+   LESSON
+
+   Shared by every learning chapter.
+
+============================================================ */
+
+.lesson {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--section-gap-lg);
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+
+  section:last-child {
+      padding-bottom: 20rem;
+  }
+}
+
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.lesson__header {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--component-gap-sm);
+
+  padding-bottom: var(--section-gap-md);
+
+  border-bottom:
+    var(--border-divider)
+    solid
+    var(--color-border-subtle);
+}
+
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.lesson__title {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--text-display-sm-size);
+
+  font-weight: var(--text-display-sm-weight);
+
+  line-height: var(--text-display-sm-line);
+
+  letter-spacing: var(--text-display-sm-tracking);
+}
+
+
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+
+.lesson__summary {
+  margin: 0;
+
+  max-width: var(--content-width-md);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--text-body-lg-size);
+
+  font-weight: var(--text-body-lg-weight);
+
+  line-height: var(--text-body-lg-line);
+}
+
+
+
+/* ============================================================
+   SECTION
+============================================================ */
+
+.lesson__section {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--component-gap-md);
+
+  scroll-margin-top: 88px;
+}
+
+
+
+/* ============================================================
+   HEADING
+============================================================ */
+
+.lesson__heading {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--text-heading-lg-size);
+
+  font-weight: var(--text-heading-lg-weight);
+
+  line-height: var(--text-heading-lg-line);
+
+  letter-spacing: var(--text-heading-lg-tracking);
+}
+
+
+
+/* ============================================================
+   PARAGRAPH
+============================================================ */
+
+.lesson__paragraph {
+  margin: 0;
+
+  max-width: var(--content-width-md);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--text-body-lg-size);
+
+  font-weight: var(--text-body-lg-weight);
+
+  line-height: var(--text-body-lg-line);
+}
+
+
+
+.lesson__paragraph + .lesson__paragraph {
+  margin-top: var(--component-gap-sm);
+}
+
+
+
+/* ============================================================
+   LINKS
+============================================================ */
+
+.lesson a {
+  color: var(--color-primary);
+
+  text-decoration: none;
+
+  transition:
+    color .18s ease;
+}
+
+.lesson a:hover {
+  color: var(--color-primary-hover);
+
+  text-decoration: underline;
+}
+
+
+
+/* ============================================================
+   LISTS
+============================================================ */
+
+.lesson ul,
+.lesson ol {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--component-gap-xs);
+
+  margin: 0;
+
+  padding-left: var(--space-xl);
+
+  max-width: var(--content-width-md);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--text-body-lg-size);
+
+  line-height: var(--text-body-lg-line);
+}
+
+
+
+/* ============================================================
+   LIST ITEM
+============================================================ */
+
+.lesson li::marker {
+  color: var(--color-text-muted);
+}
+
+
+
+/* ============================================================
+   STRONG
+============================================================ */
+
+.lesson strong {
+  color: var(--color-text-primary);
+
+  font-weight: 600;
+}
+
+
+
+/* ============================================================
+   EMPHASIS
+============================================================ */
+
+.lesson em {
+  color: var(--color-text-primary);
+
+  font-style: italic;
+}
+
+
+
+/* ============================================================
+   BLOCKQUOTE
+============================================================ */
+
+.lesson blockquote {
+  margin: 0;
+
+  padding:
+    var(--card-padding-md);
+
+  border-left:
+    var(--border-width-emphasis)
+    solid
+    var(--color-primary);
+
+  border-radius: var(--radius-panel);
+
+  background: var(--color-primary-soft);
+
+  color: var(--color-text-secondary);
+
+  max-width: var(--content-width-md);
+}
+
+
+
+/* ============================================================
+   CODE
+============================================================ */
+
+.lesson code {
+  padding:
+    var(--space-xs)
+    var(--space-sm);
+
+  border:
+    var(--border-card)
+    solid
+    var(--color-border-subtle);
+
+  border-radius: var(--radius-badge);
+
+  background: var(--color-surface-subtle);
+
+  font-family: var(--font-family-mono);
+
+  font-size: var(--text-code-size);
+
+  line-height: var(--text-code-line);
+}
+
+
+
+/* ============================================================
+   CODE BLOCK
+============================================================ */
+
+.lesson pre {
+  margin: 0;
+
+  padding: var(--card-padding-md);
+
+  overflow-x: auto;
+
+  border:
+    var(--border-card)
+    solid
+    var(--color-border-subtle);
+
+  border-radius: var(--radius-panel);
+
+  background: var(--color-surface-subtle);
+}
+
+.lesson pre code {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+}
+
+
+
+/* ============================================================
+   IMAGE
+============================================================ */
+
+.lesson img {
+  display: block;
+
+  width: 100%;
+
+  max-width: var(--content-width-lg);
+
+  border:
+    var(--border-card)
+    solid
+    var(--color-border-subtle);
+
+  border-radius: var(--radius-panel);
+}
+
+
+
+/* ============================================================
+   SELECTION
+============================================================ */
+
+.lesson ::selection {
+  background: var(--color-primary-soft);
+}

@@ -6,9 +6,11 @@
   height: 100dvh;
   width: 100dvw;
   overflow: hidden;
-
+ scroll-margin-top: 90rem;
   &__content {
-    overflow: hidden;
+   // overflow: hidden;
+    min-height: 0;
+    height: 100%;
   }
   &__wrapper{
 

@@ -45,12 +45,17 @@ export class PageContentAsideComponent implements OnInit {
   }
 
   protected onNavigate(name: string){
-     document
-        .getElementById(name)
-        ?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+    const container = document.querySelector('.learn-page__content') as HTMLElement | null;
+    const target = document.getElementById(name);
+
+    if (!container || !target) return;
+
+    const top = target.offsetTop - container.offsetTop;
+    console.log(top)
+    container.scrollTo({
+      top,
+      behavior: 'smooth'
+    });
   }
 
   ngOnDestroy(): void {
