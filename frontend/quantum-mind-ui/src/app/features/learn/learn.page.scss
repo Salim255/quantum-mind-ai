@@ -13,6 +13,10 @@
     overscroll-behavior: contain;
   }
 
+  app-content-aside {
+    width: 30rem;
+  }
+
   @include respond(tab-port) {
     grid-template-columns: 1fr 0;
   }

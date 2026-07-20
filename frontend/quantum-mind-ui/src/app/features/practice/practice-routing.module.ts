@@ -5,7 +5,12 @@ import { NgModule } from "@angular/core";
 const routes:Routes = [
   {
     path: "",
-    component: PracticePage
+    component: PracticePage,
+   /*  children: [
+      {
+        path: "quizes"
+      }
+    ] */
   }
 ]
 

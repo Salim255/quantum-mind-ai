@@ -1,0 +1,210 @@
+.practice-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap-lg);
+
+  padding: 2rem;
+}
+
+
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.practice-page__header {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--component-gap-sm);
+
+  padding-bottom: var(--section-gap-md);
+
+  border-bottom:
+    var(--border-divider)
+    solid
+    var(--color-border-subtle);
+}
+
+
+
+.practice-page__title {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--text-display-sm-size);
+
+  font-weight: var(--text-display-sm-weight);
+
+  line-height: var(--text-display-sm-line);
+}
+
+
+
+.practice-page__description {
+  margin: 0;
+
+  max-width: var(--content-width-md);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--text-body-lg-size);
+
+  font-weight: var(--text-body-lg-weight);
+
+  line-height: var(--text-body-lg-line);
+}
+
+
+
+/* ==========================================================
+   OPTIONS
+========================================================== */
+
+.practice-page__options {
+  display: grid;
+
+  gap: var(--component-gap-md);
+}
+
+
+
+/* ==========================================================
+   CARD
+========================================================== */
+
+.practice-option {
+  display: flex;
+
+  align-items: center;
+
+  gap: var(--component-gap-md);
+
+  width: 100%;
+
+  padding: var(--card-padding-lg);
+
+  border:
+    var(--border-card)
+    solid
+    var(--color-border-subtle);
+
+  border-radius: var(--radius-panel);
+
+  background: var(--color-surface);
+
+  cursor: pointer;
+
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+
+  text-align: left;
+}
+
+.practice-option:hover {
+  background: var(--color-surface-subtle);
+
+  border-color: var(--color-primary-border);
+
+  transform: translateY(-1px);
+}
+
+
+
+/* ==========================================================
+   ICON
+========================================================== */
+
+.practice-option__icon {
+  display: grid;
+
+  place-items: center;
+
+  width: 52px;
+
+  height: 52px;
+
+  flex-shrink: 0;
+
+  border-radius: var(--radius-card);
+
+  background: var(--color-primary-soft);
+
+  color: var(--color-primary);
+
+  font-size: 1.35rem;
+}
+
+
+
+/* ==========================================================
+   CONTENT
+========================================================== */
+
+.practice-option__content {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--component-gap-xs);
+
+  flex: 1;
+}
+
+
+
+.practice-option__title {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--text-heading-md-size);
+
+  font-weight: var(--text-heading-md-weight);
+
+  line-height: var(--text-heading-md-line);
+}
+
+
+
+.practice-option__description {
+  margin: 0;
+
+  max-width: var(--content-width-sm);
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--text-body-md-size);
+
+  font-weight: var(--text-body-md-weight);
+
+  line-height: var(--text-body-md-line);
+}
+
+
+
+/* ==========================================================
+   ARROW
+========================================================== */
+
+.practice-option__arrow {
+  display: grid;
+
+  place-items: center;
+
+  color: var(--color-text-muted);
+
+  font-size: 1.15rem;
+
+  transition:
+    color .18s ease,
+    transform .18s ease;
+}
+
+.practice-option:hover .practice-option__arrow {
+  color: var(--color-primary);
+
+  transform: translateX(4px);
+}
