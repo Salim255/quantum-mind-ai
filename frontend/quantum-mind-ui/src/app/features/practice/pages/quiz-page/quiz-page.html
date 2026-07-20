@@ -1,42 +1,56 @@
-<div class="quiz">
-  <app-quiz-header  [topic]="'spin'" [quizType]="'general'"></app-quiz-header>
-  <app-quiz-progress [current]="1" [total]="10"></app-quiz-progress>
+<div class="quiz-page">
 
-    <section class="quiz__content">
+    <main class="quiz-page__content">
 
-        <section class="quiz-question">
 
-            <h2 class="quiz-question__title">
+        <!-- HEADER -->
 
-                Which quantum gate creates a superposition
-                from the |0⟩ state?
+        <app-quiz-header
+            [quizType]="quiz.type"
+            [topic]="quiz.topic"
+            [description]="quiz.description">
+        </app-quiz-header>
 
-            </h2>
 
-        </section>
 
-        <section class="quiz-answers">
+        <!-- PROGRESS -->
 
-            <!-- answers -->
+        <app-quiz-progress
+            [current]="currentQuestionIndex + 1"
+            [total]="quiz.questions.length">
+        </app-quiz-progress>
 
-        </section>
 
-    </section>
 
-    <footer class="quiz__footer">
+        <!-- QUESTION -->
 
-        <button>
-            Previous
-        </button>
+        <app-quiz-question
+            [question]="currentQuestion"
+            [selectedAnswerId]="selectedAnswerId"
+            [selectedIds]="selectedIds"
 
-        <button>
-            Check Answer
-        </button>
+            (answerSelected)="onSingleAnswerSelected($event)"
 
-        <button>
-            Next
-        </button>
+            (selectionChanged)="onMultipleAnswersChanged($event)">
+        </app-quiz-question>
 
-    </footer>
+
+
+        <!-- FOOTER -->
+
+        <app-quiz-footer
+
+            [canGoPrevious]="canGoPrevious"
+            [canCheck]="canCheckAnswer"
+            [canGoNext]="canGoNext"
+
+            (previous)="previousQuestion()"
+            (check)="checkAnswer()"
+            (next)="nextQuestion()">
+
+        </app-quiz-footer>
+
+
+    </main>
 
 </div>

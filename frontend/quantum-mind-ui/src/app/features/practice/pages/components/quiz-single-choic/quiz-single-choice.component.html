@@ -1,0 +1,41 @@
+<div class="quiz-single-choice">
+
+    @for(answer of answers; track answer.id){
+
+        <button
+            type="button"
+            class="quiz-option"
+            [class.quiz-option--selected]="selectedAnswerId === answer.id"
+            (click)="onSelect(answer.id)">
+
+            <div class="quiz-option__indicator">
+
+                <span class="quiz-option__radio"></span>
+
+            </div>
+
+            <div class="quiz-option__content">
+
+                <h3 class="quiz-option__title">
+
+                    {{ answer.title }}
+
+                </h3>
+
+                @if(answer.description){
+
+                    <p class="quiz-option__description">
+
+                        {{ answer.description }}
+
+                    </p>
+
+                }
+
+            </div>
+
+        </button>
+
+    }
+
+</div>

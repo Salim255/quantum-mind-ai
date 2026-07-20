@@ -1,0 +1,80 @@
+/* ==========================================================
+   QUIZ QUESTION
+========================================================== */
+
+.quiz-question {
+    display: flex;
+    flex-direction: column;
+
+    gap: var(--section-gap-lg);
+}
+
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.quiz-question__header {
+    display: flex;
+    flex-direction: column;
+
+    gap: var(--component-gap-sm);
+
+    padding-bottom: var(--section-gap-md);
+
+    border-bottom:
+        var(--border-divider)
+        solid
+        var(--color-border-subtle);
+}
+
+
+/* ==========================================================
+   LABEL
+========================================================== */
+
+.quiz-question__label {
+    margin: 0;
+
+    color: var(--color-text-muted);
+
+    font-size: var(--text-label-sm-size);
+    font-weight: var(--text-label-sm-weight);
+    line-height: var(--text-label-sm-line);
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+
+/* ==========================================================
+   TITLE
+========================================================== */
+
+.quiz-question__title {
+    margin: 0;
+
+    max-width: var(--content-width-md);
+
+    color: var(--color-text-primary);
+
+    font-size: var(--text-heading-xl-size);
+    font-weight: var(--text-heading-xl-weight);
+    line-height: var(--text-heading-xl-line);
+    letter-spacing: var(--text-heading-xl-tracking);
+
+    text-wrap: balance;
+}
+
+
+/* ==========================================================
+   ANSWERS
+========================================================== */
+
+.quiz-question__answers {
+    display: flex;
+    flex-direction: column;
+
+    gap: var(--component-gap-md);
+}

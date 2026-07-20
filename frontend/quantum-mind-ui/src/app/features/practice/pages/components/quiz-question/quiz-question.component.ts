@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { QuizQuestion } from "../../models/quiz.model";
 
 @Component({
   selector: "app-quiz-question",
@@ -6,4 +7,21 @@ import { Component } from "@angular/core";
   styleUrls: ["./quiz-question.component.scss"],
   standalone: false
 })
-export class QuizQuestionComponent {}
+export class QuizQuestionComponent {
+  @Input({ required: true })
+  question!: QuizQuestion;
+
+  @Input()
+  selectedAnswerId?: string;
+
+  @Input()
+  selectedIds: string[] = [];
+
+  @Output()
+  answerSelected =
+  new EventEmitter<string>();
+
+  @Output()
+  selectionChanged =
+  new EventEmitter<string[]>();
+}
