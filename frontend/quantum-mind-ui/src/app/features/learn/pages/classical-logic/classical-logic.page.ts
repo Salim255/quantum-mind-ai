@@ -14,14 +14,8 @@ export class ClassicalLogicPage {
 
   constructor(private pageAsideService: PageAsideService){}
 
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    //this.observeSections();
-  }
-
   ngAfterViewInit(): void {
-      this.observeSections();
+    this.observeSections();
   }
 
   private observeSections(): void {

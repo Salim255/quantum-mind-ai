@@ -14,8 +14,7 @@ export class MathematicsPage implements AfterViewInit {
   private observer?: IntersectionObserver;
   htmlSections = signal<any[]>([]);
 
-  constructor(
-    private pageAsideService: PageAsideService){}
+  constructor(private pageAsideService: PageAsideService){}
 
 
 
