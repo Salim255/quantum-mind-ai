@@ -1,7 +1,6 @@
-import { Component, OnInit, signal } from "@angular/core";
-import { Subscription, take } from "rxjs";
+import { Component, Input, OnInit, signal } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ContentService } from "../../../features/learn/services/content.service";
-import { NgZone } from '@angular/core';
 import { PageAsideService } from "../../service/page-aside-content.service";
 
 
@@ -12,6 +11,7 @@ import { PageAsideService } from "../../service/page-aside-content.service";
   standalone: false
 })
 export class PageContentAsideComponent implements OnInit {
+  @Input() scrollContainer!: HTMLElement;
   private pageAsideContentSubscription!: Subscription;
   private currentSectionIdSubscription!: Subscription;
 

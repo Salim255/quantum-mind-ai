@@ -1,4 +1,14 @@
-import { BELL_INEQUALITY, CLASSICAL_LOGIC, ENTANGLEMENT, LINEAR_ALGEBRA, QUANTUM_ALGOS, QUANTUM_IMPACT, QUANTUM_LOGIC, SPIN, SPIN_QUBITS } from "../../features/learn/services/data";
+import {
+  BELL_INEQUALITY,
+  CLASSICAL_LOGIC,
+  ENTANGLEMENT,
+  LINEAR_ALGEBRA,
+  QUANTUM_ALGOS,
+  QUANTUM_IMPACT,
+  QUANTUM_LOGIC,
+  SPIN,
+  SPIN_QUBITS,
+} from "../../features/learn/services/data";
 import { NavItem } from "./aside-nav.service";
 
 export const NAVIGATION: NavItem[] = [
