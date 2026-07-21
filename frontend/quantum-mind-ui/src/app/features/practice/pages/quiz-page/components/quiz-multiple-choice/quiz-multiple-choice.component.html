@@ -1,0 +1,116 @@
+<div class="quiz-multiple-choice">
+
+    @for(answer of answers; track answer.id){
+
+        <button
+            type="button"
+            class="quiz-option"
+            [class.quiz-option--selected]="selectedIds.includes(answer.id)"
+            [class.quiz-option--correct]="showResult && answer.isCorrect"
+            [class.quiz-option--incorrect]="
+                showResult &&
+                selectedIds.includes(answer.id) &&
+                !answer.isCorrect
+            "
+            (click)="toggleAnswer(answer.id)">
+
+            <span class="quiz-option__checkbox">
+
+                @if(selectedIds.includes(answer.id)){
+
+                    <iconify-icon
+                        icon="lucide:check">
+                    </iconify-icon>
+
+                }
+
+            </span>
+
+            <div class="quiz-option__content">
+
+                <h3 class="quiz-option__title">
+
+                    {{ answer.title }}
+
+                </h3>
+
+                <!-- Hint -->
+
+                @if(
+                    showHints &&
+                    selectedIds.includes(answer.id) &&
+                    answer.hint
+                ){
+
+                    <div class="quiz-option__message quiz-option__message--hint">
+
+                        <iconify-icon
+                            icon="lucide:lightbulb">
+                        </iconify-icon>
+
+                        <p>
+
+                            {{ answer.hint }}
+
+                        </p>
+
+                    </div>
+
+                }
+
+                <!-- Correct explanation -->
+
+                @if(
+                    showResult &&
+                    answer.isCorrect &&
+                    answer.correctExplanation
+                ){
+
+                    <div class="quiz-option__message quiz-option__message--success">
+
+                        <iconify-icon
+                            icon="lucide:circle-check">
+                        </iconify-icon>
+
+                        <p>
+
+                            {{ answer.correctExplanation }}
+
+                        </p>
+
+                    </div>
+
+                }
+
+                <!-- Incorrect explanation -->
+
+                @if(
+                    showResult &&
+                    selectedIds.includes(answer.id) &&
+                    !answer.isCorrect &&
+                    answer.incorrectExplanation
+                ){
+
+                    <div class="quiz-option__message quiz-option__message--error">
+
+                        <iconify-icon
+                            icon="lucide:circle-x">
+                        </iconify-icon>
+
+                        <p>
+
+                            {{ answer.incorrectExplanation }}
+
+                        </p>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </button>
+
+    }
+
+</div>

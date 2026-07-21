@@ -1,0 +1,29 @@
+<div class="quiz-progress">
+
+
+    <div class="quiz-progress__meta">
+
+        <span class="quiz-progress__label">
+            Question
+        </span>
+
+
+        <span class="quiz-progress__count">
+            {{ current }} / {{ total }}
+        </span>
+
+    </div>
+
+
+
+    <div class="quiz-progress__track">
+
+        <div
+            class="quiz-progress__value"
+            [style.width.%]="progress">
+        </div>
+
+    </div>
+
+
+</div>

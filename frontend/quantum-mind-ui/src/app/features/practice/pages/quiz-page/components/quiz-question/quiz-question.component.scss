@@ -1,13 +1,21 @@
 /* ==========================================================
    QUIZ QUESTION
+
+   Premium reading experience
 ========================================================== */
 
 .quiz-question {
+
     display: flex;
+
     flex-direction: column;
 
-    gap: var(--section-gap-lg);
+    gap: var(--section-gap-xs);
+
 }
+
+
+
 
 
 /* ==========================================================
@@ -15,37 +23,17 @@
 ========================================================== */
 
 .quiz-question__header {
+
     display: flex;
+
     flex-direction: column;
 
-    gap: var(--component-gap-sm);
+    gap: var(--component-gap-xs);
 
-    padding-bottom: var(--section-gap-md);
-
-    border-bottom:
-        var(--border-divider)
-        solid
-        var(--color-border-subtle);
 }
 
 
-/* ==========================================================
-   LABEL
-========================================================== */
 
-.quiz-question__label {
-    margin: 0;
-
-    color: var(--color-text-muted);
-
-    font-size: var(--text-label-sm-size);
-    font-weight: var(--text-label-sm-weight);
-    line-height: var(--text-label-sm-line);
-
-    text-transform: uppercase;
-
-    letter-spacing: .08em;
-}
 
 
 /* ==========================================================
@@ -53,19 +41,49 @@
 ========================================================== */
 
 .quiz-question__title {
+
     margin: 0;
 
-    max-width: var(--content-width-md);
+    width: 100%;
 
     color: var(--color-text-primary);
 
-    font-size: var(--text-heading-xl-size);
-    font-weight: var(--text-heading-xl-weight);
-    line-height: var(--text-heading-xl-line);
-    letter-spacing: var(--text-heading-xl-tracking);
+    font-size: var(--text-heading-md-size);
 
-    text-wrap: balance;
+    font-weight: 600;
+
+    line-height: 1.45;
+
+    letter-spacing: -.01em;
+
 }
+
+
+
+
+
+/* ==========================================================
+   DESCRIPTION
+========================================================== */
+
+.quiz-question__description {
+
+    margin: 0;
+
+    width: 100%;
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-body-md-size);
+
+    font-weight: var(--text-body-md-weight);
+
+    line-height: var(--text-body-md-line);
+
+}
+
+
+
 
 
 /* ==========================================================
@@ -73,8 +91,13 @@
 ========================================================== */
 
 .quiz-question__answers {
+
     display: flex;
+
     flex-direction: column;
 
-    gap: var(--component-gap-md);
+    gap: var(--component-gap-sm);
+
+    padding-top: var(--space-sm);
+
 }

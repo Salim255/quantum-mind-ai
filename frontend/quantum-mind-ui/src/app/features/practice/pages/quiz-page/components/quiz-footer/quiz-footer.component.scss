@@ -1,0 +1,96 @@
+/* ==========================================================
+   QUIZ FOOTER
+========================================================== */
+
+.quiz-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--component-gap-lg);
+
+    padding-top: var(--section-gap-md);
+
+    border-top:
+        var(--border-divider)
+        solid
+        var(--color-border-subtle);
+
+}
+
+
+
+/* ==========================================================
+   LEFT BUTTON
+========================================================== */
+
+.quiz-footer > .quiz-footer__button:first-child {
+
+    flex: 1;
+
+    justify-content: flex-start;
+
+}
+
+
+
+/* ==========================================================
+   COUNTER
+========================================================== */
+
+.quiz-footer__counter {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: var(--space-xs);
+
+    flex-shrink: 0;
+
+}
+
+
+
+.quiz-footer__current {
+
+    color: var(--color-text-primary);
+
+    font-size: var(--text-heading-sm-size);
+
+    font-weight: 600;
+
+}
+
+
+
+.quiz-footer__separator,
+
+.quiz-footer__total {
+
+    color: var(--color-text-muted);
+
+    font-size: var(--text-body-md-size);
+
+}
+
+
+
+/* ==========================================================
+   ACTIONS
+========================================================== */
+
+.quiz-footer__actions {
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: var(--component-gap-sm);
+
+}

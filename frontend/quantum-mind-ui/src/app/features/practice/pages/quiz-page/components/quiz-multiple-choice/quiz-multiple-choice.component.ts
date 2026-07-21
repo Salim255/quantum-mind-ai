@@ -14,11 +14,14 @@ export class QuizMultipleChoiceComponent {
   @Input()
   selectedIds: string[] = [];
 
+  @Input() showHints = false;
+
+  @Input() showResult = false;
   @Output()
   selectionChanged =
   new EventEmitter<string[]>();
 
-  toggle(id: string): void {
+  toggleAnswer(id: string): void {
 
       const exists =
           this.selectedIds.includes(id);
@@ -31,4 +34,5 @@ export class QuizMultipleChoiceComponent {
       this.selectionChanged.emit(selection);
 
 }
+
 }

@@ -1,0 +1,59 @@
+<footer class="quiz-footer">
+
+    <button
+        type="button"
+        class="quiz-footer__button quiz-footer__button--secondary"
+        [disabled]="!canGoPrevious"
+        (click)="previous.emit()">
+
+        Previous
+
+    </button>
+
+    <div class="quiz-footer__counter">
+
+        <span class="quiz-footer__current">
+
+            {{ currentQuestion + 1 }}
+
+        </span>
+
+        <span class="quiz-footer__separator">
+
+            /
+
+        </span>
+
+        <span class="quiz-footer__total">
+
+            {{ totalQuestions }}
+
+        </span>
+
+    </div>
+
+    <div class="quiz-footer__actions">
+
+        <button
+            type="button"
+            class="quiz-footer__button quiz-footer__button--secondary"
+            [disabled]="!canCheck"
+            (click)="check.emit()">
+
+            Check Answer
+
+        </button>
+
+        <button
+            type="button"
+            class="quiz-footer__button quiz-footer__button--primary"
+            [disabled]="!canGoNext"
+            (click)="next.emit()">
+
+            Next
+
+        </button>
+
+    </div>
+
+</footer>

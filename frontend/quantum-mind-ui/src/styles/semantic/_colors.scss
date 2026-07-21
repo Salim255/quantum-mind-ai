@@ -1,163 +1,145 @@
 @use "../tokens/colors" as color;
 
-
-/* ============================================================
-   QUANTUM AI DESIGN SYSTEM
-
-   SEMANTIC COLORS
-
-   Components consume these variables.
-
-============================================================ */
-
-
 :root {
 
+  /* ============================================================
+     BACKGROUND
+  ============================================================ */
+
+  --color-background: #{color.$grey-25};
+  --color-surface: #{color.$white};
+  --color-surface-subtle: #{color.$grey-50};
+  --color-surface-muted: #{color.$grey-100};
+
+
+  /* ============================================================
+     TEXT
+  ============================================================ */
+
+  --color-text-primary: #{color.$grey-900};
+  --color-text-secondary: #{color.$grey-600};
+  --color-text-muted: #{color.$grey-500};
+  --color-text-disabled: #{color.$grey-400};
+  --color-text-inverse: #{color.$white};
+
+
+  /* ============================================================
+     BORDER
+  ============================================================ */
+
+  --color-border: #{color.$grey-200};
+  --color-border-subtle: #{color.$grey-100};
+  --color-border-strong: #{color.$grey-300};
+
+
+  /* ============================================================
+     BRAND (PRIMARY)
+  ============================================================ */
+
+  --color-primary-50: #{color.$primary-50};
+  --color-primary-100: #{color.$primary-100};
+  --color-primary-200: #{color.$primary-200};
+  --color-primary-300: #{color.$primary-300};
+  --color-primary-400: #{color.$primary-400};
+  --color-primary-500: #{color.$primary-500};
+  --color-primary-600: #{color.$primary-600};
+  --color-primary-700: #{color.$primary-700};
+  --color-primary-800: #{color.$primary-800};
+  --color-primary-900: #{color.$primary-900};
+
+  /* Semantic aliases */
+  --color-primary: #{color.$primary-600};
+  --color-primary-hover: #{color.$primary-700};
+  --color-primary-soft: #{color.$primary-50};
+  --color-primary-border: #{color.$primary-200};
+
+
+  /* ============================================================
+     GREYS (FULL SCALE)
+  ============================================================ */
+
+  --color-grey-25: #{color.$grey-25};
+  --color-grey-50: #{color.$grey-50};
+  --color-grey-100: #{color.$grey-100};
+  --color-grey-200: #{color.$grey-200};
+  --color-grey-300: #{color.$grey-300};
+  --color-grey-400: #{color.$grey-400};
+  --color-grey-500: #{color.$grey-500};
+  --color-grey-600: #{color.$grey-600};
+  --color-grey-700: #{color.$grey-700};
+  --color-grey-800: #{color.$grey-800};
+  --color-grey-900: #{color.$grey-900};
+
+
+  /* ============================================================
+     SUCCESS
+  ============================================================ */
+
+  --color-success-50: #{color.$success-50};
+  --color-success-100: #{color.$success-100};
+  --color-success-500: #{color.$success-500};
+  --color-success-600: #{color.$success-600};
+  --color-success-700: #{color.$success-700};
+
+  /* Semantic aliases */
+  --color-success: #{color.$success-600};
+  --color-success-soft: #{color.$success-50};
+
+
+  /* ============================================================
+     WARNING
+  ============================================================ */
+
+  --color-warning-50: #{color.$warning-50};
+  --color-warning-100: #{color.$warning-100};
+  --color-warning-500: #{color.$warning-500};
+  --color-warning-600: #{color.$warning-600};
+  --color-warning-700: #{color.$warning-700};
+
+  /* Semantic aliases */
+  --color-warning: #{color.$warning-600};
+  --color-warning-soft: #{color.$warning-50};
+
+
+  /* ============================================================
+     ERROR
+  ============================================================ */
 
-/* ============================================================
-   BACKGROUND
-============================================================ */
+  --color-error-50: #{color.$error-50};
+  --color-error-100: #{color.$error-100};
+  --color-error-500: #{color.$error-500};
+  --color-error-600: #{color.$error-600};
+  --color-error-700: #{color.$error-700};
 
+  /* Semantic aliases */
+  --color-error: #{color.$error-600};
+  --color-error-soft: #{color.$error-50};
 
---color-background:
-  #{color.$grey-25};
 
+  /* ============================================================
+     INFO
+  ============================================================ */
 
---color-surface:
-  #{color.$white};
+  --color-info-50: #{color.$info-50};
+  --color-info-100: #{color.$info-100};
+  --color-info-500: #{color.$info-500};
+  --color-info-600: #{color.$info-600};
+  --color-info-700: #{color.$info-700};
 
+  /* Semantic aliases */
+  --color-info: #{color.$info-600};
+  --color-info-soft: #{color.$info-50};
 
---color-surface-subtle:
-  #{color.$grey-50};
 
+  /* ============================================================
+     PURE CONTRAST
+  ============================================================ */
 
---color-surface-muted:
-  #{color.$grey-100};
+  --color-ink-950: #{color.$ink-950};
+  --color-ink-900: #{color.$ink-900};
+  --color-ink-800: #{color.$ink-800};
 
-
-
-
-/* ============================================================
-   TEXT
-============================================================ */
-
-
---color-text-primary:
-  #{color.$grey-900};
-
-
---color-text-secondary:
-  #{color.$grey-600};
-
-
---color-text-muted:
-  #{color.$grey-500};
-
-
---color-text-disabled:
-  #{color.$grey-400};
-
-
---color-text-inverse:
-  #{color.$white};
-
-
-
-
-/* ============================================================
-   BORDER
-============================================================ */
-
-
---color-border:
-  #{color.$grey-200};
-
-
---color-border-subtle:
-  #{color.$grey-100};
-
-
---color-border-strong:
-  #{color.$grey-300};
-
-
-
-
-/* ============================================================
-   BRAND
-============================================================ */
-
-
---color-primary:
-  #{color.$primary-600};
-
-
---color-primary-hover:
-  #{color.$primary-700};
-
-
---color-primary-soft:
-  #{color.$primary-50};
-
-
---color-primary-border:
-  #{color.$primary-200};
-
-
-
-
-/* ============================================================
-   STATES
-============================================================ */
-
-
---color-success:
-  #{color.$success-600};
-
-
---color-success-soft:
-  #{color.$success-50};
-
-
-
---color-warning:
-  #{color.$warning-600};
-
-
---color-warning-soft:
-  #{color.$warning-50};
-
-
-
---color-error:
-  #{color.$error-600};
-
-
---color-error-soft:
-  #{color.$error-50};
-
-
-
---color-info:
-  #{color.$info-600};
-
-
---color-info-soft:
-  #{color.$info-50};
-
-
-
-
-/* ============================================================
-   CONTRAST
-============================================================ */
-
-
---color-strong:
-  #{color.$ink-950};
-
-
---color-inverse:
-  #{color.$white};
-
+  /* Semantic aliases */
+  --color-strong: #{color.$ink-950};
+  --color-inverse: #{color.$white};
 }

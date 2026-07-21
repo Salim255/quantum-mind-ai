@@ -11,12 +11,10 @@
 
     width: 100%;
 
-    padding:
-
-        var(--page-padding-mobile)
-
-        var(--page-padding-mobile);
-
+    min-height: 0;
+    height: 100dvh;
+    overflow-y: auto;
+    padding: var(--page-padding-mobile) var(--page-padding-mobile);
 }
 
 
@@ -27,11 +25,10 @@
 
     flex-direction: column;
 
-    gap: var(--section-gap-lg);
+    gap: var(--section-gap-xs);
 
 
     width: 100%;
-
     max-width: var(--content-width-md);
 
 }

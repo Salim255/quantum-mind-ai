@@ -1,56 +1,39 @@
 <div class="quiz-page">
 
     <main class="quiz-page__content">
+      <!-- HEADER -->
+      <app-quiz-header
+        [quizType]="quiz.type"
+        [topic]="quiz.topic"
+        [description]="quiz.description">
+      </app-quiz-header>
 
+      <!-- PROGRESS -->
+    <!--   <app-quiz-progress
+          [current]="currentQuestionIndex + 1"
+          [total]="quiz.questions.length">
+      </app-quiz-progress> -->
 
-        <!-- HEADER -->
+      <!-- QUESTION -->
+      <app-quiz-question
+          [question]="currentQuestion"
+          [selectedAnswerId]="selectedAnswerId"
+          [selectedIds]="selectedIds"
 
-        <app-quiz-header
-            [quizType]="quiz.type"
-            [topic]="quiz.topic"
-            [description]="quiz.description">
-        </app-quiz-header>
+          (answerSelected)="onSingleAnswerSelected($event)"
 
+          (selectionChanged)="onMultipleAnswersChanged($event)">
+      </app-quiz-question>
 
+      <!-- FOOTER -->
+      <app-quiz-footer
+        [canGoPrevious]="canGoPrevious"
+        [canCheck]="canCheckAnswer"
+        [canGoNext]="canGoNext"
 
-        <!-- PROGRESS -->
-
-        <app-quiz-progress
-            [current]="currentQuestionIndex + 1"
-            [total]="quiz.questions.length">
-        </app-quiz-progress>
-
-
-
-        <!-- QUESTION -->
-
-        <app-quiz-question
-            [question]="currentQuestion"
-            [selectedAnswerId]="selectedAnswerId"
-            [selectedIds]="selectedIds"
-
-            (answerSelected)="onSingleAnswerSelected($event)"
-
-            (selectionChanged)="onMultipleAnswersChanged($event)">
-        </app-quiz-question>
-
-
-
-        <!-- FOOTER -->
-
-        <app-quiz-footer
-
-            [canGoPrevious]="canGoPrevious"
-            [canCheck]="canCheckAnswer"
-            [canGoNext]="canGoNext"
-
-            (previous)="previousQuestion()"
-            (check)="checkAnswer()"
-            (next)="nextQuestion()">
-
-        </app-quiz-footer>
-
-
+        (previous)="previousQuestion()"
+        (check)="checkAnswer()"
+        (next)="nextQuestion()">
+      </app-quiz-footer>
     </main>
-
 </div>

@@ -24,6 +24,14 @@ export interface QuizAnswer {
      */
     description?: string;
 
+    hint?: string;
+
+    incorrectExplanation?: string;
+
+    correctExplanation?: string;
+
+    isCorrect: boolean;
+
 }
 
 
@@ -41,7 +49,7 @@ export interface QuizQuestion {
      */
     text: string;
 
-
+    description?: string;
     /**
      * Defines the selection behavior.
      */

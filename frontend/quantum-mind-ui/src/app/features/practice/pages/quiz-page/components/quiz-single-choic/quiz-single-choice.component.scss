@@ -1,0 +1,268 @@
+/* ==========================================================
+   QUIZ SINGLE CHOICE
+========================================================== */
+
+.quiz-single-choice {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--component-gap-sm);
+
+}
+
+
+
+
+
+/* ==========================================================
+   OPTION
+========================================================== */
+
+.quiz-option {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: var(--component-gap-md);
+
+    width: 100%;
+
+    padding:
+        var(--card-padding-md);
+
+    background:
+        var(--color-surface);
+
+    border:
+        var(--border-card)
+        solid
+        var(--color-border);
+
+    border-radius:
+        var(--radius-card);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        transform .18s ease,
+        box-shadow .18s ease;
+
+}
+
+
+
+
+
+/* ==========================================================
+   HOVER
+========================================================== */
+
+.quiz-option:hover {
+
+    background:
+        var(--color-surface-subtle);
+
+    border-color:
+        var(--color-primary-border);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+
+
+
+/* ==========================================================
+   FOCUS
+========================================================== */
+
+.quiz-option:focus-visible {
+
+    outline: none;
+
+    border-color:
+        var(--color-primary);
+
+    box-shadow:
+        0 0 0 3px
+        var(--color-primary-soft);
+
+}
+
+
+
+
+
+/* ==========================================================
+   SELECTED
+========================================================== */
+
+.quiz-option--selected {
+
+    background:
+        var(--color-primary-soft);
+
+    border-color:
+        var(--color-primary);
+
+}
+
+
+
+
+
+/* ==========================================================
+   RADIO
+========================================================== */
+
+.quiz-option__radio {
+
+    position: relative;
+
+    flex-shrink: 0;
+
+    width: 18px;
+
+    height: 18px;
+
+    margin-top: 3px;
+
+    border-radius: 50%;
+
+    border:
+        2px solid
+        var(--color-border-strong);
+
+    transition:
+        border-color .18s ease;
+
+}
+
+
+
+
+
+.quiz-option__radio::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 4px;
+
+    border-radius: 50%;
+
+    background:
+        var(--color-primary);
+
+    transform: scale(0);
+
+    transition:
+        transform .18s ease;
+
+}
+
+
+
+
+
+.quiz-option--selected
+.quiz-option__radio {
+
+    border-color:
+        var(--color-primary);
+
+}
+
+
+
+
+
+.quiz-option--selected
+.quiz-option__radio::after {
+
+    transform: scale(1);
+
+}
+
+
+
+
+
+/* ==========================================================
+   CONTENT
+========================================================== */
+
+.quiz-option__content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    gap: var(--space-xs);
+
+}
+
+
+/* ==========================================================
+   TITLE
+========================================================== */
+
+.quiz-option__title {
+
+    margin: 0;
+
+    color: var(--color-grey-600);
+
+    font-size: var(--text-body-lg-size);
+
+    font-weight: 400;
+
+    line-height: var(--text-body-lg-line);
+}
+
+
+
+/* ==========================================================
+   DESCRIPTION / EXPLANATION
+========================================================== */
+.quiz-option__description {
+
+    margin: 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-body-sm-size);
+
+    font-weight: var(--text-body-sm-weight);
+
+    line-height: var(--text-body-sm-line);
+
+}
+
+
+
+
+
+/* ==========================================================
+   DISABLED
+========================================================== */
+
+.quiz-option:disabled {
+
+    cursor: default;
+
+    opacity: .75;
+
+}

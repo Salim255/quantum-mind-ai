@@ -17,7 +17,11 @@ export class QuizSingleChoiceComponent {
   @Output()
   selected = new EventEmitter<string>();
 
-  onSelect(id: string): void {
+  @Input() showHints = false;
+
+  @Input() showResult = false;
+
+  onSelect(id: string): void  {
       this.selected.emit(id);
   }
 }
