@@ -11,19 +11,24 @@ class TopicImplService(TopicService):
         self.topic_repository = topic_repository
 
     async def create_topic(self, topic_data: TopicCreateDTO) -> TopicDTO:
+
         topic = Topic(
             **topic_data.model_dump()
         )
-        self.topic_repository.add(topic)
         
+        self.topic_repository.add(topic)
+
         return TopicDTO.model_validate(topic)
 
 
     async def get_topic(self, topic_id: UUID):
         topic: Topic  =  self.topic_repository.get_by_id(topic_id)
+
         if topic is None:
             return None
+        
         return TopicDTO.model_validate(topic)
+    
 
     async def get_topics(self):
         topics = self.topic_repository.list()
@@ -48,13 +53,14 @@ class TopicImplService(TopicService):
             return None
         for key, value in topic_data.model_dump().items():
             setattr(topic, key, value)
-        self.topic_repository.commit()
+ 
         return TopicDTO.model_validate(topic)
 
     async def delete_topic(self, topic_id: UUID):
         topic = self.topic_repository.get_by_id(topic_id)
         if topic is None:
             return None
+        
         self.topic_repository.delete(topic)
-        self.topic_repository.commit()
+    
         return TopicDTO.model_validate(topic)

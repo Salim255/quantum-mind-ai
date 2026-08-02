@@ -9,7 +9,7 @@ from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.topic.dependencies import get_topic_service
-
+from app.core.dtos.response_dto import ResponseDTO
 
 # ==========================================================
 # CREATE
@@ -17,7 +17,7 @@ from app.v1.modules.topic.dependencies import get_topic_service
 
 @topic_router.post(
     "/",
-    response_model=TopicDTO,
+    response_model=ResponseDTO[TopicDTO],
     status_code=status.HTTP_201_CREATED,
     summary="Create a new learning topic",
     description="""
@@ -51,7 +51,7 @@ async def create_topic(
         Depends(get_topic_service)
     ]
 ):  
-    return await get_topic_service.create_topic(payload)
+    return await ResponseDTO[TopicDTO].create(await get_topic_service.create_topic(payload))
   
 
 # ==========================================================
