@@ -9,6 +9,8 @@ from app.v1.modules.topic.service.topic_service import TopicService
 from app.v1.modules.topic.service.topic_impl_service import TopicImplService
 from app.repositories import topic_repository
 from app.repositories.block_repository import BlockRepository
+from backend.app.v1.modules.block.service.block_impl_service import BlockImplService
+from backend.app.v1.modules.block.service.block_service import BlockService
 
 
 # ============================================================
@@ -64,7 +66,7 @@ def get_block_repository(
         AsyncSession,
         Depends(get_db_session)
     ],
-) -> TopicRepository:
+) -> BlockRepository:
     """
     Creates the block repository.
 
@@ -87,9 +89,9 @@ def get_block_service(
         BlockRepository,
         Depends(get_block_repository)
     ],
-) -> TopicService:
+) -> BlockService:
     """
-    Creates the topic service.
+    Creates the block service.
 
     Service responsibility:
         - business logic
@@ -97,4 +99,4 @@ def get_block_service(
         - DTO conversion
     """
 
-    return TopicImplService(block_repository)
+    return BlockImplService(block_repository)
