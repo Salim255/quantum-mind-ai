@@ -1,7 +1,9 @@
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import Relationship, SQLModel, Field
+
+from backend.app.models.section import Section
 
 
 class Topic(SQLModel, table=True):
@@ -118,6 +120,22 @@ class Topic(SQLModel, table=True):
         )
     )
 
+    # ==========================================================
+    # RELATIONSHIPS
+    # ==========================================================
+
+    sections: list[Section] = Relationship(
+        back_populates="topic",
+    )
+    """
+    Ordered collection of sections belonging to this topic.
+
+    A topic can contain zero or many sections.
+
+    Sections are responsible for organizing the lesson into
+    logical chapters and hold the learning blocks.
+    """
+    
 
     # ==========================================================
     # AUDIT
