@@ -1,88 +1,72 @@
 from pydantic import PostgresDsn
-from sqlmodel import create_engine
-from sqlalchemy.engine import Engine
-from sqlalchemy import text
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 import logging
-
 
 logger = logging.getLogger(__name__)
 
+
 class DBEngineService:
     """
-    Responsible for creating and exposing the application's
-    database engine.
+    Responsible for creating and exposing the async database engine.
 
-    The engine is SQLAlchemy's central entry point for all
-    database communication. Sessions, queries, and transactions
-    ultimately use this engine to talk to PostgreSQL.
+    The engine is the main connection manager between the application
+    and PostgreSQL.
 
-    Application flow:
+    Flow:
 
     FastAPI
         ↓
-    Repositories / Services
+    Repository
         ↓
-    SQLModel Sessions
+    AsyncSession
         ↓
-    Database Engine (this class)
+    AsyncEngine
         ↓
     PostgreSQL
     """
 
     def __init__(self, db_url: PostgresDsn):
-        """
-        Initialize the database engine service.
 
-        Args:
-            db_url:
-                PostgreSQL connection string used to establish
-                connections to the database.
-        """
         self.db_url = db_url
 
-        # Create the engine once when the application starts.
-        # The same engine instance is reused throughout the
-        # application's lifetime.
         self.engine = self.create_engine()
 
-    def create_engine(self) -> Engine:
-        """
-        Create and return a SQLAlchemy engine.
 
-        The engine manages:
-        - Database connections
-        - Connection pooling
-        - SQL execution
-        - Transaction communication
+    def create_engine(self) -> AsyncEngine:
+        """
+        Create an asynchronous SQLAlchemy engine.
+
+        AsyncEngine is required when using AsyncSession.
 
         Returns:
-            Engine: Configured SQLAlchemy engine instance.
+            AsyncEngine: configured async database engine.
         """
+
         try:
 
-            engine = create_engine(str(self.db_url))
+            engine = create_async_engine(
+                str(self.db_url),
+                echo=False,
+                pool_pre_ping=True,
+            )
 
-            with engine.connect() as conn:
-                conn.execute(text("SELECT 1"))
-
-            logger.info("Database connection established successfully. ✅✅")
+            logger.info(
+                "Async database engine created successfully ✅"
+            )
 
             return engine
-        
+
+
         except Exception as e:
 
             logger.exception(e)
 
             raise e
-    
-    def get_engine(self) -> Engine:
-        """
-        Return the application's engine instance.
 
-        This is typically used when creating database sessions.
 
-        Returns:
-            Engine: Active SQLAlchemy engine.
+    def get_engine(self) -> AsyncEngine:
         """
-        
+        Return the application's async engine instance.
+        """
+
         return self.engine

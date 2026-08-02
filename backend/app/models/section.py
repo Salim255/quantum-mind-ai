@@ -133,6 +133,47 @@ class Section(SQLModel, table=True):
     """
     
     # ==========================================================
+    # CHILD RELATIONSHIP
+    # ==========================================================
+
+    blocks: list["Block"] = Relationship(
+        back_populates="section",
+        cascade_delete=True,
+    )
+    """
+    Collection of educational content blocks belonging to this section.
+
+    Relationship:
+
+        Topic
+            |
+            └── Section
+                    |
+                    └── Blocks
+
+
+    A section can contain zero or many blocks.
+
+    Blocks are the smallest renderable learning units,
+    such as:
+
+        - heading
+        - paragraph
+        - equation
+        - image
+        - example
+        - exercise
+
+
+    Cascade behavior:
+
+    When a section is deleted:
+        - all related blocks are automatically deleted.
+
+    This prevents orphan blocks without a valid parent section.
+    """
+
+    # ==========================================================
     # AUDIT
     # ==========================================================
 

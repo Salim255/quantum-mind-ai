@@ -45,7 +45,7 @@ class DbSettingsService:
             PostgresDsn: Validated PostgreSQL connection string.
         """
         return str(PostgresDsn.build(
-            scheme="postgresql+psycopg",
+            scheme="postgresql+asyncpg",
             username=self.settings.DB_USERNAME,
             password=self.settings.DB_PASSWORD,
             host=self.settings.DB_HOST,

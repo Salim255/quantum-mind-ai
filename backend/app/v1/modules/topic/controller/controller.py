@@ -51,7 +51,7 @@ async def create_topic(
         Depends(get_topic_service)
     ]
 ):  
-    return get_topic_service.create_topic(payload)
+    return await get_topic_service.create_topic(payload)
   
 
 # ==========================================================

@@ -1,7 +1,7 @@
-from sqlmodel import Session, select
+from sqlmodel import select
 from app.models.topic import Topic
 from app.repositories.base_repository import BaseRepository
-
+from sqlalchemy.ext.asyncio import AsyncSession
 
 class TopicRepository(BaseRepository[Topic]):
     """
@@ -10,7 +10,7 @@ class TopicRepository(BaseRepository[Topic]):
     Inherits common CRUD operations from BaseRepository.
     """
 
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         # Pass Topic model to BaseRepository
         super().__init__(session, Topic)
 

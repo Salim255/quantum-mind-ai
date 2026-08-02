@@ -1,11 +1,34 @@
-from sqlmodel import Session
-from sqlalchemy.engine import Engine
+from collections.abc import AsyncGenerator
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
+
 
 class DBSessionService:
-    def __init__(self, engine: Engine):
+    """
+    Provides asynchronous database sessions.
+
+    Uses SQLAlchemy AsyncSession to allow non-blocking
+    database operations inside FastAPI async endpoints.
+    """
+
+    def __init__(
+        self,
+        engine: AsyncEngine,
+    ):
         self.engine = engine
-    
-    def get_session(self):
-        with Session(self.engine) as session:
-            yield  session
-    
+
+
+    async def get_session(
+        self,
+    ) -> AsyncGenerator[AsyncSession, None]:
+        """
+        Creates and provides a database session.
+
+        The session is automatically closed after
+        the request finishes.
+        """
+
+        async with AsyncSession(
+            bind=self.engine
+        ) as session:
+
+            yield session

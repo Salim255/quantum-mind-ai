@@ -1,9 +1,5 @@
-from typing import Container
 from uuid import UUID
-
 from app.repositories.topic_repository import TopicRepository
-from app.repositories.section_repository import SectionRepository
-from app.repositories.block_repository import BlockRepository
 from app.v1.modules.topic.service.topic_service import TopicService
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
@@ -11,17 +7,15 @@ from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.models.topic import Topic
 
 class TopicImplService(TopicService):
-    def __init__(self, topic_repository: TopicRepository, container: Container):
+    def __init__(self, topic_repository: TopicRepository):
         self.topic_repository = topic_repository
-        self.container = container
 
-    
     async def create_topic(self, topic_data: TopicCreateDTO) -> TopicDTO:
         topic = Topic(
             **topic_data.model_dump()
         )
         self.topic_repository.add(topic)
-        self.topic_repository.commit()
+        
         return TopicDTO.model_validate(topic)
 
 
