@@ -3,21 +3,25 @@ from uuid import UUID, uuid4
 
 from sqlmodel import Relationship, SQLModel, Field
 
-from backend.app.models.section import Section
+from app.models.section import Section
 
 
 class Topic(SQLModel, table=True):
     """
     Represents a top-level learning topic inside QuantumMind.
 
-    A topic is the entry point of a learning resource.
-    It provides the information needed to display a topic card,
-    create navigation routes, organize learning categories,
-    and connect users with the actual educational content.
+    A Topic is the entry point of a learning resource.
 
-    A topic DOES NOT store lesson content.
+    It is responsible for:
 
-    Detailed educational material is stored separately through:
+    - Defining the public learning route.
+    - Organizing topics by category.
+    - Providing the metadata displayed in the Learn section.
+    - Owning the collection of learning sections.
+
+    A Topic DOES NOT contain the educational content itself.
+
+    Educational content is organized as:
 
         Topic
             |
@@ -44,7 +48,6 @@ class Topic(SQLModel, table=True):
 
     __tablename__ = "topics"
 
-
     # ==========================================================
     # IDENTITY
     # ==========================================================
@@ -53,9 +56,8 @@ class Topic(SQLModel, table=True):
         default_factory=uuid4,
         primary_key=True,
         index=True,
-        description="Unique identifier of the learning topic."
+        description="Unique identifier of the learning topic.",
     )
-
 
     # ==========================================================
     # DISPLAY INFORMATION
@@ -66,11 +68,9 @@ class Topic(SQLModel, table=True):
         nullable=False,
         index=True,
         description=(
-            "Human-readable title displayed to users. "
-            "Example: 'Quantum Entanglement'."
-        )
+            "Human-readable title displayed to learners."
+        ),
     )
-
 
     slug: str = Field(
         max_length=255,
@@ -78,23 +78,17 @@ class Topic(SQLModel, table=True):
         unique=True,
         index=True,
         description=(
-            "URL-friendly identifier used for routing and public links. "
-            "Example: 'quantum-entanglement'. "
-            "Should remain stable even if the title changes."
-        )
+            "Stable URL-friendly identifier used for routing and public URLs."
+        ),
     )
-
 
     description: str | None = Field(
         default=None,
         nullable=True,
         description=(
-            "Short introduction displayed before entering the topic. "
-            "Used for topic cards, previews, and summaries. "
-            "Does not contain the full lesson content."
-        )
+            "Short introduction displayed before entering the topic."
+        ),
     )
-
 
     # ==========================================================
     # ORGANIZATION
@@ -105,37 +99,53 @@ class Topic(SQLModel, table=True):
         nullable=False,
         index=True,
         description=(
-            "High-level grouping used to organize topics. "
-            "Example: 'Quantum Physics', 'Mathematics', 'Programming'."
-        )
+            "High-level category used to organize learning topics."
+        ),
     )
 
-
-    order: int = Field(
+    display_order: int = Field(
         default=0,
         nullable=False,
         description=(
-            "Controls the display order of topics inside a category "
-            "or learning path."
-        )
+            "Display order of this topic inside its category."
+        ),
     )
 
     # ==========================================================
     # RELATIONSHIPS
     # ==========================================================
 
-    sections: list[Section] = Relationship(
+    sections: list["Section"] = Relationship(
         back_populates="topic",
+        sa_relationship_kwargs={
+            "cascade": "all, delete-orphan",
+        },
     )
     """
-    Ordered collection of sections belonging to this topic.
+    Collection of learning sections that belong to this topic.
+
+    Relationship:
+
+        Topic
+            └── Sections
 
     A topic can contain zero or many sections.
 
-    Sections are responsible for organizing the lesson into
-    logical chapters and hold the learning blocks.
+    Each section belongs to exactly one topic.
+
+    SQLAlchemy automatically manages the lifecycle of child
+    sections through this relationship.
+
+    Cascade behavior:
+
+    - save newly added sections
+    - update existing sections
+    - delete all sections when the topic is deleted
+    - delete orphan sections removed from this collection
+
+    This guarantees that a section can never exist without
+    its parent topic.
     """
-    
 
     # ==========================================================
     # AUDIT
@@ -144,12 +154,11 @@ class Topic(SQLModel, table=True):
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
         nullable=False,
-        description="Timestamp when the topic was created."
+        description="Timestamp when the topic was created.",
     )
-
 
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
         nullable=False,
-        description="Timestamp when the topic metadata was last updated."
+        description="Timestamp when the topic metadata was last updated.",
     )

@@ -1,7 +1,9 @@
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import Relationship, SQLModel, Field
+
+from backend.app.models.topic import Topic
 
 
 class Section(SQLModel, table=True):
@@ -54,21 +56,6 @@ class Section(SQLModel, table=True):
         description="Unique identifier of the learning section."
     )
 
-
-    # ==========================================================
-    # RELATIONSHIP
-    # ==========================================================
-
-    topic_id: UUID = Field(
-        foreign_key="topics.id",
-        nullable=False,
-        index=True,
-        description=(
-            "Reference to the parent topic that owns this section."
-        )
-    )
-
-
     # ==========================================================
     # DISPLAY INFORMATION
     # ==========================================================
@@ -120,6 +107,34 @@ class Section(SQLModel, table=True):
     )
 
 
+
+    # ==========================================================
+    # PARENT RELATIONSHIP
+    # ==========================================================
+
+    topic_id: UUID = Field(
+        foreign_key="topics.id",
+        nullable=False,
+        index=True,
+        description=(
+            "Identifier of the parent topic that owns this section."
+        ),
+    )
+
+    topic: Topic = Relationship(
+        back_populates="sections",
+    )
+    """
+    Parent learning topic that owns this section.
+
+    Relationship:
+
+        Topic
+            └── Sections
+
+    Every section belongs to exactly one topic.
+    """
+    
     # ==========================================================
     # AUDIT
     # ==========================================================
