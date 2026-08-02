@@ -42,7 +42,8 @@ Example:
 )
 async def create_topic(
     payload: TopicCreateDTO,
-):
+):  
+    print("Received payload:", payload)  # Debugging line
     return {"message": "Topic created successfully."}
 
 
