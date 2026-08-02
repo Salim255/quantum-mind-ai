@@ -1,7 +1,7 @@
 
 from sqlmodel import Session
 from app.models.block import Block
-from backend.app.repositories.base_repository import BaseRepository
+from app.repositories.base_repository import BaseRepository
 
 
 class BlockRepository(BaseRepository, [Block]):

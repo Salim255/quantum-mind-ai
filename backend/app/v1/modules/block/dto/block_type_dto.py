@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class BlockType(str, Enum):
+class BlockTypeDTO(str, Enum):
     """
     Supported educational block types rendered by QuantumMind.
     """

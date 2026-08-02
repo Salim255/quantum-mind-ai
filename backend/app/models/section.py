@@ -1,9 +1,6 @@
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
-
 from sqlmodel import Relationship, SQLModel, Field
-
-from backend.app.models.topic import Topic
 
 
 class Section(SQLModel, table=True):
@@ -121,7 +118,7 @@ class Section(SQLModel, table=True):
         ),
     )
 
-    topic: Topic = Relationship(
+    topic: "Topic" = Relationship(
         back_populates="sections",
     )
     """

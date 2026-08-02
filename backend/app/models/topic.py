@@ -3,8 +3,6 @@ from uuid import UUID, uuid4
 
 from sqlmodel import Relationship, SQLModel, Field
 
-from app.models.section import Section
-
 
 class Topic(SQLModel, table=True):
     """
