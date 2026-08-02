@@ -1,6 +1,5 @@
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
-
 from sqlmodel import Relationship, SQLModel, Field
 
 
@@ -112,7 +111,26 @@ class Topic(SQLModel, table=True):
     # ==========================================================
     # RELATIONSHIPS
     # ==========================================================
+    blocks: list["Block"] = Relationship(
+        back_populates="topic"
+    )
 
+    """
+    Collection of learning blocks that belong to this topic.
+    Relationship:
+
+        Topic
+            └── Blocks 
+    A topic can contain zero or many blocks.
+    Each block belongs to exactly one topic.
+    SQLAlchemy automatically manages the lifecycle of child blocks through this relationship.
+    Cascade behavior:   
+    - save newly added blocks
+    - update existing blocks
+    - delete all blocks when the topic is deleted
+    - delete orphan blocks removed from this collection
+    This guarantees that a block can never exist without its parent topic.
+    """
     sections: list["Section"] = Relationship(
         back_populates="topic",
         sa_relationship_kwargs={

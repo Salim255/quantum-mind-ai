@@ -51,7 +51,7 @@ async def create_topic(
         Depends(get_topic_service)
     ]
 ):  
-    return await ResponseDTO[TopicDTO].create(await get_topic_service.create_topic(payload))
+    return ResponseDTO.success(await get_topic_service.create_topic(payload))
   
 
 # ==========================================================

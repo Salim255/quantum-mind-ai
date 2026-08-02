@@ -88,9 +88,22 @@ class Block(SQLModel, table=True):
     # PARENT RELATIONSHIP
     # ==========================================================
 
-    section_id: UUID = Field(
+    topic_id: UUID | None = Field(
+        default=None,
+        foreign_key="topics.id",
+        index=True
+    )
+
+    topic: "Topic" = Relationship(
+    back_populates="blocks"
+)
+    """
+    Parent learning topic containing this block.
+    """
+    
+    section_id: UUID | None = Field(
         foreign_key="sections.id",
-        nullable=False,
+        default=None,
         index=True,
         description=(
             "Identifier of the parent section that owns this block."
