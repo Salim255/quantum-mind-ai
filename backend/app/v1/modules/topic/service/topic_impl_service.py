@@ -11,11 +11,9 @@ class TopicImplService(TopicService):
         self.topic_repository = topic_repository
 
     async def create_topic(self, topic_data: TopicCreateDTO) -> TopicDTO:
-
         topic = Topic(
             **topic_data.model_dump()
         )
-        
         self.topic_repository.add(topic)
 
         return TopicDTO.model_validate(topic)

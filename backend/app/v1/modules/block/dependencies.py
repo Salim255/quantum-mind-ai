@@ -1,16 +1,11 @@
 from typing import Annotated
-
 from fastapi import Depends, Request
 from sqlmodel.ext.asyncio.session import AsyncSession
-
 from app.core.container import Container
-from app.repositories.topic_repository import TopicRepository
-from app.v1.modules.topic.service.topic_service import TopicService
-from app.v1.modules.topic.service.topic_impl_service import TopicImplService
 from app.repositories import topic_repository
 from app.repositories.block_repository import BlockRepository
-from backend.app.v1.modules.block.service.block_impl_service import BlockImplService
-from backend.app.v1.modules.block.service.block_service import BlockService
+from app.v1.modules.block.service.block_impl_service import BlockImplService
+from app.v1.modules.block.service.block_service import BlockService
 
 
 # ============================================================

@@ -1,62 +1,114 @@
 from typing import Generic, TypeVar, Type, Optional, List
-from sqlmodel import Session, select
+from sqlmodel import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-# Generic type for any model (Topic, User, etc.)
+
 T = TypeVar("T")
 
 
 class BaseRepository(Generic[T]):
     """
-    Base repository that handles common database operations.
+    Async base repository that provides common CRUD operations.
 
-    This avoids repeating CRUD logic in every repository.
+    All repositories inherit from this class to avoid
+    duplicating database access logic.
+
+    Example:
+
+        TopicRepository(BaseRepository[Topic])
+        UserRepository(BaseRepository[User])
     """
 
-    def __init__(self, session: Session, model: Type[T]):
-        # DB session (connection to database)
-        self.session = session
+    def __init__(
+        self,
+        session: AsyncSession,
+        model: Type[T],
+    ):
+        """
+        Initialize repository.
 
-        # The model this repository works with (e.g. Topic)
+        Args:
+            session:
+                Async database session.
+
+            model:
+                SQLModel entity handled by this repository.
+        """
+
+        self.session = session
         self.model = model
 
-    # -----------------------------
+
+    # --------------------------------------------------
     # GET BY ID
-    # -----------------------------
-    def get_by_id(self, id) -> Optional[T]:
-        """
-        Fetch a single record by primary key.
-        """
-        statement = select(self.model).where(self.model.id == id)
-        return self.session.exec(statement).first()
+    # --------------------------------------------------
 
-    # -----------------------------
+    async def get_by_id(
+        self,
+        id
+    ) -> Optional[T]:
+        """
+        Fetch one entity by primary key.
+        """
+
+        statement = select(self.model).where(
+            self.model.id == id
+        )
+
+        result = await self.session.execute(statement)
+
+        return result.scalar_one_or_none()
+
+
+    # --------------------------------------------------
     # GET ALL
-    # -----------------------------
-    def get_all(self) -> List[T]:
-        """
-        Fetch all records from table.
-        """
-        statement = select(self.model)
-        return self.session.exec(statement).all()
+    # --------------------------------------------------
 
-    # -----------------------------
+    async def get_all(self) -> List[T]:
+        """
+        Fetch all entities.
+        """
+
+        statement = select(self.model)
+
+        result = await self.session.execute(statement)
+
+        return list(result.scalars().all())
+
+
+    # --------------------------------------------------
     # ADD / CREATE
-    # -----------------------------
-    def add(self, entity: T) -> T:
+    # --------------------------------------------------
+
+    async def add(
+        self,
+        entity: T
+    ) -> T:
         """
-        Insert new record into database.
+        Add a new entity and persist it.
         """
+
         self.session.add(entity)
-        self.session.commit()
-        self.session.refresh(entity)
+
+        await self.session.commit()
+
+        await self.session.refresh(entity)
+
         return entity
 
-    # -----------------------------
+
+    # --------------------------------------------------
     # DELETE
-    # -----------------------------
-    def delete(self, entity: T) -> None:
+    # --------------------------------------------------
+
+    async def delete(
+        self,
+        entity: T
+    ) -> None:
         """
-        Remove record from database.
+        Delete an entity.
         """
-        self.session.delete(entity)
-        self.session.commit()
+
+        await self.session.delete(entity)
+
+        await self.session.commit()

@@ -1,19 +1,72 @@
 
 from typing import Annotated
-
-from app.v1.modules.topic.service.topic_service import TopicService
-
+from uuid import UUID
 from .router import router as topic_router
-from fastapi import  Depends, status
+from fastapi import  Depends, Path, status
+from app.v1.modules.topic.service.topic_service import TopicService
+from app.v1.modules.block.dto.block_create_dto import BlockCreateDTO
+from app.v1.modules.block.service.block_service import BlockService
+from app.v1.modules.block.service.block_service import BlockService
+from app.v1.modules.block.dto.block_dto import BlockDTO
+from app.core.dtos.response_dto import ResponseDTO
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.topic.dependencies import get_topic_service
-from app.core.dtos.response_dto import ResponseDTO
+
+from app.v1.modules.block.dependencies import get_block_service
+
 
 # ==========================================================
 # CREATE
 # ==========================================================
+@topic_router.post(
+    "/{topic_id}/blocks",
+    response_model=ResponseDTO[BlockDTO],
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a topic block",
+    description="""
+Create a new learning block attached directly to a Topic.
+
+Topic blocks are introductory pieces of content displayed before the
+learner enters the topic's sections.
+
+Typical use cases include:
+
+- Topic introductions
+- Learning objectives
+- Chapter overviews
+- Historical context
+- Important notes
+
+The `topic_id` is provided through the URL.
+
+The request body contains the block information only.
+""",
+    response_description="The newly created topic block.",
+)
+async def create_topic_block(
+    topic_id: Annotated[
+        UUID,
+        Path(
+            description="Identifier of the parent topic."
+        ),
+    ],
+    payload: BlockCreateDTO,
+    block_service: Annotated[
+        BlockService,
+        Depends(get_block_service),
+    ],
+):
+
+    payload.topic_id = topic_id
+    payload.section_id = None
+
+    print(f"Creating topic block with payload=============:✅💥💥 {payload}")
+    return ResponseDTO.success(
+        await block_service.create_block(payload)
+    )
+
 
 @topic_router.post(
     "/",
