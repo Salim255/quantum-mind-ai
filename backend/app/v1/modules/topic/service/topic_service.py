@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
+from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from sqlmodel import UUID
 
 class TopicService(ABC):
