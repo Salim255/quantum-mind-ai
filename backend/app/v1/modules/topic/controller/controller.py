@@ -1,10 +1,14 @@
 
+from typing import Annotated
+
+from app.v1.modules.topic.service.topic_service import TopicService
+
 from .router import router as topic_router
-from fastapi import  status
+from fastapi import  Depends, status
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
-
+from app.v1.modules.topic.dependencies import get_topic_service
 
 
 # ==========================================================
@@ -42,11 +46,13 @@ Example:
 )
 async def create_topic(
     payload: TopicCreateDTO,
+    get_topic_service: Annotated[
+        TopicService,
+        Depends(get_topic_service)
+    ]
 ):  
-    print("Received payload:", payload)  # Debugging line
-    return {"message": "Topic created successfully."}
-
-
+    return get_topic_service.create_topic(payload)
+  
 
 # ==========================================================
 # GET ONE TOPIC
@@ -74,8 +80,13 @@ It does not include sections or blocks.
 )
 async def get_topic(
     topic_id: str,
+    get_topic_service: Annotated[
+        TopicService,
+        Depends(get_topic_service)
+    ]
 ):
-    return {"message": "Topic retrieved successfully."}
+    topic = get_topic_service.get_topic(topic_id)
+    return topic
 
 
 
@@ -109,8 +120,13 @@ Use this endpoint for navigation and section browsing.
 )
 async def get_topic_with_sections(
     topic_id: str,
+    get_topic_service: Annotated[
+        TopicService,
+        Depends(get_topic_service)
+    ]
 ):
-    return {"message": "Topic and sections retrieved successfully."}
+    topic = get_topic_service.get_topic_with_sections(topic_id)
+    return topic
 
 
 
@@ -154,8 +170,13 @@ Used for rendering complete learning pages.
 )
 async def get_topic_with_sections_and_blocks(
     topic_id: str,
+    get_topic_service: Annotated[
+        TopicService,
+        Depends(get_topic_service)
+    ]
 ):
-    return {"message": "Complete topic content retrieved."}
+    topic = get_topic_service.get_topic_with_sections_and_blocks(topic_id)
+    return topic
 
 
 

@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
-from models.topic import Topic
-from repositories.base_repository import BaseRepository
+from app.models.topic import Topic
+from app.repositories.base_repository import BaseRepository
 
 
 class TopicRepository(BaseRepository[Topic]):

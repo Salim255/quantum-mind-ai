@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
+from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from sqlmodel import UUID
 
 class TopicService(ABC):
@@ -29,16 +30,14 @@ class TopicService(ABC):
     """
 
 
-
     # ==========================================================
     # CREATE
     # ==========================================================
-
     @abstractmethod
     async def create_topic(
         self,
         topic_data: TopicCreateDTO,
-    ):
+    )-> TopicDTO:
         """
         Creates a new learning topic.
 
@@ -56,12 +55,9 @@ class TopicService(ABC):
             "create_topic() must be implemented"
         )
 
-
-
     # ==========================================================
     # READ
     # ==========================================================
-
     @abstractmethod
     async def get_topic(
         self,

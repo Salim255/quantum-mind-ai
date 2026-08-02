@@ -1,31 +1,66 @@
+from typing import Container
+from uuid import UUID
+
 from app.repositories.topic_repository import TopicRepository
 from app.repositories.section_repository import SectionRepository
 from app.repositories.block_repository import BlockRepository
 from app.v1.modules.topic.service.topic_service import TopicService
+from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
+from app.v1.modules.topic.dto.topic_dto import TopicDTO
+from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
+from app.models.topic import Topic
 
 class TopicImplService(TopicService):
-    def __init__(self, topic_repository):
+    def __init__(self, topic_repository: TopicRepository, container: Container):
         self.topic_repository = topic_repository
+        self.container = container
 
     
-    def create_topic(self, topic_data):
-        return "hello from create_topic with topic_data: {topic_data}"
-
-    def get_topic(self, topic_id: int):
-        return "Topic details for topic_id: {topic_id}"
-
-    def get_all_topics(self):
-        return "List of all topics"
-
-    def get_topic_with_sections(self, topic_id: int):
-        return "Topic with sections for topic_id: {topic_id}"
-    
-    def get_topic_with_sections_and_blocks(self, topic_id: int):
-        return "Topic with sections and blocks for topic_id: {topic_id}"
+    async def create_topic(self, topic_data: TopicCreateDTO) -> TopicDTO:
+        topic = Topic(
+            **topic_data.model_dump()
+        )
+        self.topic_repository.add(topic)
+        self.topic_repository.commit()
+        return TopicDTO.model_validate(topic)
 
 
-    def update_topic(self, topic_id: int, topic_data):
-        return "Topic updated for topic_id: {topic_id} with topic_data: {topic_data}"
-    
-    def delete_topic(self, topic_id: int):
-        return "Topic deleted for topic_id: {topic_id}"
+    async def get_topic(self, topic_id: UUID):
+        topic: Topic  =  self.topic_repository.get_by_id(topic_id)
+        if topic is None:
+            return None
+        return TopicDTO.model_validate(topic)
+
+    async def get_topics(self):
+        topics = self.topic_repository.list()
+        return [TopicDTO.model_validate(topic) for topic in topics]
+
+    async def get_topic_with_sections(self, topic_id: UUID):
+        topic = self.topic_repository.get_by_id(topic_id)
+        if topic is None:
+            return None
+        return TopicDTO.model_validate(topic)
+
+    async def get_topic_with_sections_and_blocks(self, topic_id: UUID):
+        topic = self.topic_repository.get_by_id(topic_id)
+        if topic is None:
+            return None
+        return TopicDTO.model_validate(topic)
+
+
+    async def update_topic(self, topic_id: UUID, topic_data: TopicUpdateDTO):
+        topic = self.topic_repository.get_by_id(topic_id)
+        if topic is None:
+            return None
+        for key, value in topic_data.model_dump().items():
+            setattr(topic, key, value)
+        self.topic_repository.commit()
+        return TopicDTO.model_validate(topic)
+
+    async def delete_topic(self, topic_id: UUID):
+        topic = self.topic_repository.get_by_id(topic_id)
+        if topic is None:
+            return None
+        self.topic_repository.delete(topic)
+        self.topic_repository.commit()
+        return TopicDTO.model_validate(topic)
