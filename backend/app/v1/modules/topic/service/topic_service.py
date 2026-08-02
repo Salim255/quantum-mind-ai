@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
+from sqlmodel import UUID
 
 class TopicService(ABC):
     """
@@ -34,7 +36,7 @@ class TopicService(ABC):
     @abstractmethod
     async def create_topic(
         self,
-        topic_data: TopicCreate,
+        topic_data: TopicCreateDTO,
     ):
         """
         Creates a new learning topic.
@@ -163,8 +165,7 @@ class TopicService(ABC):
         )
 
 
-
-    # ==========================================================
+     # ==========================================================
     # UPDATE
     # ==========================================================
 
@@ -172,7 +173,7 @@ class TopicService(ABC):
     async def update_topic(
         self,
         topic_id: UUID,
-        topic_data: TopicUpdate,
+        topic_data: TopicUpdateDTO,
     ):
         """
         Updates topic information.
@@ -190,8 +191,6 @@ class TopicService(ABC):
         raise NotImplementedError(
             "update_topic() must be implemented"
         )
-
-
 
     # ==========================================================
     # DELETE
