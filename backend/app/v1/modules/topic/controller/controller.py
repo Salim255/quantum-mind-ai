@@ -43,7 +43,7 @@ Example:
 async def create_topic(
     payload: TopicCreateDTO,
 ):
-    pass
+    return {"message": "Topic created successfully."}
 
 
 
@@ -74,7 +74,7 @@ It does not include sections or blocks.
 async def get_topic(
     topic_id: str,
 ):
-    pass
+    return {"message": "Topic retrieved successfully."}
 
 
 
@@ -109,7 +109,7 @@ Use this endpoint for navigation and section browsing.
 async def get_topic_with_sections(
     topic_id: str,
 ):
-    pass
+    return {"message": "Topic and sections retrieved successfully."}
 
 
 
@@ -154,17 +154,17 @@ Used for rendering complete learning pages.
 async def get_topic_with_sections_and_blocks(
     topic_id: str,
 ):
-    pass
+    return {"message": "Complete topic content retrieved."}
 
 
 
 # ==========================================================
 # LIST TOPICS
 # ==========================================================
-
+#     response_model=list[TopicDTO],
 @topic_router.get(
     "/",
-    response_model=list[TopicDTO],
+
     status_code=status.HTTP_200_OK,
     summary="List learning topics",
     description="""
@@ -178,7 +178,7 @@ Used for:
 """,
 )
 async def get_topics():
-    pass
+    return {"message": "List of all topics."}
 
 
 
@@ -209,7 +209,7 @@ async def update_topic(
     topic_id: str,
     payload: TopicUpdateDTO,
 ):
-    pass
+    return {"message": "Topic updated successfully."}
 
 
 
@@ -243,4 +243,4 @@ may also be removed.
 async def delete_topic(
     topic_id: str,
 ):
-    pass
+    return {"message": "Topic deleted successfully."}
