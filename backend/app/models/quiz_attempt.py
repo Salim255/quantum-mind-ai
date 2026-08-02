@@ -10,12 +10,17 @@ class QuizAttempt(SQLModel, table=True):
         primary_key=True,
         index=True,
     )
-
+   
     user_id: UUID = Field(
         nullable=False,
         index=True,
     )
 
+    topic_id: UUID  = Field(
+        nullable=False,
+        index=True,
+    )
+    
     score: float = Field(
         default=0.0,
         nullable=False,

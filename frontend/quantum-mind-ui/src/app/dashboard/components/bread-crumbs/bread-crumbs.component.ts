@@ -25,8 +25,7 @@ export class BreadCrumbsComponent implements OnInit, OnDestroy {
   subscribeToBreadCrumbs(){
     this.breadCrumbsSubscription = this.breadcrumbService.getAppBreadCrumbs$
     .subscribe((value: Breadcrumb[]) => {
-        console.log(value)
-        this.breadcrumbs.set(value)
+      this.breadcrumbs.set(value)
     })
   }
   ngOnDestroy(): void {

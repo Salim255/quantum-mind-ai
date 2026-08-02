@@ -41,7 +41,7 @@ class DocIngestionImplService(DocIngestionService):
                 reader=reader,
                 sections=extracted_sections
                 )
-            
+            print("TEST to see text", extracted_texts)
             # 6 extract_images
             #merged_contents = self.merge_content_blocks(texts=extracted_texts, images=extracted_images)
             # 7 persist_to_database
