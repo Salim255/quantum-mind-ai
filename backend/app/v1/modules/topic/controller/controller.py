@@ -1,11 +1,9 @@
 
 from .router import router as topic_router
-
 from fastapi import  status
-
-from app.v1.modules.topic.schemas.topic_create import TopicCreateDTO
-from app.v1.modules.topic.schemas.topic_update import TopicUpdateDTO
-from app.v1.modules.topic.schemas.topic_read import TopicReadDTO
+from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
+from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
+from app.v1.modules.topic.dto.topic_dto import TopicDTO
 
 
 
@@ -15,7 +13,7 @@ from app.v1.modules.topic.schemas.topic_read import TopicReadDTO
 
 @topic_router.post(
     "/",
-    response_model=TopicReadDTO,
+    response_model=TopicDTO,
     status_code=status.HTTP_201_CREATED,
     summary="Create a new learning topic",
     description="""
@@ -55,7 +53,7 @@ async def create_topic(
 
 @topic_router.get(
     "/{topic_id}",
-    response_model=TopicReadDTO,
+    response_model=TopicDTO,
     status_code=status.HTTP_200_OK,
     summary="Get a learning topic",
     description="""
@@ -166,7 +164,7 @@ async def get_topic_with_sections_and_blocks(
 
 @topic_router.get(
     "/",
-    response_model=list[TopicReadDTO],
+    response_model=list[TopicDTO],
     status_code=status.HTTP_200_OK,
     summary="List learning topics",
     description="""
@@ -190,7 +188,7 @@ async def get_topics():
 
 @topic_router.patch(
     "/{topic_id}",
-    response_model=TopicReadDTO,
+    response_model=TopicDTO,
     status_code=status.HTTP_200_OK,
     summary="Update a learning topic",
     description="""
