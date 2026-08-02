@@ -117,8 +117,11 @@ class Block(SQLModel, table=True):
 
 
     content: dict = Field(
-        sa_column=Column(JSONB),
-        nullable=False,
+        sa_column=Column(
+            JSONB,
+            nullable=False,
+            default={},
+        ),
         description=(
             "Stores the block-specific data required for rendering. "
             "The structure depends on the block type."
