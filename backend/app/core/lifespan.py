@@ -16,7 +16,7 @@ class LifespanService:
 
         await self.container.qdrant.create_collection()
 
-        self.container.db_init_service.create_tables()
+        await self.container.db_init_service.create_tables()
 
         yield
 

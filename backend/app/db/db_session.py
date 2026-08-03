@@ -1,6 +1,5 @@
 from collections.abc import AsyncGenerator
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
-
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 class DBSessionService:
     """
@@ -12,9 +11,13 @@ class DBSessionService:
 
     def __init__(
         self,
-        engine: AsyncEngine,
+        engine,
     ):
-        self.engine = engine
+        self.session_factory = async_sessionmaker(
+            bind=engine,
+            class_=AsyncSession,
+            expire_on_commit=False,
+        )
 
 
     async def get_session(
@@ -27,8 +30,6 @@ class DBSessionService:
         the request finishes.
         """
 
-        async with AsyncSession(
-            bind=self.engine
-        ) as session:
+        async with self.session_factory() as session:
 
             yield session

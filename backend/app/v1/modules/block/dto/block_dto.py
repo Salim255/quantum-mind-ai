@@ -1,36 +1,36 @@
 from datetime import datetime
 from uuid import UUID
-from pydantic import BaseModel
+
+from pydantic import BaseModel, ConfigDict
+
 from app.v1.modules.block.dto.block_type_dto import BlockTypeDTO
 
 
 class BlockDTO(BaseModel):
     """
-    Represents a learning block returned to the client.
+    Represents a learning content block.
 
     A block belongs to either:
-    - a Topic (topic introduction), or
-    - a Section (section content).
+    - a Topic (topic-level introduction)
+    - a Section (section-level content)
     """
 
-    id: UUID
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
-    title: str | None
+    id: UUID
 
     type: BlockTypeDTO
 
     content: str
 
-    order_index: int
+    display_order: int
 
-    topic_id: UUID | None
+    topic_id: UUID | None = None
 
-    section_id: UUID | None
+    section_id: UUID | None = None
 
     created_at: datetime
 
     updated_at: datetime
-
-    model_config = {
-        "from_attributes": True,
-    }

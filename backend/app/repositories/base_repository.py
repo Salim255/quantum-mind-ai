@@ -1,4 +1,5 @@
 from typing import Generic, TypeVar, Type, Optional, List
+
 from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,11 +13,6 @@ class BaseRepository(Generic[T]):
 
     All repositories inherit from this class to avoid
     duplicating database access logic.
-
-    Example:
-
-        TopicRepository(BaseRepository[Topic])
-        UserRepository(BaseRepository[User])
     """
 
     def __init__(
@@ -24,17 +20,6 @@ class BaseRepository(Generic[T]):
         session: AsyncSession,
         model: Type[T],
     ):
-        """
-        Initialize repository.
-
-        Args:
-            session:
-                Async database session.
-
-            model:
-                SQLModel entity handled by this repository.
-        """
-
         self.session = session
         self.model = model
 
@@ -109,6 +94,6 @@ class BaseRepository(Generic[T]):
         Delete an entity.
         """
 
-        await self.session.delete(entity)
+        self.session.delete(entity)
 
         await self.session.commit()

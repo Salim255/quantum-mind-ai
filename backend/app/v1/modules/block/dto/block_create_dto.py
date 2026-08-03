@@ -23,15 +23,15 @@ class BlockCreateDTO(BaseModel):
         description="Block type (paragraph, heading, equation, image, exercise, etc.)."
     )
 
+    display_order: int = Field(
+            default=0,
+            ge=0,
+            description="Display order of the block within its parent."
+        )   
+    
     content: str = Field(
         min_length=1,
         description="Educational content stored inside the block."
-    )
-
-    order_index: int = Field(
-        default=0,
-        ge=0,
-        description="Display order inside its parent."
     )
 
     topic_id: UUID | None = Field(
@@ -43,14 +43,3 @@ class BlockCreateDTO(BaseModel):
         default=None,
         description="Parent section identifier."
     )
-
-    @model_validator(mode="after")
-    def validate_parent(self):
-        """
-        A block must belong to exactly one parent.
-        """
-        if (self.topic_id is None) == (self.section_id is None):
-            raise ValueError(
-                "A block must belong to either a topic or a section (but not both)."
-            )
-        return self

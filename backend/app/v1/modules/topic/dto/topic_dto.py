@@ -60,6 +60,11 @@ class TopicDTO(BaseModel):
         Quantum Physics
     """
 
+    display_order: int | None
+    """
+    Controls the order of topics within a category.
+    Lower numbers appear first in listings.
+    """
 
     # ==========================================================
     # PRESENTATION
