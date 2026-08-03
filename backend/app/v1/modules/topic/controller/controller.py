@@ -95,7 +95,7 @@ async def create_topic_section(
         SectionService,
         Depends(get_section_service),
     ],
-):
+) -> ResponseDTO[SectionDTO]:
 
     payload.topic_id = topic_id
 

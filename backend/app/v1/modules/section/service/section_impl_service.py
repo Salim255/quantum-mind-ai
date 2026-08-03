@@ -74,7 +74,7 @@ class SectionImplService(SectionService):
 
             await self.section_repository.add(new_section)
 
-            return SectionDTO.model_validate(new_section)
+            return SectionDTO.model_validate(**new_section.model_dump())
         
         except Exception as e:
             # Handle exceptions and possibly log them
