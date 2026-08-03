@@ -2,6 +2,7 @@ from __future__ import annotations
 from sqlmodel import SQLModel, Field
 from uuid import UUID, uuid4
 from datetime import datetime, UTC
+from sqlalchemy import Column, DateTime
 
 class Question(SQLModel, table=True):
     __tablename__="questions"
@@ -45,10 +46,16 @@ class Question(SQLModel, table=True):
 
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
-        nullable=False
+        sa_column=Column(
+            DateTime(timezone=True),
+            nullable=False,
+        ),
     )
 
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
-        nullable=False
+         sa_column=Column(
+            DateTime(timezone=True),
+            nullable=False,
+        ),
     )

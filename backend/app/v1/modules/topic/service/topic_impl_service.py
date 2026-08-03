@@ -11,12 +11,17 @@ class TopicImplService(TopicService):
         self.topic_repository = topic_repository
 
     async def create_topic(self, topic_data: TopicCreateDTO) -> TopicDTO:
-        topic = Topic(
-            **topic_data.model_dump()
-        )
-        self.topic_repository.add(topic)
-
-        return TopicDTO.model_validate(topic)
+        try:
+            topic = Topic(
+                **topic_data.model_dump()
+            )
+            await self.topic_repository.add(topic)
+            
+            return TopicDTO.model_validate(topic)
+        except Exception as e:
+            # Log the exception for debugging purposes
+            print(f"Error creating topic: {e}")
+            raise e
 
 
     async def get_topic(self, topic_id: UUID):

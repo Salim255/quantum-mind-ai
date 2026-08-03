@@ -46,7 +46,7 @@ class DBEngineService:
 
             engine = create_async_engine(
                 str(self.db_url),
-                echo=False,
+                echo=True, # Enable SQL query logging for debugging
                 pool_pre_ping=True,
             )
 

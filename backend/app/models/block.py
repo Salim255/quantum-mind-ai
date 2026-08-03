@@ -1,7 +1,7 @@
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
 from sqlmodel import Field, Relationship, SQLModel
-from sqlalchemy import Column
+from sqlalchemy import Column, DateTime
 from sqlalchemy.dialects.postgresql import JSONB
 from app.v1.modules.block.dto.block_type_dto import BlockTypeDTO
 
@@ -100,7 +100,7 @@ class Block(SQLModel, table=True):
     """
     Parent learning topic containing this block.
     """
-    
+
     section_id: UUID | None = Field(
         foreign_key="sections.id",
         default=None,
@@ -191,12 +191,18 @@ class Block(SQLModel, table=True):
 
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
-        nullable=False,
+         sa_column=Column(
+            DateTime(timezone=True),
+            nullable=False,
+        ),
         description="Timestamp when the block was created.",
     )
 
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
-        nullable=False,
+         sa_column=Column(
+            DateTime(timezone=True),
+            nullable=False,
+        ),
         description="Timestamp when the block was last modified.",
     )

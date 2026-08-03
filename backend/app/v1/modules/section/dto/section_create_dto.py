@@ -47,7 +47,8 @@ class SectionCreateDTO(BaseModel):
         ),
     )
 
-    topic_id: UUID = Field(
+    topic_id: UUID | None = Field(
+        default=None,
         description=(
             "Identifier of the topic that owns this section."
         ),

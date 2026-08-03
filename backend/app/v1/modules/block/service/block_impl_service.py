@@ -32,7 +32,7 @@ class BlockImplService(BlockService):
         # Implement the logic to create a block using the block_repository
         try:
             block = Block(**block_data.model_dump())
-            self.block_repository.add(block)
+            await self.block_repository.add(block)
             return block
         except Exception as e:
             logger.error(f"Error creating block: {e}")

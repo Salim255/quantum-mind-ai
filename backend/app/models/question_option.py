@@ -1,3 +1,4 @@
+from sqlalchemy import Column, DateTime
 from sqlmodel import SQLModel, Field
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
@@ -34,10 +35,16 @@ class QuestionOption(SQLModel, table=True):
 
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
-        nullable=False
+        sa_column=Column(
+            DateTime(timezone=True),
+            nullable=False,
+        ),
     )
 
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
-        nullable=False
+        sa_column=Column(
+            DateTime(timezone=True),
+            nullable=False,
+        ),
     )
