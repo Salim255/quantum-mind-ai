@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from backend.app.v1.modules.ingestion.dto.section_dto import SectionDTO
-from backend.app.v1.modules.section.dto.section_create_dto import SectionCreateDTO
+from app.v1.modules.ingestion.dto.section_dto import SectionDTO
+from app.v1.modules.section.dto.section_create_dto import SectionCreateDTO
 
 class SectionService(ABC):
     """

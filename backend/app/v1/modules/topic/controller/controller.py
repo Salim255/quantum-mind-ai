@@ -1,6 +1,9 @@
 
 from typing import Annotated
 from uuid import UUID
+
+from app.v1.modules.section.dependencies import get_section_service
+from app.v1.modules.section.service.section_service import SectionService
 from .router import router as topic_router
 from fastapi import  Depends, Path, status
 from app.v1.modules.topic.service.topic_service import TopicService
@@ -13,9 +16,9 @@ from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.topic.dependencies import get_topic_service
-
 from app.v1.modules.block.dependencies import get_block_service
-
+from app.v1.modules.section.dto.section_create_dto import SectionCreateDTO
+from app.v1.modules.section.dto.section_dto import SectionDTO
 
 # ==========================================================
 # CREATE
@@ -62,9 +65,42 @@ async def create_topic_block(
     payload.topic_id = topic_id
     payload.section_id = None
 
-    print(f"Creating topic block with payload=============:✅💥💥 {payload}")
     return ResponseDTO.success(
         await block_service.create_block(payload)
+    )
+
+@topic_router.post(
+    "/{topic_id}/sections",
+    response_model=ResponseDTO[SectionDTO],
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a topic section",
+    description="""
+Create a new learning section attached directly to a Topic.
+Sections are top-level containers for blocks and represent the main
+chapters of a learning topic.
+The `topic_id` is provided through the URL.
+The request body contains the section information only.
+""",
+    response_description="The newly created topic section.",
+)
+async def create_topic_section(
+    topic_id: Annotated[
+        UUID,
+        Path(
+            description="Identifier of the parent topic."
+        ),
+    ],
+    payload: SectionCreateDTO,
+    section_service: Annotated[
+        SectionService,
+        Depends(get_section_service),
+    ],
+):
+
+    payload.topic_id = topic_id
+
+    return ResponseDTO.success(
+        await section_service.create_section(payload)
     )
 
 

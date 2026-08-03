@@ -5,6 +5,7 @@ from app.v1.modules.quiz.controller.controller import router as quiz_router
 from app.v1.modules.topic.controller.controller import topic_router
 from app.v1.modules.section.controller.controller import section_router
 
+
 class RouterService:
     @staticmethod
     def register_routers(app: FastAPI) -> None:

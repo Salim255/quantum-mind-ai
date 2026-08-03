@@ -1,9 +1,13 @@
 
-from fastapi import logger
+import logging
 
 from app.v1.modules.section.service.section_service import SectionService
 from app.v1.modules.ingestion.dto.section_dto import SectionDTO
 from app.v1.modules.section.dto.section_create_dto import SectionCreateDTO
+from app.models.section import Section
+from app.repositories.section_repository import SectionRepository
+
+logger = logging.getLogger(__name__)
 
 class SectionImplService(SectionService):
     """
@@ -30,6 +34,16 @@ class SectionImplService(SectionService):
         Controller/API layer
     """
 
+    def __init__(self, section_repository: SectionRepository):
+        """
+        Initializes the SectionImplService with a section repository.
+
+        Args:
+            section_repository: An instance of SectionRepository for database operations.
+        """
+        self.section_repository = section_repository  
+
+
     async def create_section(
         self,
         section_data: SectionCreateDTO,
@@ -54,14 +68,15 @@ class SectionImplService(SectionService):
             # return SectionDTO.from_orm(new_section)
 
             # Placeholder implementation for demonstration purposes
-            new_section = SectionDTO(
-                id="generated-uuid",
-                title=section_data.title,
-                description=section_data.description,
-                topic_id=section_data.topic_id,
+            new_section = Section(
+                **section_data.model_dump()
             )
-            return new_section
+
+            await self.section_repository.add(new_section)
+
+            return SectionDTO.model_validate(new_section)
+        
         except Exception as e:
             # Handle exceptions and possibly log them
-            logger.error(f"Error creating section: {e}")
-            raise e
+            logger.exception(f"Error creating section {e}")
+            raise 
