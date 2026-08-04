@@ -71,3 +71,11 @@ class TopicCreateDTO(BaseModel):
             "the complete learning content."
         )
     )
+
+    display_order: int | None = Field(
+        default=None,
+        description=(
+            "Controls the order of topics within a category. "
+            "Lower numbers appear first in listings."
+        )
+    )
