@@ -83,7 +83,7 @@ class TopicService(ABC):
 
 
     @abstractmethod
-    async def get_topics(self)-> TopicsResponseDTO:
+    async def get_topics_with_sections_and_blocks(self):
         """
         Retrieves all available learning topics.
 

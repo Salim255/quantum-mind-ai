@@ -19,24 +19,25 @@ class TopicRepository(BaseRepository[Topic]):
     # -----------------------------
     # GET BY SLUG
     # -----------------------------
-    def get_by_slug(self, slug: str):
+    async def get_by_slug(self, slug: str):
         """
         Find a topic using its unique slug.
         """
         statement = select(Topic).where(Topic.slug == slug)
-        return self.session.exec(statement).first()
+        return await self.session.exec(statement).first()
 
     # -----------------------------
     # GET BY CATEGORY
     # -----------------------------
-    def get_by_category(self, category: str):
+    async def get_by_category(self, category: str):
         """
         Get all topics in a category.
         """
         statement = select(Topic).where(Topic.category == category)
-        return self.session.exec(statement).all()
+        return await self.session.exec(statement).all()
 
-    def get_topics_with_sections_with_blocks(self):
+
+    async def get_topics_with_sections_with_blocks(self):
         """
         Get a topic along with its sections and blocks.
         """
@@ -44,4 +45,6 @@ class TopicRepository(BaseRepository[Topic]):
             selectinload(Topic.sections).selectinload(Section.blocks)
         )
         # Without scalars(), session.execute() returns Row objects.
-        return self.session.execute(statement).scalars().all()
+        result = await self.session.execute(statement)
+
+        return list(result.scalars().all())

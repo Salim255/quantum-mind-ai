@@ -20,6 +20,7 @@ from app.v1.modules.topic.dependencies import get_topic_service
 from app.v1.modules.block.dependencies import get_block_service
 from app.v1.modules.section.dto.section_create_dto import SectionCreateDTO
 from app.v1.modules.section.dto.section_dto import SectionDTO
+from app.v1.modules.topic.dto.topic_with_sections_dto import TopicWithSectionsDTO
 
 # ==========================================================
 # CREATE
@@ -144,6 +145,37 @@ async def create_topic(
     return ResponseDTO.success(await get_topic_service.create_topic(payload))
   
 
+
+# ==========================================================
+# LIST TOPICS
+# ==========================================================
+
+@topic_router.get(
+    "/",
+    response_model=list[TopicWithSectionsDTO],
+    status_code=status.HTTP_200_OK,
+    summary="List learning topics",
+    description="""
+Returns all available QuantumMind learning topics.
+
+Used for:
+
+- Learn page
+- Topic catalogue
+- Search results
+""",
+)
+async def get_topics_with_sections_and_blocks(
+    get_topic_service: Annotated[
+        TopicService,
+        Depends(get_topic_service)
+    ]
+):
+
+    response = await get_topic_service.get_topics_with_sections_and_blocks()
+   
+    return response
+
 # ==========================================================
 # GET ONE TOPIC
 # ==========================================================
@@ -267,31 +299,6 @@ async def get_topic_with_sections_and_blocks(
 ):
     topic = get_topic_service.get_topic_with_sections_and_blocks(topic_id)
     return topic
-
-
-
-# ==========================================================
-# LIST TOPICS
-# ==========================================================
-#     response_model=list[TopicDTO],
-@topic_router.get(
-    "/",
-
-    status_code=status.HTTP_200_OK,
-    summary="List learning topics",
-    description="""
-Returns all available QuantumMind learning topics.
-
-Used for:
-
-- Learn page
-- Topic catalogue
-- Search results
-""",
-)
-async def get_topics()-> ResponseDTO[TopicsResponseDTO]:
-    return ResponseDTO.success(await get_topic_service.get_topics())
-
 
 
 # ==========================================================

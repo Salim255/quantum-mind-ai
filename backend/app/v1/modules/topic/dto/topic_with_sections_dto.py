@@ -1,20 +1,20 @@
-
 from datetime import datetime
 from uuid import UUID
+
 from pydantic import BaseModel, ConfigDict, Field
+
 from app.v1.modules.section.dto.section_with_blocks_dto import SectionWithBlocksDTO
 
 
 class TopicWithSectionsDTO(BaseModel):
     """
-    Data Transfer Object for a Topic along with its Sections.
-    Inherits from TopicDTO and adds a list of SectionDTOs.
+    Data Transfer Object for a Topic with nested Sections and Blocks.
+    Used when loading a topic together with its learning structure.
     """
 
     model_config = ConfigDict(
         from_attributes=True,
     )
-
 
     # ==========================================================
     # IDENTITY
@@ -26,12 +26,10 @@ class TopicWithSectionsDTO(BaseModel):
     Used internally for database relations.
     """
 
-
     title: str
     """
     Human-readable topic title displayed to learners.
     """
-
 
     slug: str
     """
@@ -39,7 +37,6 @@ class TopicWithSectionsDTO(BaseModel):
     Example:
         quantum-entanglement
     """
-
 
     # ==========================================================
     # CLASSIFICATION
@@ -52,7 +49,7 @@ class TopicWithSectionsDTO(BaseModel):
         Quantum Physics
     """
 
-    display_order: int | None
+    display_order: int | None = None
     """
     Controls the order of topics within a category.
     Lower numbers appear first in listings.
@@ -67,7 +64,6 @@ class TopicWithSectionsDTO(BaseModel):
     Short introduction displayed before opening the topic.
     """
 
-
     # ==========================================================
     # METADATA
     # ==========================================================
@@ -77,10 +73,17 @@ class TopicWithSectionsDTO(BaseModel):
     Timestamp when the topic was created.
     """
 
-
     updated_at: datetime
     """
     Timestamp when the topic was last modified.
     """
 
-    sections: list[SectionWithBlocksDTO] =  Field(default_factory=list)
+    # ==========================================================
+    # RELATIONS
+    # ==========================================================
+
+    sections: list[SectionWithBlocksDTO] = Field(default_factory=list)
+    """
+    Sections belonging to this topic.
+    Each section contains its learning blocks.
+    """
