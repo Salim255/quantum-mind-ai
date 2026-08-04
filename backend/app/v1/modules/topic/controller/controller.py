@@ -152,7 +152,7 @@ async def create_topic(
 
 @topic_router.get(
     "/",
-    response_model=list[TopicWithSectionsDTO],
+    response_model=ResponseDTO,
     status_code=status.HTTP_200_OK,
     summary="List learning topics",
     description="""
@@ -173,8 +173,10 @@ async def get_topics_with_sections_and_blocks(
 ):
 
     response = await get_topic_service.get_topics_with_sections_and_blocks()
-   
-    return response
+    ResponseDTO.success({
+        'topics': response
+    })
+
 
 # ==========================================================
 # GET ONE TOPIC

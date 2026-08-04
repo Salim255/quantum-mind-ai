@@ -46,12 +46,12 @@ class TopicImplService(TopicService):
             topics=[TopicDTO.model_validate(topic) for topic in topics]
         )
 
-    async def get_topics_with_sections_and_blocks(self):
+    async def get_topics_with_sections_and_blocks(self)-> list[TopicWithSectionsDTO] :
        try:
             topics = await self.topic_repository.get_topics_with_sections_with_blocks()
 
             if topics is None:
-                return None
+                return []
 
             return [
                 TopicWithSectionsDTO.model_validate(topic).model_dump()
