@@ -2,7 +2,7 @@ from datetime import datetime, UTC
 from uuid import UUID, uuid4
 from sqlmodel import Field, Relationship, SQLModel
 from sqlalchemy import Column, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID as PG_UUID
 from app.v1.modules.block.dto.block_type_dto import BlockTypeDTO
 
 
@@ -90,13 +90,12 @@ class Block(SQLModel, table=True):
 
     topic_id: UUID | None = Field(
         default=None,
-        foreign_key="topics.id",
         sa_column=Column(
-            UUID(as_uuid=True),
+            PG_UUID(as_uuid=True),
             ForeignKey("topics.id", ondelete="CASCADE"),
             nullable=True,      # <-- allows NULL
+            index=True,   # <-- moved here
         ),
-        index=True,
         description="Identifier of the parent topic that owns this section.",
     )
 
@@ -109,13 +108,13 @@ class Block(SQLModel, table=True):
 
     section_id: UUID | None = Field(
         default=None,
-        foreign_key="sections.id",
         sa_column=Column(
-            UUID(as_uuid=True),
+            PG_UUID(as_uuid=True),
             ForeignKey("sections.id", ondelete="CASCADE"),
             nullable=True,      # <-- allows NULL
+            index=True,
         ),
-        index=True,
+ 
         description="Identifier of the parent section that owns this block.",
     )
 

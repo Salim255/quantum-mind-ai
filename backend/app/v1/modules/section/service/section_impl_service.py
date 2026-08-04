@@ -2,7 +2,7 @@
 import logging
 
 from app.v1.modules.section.service.section_service import SectionService
-from app.v1.modules.ingestion.dto.section_dto import SectionDTO
+from app.v1.modules.section.dto.section_dto import SectionDTO
 from app.v1.modules.section.dto.section_create_dto import SectionCreateDTO
 from app.models.section import Section
 from app.repositories.section_repository import SectionRepository
@@ -68,13 +68,13 @@ class SectionImplService(SectionService):
             # return SectionDTO.from_orm(new_section)
 
             # Placeholder implementation for demonstration purposes
-            new_section = Section(
+            section = Section(
                 **section_data.model_dump()
             )
 
-            await self.section_repository.add(new_section)
+            await self.section_repository.add(section)
 
-            return SectionDTO.model_validate(**new_section.model_dump())
+            return SectionDTO.model_validate(section)
         
         except Exception as e:
             # Handle exceptions and possibly log them
