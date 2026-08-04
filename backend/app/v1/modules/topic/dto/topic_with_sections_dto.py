@@ -1,7 +1,7 @@
 
 from datetime import datetime
 from uuid import UUID
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from app.v1.modules.section.dto.section_with_blocks_dto import SectionWithBlocksDTO
 
 
@@ -83,4 +83,4 @@ class TopicWithSectionsDTO(BaseModel):
     Timestamp when the topic was last modified.
     """
 
-    sections: list[SectionWithBlocksDTO] = []
+    sections: list[SectionWithBlocksDTO] =  Field(default_factory=list)

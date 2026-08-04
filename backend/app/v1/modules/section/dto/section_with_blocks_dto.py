@@ -2,7 +2,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.v1.modules.block.dto.block_dto import BlockDTO
 from pydantic import ConfigDict
@@ -25,4 +25,4 @@ class SectionWithBlocksDTO(BaseModel):
         from_attributes=True,
     )
 
-    blocks: List[BlockDTO] = []
+    blocks: List[BlockDTO] =  Field(default_factory=list)
