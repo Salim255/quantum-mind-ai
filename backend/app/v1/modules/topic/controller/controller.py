@@ -4,6 +4,7 @@ from uuid import UUID
 
 from app.v1.modules.section.dependencies import get_section_service
 from app.v1.modules.section.service.section_service import SectionService
+from app.v1.modules.topic.dto.topics_reponse_dto import TopicsResponseDTO
 from .router import router as topic_router
 from fastapi import  Depends, Path, status
 from app.v1.modules.topic.service.topic_service import TopicService
@@ -288,8 +289,8 @@ Used for:
 - Search results
 """,
 )
-async def get_topics():
-    return {"message": "List of all topics."}
+async def get_topics()-> ResponseDTO[TopicsResponseDTO]:
+    return ResponseDTO.success(await get_topic_service.get_topics())
 
 
 

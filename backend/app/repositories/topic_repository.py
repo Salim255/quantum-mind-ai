@@ -1,7 +1,9 @@
 from sqlmodel import select
+from sqlalchemy.orm import selectinload
 from app.models.topic import Topic
 from app.repositories.base_repository import BaseRepository
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.section import Section
 
 class TopicRepository(BaseRepository[Topic]):
     """
@@ -33,3 +35,13 @@ class TopicRepository(BaseRepository[Topic]):
         """
         statement = select(Topic).where(Topic.category == category)
         return self.session.exec(statement).all()
+
+    def get_topics_with_sections_with_blocks(self):
+        """
+        Get a topic along with its sections and blocks.
+        """
+        statement = select(Topic).options(
+            selectinload(Topic.sections).selectinload(Section.blocks)
+        )
+        # Without scalars(), session.execute() returns Row objects.
+        return self.session.execute(statement).scalars().all()

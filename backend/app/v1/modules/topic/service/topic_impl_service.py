@@ -5,6 +5,7 @@ from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.models.topic import Topic
+from app.v1.modules.topic.dto.topics_reponse_dto import TopicsResponseDTO
 
 class TopicImplService(TopicService):
     def __init__(self, topic_repository: TopicRepository):
@@ -33,9 +34,12 @@ class TopicImplService(TopicService):
         return TopicDTO.model_validate(topic)
     
 
-    async def get_topics(self):
+    async def get_topics(self) -> TopicsResponseDTO:
         topics = self.topic_repository.list()
-        return [TopicDTO.model_validate(topic) for topic in topics]
+
+        return TopicsResponseDTO(
+            topics=[TopicDTO.model_validate(topic) for topic in topics]
+        )
 
     async def get_topic_with_sections(self, topic_id: UUID):
         topic = self.topic_repository.get_by_id(topic_id)
