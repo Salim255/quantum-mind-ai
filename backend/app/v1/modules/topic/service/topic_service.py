@@ -4,6 +4,8 @@ from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from sqlmodel import UUID
 
+from backend.app.v1.modules.topic.dto.topics_reponse_dto import TopicsResponseDTO
+
 class TopicService(ABC):
     """
     Defines the contract for Topic business operations.
@@ -81,7 +83,7 @@ class TopicService(ABC):
 
 
     @abstractmethod
-    async def get_topics(self):
+    async def get_topics(self)-> TopicsResponseDTO:
         """
         Retrieves all available learning topics.
 
