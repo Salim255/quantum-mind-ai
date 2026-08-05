@@ -173,9 +173,11 @@ async def get_topics_with_sections_and_blocks(
     ]
 ):
 
-    response: TopicsWithSectionsResponseDTO = await get_topic_service.get_topics_with_sections_and_blocks()
+    return  ResponseDTO.success(
+        await get_topic_service.get_topics_with_sections_and_blocks()
+    )
     
-    return ResponseDTO.success(response)
+
 
 
 # ==========================================================

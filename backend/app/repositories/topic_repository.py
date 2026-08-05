@@ -42,6 +42,7 @@ class TopicRepository(BaseRepository[Topic]):
         Get a topic along with its sections and blocks.
         """
         statement = select(Topic).options(
+            selectinload(Topic.blocks),
             selectinload(Topic.sections).selectinload(Section.blocks)
         )
         # Without scalars(), session.execute() returns Row objects.

@@ -4,7 +4,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.v1.modules.section.dto.section_with_blocks_dto import SectionWithBlocksDTO
-
+from app.v1.modules.block.dto.block_dto import BlockDTO
 
 class TopicWithSectionsDTO(BaseModel):
     """
@@ -82,6 +82,8 @@ class TopicWithSectionsDTO(BaseModel):
     # RELATIONS
     # ==========================================================
 
+    blocks: list[BlockDTO] = Field(default_factory=list)
+    
     sections: list[SectionWithBlocksDTO] = Field(default_factory=list)
     """
     Sections belonging to this topic.
