@@ -16,26 +16,6 @@ class TopicRepository(BaseRepository[Topic]):
         # Pass Topic model to BaseRepository
         super().__init__(session, Topic)
 
-    # -----------------------------
-    # GET BY SLUG
-    # -----------------------------
-    async def get_by_slug(self, slug: str):
-        """
-        Find a topic using its unique slug.
-        """
-        statement = select(Topic).where(Topic.slug == slug)
-        return await self.session.exec(statement).first()
-
-    # -----------------------------
-    # GET BY CATEGORY
-    # -----------------------------
-    async def get_by_category(self, category: str):
-        """
-        Get all topics in a category.
-        """
-        statement = select(Topic).where(Topic.category == category)
-        return await self.session.exec(statement).all()
-
 
     async def get_topics_with_sections_with_blocks(self):
         """
@@ -45,6 +25,7 @@ class TopicRepository(BaseRepository[Topic]):
             selectinload(Topic.blocks),
             selectinload(Topic.sections).selectinload(Section.blocks)
         )
+
         # Without scalars(), session.execute() returns Row objects.
         result = await self.session.execute(statement)
 

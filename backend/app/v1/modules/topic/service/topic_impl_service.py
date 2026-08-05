@@ -24,6 +24,7 @@ class TopicImplService(TopicService):
             await self.topic_repository.add(topic)
             
             return TopicDTO.model_validate(topic)
+        
         except Exception as e:
             # Log the exception for debugging purposes
             logger.exception(f"Error creating topic: {e}")
@@ -31,21 +32,32 @@ class TopicImplService(TopicService):
 
 
     async def get_topic(self, topic_id: UUID):
-        topic: Topic  =  self.topic_repository.get_by_id(topic_id)
-
-        if topic is None:
-            return None
-        
-        return TopicDTO.model_validate(topic)
+        try:
+            topic: Topic  =  self.topic_repository.get_by_id(topic_id)
+            
+            if topic is None:
+                return None
+            
+            return TopicDTO.model_validate(topic)
+        except Exception as e:
+            logger.exception(f"Error in get topic {e}")
+            raise
     
-
+    
+    #### 
     async def get_topics(self) -> TopicsResponseDTO:
-        topics = self.topic_repository.list()
+        try:
+            topics = self.topic_repository.list()
+            
+            return TopicsResponseDTO(
+                topics=[TopicDTO.model_validate(topic) for topic in topics]
+            )
+        
+        except Exception as e:
+            logger.exception(f"Error in get only  topics: {e}")
+            raise
 
-        return TopicsResponseDTO(
-            topics=[TopicDTO.model_validate(topic) for topic in topics]
-        )
-
+    ####
     async def get_topics_with_sections_and_blocks(self)-> TopicsWithSectionsResponseDTO:
        try:
             topics = await self.topic_repository.get_topics_with_sections_with_blocks()
@@ -63,40 +75,70 @@ class TopicImplService(TopicService):
                 ]
             )
                
-            
-       
        except Exception as e:
             # Log the exception for debugging purposes
             logger.exception(f"Error retrieving topics with sections and blocks: {e}")
-            raise e
+
+            raise
+
 
     async def get_topic_with_sections(self, topic_id: UUID):
-        topic = self.topic_repository.get_by_id(topic_id)
-        if topic is None:
-            return None
-        return TopicDTO.model_validate(topic)
+        try:
+            topic = self.topic_repository.get_by_id(topic_id)
+
+            if topic is None:
+                return None
+            
+            return TopicDTO.model_validate(topic)
+        
+        except Exception as e:
+            logger.exception(f"Error in get topic with sections: {e}")
+
+            raise
 
     async def get_topic_with_sections_and_blocks(self, topic_id: UUID):
-        topic = await self.topic_repository.get_by_id(topic_id)
-        if topic is None:
-            return None
-        return TopicDTO.model_validate(topic)
+        try:
+
+            topic = await self.topic_repository.get_by_id(topic_id)
+            if topic is None:
+                return None
+            return TopicDTO.model_validate(topic)
+        
+        except Exception as e:
+            print(f"Error in get topic with sections and blocks: {e}")
+            raise
 
 
     async def update_topic(self, topic_id: UUID, topic_data: TopicUpdateDTO):
-        topic = self.topic_repository.get_by_id(topic_id)
-        if topic is None:
-            return None
-        for key, value in topic_data.model_dump().items():
-            setattr(topic, key, value)
- 
-        return TopicDTO.model_validate(topic)
+       try:
+            
+            topic = self.topic_repository.get_by_id(topic_id)
+
+            if topic is None:
+                return None
+            
+            for key, value in topic_data.model_dump().items():
+                setattr(topic, key, value)
+    
+            return TopicDTO.model_validate(topic)
+       
+       except Exception as e:
+           logger.exception(f"Error in update topic: {e}")
+           raise
 
     async def delete_topic(self, topic_id: UUID):
-        topic = self.topic_repository.get_by_id(topic_id)
-        if topic is None:
-            return None
+       try:
+            
+            topic = self.topic_repository.get_by_id(topic_id)
+
+            if topic is None:
+                return None
+            
+            self.topic_repository.delete(topic)
         
-        self.topic_repository.delete(topic)
-    
-        return TopicDTO.model_validate(topic)
+            return TopicDTO.model_validate(topic)
+       
+       except Exception as e:
+            logger.exception(f"Error in delete topic {e}")
+
+            raise
