@@ -1,46 +1,37 @@
 <div class="spin-page lesson">
   <header class="lesson__header">
     <h1 class="lesson__title">
-      Spin and the Stern–Gerlach Experiment
+      {{ spanTopic()?.title }}
     </h1>
 
     <p class="lesson__summary">
-      Classical computers store information using bits, which can be either 0 or 1.
-      Quantum computers use qubits, which can represent 0, 1, or a quantum combination of both states.
-      One way to create a qubit is by using the spin of an electron. Spin behaves like a tiny magnet with a north and south pole.
-      In the 1920s, physicists Otto Stern and Walther Gerlach designed an experiment to study this behavior. They sent a beam of silver atoms through a specially shaped magnetic field.
-      Classically, scientists expected the atoms to be deflected by different amounts, producing a continuous band on a screen. Instead, they observed only <strong>two distinct spots</strong>.
-      This surprising result showed that the magnetic orientation of the atoms was not continuous. When measured along a given direction,
-      the atoms could only be found in one of <strong>two possible states</strong>.
-      The same behavior is observed for electrons. If we measure an electron's spin in the vertical direction,
-      the result is always one of two outcomes:
-      <span>
-        <ul>
-          <li>Spin Up (↑)</li>
-          <li>Spin Down (↓)</li>
-        </ul>
-      </span>
-
-      These two states form the basis of a qubit.
-      The Stern–Gerlach experiment was one of the first demonstrations that nature behaves differently from classical expectations. Instead of allowing every possible orientation,
-      quantum measurements produce specific discrete outcomes.
-      This idea lies at the heart of quantum computing: information can be encoded in quantum states and manipulated in ways that have no classical equivalent.
+   <!--     {{ spanTopic()?.description }} -->
+    @for(block of  topicBlocks(); track $index){
+        <p [id]="block.id">
+          {{ block.content }}
+        </p>
+      }
     </p>
+
+
+
   </header>
 
-  <section
-    class="lesson__section"
-    #pageSection
-    id="quantum-clock">
-    <h2 class="lesson__heading"> The Quantum Clock </h2>
-    <p class="lesson__parageaph">
-      The quantum clock is a thought experiment used to understand how quantum systems behave when we measure them.
-      Instead of directly observing the direction of a pointer, we can only ask specific yes/no questions, such as whether it points in a given direction.
-      Unlike a classical system, the response is not based on revealing a hidden full state.
-      Each measurement only produces one of two possible outcomes: the direction asked about, or its exact opposite.
-      This shows a key idea in quantum physics: the result of a measurement depends on the question being asked, not on revealing a pre-existing classical value.
-    </p>
-  </section>
+
+  @for(section of   sectionsList(); track section.id){
+     <section
+      class="lesson__section"
+      #pageSection
+      [id]="section.slug">
+      <h2 class="lesson__heading"> {{section.title}} </h2>
+        @for(block of  section.blocks; track block.id){
+        <p [id]="block.id" class="lesson__parageaph">
+            {{ block.content }}
+        </p>
+      }
+    </section>
+  }
+
 
 
   <section

@@ -1,6 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, computed, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChildren } from "@angular/core";
 import { Subscription } from "rxjs";
 import { PageAsideService } from "../../../../shared/service/page-aside-content.service";
+import { LearnService } from "../../services/learn.service";
+import { TopicWithSectionsDTO } from "../../interfaces/topic-with-sections.dto";
 
 @Component({
   selector: "app-spin-page",
@@ -8,18 +10,57 @@ import { PageAsideService } from "../../../../shared/service/page-aside-content.
   styleUrl: "./spin.page.scss",
   standalone: false
 })
-export class SpinPage  implements AfterViewInit, OnDestroy {
+export class SpinPage  implements AfterViewInit, OnInit, OnDestroy {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
 
-  constructor(private pageAsideService: PageAsideService){}
+  private spinTopicsSubscription!: Subscription;
+
+  spanTopic = signal<TopicWithSectionsDTO | null>(null);
+
+  topicBlocks = computed(() => {
+    return [
+      ...(this.spanTopic()?.blocks.sort((a, b) => a.display_order - b.display_order)) ?? []
+    ]
+  })
+
+  sectionsList = computed(( ) => {
+    return [
+      ...(
+        this.spanTopic()?.sections?.sort((a, b) => a.order_index - b.order_index))
+        ?.map(section => ({
+          ...section,
+          blocks: section.blocks.sort((a, b) => a.display_order - b.display_order)
+        })) ?? []
+    ]
+  })
+
+
+  constructor(
+    private learnService: LearnService,
+    private pageAsideService: PageAsideService
+  ){}
+
+
+  ngOnInit(): void {
+    this.subscribeToLearnTopics();
+  }
 
   ngAfterViewInit(): void {
     this.observeSections();
   }
 
-    private observeSections(): void {
+  subscribeToLearnTopics(){
+    this.spinTopicsSubscription = this.learnService.getTopicItem$(0)
+    .subscribe((data: TopicWithSectionsDTO | null) => {
+      console.log(data)
+      this.spanTopic.set(data);
+      console.log(this.sectionsList());
+    })
+  }
+
+  private observeSections(): void {
 
       this.observer = new IntersectionObserver(
         entries => {
