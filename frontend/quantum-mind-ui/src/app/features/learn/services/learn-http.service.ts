@@ -12,4 +12,8 @@ export class LearnHttpService {
   getDocs(formData: FormData): Observable<any>{
     return this.http.post<any>(`${this.baseUrl}/ingest-pdf`, formData)
   }
+
+  getLearnTopics(){
+    return this.http.get<any>(`${this.ENV.apiBaseUrl}/topics`)
+  }
 }

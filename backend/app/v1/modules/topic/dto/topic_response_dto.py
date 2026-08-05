@@ -17,4 +17,4 @@ class TopicResponseDTO(BaseModel):
 
     Database-only fields are intentionally excluded.
     """
-    topic: TopicDTO | TopicWithSectionsDTO
+    topic: TopicDTO

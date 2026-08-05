@@ -1,4 +1,5 @@
-import { Component, signal } from "@angular/core";
+import { Component, OnInit, signal } from "@angular/core";
+import { LearnService } from "../features/learn/services/learn.service";
 
 @Component({
   selector: "app-dashboard",
@@ -6,10 +7,11 @@ import { Component, signal } from "@angular/core";
   styleUrls: ["./dashboard.page.scss"],
   standalone:false
 })
-export class DashboardPage {
+export class DashboardPage implements OnInit {
 
   closeAside = signal<boolean>(JSON.parse(localStorage.getItem("asideIsClose") ?? 'true'));
-  constructor() {}
+
+  constructor(private learnService: LearnService) {}
 
  /*  Minimal v1 Navigation
 
@@ -43,4 +45,8 @@ export class DashboardPage {
   Resources
 
   It's simple, scalable, and mirrors how people naturally learn: */
+
+  ngOnInit(): void {
+    this.learnService.getTopics().subscribe()
+  }
 }

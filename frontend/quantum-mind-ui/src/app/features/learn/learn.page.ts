@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ContentService } from "./services/content.service";
 import { EventType, NavigationEnd, Router } from "@angular/router";
 import { filter, Subscription } from "rxjs";
+import { LearnService } from "./services/learn.service";
 
 @Component({
   selector: "app-learn-page",
@@ -12,74 +13,24 @@ import { filter, Subscription } from "rxjs";
 export class LearnPage implements OnInit, OnDestroy{
   closeAside = signal<boolean>(JSON.parse(localStorage.getItem("asideIsClose") ?? 'false'));
   private currentSectionIdSubscription!: Subscription;
+  private learnTopicsSubscription!: Subscription;
 
   constructor(
+    private learnService: LearnService,
     private router: Router,
     private contentService: ContentService
   ){}
 
   ngOnInit(): void {
     this.listenToRouter();
+    this.subscribeToLearnTopics();
   }
-  /*   Learn
 
-  For consuming knowledge.
-
-  Dashboard
-  Learning Paths
-  Topics
-  Concepts Library
-  Quantum Glossary
-  Documentation
-  Resources
-
-  Examples:
-
-  Learn
-  ├── Learning Paths
-  ├── Topics
-  ├── Concepts
-  ├── Glossary
-  ├── Documentation
-  └── Resources */
-/*
-  Learn
-├── Mathematics
-│   ├── Linear Algebra
-│   ├── Complex Numbers
-│   ├── Vectors & Matrices
-│   ├── Probability
-│   └── Tensor Products
-│
-├── Physics
-│   ├── Classical Physics
-│   ├── Quantum Mechanics
-│   ├── Wave Functions
-│   ├── Superposition
-│   ├── Entanglement
-│   └── Measurement Theory
-│
-├── Quantum Computing
-│   ├── Qubits
-│   ├── Quantum Gates
-│   ├── Quantum Circuits
-│   ├── Quantum Error Correction
-│   └── Quantum Hardware
-│
-├── Quantum Algorithms
-│   ├── Deutsch-Jozsa
-│   ├── Grover's Algorithm
-│   ├── Shor's Algorithm
-│   ├── Quantum Fourier Transform
-│   └── Variational Algorithms
-│
-└── Applications
-    ├── Cryptography
-    ├── Optimization
-    ├── Chemistry
-    ├── Machine Learning
-    └── Finance */
-
+  subscribeToLearnTopics(){
+    this.learnTopicsSubscription = this.learnService.getLearnTopics$.subscribe(data => {
+      console.log("Hello from data==",data)
+    })
+  }
 
   listenToRouter(): void {
      this.router.events.pipe(
@@ -98,6 +49,7 @@ export class LearnPage implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.contentService.clearStorage();
-    this.currentSectionIdSubscription?.unsubscribe()
+    this.currentSectionIdSubscription?.unsubscribe();
+    this.learnTopicsSubscription?.unsubscribe();
   }
 }
