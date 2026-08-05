@@ -31,9 +31,7 @@ export class PageContentAsideComponent implements OnInit {
   private subscribeToSectionId(){
     this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
       id => {
-        console.log(id, "hello")
         if(id) {
-
           this.activeSection.set(id);
         }
       }
@@ -46,10 +44,6 @@ export class PageContentAsideComponent implements OnInit {
       this.sections.set(sections)
     }
     )
-  }
-
-  protected onNavigate(item: any ){
-    console.log(item)
   }
 
   ngOnDestroy(): void {

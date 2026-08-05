@@ -7,6 +7,7 @@ export type Section = {
   id: string;
   name: string;
 }
+
 export interface NavItem {
   id: string;
   name: string;
@@ -27,7 +28,6 @@ export class AsideNavService {
   setCurrentPageUrl(url: string){
     const pageNavs: NavItem | null = this.getAsideNav(url) ?? null;
 
-    console.log(pageNavs);
     this.currentPageUrlSubject.next(pageNavs);
     // Bread crumbs
     this.breadcrumbService.setAppBreadCrumbs(url);

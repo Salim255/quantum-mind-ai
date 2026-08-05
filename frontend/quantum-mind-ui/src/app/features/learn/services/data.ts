@@ -1,12 +1,11 @@
 export const SPIN = [
-  { id: "quantum-clock", name: "The Quantum Clock" },
-  { id: "measurements-in-same-direction", name: "Measurements in the Same Direction" },
-  { id: "measurements-different-directions", name: "Measurements in Different Directions" },
+  { id: "the-quantum-clock", name: "The Quantum Clock" },
+  { id: "measurements-in-the-same-direction", name: "Measurements in the Same Direction" },
+  { id: "measurements-in-different-directions", name: "Measurements in Different Directions" },
   { id: "measurements", name: "Measurements" },
   { id: "randomness", name: "Randomness" },
   { id: "photons-and-polarization", name: "Photons and Polarization" }
 ];
-
 
 export const LINEAR_ALGEBRA = [
   { id: "complex-numbers-versus-real-numbers", name: "Complex Numbers versus Real Numbers" },

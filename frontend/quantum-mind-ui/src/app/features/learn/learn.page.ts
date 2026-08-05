@@ -28,7 +28,7 @@ export class LearnPage implements OnInit, OnDestroy{
 
   subscribeToLearnTopics(){
     this.learnTopicsSubscription = this.learnService.getLearnTopics$.subscribe(data => {
-      console.log("Hello from data==",data)
+
     })
   }
 

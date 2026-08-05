@@ -36,7 +36,6 @@ export class SpinPage  implements AfterViewInit, OnInit, OnDestroy {
     ]
   })
 
-
   constructor(
     private learnService: LearnService,
     private pageAsideService: PageAsideService
@@ -54,9 +53,7 @@ export class SpinPage  implements AfterViewInit, OnInit, OnDestroy {
   subscribeToLearnTopics(){
     this.spinTopicsSubscription = this.learnService.getTopicItem$(0)
     .subscribe((data: TopicWithSectionsDTO | null) => {
-      console.log(data)
       this.spanTopic.set(data);
-      console.log(this.sectionsList());
     })
   }
 

@@ -18,8 +18,7 @@
           [scrollContainer]="scrollContainer"
           type="button"
           class="page-content-nav__link"
-           [class.page-content-nav__link--active]="activeSection() === item.id"
-          (click)="onNavigate(item)"
+          [class.page-content-nav__link--active]="activeSection() === item.id"
         >
           <span class="page-content-nav__label">
             {{ item.name }}

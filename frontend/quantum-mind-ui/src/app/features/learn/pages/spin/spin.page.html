@@ -25,7 +25,8 @@
       [id]="section.slug">
       <h2 class="lesson__heading"> {{section.title}} </h2>
         @for(block of  section.blocks; track block.id){
-        <p [id]="block.id" class="lesson__parageaph">
+
+        <p [id]="block.id" class="lesson__paragraph">
             {{ block.content }}
         </p>
       }
@@ -34,7 +35,7 @@
 
 
 
-  <section
+<!--   <section
     #pageSection
     class="lesson__section"
     id="measurements-in-same-direction">
@@ -195,6 +196,6 @@
     This experiment shows that quantum behavior can be observed in simple optical setups and is not limited to abstract or microscopic particle experiments.
     It directly connects to the same principles used in electron spin and qubits.
   </p>
-</section>
+</section> -->
 
 </div>

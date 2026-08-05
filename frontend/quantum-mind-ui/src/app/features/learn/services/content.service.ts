@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({providedIn: "root"})
 export class ContentService {
+
   private currentSectionsSubject = new BehaviorSubject< { name: string } []>(
     JSON.parse(localStorage.getItem('asideSections') ?? '[]')
   );
