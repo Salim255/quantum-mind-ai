@@ -1,12 +1,14 @@
 
 from typing import Annotated
 from uuid import UUID
-
-from app.v1.modules.section.dependencies import get_section_service
-from app.v1.modules.section.service.section_service import SectionService
-from app.v1.modules.topic.dto.topics_reponse_dto import TopicsResponseDTO
 from .router import router as topic_router
 from fastapi import  Depends, Path, status
+from app.v1.modules.topic.dependencies import get_topic_service
+from app.v1.modules.block.dependencies import get_block_service
+from app.v1.modules.section.dependencies import get_section_service
+from app.v1.modules.section.service.section_service import SectionService
+from app.v1.modules.topic.dto.topics_with_sections_response_dto import TopicsWithSectionsResponseDTO
+
 from app.v1.modules.topic.service.topic_service import TopicService
 from app.v1.modules.block.dto.block_create_dto import BlockCreateDTO
 from app.v1.modules.block.service.block_service import BlockService
@@ -16,8 +18,7 @@ from app.core.dtos.response_dto import ResponseDTO
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
-from app.v1.modules.topic.dependencies import get_topic_service
-from app.v1.modules.block.dependencies import get_block_service
+
 from app.v1.modules.section.dto.section_create_dto import SectionCreateDTO
 from app.v1.modules.section.dto.section_dto import SectionDTO
 from app.v1.modules.topic.dto.topic_with_sections_dto import TopicWithSectionsDTO
@@ -152,7 +153,7 @@ async def create_topic(
 
 @topic_router.get(
     "/",
-    response_model=ResponseDTO,
+    response_model=ResponseDTO[TopicsWithSectionsResponseDTO],
     status_code=status.HTTP_200_OK,
     summary="List learning topics",
     description="""
@@ -172,10 +173,9 @@ async def get_topics_with_sections_and_blocks(
     ]
 ):
 
-    response = await get_topic_service.get_topics_with_sections_and_blocks()
-    ResponseDTO.success({
-        'topics': response
-    })
+    response: TopicsWithSectionsResponseDTO = await get_topic_service.get_topics_with_sections_and_blocks()
+    
+    return ResponseDTO.success(response)
 
 
 # ==========================================================

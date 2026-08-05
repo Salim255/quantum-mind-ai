@@ -6,9 +6,9 @@ from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.models.topic import Topic
-from app.v1.modules.topic.dto.topics_reponse_dto import TopicsResponseDTO
+from app.v1.modules.topic.dto.topics_response_dto import TopicsResponseDTO
 from app.v1.modules.topic.dto.topic_with_sections_dto import TopicWithSectionsDTO
-
+from app.v1.modules.topic.dto.topics_with_sections_response_dto import TopicsWithSectionsResponseDTO
 
 logger = logging.getLogger(__name__)
 
@@ -46,17 +46,24 @@ class TopicImplService(TopicService):
             topics=[TopicDTO.model_validate(topic) for topic in topics]
         )
 
-    async def get_topics_with_sections_and_blocks(self)-> list[TopicWithSectionsDTO] :
+    async def get_topics_with_sections_and_blocks(self)-> TopicsWithSectionsResponseDTO:
        try:
             topics = await self.topic_repository.get_topics_with_sections_with_blocks()
 
             if topics is None:
-                return []
+                return TopicsWithSectionsResponseDTO(
+                    topics=[]
+                )
+    
 
-            return [
-                TopicWithSectionsDTO.model_validate(topic).model_dump()
-                for topic in topics
-            ]
+            return TopicsWithSectionsResponseDTO(
+                topics=  [ 
+                    TopicWithSectionsDTO.model_validate(topic).model_dump()
+                    for topic in topics
+                ]
+            )
+               
+            
        
        except Exception as e:
             # Log the exception for debugging purposes
