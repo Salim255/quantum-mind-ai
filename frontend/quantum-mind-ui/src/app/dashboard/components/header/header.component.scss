@@ -40,7 +40,11 @@
 
   background:
     var(--color-surface-subtle);
+
+  display: flex;
+  justify-content: space-between;
 }
+
 
 .dash-header__identity {
   display: flex;

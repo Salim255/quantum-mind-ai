@@ -8,10 +8,12 @@ import { AsideLayoutComponent } from "./components/aside-layout/aside-layout.com
 import { BreadCrumbsComponent } from "./components/bread-crumbs/bread-crumbs.component";
 import { AsideNavLinkComponent } from "./components/aide-nav-link/aside-nav-link.component";
 import { SharedModule } from "../shared/shared.module";
+import { AssistantLauncherComponent } from "./components/assistant-launcher/assitant-launcher.component";
 
 @NgModule({
   imports: [SharedModule, CommonModule, DashboardRoutingModule],
   declarations: [
+    AssistantLauncherComponent,
     AsideNavLinkComponent,
     BreadCrumbsComponent,
     AsideLayoutComponent,
