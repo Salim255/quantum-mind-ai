@@ -1,0 +1,76 @@
+<section
+  class="assistant-panel"
+  aria-label="AI Assistant"
+>
+  <header class="assistant-panel__header">
+    <div class="assistant-panel__identity">
+      <span
+        class="assistant-panel__icon"
+        aria-hidden="true"
+      >
+        ✦
+      </span>
+
+      <div class="assistant-panel__heading">
+        <h2 class="assistant-panel__title">
+          AI Assistant
+        </h2>
+
+        <span class="assistant-panel__context">
+          About this content
+        </span>
+      </div>
+    </div>
+
+    <button
+      class="assistant-panel__close"
+      type="button"
+      aria-label="Close AI Assistant"
+      (click)="onClose()"
+    >
+      ×
+    </button>
+  </header>
+
+  <main class="assistant-panel__conversation">
+    <div class="assistant-panel__empty">
+      <span
+        class="assistant-panel__empty-icon"
+        aria-hidden="true"
+      >
+        ✦
+      </span>
+
+      <h3 class="assistant-panel__empty-title">
+        Ask about this content
+      </h3>
+
+      <p class="assistant-panel__empty-description">
+        Ask a question about the content you're currently viewing.
+      </p>
+    </div>
+  </main>
+
+  <footer class="assistant-panel__composer">
+    <div class="assistant-panel__input-wrapper">
+      <textarea
+        class="assistant-panel__input"
+        rows="1"
+        placeholder="Ask a question..."
+        aria-label="Ask a question"
+      ></textarea>
+
+      <button
+        class="assistant-panel__send"
+        type="button"
+        aria-label="Send message"
+      >
+        →
+      </button>
+    </div>
+
+    <span class="assistant-panel__hint">
+      AI can make mistakes. Check important information.
+    </span>
+  </footer>
+</section>
