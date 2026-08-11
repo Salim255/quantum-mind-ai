@@ -8,9 +8,35 @@
   overflow: hidden;
   scroll-margin-top: 90rem;
   &__content {
-   overflow: hidden;
-    min-height: 0;
-    height: 100%;
+      min-height: 0;
+      height: 100%;
+
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+
+      overflow: hidden;
+  }
+
+  &__outlet {
+      grid-column: 1 / -1;
+      grid-row: 1;
+
+      min-width: 0;
+      min-height: 0;
+      overflow: auto;
+  }
+
+  &__assistant-panel {
+      grid-column: 8 / -1;
+      grid-row: 1;
+
+      min-width: 0;
+      min-height: 0;
+
+      background: var(--color-surface);
+
+      box-shadow:
+          -8px 0 24px rgb(0 0 0 / 8%);
   }
   &__wrapper{
 
