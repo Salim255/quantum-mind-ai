@@ -6,17 +6,14 @@
   height: 100dvh;
   width: 100dvw;
   overflow: hidden;
- scroll-margin-top: 90rem;
+  scroll-margin-top: 90rem;
   &__content {
-   // overflow: hidden;
+   overflow: hidden;
     min-height: 0;
     height: 100%;
   }
   &__wrapper{
 
-  }
-  app-header {
-    //position: sticky;
   }
 
   &__aside {
@@ -28,8 +25,6 @@
 
   @include respond(tab-port) {
     grid-template-columns: 0 1fr;
-    &__aside {
-      //display: none;
-    }
+
   }
 }

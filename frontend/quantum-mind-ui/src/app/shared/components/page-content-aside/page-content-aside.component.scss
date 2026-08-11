@@ -5,6 +5,8 @@
 
   min-height: 0;
   height: 100%;
+  overflow: hidden;
+  background-color: blue;
 }
 
 .page-content-nav__title {
@@ -34,6 +36,12 @@
   padding: 0;
 
   list-style: none;
+
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+
+  background-color: red;
 }
 
 .page-content-nav__item {
