@@ -13,7 +13,5 @@ import {
 export class AssistantPanelComponent {
   readonly close = output<void>();
 
-  protected onClose(): void {
-    this.close.emit();
-  }
+
 }

@@ -1,0 +1,192 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+/* ==========================================================
+   ASSISTANT HEADER
+========================================================== */
+
+.assistant-header {
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  min-height: 56px;
+
+  padding-inline:
+    var(--space-md);
+
+  border-bottom:
+    var(--border-divider)
+    solid
+    var(--color-border-subtle);
+
+  background:
+    var(--color-surface);
+}
+
+
+/* ==========================================================
+   HEADING
+========================================================== */
+
+.assistant-header__heading {
+
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  gap:
+    var(--component-gap-sm);
+}
+
+
+.assistant-header__title {
+
+  flex-shrink: 0;
+
+  margin: 0;
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  letter-spacing:
+    var(--text-heading-sm-tracking);
+}
+
+
+.assistant-header__context {
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  color:
+    var(--color-text-muted);
+
+  font-size:
+    var(--text-caption-size);
+
+  font-weight:
+    var(--text-caption-weight);
+
+  line-height:
+    var(--text-caption-line);
+
+  letter-spacing:
+    var(--text-caption-tracking);
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* ==========================================================
+   CLOSE
+========================================================== */
+
+.assistant-header__close {
+
+  flex-shrink: 0;
+
+  width: 40px;
+  height: 40px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border:
+    var(--border-button)
+    solid
+    transparent;
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    transparent;
+
+  color:
+    var(--color-text-secondary);
+
+  font-size: 20px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease;
+}
+
+
+.assistant-header__close:hover {
+
+  background:
+    var(--color-surface-muted);
+
+  color:
+    var(--color-text-primary);
+
+  border-color:
+    var(--color-border-subtle);
+}
+
+
+.assistant-header__close:active {
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
+
+  border-color:
+    var(--color-primary-border);
+}
+
+
+.assistant-header__close:focus-visible {
+
+  outline:
+    2px solid
+    var(--color-primary);
+
+  outline-offset:
+    2px;
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@include respond(phone) {
+
+  .assistant-header {
+
+    padding-inline:
+      var(--space-sm);
+  }
+
+
+  .assistant-header__context {
+
+    display: none;
+  }
+}

@@ -2,37 +2,10 @@
   class="assistant-panel"
   aria-label="AI Assistant"
 >
-  <header class="assistant-panel__header">
-    <div class="assistant-panel__identity">
-      <span
-        class="assistant-panel__icon"
-        aria-hidden="true"
-      >
-        ✦
-      </span>
 
-      <div class="assistant-panel__heading">
-        <h2 class="assistant-panel__title">
-          AI Assistant
-        </h2>
+  <app-assistant-header></app-assistant-header>
 
-        <span class="assistant-panel__context">
-          About this content
-        </span>
-      </div>
-    </div>
-
-    <button
-      class="assistant-panel__close"
-      type="button"
-      aria-label="Close AI Assistant"
-      (click)="onClose()"
-    >
-      ×
-    </button>
-  </header>
-
-  <main class="assistant-panel__conversation">
+  <section class="assistant-panel__conversation">
     <div class="assistant-panel__empty">
       <span
         class="assistant-panel__empty-icon"
@@ -49,7 +22,7 @@
         Ask a question about the content you're currently viewing.
       </p>
     </div>
-  </main>
+  </section>
 
   <footer class="assistant-panel__composer">
     <div class="assistant-panel__input-wrapper">
