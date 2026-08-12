@@ -8,15 +8,16 @@ import { AsideLayoutComponent } from "./components/aside-layout/aside-layout.com
 import { BreadCrumbsComponent } from "./components/bread-crumbs/bread-crumbs.component";
 import { AsideNavLinkComponent } from "./components/aide-nav-link/aside-nav-link.component";
 import { SharedModule } from "../shared/shared.module";
-import { AssistantLauncherComponent } from "./components/assistant-launcher/assistant-launcher.component";
-import { AssistantPanelComponent } from "../features/ai-assistant/components/assistant-panel/assistant-panel.component";
 import { AngularSplitModule } from 'angular-split';
 
 @NgModule({
-  imports: [AngularSplitModule, SharedModule, CommonModule, DashboardRoutingModule],
+  imports: [
+    AngularSplitModule,
+    SharedModule,
+    CommonModule,
+    DashboardRoutingModule
+  ],
   declarations: [
-    AssistantPanelComponent,
-    AssistantLauncherComponent,
     AsideNavLinkComponent,
     BreadCrumbsComponent,
     AsideLayoutComponent,

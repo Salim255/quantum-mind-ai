@@ -4,7 +4,7 @@ import { Component, output } from "@angular/core";
   selector: "app-assistant-header",
   templateUrl: "./assistant-header.component.html",
   styleUrl: "./assistant-header.component.scss",
-  standalone: true
+  standalone: false
 })
 export class AssistantHeaderComponent {
 
