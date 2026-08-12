@@ -1,17 +1,56 @@
 <main class="dashboard-page">
+  <!-- ======================================================
+  ASIDE
+  ======================================================= -->
   <aside class="dashboard-page__aside">
     <app-aside-layout></app-aside-layout>
   </aside>
+
+
+  <!-- ======================================================
+  MAIN WRAPPER
+  ======================================================= -->
   <section class="dashboard-page__wrapper">
+    <!-- HEADER -->
     <app-header></app-header>
+
+    <!-- ====================================================
+    CONTENT
+    ===================================================== -->
     <div class="dashboard-page__content">
+      <!-- MAIN OUTLET -->
       <div class="dashboard-page__outlet">
         <router-outlet></router-outlet>
       </div>
-      <div class="dashboard-page__assistant-panel">
-          <app-ai-assistant-page> </app-ai-assistant-page>
-      </div>
+
+
+      <!-- ==================================================
+      AI ASSISTANT RESIZABLE OVERLAY
+      =================================================== -->
+      <as-split
+        class="dashboard-page__assistant-panel"
+        direction="horizontal"
+        unit="percent"
+        [gutterSize]="6"
+      >
+
+        <!-- FAKE / EMPTY AREA — 60% -->
+        <as-split-area [size]="60">
+        </as-split-area>
+
+        <!-- ASSISTANT — 40% -->
+        <as-split-area
+          [size]="40"
+          [minSize]="5"
+        >
+          <div class="dashboard-page__assistant-content">
+            <app-assistant-panel/>
+          </div>
+        </as-split-area>
+
+      </as-split>
+
     </div>
+
   </section>
 </main>
-

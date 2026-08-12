@@ -10,9 +10,10 @@ import { AsideNavLinkComponent } from "./components/aide-nav-link/aside-nav-link
 import { SharedModule } from "../shared/shared.module";
 import { AssistantLauncherComponent } from "./components/assistant-launcher/assistant-launcher.component";
 import { AssistantPanelComponent } from "../features/ai-assistant/components/assistant-panel/assistant-panel.component";
+import { AngularSplitModule } from 'angular-split';
 
 @NgModule({
-  imports: [SharedModule, CommonModule, DashboardRoutingModule],
+  imports: [AngularSplitModule, SharedModule, CommonModule, DashboardRoutingModule],
   declarations: [
     AssistantPanelComponent,
     AssistantLauncherComponent,
