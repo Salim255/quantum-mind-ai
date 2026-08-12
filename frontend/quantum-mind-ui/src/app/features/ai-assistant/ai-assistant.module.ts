@@ -5,19 +5,26 @@ import { AssistantHeaderComponent } from "./components/assistant-header/assistan
 import { AssistantPanelComponent } from "./components/assistant-panel/assistant-panel.component";
 import { AssistantFooterComponent } from "./components/assistant-footer/assistant-footer.component";
 import { AssistantLauncherComponent } from "./components/assistant-launcher/assistant-launcher.component";
+import { AssistantConversationComponent } from "./components/assistant-conversation/assistant-conversation.component";
+import { AssistantComposerComponent } from "./components/assistant-composer/assistant-composer.component";
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [
+    AssistantComposerComponent,
+    AssistantConversationComponent,
     AssistantLauncherComponent,
     AssistantFooterComponent,
     AssistantHeaderComponent,
     AssistantPanelComponent,
     AIAssistantPage
    ],
-  exports: [AIAssistantPage, AssistantLauncherComponent]
+  exports: [
+    AIAssistantPage,
+    AssistantLauncherComponent
+  ]
 })
 
 export class AIAssistantModule {}
