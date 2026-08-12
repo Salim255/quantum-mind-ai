@@ -29,6 +29,9 @@
       =================================================== -->
       <as-split
         class="dashboard-page__assistant-panel"
+        [class.dashboard-page__assistant-panel--active]="
+          aiAssistantService.isAssistantVisible$ | async
+        "
         direction="horizontal"
         unit="percent"
         [gutterSize]="6"

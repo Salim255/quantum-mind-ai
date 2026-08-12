@@ -6,11 +6,9 @@ import { BehaviorSubject } from "rxjs";
 })
 export class AIAssistantService {
 
-  private readonly _isAssistantVisible$ =
-    new BehaviorSubject<boolean>(false);
+  private readonly _isAssistantVisible$ = new BehaviorSubject<boolean>(false);
 
-  readonly isAssistantVisible$ =
-    this._isAssistantVisible$.asObservable();
+  readonly isAssistantVisible$ = this._isAssistantVisible$.asObservable();
 
 
   showAssistant(): void {

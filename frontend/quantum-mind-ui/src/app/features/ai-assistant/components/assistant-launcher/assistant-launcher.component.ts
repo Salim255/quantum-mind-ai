@@ -1,4 +1,5 @@
 import { Component, output} from '@angular/core';
+import { AIAssistantService } from '../../service/ai-assistant.service';
 
 @Component({
   selector: 'app-assistant-launcher',
@@ -9,7 +10,10 @@ import { Component, output} from '@angular/core';
 export class AssistantLauncherComponent {
   readonly openAssistant = output<void>();
 
+  constructor(private aiAssistantService: AIAssistantService){}
+
   protected onOpenAssistant(): void {
-    this.openAssistant.emit();
+    this.aiAssistantService.showAssistant();
   }
+
 }
