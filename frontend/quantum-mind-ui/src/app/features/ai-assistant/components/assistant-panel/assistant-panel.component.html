@@ -1,4 +1,4 @@
-<section
+<div
   class="assistant-panel"
   aria-label="AI Assistant"
 >
@@ -20,8 +20,10 @@
       </p>
     </div>
   </section>
-  <section>
+  <section  class="assistant-panel__conversation">
     <app-assistant-conversation></app-assistant-conversation>
-    <app-assistant-composer></app-assistant-composer>
   </section>
-</section>
+  <section  class="assistant-panel__footer">
+    <app-assistant-footer></app-assistant-footer>
+  </section>
+</div>
