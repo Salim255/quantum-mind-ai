@@ -30,11 +30,11 @@
       <as-split
         class="dashboard-page__assistant-panel"
         [class.dashboard-page__assistant-panel--active]="
-          aiAssistantService.isAssistantVisible$ | async
+          isAssistantVisible()
         "
         direction="horizontal"
         unit="percent"
-        [gutterSize]="6"
+        [gutterSize]="4"
       >
 
         <!-- FAKE / EMPTY AREA — 60% -->
@@ -44,7 +44,7 @@
         <!-- ASSISTANT — 40% -->
         <as-split-area
           [size]="40"
-          [minSize]="5"
+          [minSize]="30"
         >
           <div class="dashboard-page__assistant-content">
             <app-ai-assistant-page></app-ai-assistant-page>

@@ -8,12 +8,10 @@ import { AIAssistantService } from '../../service/ai-assistant.service';
   standalone: false
 })
 export class AssistantLauncherComponent {
-  readonly openAssistant = output<void>();
-
   constructor(private aiAssistantService: AIAssistantService){}
 
   protected onOpenAssistant(): void {
-    this.aiAssistantService.showAssistant();
+    this.aiAssistantService.toggleAssistant();
   }
 
 }

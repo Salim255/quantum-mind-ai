@@ -1,4 +1,5 @@
 import { Component, output } from "@angular/core";
+import { AIAssistantService } from "../../service/ai-assistant.service";
 
 @Component({
   selector: "app-assistant-header",
@@ -8,9 +9,9 @@ import { Component, output } from "@angular/core";
 })
 export class AssistantHeaderComponent {
 
-  protected readonly close = output<void>();
+  constructor(private aiAssistantService: AIAssistantService){}
 
-  protected onClose(): void {
-    this.close.emit();
+  protected onCloseAssistant(): void {
+    this.aiAssistantService.toggleAssistant();
   }
 }
