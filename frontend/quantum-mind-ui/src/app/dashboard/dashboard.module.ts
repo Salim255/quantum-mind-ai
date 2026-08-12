@@ -9,10 +9,12 @@ import { BreadCrumbsComponent } from "./components/bread-crumbs/bread-crumbs.com
 import { AsideNavLinkComponent } from "./components/aide-nav-link/aside-nav-link.component";
 import { SharedModule } from "../shared/shared.module";
 import { AngularSplitModule } from 'angular-split';
+import { AIAssistantModule } from "../features/ai-assistant/ai-assistant.module";
 
 @NgModule({
   imports: [
     AngularSplitModule,
+    AIAssistantModule,
     SharedModule,
     CommonModule,
     DashboardRoutingModule
