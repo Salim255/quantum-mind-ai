@@ -12,7 +12,7 @@ import {
 })
 export class AssistantPanelComponent {
   readonly close = output<void>();
-  messages = [];
+  messages = [1];
   protected onClose(): void {
     this.close.emit();
   }

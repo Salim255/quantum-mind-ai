@@ -1,0 +1,187 @@
+/* ============================================================
+   ASSISTANT MESSAGE
+============================================================ */
+
+.assistant-message {
+
+  display: flex;
+
+  width: 100%;
+
+  min-width: 0;
+
+  gap:
+    var(--component-gap-sm);
+
+  color:
+    var(--color-text-primary);
+}
+
+
+/* ============================================================
+   USER MESSAGE
+============================================================ */
+
+.assistant-message--user {
+
+  justify-content: flex-end;
+
+  padding-left:
+    var(--space-8);
+}
+
+
+.assistant-message--user
+.assistant-message__content {
+
+  max-width:
+    75%;
+
+  padding:
+    var(--space-3)
+    var(--space-4);
+
+  background:
+    var(--color-primary-soft);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-xl)
+    var(--radius-xl)
+    var(--radius-sm)
+    var(--radius-xl);
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-body-md-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  overflow-wrap:
+    anywhere;
+}
+
+
+/* ============================================================
+   ASSISTANT MESSAGE
+============================================================ */
+
+.assistant-message--assistant {
+
+  align-items: flex-start;
+
+  padding-right:
+    var(--space-6);
+}
+
+
+.assistant-message--assistant
+.assistant-message__content {
+
+  flex: 1;
+
+  min-width: 0;
+
+  padding-top:
+    var(--space-1);
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-body-md-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  overflow-wrap:
+    anywhere;
+}
+
+
+/* ============================================================
+   AI ICON
+============================================================ */
+
+.assistant-message__avatar {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  width: 3.2rem;
+
+  height: 3.2rem;
+
+  margin-top:
+    var(--space-1);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
+}
+
+
+.assistant-message__avatar
+iconify-icon {
+
+  display: block;
+
+  width: 1.6rem;
+
+  height: 1.6rem;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 48em) {
+
+  .assistant-message--user {
+
+    padding-left:
+      var(--space-4);
+  }
+
+
+  .assistant-message--user
+  .assistant-message__content {
+
+    max-width:
+      85%;
+  }
+
+
+  .assistant-message--assistant {
+
+    padding-right:
+      var(--space-3);
+  }
+}

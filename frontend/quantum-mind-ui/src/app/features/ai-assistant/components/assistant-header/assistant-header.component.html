@@ -1,15 +1,17 @@
 <header class="assistant-header">
 
-  <div class="assistant-header__heading">
+  <div class="assistant-header__identity">
 
     <span
       class="assistant-header__icon"
       aria-hidden="true"
     >
-      <iconify-icon icon="lucide:sparkles"></iconify-icon>
+      <iconify-icon
+        icon="lucide:sparkles"
+      ></iconify-icon>
     </span>
 
-    <div class="assistant-header__identity">
+    <div class="assistant-header__text">
 
       <h2 class="assistant-header__title">
         AI Assistant
@@ -30,7 +32,10 @@
     aria-label="Close AI Assistant"
     (click)="onCloseAssistant()"
   >
-    ×
+    <iconify-icon
+      icon="lucide:x"
+      aria-hidden="true"
+    ></iconify-icon>
   </button>
 
 </header>

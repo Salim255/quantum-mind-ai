@@ -1,6 +1,10 @@
-/* ==========================================================
+@use "../../../../../styles/mixins/queries" as *;
+/* ============================================================
    ASSISTANT HEADER
-========================================================== */
+   ------------------------------------------------------------
+   Quantum AI
+   Premium minimal / restrained AI identity
+============================================================ */
 
 .assistant-header {
 
@@ -10,16 +14,21 @@
 
   justify-content: space-between;
 
-  gap: var(--component-gap-md);
+  gap:
+    var(--component-gap-md);
 
   width: 100%;
 
-  min-height: 42px;
+  min-width: 0;
 
-  padding: var(--space-2) var(--space-10);
+  min-height: 6.4rem;
+
+  padding:
+    var(--space-3)
+    var(--space-4);
 
   border-bottom:
-    var(--border-divider)
+    var(--border-thin)
     solid
     var(--color-border-subtle);
 
@@ -28,169 +37,212 @@
 }
 
 
-/* ==========================================================
-   HEADING
-========================================================== */
-
-.assistant-header__heading {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: var(--component-gap-sm);
-
-  min-width: 0;
-}
-
-
-/* ==========================================================
-   AI ICON
-========================================================== */
-
-.assistant-header__icon {
-
-  flex-shrink: 0;
-
-  width: 30px;
-
-  height: 30px;
-
-  display: grid;
-
-  place-items: center;
-
-  color:
-    var(--color-primary);
-
-  font-size: 16px;
-
-  transition:
-    background .18s ease,
-    color .18s ease,
-    border-color .18s ease;
-}
-
-
-.assistant-header__icon iconify-icon {
-
-  font-size: 16px;
-}
-
-
-/* ==========================================================
+/* ============================================================
    IDENTITY
-========================================================== */
+============================================================ */
 
 .assistant-header__identity {
 
   display: flex;
 
-  align-items: baseline;
-
-  gap: var(--component-gap-sm);
-
-  min-width: 0;
-}
-
-
-/* ==========================================================
-   TITLE
-========================================================== */
-
-.assistant-header__title {
-
-  margin: 0;
-
-  color:
-    var(--color-text-primary);
-
-  font-size:
-    var(--text-body-md-size);
-
-  font-weight:
-    var(--text-label-md-weight);
-
-  line-height:
-    var(--text-body-md-line);
-
-  white-space: nowrap;
-}
-
-
-/* ==========================================================
-   CONTEXT
-========================================================== */
-
-.assistant-header__context {
+  align-items: center;
 
   min-width: 0;
 
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-
-  color:
-    var(--color-text-muted);
-
-  font-size:
-    var(--text-caption-size);
-
-  font-weight:
-    var(--text-caption-weight);
-
-  line-height:
-    var(--text-caption-line);
+  gap:
+    var(--component-gap-sm);
 }
 
 
-/* ==========================================================
-   CLOSE
-========================================================== */
+/* ============================================================
+   AI ICON
+============================================================ */
 
-.assistant-header__close {
+.assistant-header__icon {
 
   flex-shrink: 0;
-
-  width: 32px;
-
-  height: 32px;
 
   display: grid;
 
   place-items: center;
 
+  width: 3.8rem;
+
+  height: 3.8rem;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+
+.assistant-header__icon
+iconify-icon {
+
+  display: flex;
+
+  width: 1.8rem;
+
+  height: 1.8rem;
+}
+
+
+/* ============================================================
+   IDENTITY TEXT
+============================================================ */
+
+.assistant-header__text {
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+
+  gap:
+    var(--space-1);
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.assistant-header__title {
+
+  margin: 0;
+
+  overflow: hidden;
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  letter-spacing:
+    var(--text-heading-sm-tracking);
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   CONTEXT
+============================================================ */
+
+.assistant-header__context {
+
+  display: block;
+
+  overflow: hidden;
+
+  color:
+    var(--color-text-secondary);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    var(--text-label-sm-tracking);
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   CLOSE
+============================================================ */
+
+.assistant-header__close {
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  width: 3.6rem;
+
+  height: 3.6rem;
+
   padding: 0;
 
   border:
-    var(--border-button)
+    var(--border-thin)
     solid
     transparent;
 
   border-radius:
     var(--radius-md);
 
-  background: transparent;
+  background:
+    transparent;
 
   color:
     var(--color-text-secondary);
 
-  font-size: 20px;
-
-  font-weight: 400;
-
-  line-height: 1;
-
   cursor: pointer;
 
+  appearance: none;
+
   transition:
-    background .18s ease,
-    color .18s ease,
-    border-color .18s ease;
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
+
+/* ============================================================
+   CLOSE ICON
+============================================================ */
+
+.assistant-header__close
+iconify-icon {
+
+  display: flex;
+
+  width: 1.8rem;
+
+  height: 1.8rem;
+}
+
+
+/* ============================================================
+   CLOSE — HOVER
+============================================================ */
 
 .assistant-header__close:hover {
 
@@ -205,38 +257,80 @@
 }
 
 
+/* ============================================================
+   CLOSE — ACTIVE
+============================================================ */
+
 .assistant-header__close:active {
 
   background:
-    var(--color-primary-soft);
-
-  color:
-    var(--color-primary);
-
-  border-color:
-    var(--color-primary-border);
+    var(--color-border-subtle);
 }
 
+
+/* ============================================================
+   CLOSE — FOCUS
+============================================================ */
 
 .assistant-header__close:focus-visible {
 
   outline:
-    2px solid
+    var(--border-thin)
+    solid
     var(--color-primary);
 
-  outline-offset: 2px;
+  outline-offset:
+    .2rem;
 }
 
 
-/* ==========================================================
-   RESPONSIVE
-========================================================== */
+/* ============================================================
+   IDENTITY — SUBTLE AI INTERACTION
+============================================================ */
 
-@media (max-width: 48em) {
+.assistant-header__identity:hover
+.assistant-header__icon {
+
+  background:
+    var(--color-primary);
+
+  border-color:
+    var(--color-primary);
+
+  color:
+    var(--color-text-inverse);
+
+  box-shadow:
+    var(--shadow-xs);
+}
+
+
+/* ============================================================
+   TABLET / MOBILE
+============================================================ */
+
+@include respond(phone-lg) {
+
+  .assistant-header {
+
+    min-height: 5.6rem;
+
+    padding:
+      var(--space-3);
+  }
+
+
+  .assistant-header__icon {
+
+    width: 3.6rem;
+
+    height: 3.6rem;
+  }
+
 
   .assistant-header__context {
 
-    display: none;
+    max-width:
+      20rem;
   }
-
 }

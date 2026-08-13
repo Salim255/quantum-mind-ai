@@ -1,0 +1,22 @@
+<article
+  class="assistant-message"
+  [class.assistant-message--user]="message().role === 'user'"
+  [class.assistant-message--assistant]="message().role === 'assistant'"
+>
+
+  @if (message().role === "assistant") {
+    <div
+      class="assistant-message__avatar"
+      aria-hidden="true"
+    >
+      <iconify-icon
+        icon="lucide:sparkles"
+      ></iconify-icon>
+    </div>
+  }
+
+  <div class="assistant-message__content">
+    {{ message().content }}
+  </div>
+
+</article>

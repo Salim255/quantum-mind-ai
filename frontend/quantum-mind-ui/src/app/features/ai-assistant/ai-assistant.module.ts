@@ -8,12 +8,14 @@ import { AssistantLauncherComponent } from "./components/assistant-launcher/assi
 import { AssistantConversationComponent } from "./components/assistant-conversation/assistant-conversation.component";
 import { AssistantComposerComponent } from "./components/assistant-composer/assistant-composer.component";
 import { AssistantConversationPHComponent } from "./components/assistant-conversation-p-h/assistant-conversation-p-h.component";
+import { AssistantMessageComponent } from "./components/assistant-message/assistant-message.component";
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [
+    AssistantMessageComponent,
     AssistantConversationPHComponent,
     AssistantComposerComponent,
     AssistantConversationComponent,

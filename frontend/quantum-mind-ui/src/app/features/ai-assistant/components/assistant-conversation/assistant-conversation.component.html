@@ -1,5 +1,7 @@
 <section class="assistant-conversation">
 
   <!-- messages -->
-  <div>Hello from all the messages</div>
+    @for(message of messages(); track message.id) {
+      <app-assistant-message [message]="message"></app-assistant-message>
+    }
 </section>
