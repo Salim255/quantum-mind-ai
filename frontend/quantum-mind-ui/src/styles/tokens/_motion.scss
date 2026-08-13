@@ -1,99 +1,74 @@
 /* ============================================================
-   QUANTUM AI DESIGN SYSTEM
+   QUANTUM MIND
+   MOTION SYSTEM
    ------------------------------------------------------------
-   MOTION TOKENS
+   Global motion variables.
 
-   Motion defines interaction timing and transitions.
+   Components consume these variables directly.
 
-   The system focuses on subtle, professional movement:
-   fast feedback, smooth surfaces and controlled elevation.
-
+   Motion should remain subtle, fast and predictable.
 ============================================================ */
 
+:root {
 
-/* ============================================================
-   DURATIONS
-============================================================ */
+  /* ==========================================================
+     DURATIONS
+  ========================================================== */
 
+  --duration-instant: 0ms;
 
-$duration-instant:
-  0ms;
+  --duration-fast: 120ms;
 
+  --duration-normal: 200ms;
 
-$duration-fast:
-  120ms;
+  --duration-slow: 300ms;
 
-
-$duration-normal:
-  200ms;
-
-
-$duration-slow:
-  300ms;
+  --duration-slower: 450ms;
 
 
-$duration-slower:
-  450ms;
+  /* ==========================================================
+     EASING
+  ========================================================== */
+
+  /* Standard UI interaction */
+
+  --ease-standard:
+    cubic-bezier(.2, 0, 0, 1);
 
 
+  /* Smooth entrance / exit */
 
-/* ============================================================
-   EASING
-============================================================ */
-
-
-/*
-   Default UI interaction.
-   Buttons, inputs, toggles.
-*/
-
-$ease-standard:
-  cubic-bezier(.2, .0, .0, 1);
+  --ease-smooth:
+    cubic-bezier(.4, 0, .2, 1);
 
 
+  /* Larger / emphasized movement */
 
-/*
-   Smooth entrance and exit.
-   Dropdowns, panels, dialogs.
-*/
-
-$ease-smooth:
-  cubic-bezier(.4, 0, .2, 1);
+  --ease-emphasized:
+    cubic-bezier(.16, 1, .3, 1);
 
 
+  /* Linear movement */
 
-/*
-   Slightly premium feeling.
-   Cards and larger movements.
-*/
-
-$ease-emphasized:
-  cubic-bezier(.16, 1, .3, 1);
+  --ease-linear:
+    linear;
 
 
+  /* ==========================================================
+     TRANSITIONS
+  ========================================================== */
 
-/*
-   Linear movement.
-   Used for progress indicators.
-*/
-
-$ease-linear:
-  linear;
-
+  --motion-fast:
+    var(--duration-fast)
+    var(--ease-standard);
 
 
-/* ============================================================
-   TRANSITIONS
-============================================================ */
+  --motion-normal:
+    var(--duration-normal)
+    var(--ease-smooth);
 
 
-$transition-fast:
-  $duration-fast $ease-standard;
-
-
-$transition-normal:
-  $duration-normal $ease-smooth;
-
-
-$transition-slow:
-  $duration-slow $ease-emphasized;
+  --motion-slow:
+    var(--duration-slow)
+    var(--ease-emphasized);
+}

@@ -6,4 +6,6 @@ import { Component } from "@angular/core";
   styleUrl: "./assistant-composer.component.scss",
   standalone: false
 })
-export class AssistantComposerComponent {}
+export class AssistantComposerComponent {
+  onSubmit(){}
+}

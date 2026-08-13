@@ -71,3 +71,67 @@ $radius-modal:
 
 $radius-badge:
   $radius-pill;
+/* ============================================================
+   QUANTUM MIND
+   RADIUS SYSTEM
+   ------------------------------------------------------------
+   Global radius variables.
+
+   The system uses restrained rounding:
+   small radii for controls,
+   medium radii for components,
+   larger radii for surfaces.
+============================================================ */
+
+:root {
+
+  /* ==========================================================
+     BASE SCALE
+  ========================================================== */
+
+  --radius-none: 0;
+
+  --radius-xs: .2rem;     /* 2px */
+
+  --radius-sm: .4rem;     /* 4px */
+
+  --radius-md: .6rem;     /* 6px */
+
+  --radius-lg: .8rem;     /* 8px */
+
+  --radius-xl: 1.2rem;    /* 12px */
+
+  --radius-2xl: 1.6rem;   /* 16px */
+
+
+  /* ==========================================================
+     SPECIAL VALUES
+  ========================================================== */
+
+  --radius-pill: 999px;
+
+  --radius-circle: 50%;
+
+
+  /* ==========================================================
+     COMPONENT INTENT
+  ========================================================== */
+
+  --radius-input:
+    var(--radius-md);
+
+  --radius-button:
+    var(--radius-md);
+
+  --radius-card:
+    var(--radius-xl);
+
+  --radius-panel:
+    var(--radius-xl);
+
+  --radius-modal:
+    var(--radius-2xl);
+
+  --radius-badge:
+    var(--radius-pill);
+}

@@ -1,209 +1,323 @@
 /* ============================================================
-   QUANTUM AI DESIGN SYSTEM
+   QUANTUM MIND
+   TYPOGRAPHY SYSTEM
    ------------------------------------------------------------
-   TYPOGRAPHY TOKENS
+   Global typography variables.
 
-   Typography is one of the strongest contributors to the
-   product identity.
+   Components consume semantic typography roles directly.
 
-   Components should consume typography tokens rather than
-   inventing font sizes or weights.
-
+   Font family, size, weight, line-height and tracking
+   remain centrally controlled.
 ============================================================ */
 
+:root {
 
-/* ============================================================
-   FONT FAMILY
-============================================================ */
+  /* ==========================================================
+     FONT FAMILY
+  ========================================================== */
 
-$font-family-base:
-  "Geist",
-  "Inter",
-  -apple-system,
-  BlinkMacSystemFont,
-  "Segoe UI",
-  sans-serif;
+  --font-family-base:
+    "Geist",
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
-$font-family-mono:
-  "Geist Mono",
-  "JetBrains Mono",
-  monospace;
+  --font-family-mono:
+    "Geist Mono",
+    "JetBrains Mono",
+    monospace;
 
 
-/* ============================================================
-   FONT WEIGHTS
-============================================================ */
+  /* ==========================================================
+     FONT WEIGHTS
+  ========================================================== */
 
-$font-light:300;
-$font-regular:400;
-$font-medium:500;
-$font-semibold:600;
-$font-bold:700;
+  --font-light: 300;
 
+  --font-regular: 400;
 
-/* ============================================================
-   FONT SIZES
-============================================================ */
+  --font-medium: 500;
 
-$text-xs:1.2rem;      //12
-$text-sm:1.4rem;      //14
-$text-base:1.6rem;    //16
-$text-lg:1.8rem;      //18
-$text-xl:2rem;        //20
-$text-2xl:2.4rem;     //24
-$text-3xl:3rem;       //30
-$text-4xl:3.6rem;     //36
-$text-5xl:4.8rem;     //48
-$text-6xl:6rem;       //60
+  --font-semibold: 600;
 
+  --font-bold: 700;
 
-/* ============================================================
-   LINE HEIGHT
-============================================================ */
 
-$leading-none:1;
+  /* ==========================================================
+     FONT SIZE
+  ========================================================== */
 
-$leading-tight:1.2;
+  --text-xs: 1.2rem;      /* 12px */
 
-$leading-snug:1.35;
+  --text-sm: 1.4rem;      /* 14px */
 
-$leading-normal:1.5;
+  --text-base: 1.6rem;    /* 16px */
 
-$leading-relaxed:1.7;
+  --text-lg: 1.8rem;      /* 18px */
 
-$leading-loose:1.9;
+  --text-xl: 2rem;        /* 20px */
 
+  --text-2xl: 2.4rem;     /* 24px */
 
-/* ============================================================
-   LETTER SPACING
-============================================================ */
+  --text-3xl: 3rem;       /* 30px */
 
-$tracking-tighter:-.04em;
+  --text-4xl: 3.6rem;     /* 36px */
 
-$tracking-tight:-.025em;
+  --text-5xl: 4.8rem;     /* 48px */
 
-$tracking-normal:0;
+  --text-6xl: 6rem;       /* 60px */
 
-$tracking-wide:.03em;
 
-$tracking-wider:.06em;
+  /* ==========================================================
+     LINE HEIGHT
+  ========================================================== */
 
-$tracking-widest:.1em;
+  --leading-none: 1;
 
+  --leading-tight: 1.2;
 
-/* ============================================================
-   DISPLAY
-============================================================ */
+  --leading-snug: 1.35;
 
-$display-lg-size:$text-6xl;
-$display-lg-weight:$font-bold;
-$display-lg-line-height:$leading-none;
-$display-lg-tracking:$tracking-tighter;
+  --leading-normal: 1.5;
 
+  --leading-relaxed: 1.7;
 
-$display-md-size:$text-5xl;
-$display-md-weight:$font-bold;
-$display-md-line-height:$leading-none;
-$display-md-tracking:$tracking-tighter;
+  --leading-loose: 1.9;
 
 
-$display-sm-size:$text-4xl;
-$display-sm-weight:$font-bold;
-$display-sm-line-height:$leading-tight;
-$display-sm-tracking:$tracking-tight;
+  /* ==========================================================
+     LETTER SPACING
+  ========================================================== */
 
+  --tracking-tighter: -.04em;
 
-/* ============================================================
-   HEADINGS
-============================================================ */
+  --tracking-tight: -.025em;
 
-$heading-xl-size:$text-3xl;
-$heading-xl-weight:$font-semibold;
-$heading-xl-line-height:$leading-tight;
-$heading-xl-tracking:$tracking-tight;
+  --tracking-normal: 0;
 
+  --tracking-wide: .03em;
 
-$heading-lg-size:$text-2xl;
-$heading-lg-weight:$font-semibold;
-$heading-lg-line-height:$leading-tight;
-$heading-lg-tracking:$tracking-tight;
+  --tracking-wider: .06em;
 
+  --tracking-widest: .1em;
 
-$heading-md-size:$text-xl;
-$heading-md-weight:$font-semibold;
-$heading-md-line-height:$leading-snug;
-$heading-md-tracking:$tracking-normal;
 
+  /* ==========================================================
+     DISPLAY
+  ========================================================== */
 
-$heading-sm-size:$text-lg;
-$heading-sm-weight:$font-semibold;
-$heading-sm-line-height:$leading-snug;
-$heading-sm-tracking:$tracking-normal;
+  --text-display-lg-size:
+    var(--text-6xl);
 
+  --text-display-lg-weight:
+    var(--font-bold);
 
-/* ============================================================
-   BODY
-============================================================ */
+  --text-display-lg-line:
+    var(--leading-none);
 
-$body-lg-size:$text-lg;
-$body-lg-weight:$font-regular;
-$body-lg-line-height:$leading-relaxed;
+  --text-display-lg-tracking:
+    var(--tracking-tighter);
 
 
-$body-md-size:$text-base;
-$body-md-weight:$font-regular;
-$body-md-line-height:$leading-relaxed;
+  --text-display-md-size:
+    var(--text-5xl);
 
+  --text-display-md-weight:
+    var(--font-bold);
 
-$body-sm-size:$text-sm;
-$body-sm-weight:$font-regular;
-$body-sm-line-height:$leading-normal;
+  --text-display-md-line:
+    var(--leading-none);
 
+  --text-display-md-tracking:
+    var(--tracking-tighter);
 
-/* ============================================================
-   LABELS
-============================================================ */
 
-$label-lg-size:$text-base;
-$label-lg-weight:$font-medium;
-$label-lg-line-height:$leading-normal;
+  --text-display-sm-size:
+    var(--text-4xl);
 
+  --text-display-sm-weight:
+    var(--font-bold);
 
-$label-md-size:$text-sm;
-$label-md-weight:$font-medium;
-$label-md-line-height:$leading-normal;
+  --text-display-sm-line:
+    var(--leading-tight);
 
+  --text-display-sm-tracking:
+    var(--tracking-tight);
 
-$label-sm-size:$text-xs;
-$label-sm-weight:$font-medium;
-$label-sm-line-height:$leading-normal;
-$label-sm-tracking:$tracking-wide;
 
+  /* ==========================================================
+     HEADINGS
+  ========================================================== */
 
-/* ============================================================
-   BUTTONS
-============================================================ */
+  --text-heading-xl-size:
+    var(--text-3xl);
 
-$button-size:$text-sm;
-$button-weight:$font-semibold;
-$button-line-height:$leading-none;
-$button-tracking:$tracking-normal;
+  --text-heading-xl-weight:
+    var(--font-semibold);
 
+  --text-heading-xl-line:
+    var(--leading-tight);
 
-/* ============================================================
-   CAPTIONS
-============================================================ */
+  --text-heading-xl-tracking:
+    var(--tracking-tight);
 
-$caption-size:$text-xs;
-$caption-weight:$font-regular;
-$caption-line-height:$leading-normal;
-$caption-tracking:$tracking-normal;
 
+  --text-heading-lg-size:
+    var(--text-2xl);
 
-/* ============================================================
-   CODE
-============================================================ */
+  --text-heading-lg-weight:
+    var(--font-semibold);
 
-$code-size:$text-sm;
-$code-weight:$font-medium;
-$code-line-height:$leading-normal;
+  --text-heading-lg-line:
+    var(--leading-tight);
+
+  --text-heading-lg-tracking:
+    var(--tracking-tight);
+
+
+  --text-heading-md-size:
+    var(--text-xl);
+
+  --text-heading-md-weight:
+    var(--font-semibold);
+
+  --text-heading-md-line:
+    var(--leading-snug);
+
+  --text-heading-md-tracking:
+    var(--tracking-normal);
+
+
+  --text-heading-sm-size:
+    var(--text-lg);
+
+  --text-heading-sm-weight:
+    var(--font-semibold);
+
+  --text-heading-sm-line:
+    var(--leading-snug);
+
+  --text-heading-sm-tracking:
+    var(--tracking-normal);
+
+
+  /* ==========================================================
+     BODY
+  ========================================================== */
+
+  --text-body-lg-size:
+    var(--text-lg);
+
+  --text-body-lg-weight:
+    var(--font-regular);
+
+  --text-body-lg-line:
+    var(--leading-relaxed);
+
+
+  --text-body-md-size:
+    var(--text-base);
+
+  --text-body-md-weight:
+    var(--font-regular);
+
+  --text-body-md-line:
+    var(--leading-relaxed);
+
+
+  --text-body-sm-size:
+    var(--text-sm);
+
+  --text-body-sm-weight:
+    var(--font-regular);
+
+  --text-body-sm-line:
+    var(--leading-normal);
+
+
+  /* ==========================================================
+     LABELS
+  ========================================================== */
+
+  --text-label-lg-size:
+    var(--text-base);
+
+  --text-label-lg-weight:
+    var(--font-medium);
+
+  --text-label-lg-line:
+    var(--leading-normal);
+
+
+  --text-label-md-size:
+    var(--text-sm);
+
+  --text-label-md-weight:
+    var(--font-medium);
+
+  --text-label-md-line:
+    var(--leading-normal);
+
+
+  --text-label-sm-size:
+    var(--text-xs);
+
+  --text-label-sm-weight:
+    var(--font-medium);
+
+  --text-label-sm-line:
+    var(--leading-normal);
+
+  --text-label-sm-tracking:
+    var(--tracking-wide);
+
+
+  /* ==========================================================
+     BUTTON
+  ========================================================== */
+
+  --text-button-size:
+    var(--text-sm);
+
+  --text-button-weight:
+    var(--font-semibold);
+
+  --text-button-line:
+    var(--leading-none);
+
+  --text-button-tracking:
+    var(--tracking-normal);
+
+
+  /* ==========================================================
+     CAPTION
+  ========================================================== */
+
+  --text-caption-size:
+    var(--text-xs);
+
+  --text-caption-weight:
+    var(--font-regular);
+
+  --text-caption-line:
+    var(--leading-normal);
+
+  --text-caption-tracking:
+    var(--tracking-normal);
+
+
+  /* ==========================================================
+     CODE
+  ========================================================== */
+
+  --text-code-size:
+    var(--text-sm);
+
+  --text-code-weight:
+    var(--font-medium);
+
+  --text-code-line:
+    var(--leading-normal);
+}

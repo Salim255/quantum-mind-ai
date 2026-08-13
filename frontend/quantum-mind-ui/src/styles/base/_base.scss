@@ -1,0 +1,206 @@
+/* ============================================================
+   QUANTUM MIND
+   GLOBAL FOUNDATION
+   ------------------------------------------------------------
+   Application-wide browser and document foundation.
+
+   Defines:
+   - document behavior
+   - typography foundation
+   - font rendering
+   - selection
+   - scrollbar
+   - accessibility behavior
+
+   Components consume global CSS variables directly.
+============================================================ */
+
+@use "../mixins/queries" as *;
+
+
+/* ============================================================
+   ROOT
+============================================================ */
+
+:root {
+
+  color-scheme: light;
+
+  font-family:
+    var(--font-family-base);
+
+  font-size: 62.5%;
+
+  font-weight:
+    var(--font-regular);
+
+  line-height:
+    var(--leading-normal);
+
+  text-rendering:
+    optimizeLegibility;
+
+  -webkit-font-smoothing:
+    antialiased;
+
+  -moz-osx-font-smoothing:
+    grayscale;
+
+
+  /* ==========================================================
+     RESPONSIVE ROOT SCALE
+  ========================================================== */
+
+  @include respond(desktop) {
+    font-size: 56.25%;
+  }
+
+  @include respond(tab-land) {
+    font-size: 53.125%;
+  }
+
+  @include respond(tab-port) {
+    font-size: 50%;
+  }
+
+  @include respond(phone-lg) {
+    font-size: 46.875%;
+  }
+
+  @include respond(phone) {
+    font-size: 43.75%;
+  }
+
+  @include respond(big-desktop) {
+    font-size: 75%;
+  }
+}
+
+
+/* ============================================================
+   DOCUMENT
+============================================================ */
+
+html,
+body,
+#root {
+
+  width: 100%;
+
+  min-height: 100%;
+}
+
+
+/* ============================================================
+   BODY
+============================================================ */
+
+body {
+
+  margin: 0;
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-text-primary);
+
+  font-family:
+    var(--font-family-base);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+}
+
+
+/* ============================================================
+   SELECTION
+============================================================ */
+
+::selection {
+
+  background:
+    var(--color-primary);
+
+  color:
+    var(--color-text-inverse);
+}
+
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+
+::-webkit-scrollbar {
+
+  width: .8rem;
+
+  height: .8rem;
+}
+
+
+::-webkit-scrollbar-track {
+
+  background:
+    transparent;
+}
+
+
+::-webkit-scrollbar-thumb {
+
+  background:
+    var(--color-border-strong);
+
+  border-radius:
+    var(--radius-pill);
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+  background:
+    var(--color-text-muted);
+}
+
+
+/* ============================================================
+   INTERACTION
+============================================================ */
+
+button,
+a {
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+
+    animation-duration:
+      .01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      .01ms !important;
+
+    scroll-behavior:
+      auto !important;
+  }
+}

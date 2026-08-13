@@ -1,0 +1,77 @@
+/* ============================================================
+   ASSISTANT COMPOSER
+   ------------------------------------------------------------
+   Bottom interaction area for the AI assistant.
+
+   The composer should feel integrated into the panel:
+   subtle separation, compact spacing and minimal elevation.
+============================================================ */
+
+.assistant-panel__composer {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap:
+    var(--component-gap-xs);
+
+  width: 100%;
+
+  padding:
+    var(--space-4);
+
+  border-top:
+    var(--border-divider)
+    solid
+    var(--color-border-subtle);
+
+  background:
+    var(--color-surface);
+  padding-bottom: 14rem;
+}
+
+
+/* ============================================================
+   COMPOSER
+============================================================ */
+
+.assistant-panel__composer
+app-assistant-composer {
+
+  display: block;
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   AI DISCLAIMER
+============================================================ */
+
+.assistant-panel__hint {
+
+  display: block;
+
+  width: 100%;
+
+  padding-inline:
+    var(--space-1);
+
+  color:
+    var(--color-text-muted);
+
+  font-size:
+    var(--text-caption-size);
+
+  font-weight:
+    var(--text-caption-weight);
+
+  line-height:
+    var(--text-caption-line);
+
+  letter-spacing:
+    var(--text-caption-tracking);
+
+  text-align: center;
+}

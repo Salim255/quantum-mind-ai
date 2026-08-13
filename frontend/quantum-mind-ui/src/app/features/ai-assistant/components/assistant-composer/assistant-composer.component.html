@@ -1,9 +1,22 @@
-<form class="assistant-composer">
+<form
+  class="assistant-composer"
+  (ngSubmit)="onSubmit()"
+>
+  <textarea
+    class="assistant-composer__input"
+    rows="1"
+    placeholder="Ask anything about this content..."
+    aria-label="Ask the AI assistant"
+  ></textarea>
 
-  <textarea></textarea>
-
-  <button type="submit">
-    →
+  <button
+    class="assistant-composer__send"
+    type="submit"
+    aria-label="Send message"
+  >
+    <iconify-icon
+      class="assistant-composer__send-icon"
+      icon="lucide:arrow-up"
+    ></iconify-icon>
   </button>
-
 </form>
