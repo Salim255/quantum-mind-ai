@@ -1,170 +1,138 @@
-/* ============================================
-   BFM COLOR SYSTEM — PREMIUM MINIMAL
-============================================ */
 /* ============================================================
-   QUANTUM AI DESIGN SYSTEM
+   QUANTUM MIND
+   COLOR SYSTEM
+   ------------------------------------------------------------
+   Global color variables.
 
-   COLOR TOKENS
+   Components consume these variables directly.
 
-   Raw color primitives.
-   No component should consume these directly.
-
+   No component should need to know the underlying
+   color palette or its numeric scale.
 ============================================================ */
 
+:root {
 
+  /* ==========================================================
+     BASE
+  ========================================================== */
 
-/* ============================================================
-   BASE NEUTRALS
+  --color-white: #ffffff;
+  --color-black: #000000;
 
-   Main identity:
-   Black / White / Soft neutral system
-============================================================ */
 
+  /* ==========================================================
+     SURFACES
+  ========================================================== */
 
-$white:#ffffff;
+  --color-surface: #ffffff;
 
+  --color-surface-subtle: #fcfcfd;
 
-$black:#000000;
+  --color-surface-muted: #f2f4f7;
 
+  --color-surface-hover: #eaecf0;
 
 
-/* ============================================================
-   GREY SCALE
+  /* ==========================================================
+     TEXT
+  ========================================================== */
 
-   Used for hierarchy, borders, backgrounds, text.
-============================================================ */
+  --color-text-primary: #101828;
 
+  --color-text-secondary: #475467;
 
-$grey-25:#fcfcfd;
+  --color-text-muted: #667085;
 
-$grey-50:#f9fafb;
+  --color-text-disabled: #98a2b3;
 
-$grey-100:#f2f4f7;
+  --color-text-inverse: #ffffff;
 
-$grey-200:#eaecf0;
 
-$grey-300:#d0d5dd;
+  /* ==========================================================
+     BORDERS
+  ========================================================== */
 
-$grey-400:#98a2b3;
+  --color-border-subtle: #eaecf0;
 
-$grey-500:#667085;
+  --color-border: #d0d5dd;
 
-$grey-600:#475467;
+  --color-border-strong: #98a2b3;
 
-$grey-700:#344054;
 
-$grey-800:#1d2939;
+  /* ==========================================================
+     PRIMARY
+  ========================================================== */
 
-$grey-900:#101828;
+  --color-primary: #2563eb;
 
+  --color-primary-hover: #1d4ed8;
 
+  --color-primary-active: #1e40af;
 
-/* ============================================================
-   PURE CONTRAST
+  --color-primary-soft: #eff6ff;
 
-   Used for premium black/white surfaces
-============================================================ */
+  --color-primary-border: #bfdbfe;
 
 
-$ink-950:#09090b;
+  /* ==========================================================
+     SUCCESS
+  ========================================================== */
 
-$ink-900:#18181b;
+  --color-success: #12b76a;
 
-$ink-800:#27272a;
+  --color-success-hover: #039855;
 
+  --color-success-soft: #ecfdf3;
 
+  --color-success-border: #d1fadf;
 
-/* ============================================================
-   PRIMARY ACCENT
 
-   Controlled Quantum AI identity color
+  /* ==========================================================
+     WARNING
+  ========================================================== */
 
-============================================================ */
+  --color-warning: #f79009;
 
-$primary-50:#eff6ff;
+  --color-warning-hover: #dc6803;
 
-$primary-100:#dbeafe;
+  --color-warning-soft: #fffaeb;
 
-$primary-200:#bfdbfe;
+  --color-warning-border: #fef0c7;
 
-$primary-300:#93c5fd;
 
-$primary-400:#60a5fa;
+  /* ==========================================================
+     ERROR
+  ========================================================== */
 
-$primary-500:#3b82f6;
+  --color-error: #f04438;
 
-$primary-600:#2563eb;
+  --color-error-hover: #d92d20;
 
-$primary-700:#1d4ed8;
+  --color-error-soft: #fef3f2;
 
-$primary-800:#1e40af;
+  --color-error-border: #fee4e2;
 
-$primary-900:#1e3a8a;
 
+  /* ==========================================================
+     INFORMATION
+  ========================================================== */
 
+  --color-info: #2e90fa;
 
-/* ============================================================
-   SUCCESS
-============================================================ */
+  --color-info-hover: #1570ef;
 
+  --color-info-soft: #eff8ff;
 
-$success-50:#ecfdf3;
+  --color-info-border: #d1e9ff;
 
-$success-100:#d1fadf;
 
-$success-500:#12b76a;
+  /* ==========================================================
+     CONTRAST
+  ========================================================== */
 
-$success-600:#039855;
+  --color-ink: #09090b;
 
-$success-700:#027a48;
+  --color-ink-muted: #18181b;
 
-
-
-/* ============================================================
-   WARNING
-============================================================ */
-
-
-$warning-50:#fffaeb;
-
-$warning-100:#fef0c7;
-
-$warning-500:#f79009;
-
-$warning-600:#dc6803;
-
-$warning-700:#b54708;
-
-
-
-/* ============================================================
-   ERROR / DANGER
-============================================================ */
-
-
-$error-50:#fef3f2;
-
-$error-100:#fee4e2;
-
-$error-500:#f04438;
-
-$error-600:#d92d20;
-
-$error-700:#b42318;
-
-
-
-/* ============================================================
-   INFORMATION
-============================================================ */
-
-
-$info-50:#eff8ff;
-
-$info-100:#d1e9ff;
-
-$info-500:#2e90fa;
-
-$info-600:#1570ef;
-
-$info-700:#175cd3;
+  --color-ink-soft: #27272a;
+}

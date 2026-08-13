@@ -1,4 +1,4 @@
-import { Component, output } from "@angular/core";
+import { Component } from "@angular/core";
 import { AIAssistantService } from "../../service/ai-assistant.service";
 
 @Component({
