@@ -22,8 +22,6 @@ export class ConversationService {
   ){}
 
   sendMessage(payload: ConversationPayload): Observable<ConversationResponse>{
-
-    this.questionService.setQuestion(payload.message);
     return this.conversationHttpService.sendMessage(payload).pipe(
       tap((response: ConversationResponse) => {
         const answer_payload: AnswerPayload = response.data.answer;
@@ -67,8 +65,13 @@ export class ConversationService {
     //2 Create assistant message
     const assistantMessage = this.createAssistantMessage(payload.conversation_id);
 
-    this.appendMessage(userMessage);
-    this.appendMessage(assistantMessage);
+    // 3. Add both messages to the current conversation
+    this.appendMessages([
+      userMessage,
+      assistantMessage,
+    ]);
+
+
 
     this.conversationHttpService
     .sendStreamMessage(payload)
@@ -107,22 +110,22 @@ export class ConversationService {
     return this.conversationSubject.value;
   }
 
-  appendMessage(payload: AssistantMessage){
-    const conversation = this.getCurrentConversation();
+  private appendMessages(
+    messages: AssistantMessage[]
+  ): void {
+
+    const conversation =
+      this.getCurrentConversation();
 
     if (!conversation) {
       return;
     }
 
-    const updatedConversation: Conversation = {
-      ...conversation,
-      messages: [
-        ...conversation.messages,
-        message,
-      ],
-    };
+    conversation.appendMessages(messages);
 
-    this.conversationSubject.next(updatedConversation);
+    this.conversationSubject.next(
+      conversation
+    );
   }
 
 }
