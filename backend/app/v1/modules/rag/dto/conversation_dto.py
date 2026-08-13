@@ -14,12 +14,10 @@ class MemoryMessage(BaseModel):
     timestamp: float = Field(..., description="Unix timestamp of when the message was added to memory")
 
 class ConversationSession(BaseModel):
-    user_id: str = Field(..., description="Unique identifier for the user")
     conversation_id: Optional[str] = Field(None, description="The conversation identifier")
     messages: list[MemoryMessage] = Field(default_factory=[], description="List of messages in the conversation session")    
 
 class ConversationRequest(BaseModel):
-    user_id: str = Field(..., description="Unique identifier for the user")
     message: str = Field(..., description="The message content")
     conversation_id: Optional[str] = Field(None, description="The conversation identifier")
 

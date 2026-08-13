@@ -16,7 +16,7 @@ export class MessageFormComponent {
   user_message: string = "";
 
   submit(){
-    const payload: ConversationPayload = {user_id: "", conversation_id: "", message: this.user_message}
+    const payload: ConversationPayload = {conversation_id: "", message: this.user_message}
     this.conservationService.sendStreamMessage(payload);
     this.user_message = "";
   }

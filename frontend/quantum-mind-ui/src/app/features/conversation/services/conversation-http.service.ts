@@ -4,7 +4,6 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 export interface ConversationPayload {
-  user_id: string;
   message: string;
   conversation_id: string;
 }

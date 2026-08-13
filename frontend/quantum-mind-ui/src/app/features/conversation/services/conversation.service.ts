@@ -1,9 +1,15 @@
 import { Injectable } from "@angular/core";
-import { AnswerPayload, ConversationHttpService, ConversationPayload, ConversationResponse, FinalAnswer } from "./conversation-http.service";
+import {
+  AnswerPayload,
+  ConversationHttpService,
+  ConversationPayload,
+  ConversationResponse
+} from "./conversation-http.service";
 import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { Conversation } from "../model/conversation.model";
 import { MessageService } from "./message.service";
 import { QuestionService } from "./question.service";
+import { AssistantMessage } from "../../ai-assistant/components/assistant-message/assistant-message.component";
 
 @Injectable({providedIn: "root"})
 export class ConversationService {
@@ -26,13 +32,49 @@ export class ConversationService {
     );
   }
 
+  private createUserMessage(
+    payload: ConversationPayload
+  ): AssistantMessage {
+
+    return {
+      id: crypto.randomUUID(),
+      conversationId: payload.conversation_id,
+      role: "user",
+      content: payload.message,
+      createdAt: new Date(),
+    };
+  }
+
+
+  private createAssistantMessage(
+    conversationId: string
+  ): AssistantMessage {
+
+    return {
+      id: crypto.randomUUID(),
+      conversationId,
+      role: "assistant",
+      content: "",
+      createdAt: new Date(),
+    };
+  }
+
   sendStreamMessage(payload: ConversationPayload): void {
     this.questionService.setQuestion(payload.message);
+    //1 Create user message
+    const userMessage = this.createUserMessage(payload);
+
+    //2 Create assistant message
+    const assistantMessage = this.createAssistantMessage(payload.conversation_id);
+
+    this.appendMessage(userMessage);
+    this.appendMessage(assistantMessage);
 
     this.conversationHttpService
     .sendStreamMessage(payload)
     .subscribe({
       next: (chunk: string) => {
+
         this.messageService.setStreamResponseSubject(chunk);
       },
       error: (err) => {console.log(err)},
@@ -47,7 +89,6 @@ export class ConversationService {
   fetChConversation():Observable<Conversation>{
     const conversation = new Conversation(
             'conv-1',
-              'user-1',
               []
             );
 
@@ -62,6 +103,26 @@ export class ConversationService {
     return this.conversationSubject.asObservable();
   }
 
+  getCurrentConversation(): Conversation | null{
+    return this.conversationSubject.value;
+  }
 
-  appendMessage(){}
+  appendMessage(payload: AssistantMessage){
+    const conversation = this.getCurrentConversation();
+
+    if (!conversation) {
+      return;
+    }
+
+    const updatedConversation: Conversation = {
+      ...conversation,
+      messages: [
+        ...conversation.messages,
+        message,
+      ],
+    };
+
+    this.conversationSubject.next(updatedConversation);
+  }
+
 }

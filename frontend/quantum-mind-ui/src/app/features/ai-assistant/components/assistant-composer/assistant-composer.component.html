@@ -5,6 +5,9 @@
   <textarea
     class="assistant-composer__input"
     rows="1"
+    name="message"
+    [(ngModel)]="message"
+    [value]="message"
     placeholder="Ask anything about this content..."
     aria-label="Ask the AI assistant"
   ></textarea>

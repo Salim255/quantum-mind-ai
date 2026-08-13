@@ -1,61 +1,112 @@
-export interface MessageSchema {
-  id: string;
-  question: string;
-  response: string;
-}
-export class Conversation {
-  private user_id: string;
-  private conversation_id: string;
-  private messages: MessageSchema []
+import { AssistantMessage } from "../../ai-assistant/components/assistant-message/assistant-message.component";
 
-  // messageId -> index in messages array
-  private messagesMap: Map<string, number>  = new Map();
+export class Conversation {
+
+  private conversation_id: string;
+
+  private messages: AssistantMessage[];
+
+  // messageId → index in messages array
+  private messagesMap: Map<string, number> = new Map();
+
 
   constructor(
     conversation_id: string,
-    user_id: string,
-    messages: MessageSchema []
-  ){
-    this.user_id = user_id;
+    messages: AssistantMessage[] = [],
+  ) {
+
     this.conversation_id = conversation_id;
+
     this.messages = messages;
 
     this.buildMessagesMap();
   }
 
-  appendMessage(message: MessageSchema){
-    // 1 Check if the message already exist
-    const existingIndex = this.messagesMap.get(message.id);
 
-    // 2 update existing message
-    if(existingIndex !== undefined) {
+  appendMessage(message: AssistantMessage): void {
+
+    const existingIndex =
+      this.messagesMap.get(message.id);
+
+
+    // Update existing message
+    if (existingIndex !== undefined) {
+
       this.messages[existingIndex] = message;
+
       return;
     }
 
-    // 3 add new message
+
+    // Add new message
     this.messages.push(message);
 
-    // 4 Store new index in map
-    this.messagesMap.set(message.id, this.messages.length - 1 );
+
+    // Store new index
+    this.messagesMap.set(
+      message.id,
+      this.messages.length - 1,
+    );
   }
 
-  getUerId(): string{
-    return this.user_id;
-  }
 
-  buildMessagesMap(): void{
-    this.messages.forEach((message, index) => {
-      this.messagesMap.set(message.id, index);
+  appendMessages(messages: AssistantMessage[]): void {
+
+    messages.forEach(message => {
+      this.appendMessage(message);
     });
   }
 
-  getMessages(): MessageSchema[]{
-    return this.messages;
+
+  appendContent(
+    messageId: string,
+    chunk: string,
+  ): void {
+
+    const existingIndex =
+      this.messagesMap.get(messageId);
+
+
+    if (existingIndex === undefined) {
+      return;
+    }
+
+
+    const message =
+      this.messages[existingIndex];
+
+
+    message.content += chunk;
   }
 
-  getConversationId(): string{
+
+  private buildMessagesMap(): void {
+
+    this.messages.forEach((message, index) => {
+
+      this.messagesMap.set(
+        message.id,
+        index,
+      );
+
+    });
+  }
+
+
+  getMessages(): AssistantMessage[] {
+    return [...this.messages];
+  }
+
+
+  getConversationId(): string {
     return this.conversation_id;
   }
 
+
+  toJSON() {
+    return {
+      conversation_id: this.conversation_id,
+      messages: [...this.messages],
+    };
+  }
 }

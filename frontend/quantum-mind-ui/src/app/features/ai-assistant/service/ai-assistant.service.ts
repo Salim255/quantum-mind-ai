@@ -15,7 +15,6 @@ export class AIAssistantService {
     this._isAssistantVisible$.next(true);
   }
 
-
   hideAssistant(): void {
     this._isAssistantVisible$.next(false);
   }
