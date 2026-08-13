@@ -19,8 +19,11 @@
   background: var(--color-surface);
   color: var(--color-text-primary);
 
-  background-color: red;
-
+  &__conversation-p-h {
+    min-height: 0;
+    height: 100%;
+    margin: auto;
+  }
   &__footer{
     margin-top: auto;
   }

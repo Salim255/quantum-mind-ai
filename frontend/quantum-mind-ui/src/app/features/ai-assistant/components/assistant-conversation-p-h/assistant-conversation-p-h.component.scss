@@ -1,0 +1,128 @@
+/* ============================================================
+   ASSISTANT CONVERSATION — EMPTY STATE
+   ------------------------------------------------------------
+   Quiet AI-focused introduction surface.
+============================================================ */
+
+.assistant-conversation-pl {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 100%;
+
+  min-height: 100%;
+
+  padding:
+    var(--space-8)
+    var(--space-6);
+
+  text-align: center;
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.assistant-conversation-pl__icon {
+
+  display: flex;
+
+  justify-content: center;
+
+  width: 4.8rem;
+
+  height: 4.8rem;
+
+  margin-bottom:
+    var(--component-gap-md);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-xl);
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
+
+  box-shadow:
+    var(--shadow-xs);
+
+  justify-items: center;
+}
+
+
+.assistant-conversation-pl__icon iconify-icon {
+
+  display: block;
+
+  width: 2.2rem;
+
+  height: 2.2rem;
+  display: flex;
+  align-self: center;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.assistant-conversation-pl__title {
+
+  margin:
+    0 0
+    var(--component-gap-xs);
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  letter-spacing:
+    var(--text-heading-sm-tracking);
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.assistant-conversation-pl__description {
+
+  max-width:
+    36rem;
+
+  margin: 0;
+
+  color:
+    var(--color-text-secondary);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+}

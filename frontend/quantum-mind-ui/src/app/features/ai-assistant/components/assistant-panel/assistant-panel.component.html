@@ -2,10 +2,17 @@
   class="assistant-panel"
   aria-label="AI Assistant"
 >
-  <section  class="assistant-panel__conversation">
-    <app-assistant-conversation-p-h></app-assistant-conversation-p-h>
-    <app-assistant-conversation></app-assistant-conversation>
-  </section>
+  @if(messages.length) {
+    <section class="assistant-panel__conversation-p-h">
+      <app-assistant-conversation-p-h></app-assistant-conversation-p-h>
+    </section>
+  }
+  @else {
+    <section  class="assistant-panel__conversation">
+      <app-assistant-conversation></app-assistant-conversation>
+    </section>
+  }
+
   <section  class="assistant-panel__footer">
     <app-assistant-footer></app-assistant-footer>
   </section>
