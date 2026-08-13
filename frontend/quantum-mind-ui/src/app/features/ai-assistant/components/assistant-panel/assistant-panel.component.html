@@ -2,7 +2,7 @@
   class="assistant-panel"
   aria-label="AI Assistant"
 >
-  @if(!messages.length) {
+  @if(!messages().length) {
     <section class="assistant-panel__conversation-p-h">
       <app-assistant-conversation-p-h></app-assistant-conversation-p-h>
     </section>

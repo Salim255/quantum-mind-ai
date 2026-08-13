@@ -7,7 +7,6 @@ import {
 } from "./conversation-http.service";
 import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { Conversation } from "../model/conversation.model";
-import { MessageService } from "./message.service";
 import { QuestionService } from "./question.service";
 import { AssistantMessage } from "../../ai-assistant/components/assistant-message/assistant-message.component";
 
@@ -17,18 +16,9 @@ export class ConversationService {
 
   constructor(
     private questionService: QuestionService,
-    private messageService: MessageService,
     private conversationHttpService: ConversationHttpService,
   ){}
 
-  sendMessage(payload: ConversationPayload): Observable<ConversationResponse>{
-    return this.conversationHttpService.sendMessage(payload).pipe(
-      tap((response: ConversationResponse) => {
-        const answer_payload: AnswerPayload = response.data.answer;
-
-      })
-    );
-  }
 
   private createUserMessage(
     payload: ConversationPayload
@@ -58,7 +48,6 @@ export class ConversationService {
   }
 
   sendStreamMessage(payload: ConversationPayload): void {
-    this.questionService.setQuestion(payload.message);
     //1 Create user message
     const userMessage = this.createUserMessage(payload);
 
