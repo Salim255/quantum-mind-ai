@@ -51,7 +51,6 @@ export class Conversation {
 
 
   appendMessages(messages: AssistantMessage[]): void {
-
     messages.forEach(message => {
       this.appendMessage(message);
     });
@@ -62,7 +61,6 @@ export class Conversation {
     messageId: string,
     chunk: string,
   ): void {
-
     const existingIndex =
       this.messagesMap.get(messageId);
 

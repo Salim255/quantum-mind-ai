@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ConversationService } from "../../services/conversation.service";
-import { Conversation, MessageSchema } from "../../model/conversation.model";
+import { Conversation } from "../../model/conversation.model";
+import { AssistantMessage } from "../../../ai-assistant/components/assistant-message/assistant-message.component";
 
 @Component({
   selector: "app-messages",
@@ -12,7 +13,7 @@ import { Conversation, MessageSchema } from "../../model/conversation.model";
 export class MessagesComponent implements OnInit, OnDestroy {
   conversationSubscription!: Subscription;
   private conversation: Conversation | null = null;
-  messages = signal<MessageSchema[]>([]);
+  messages = signal<AssistantMessage[]>([]);
 
   constructor(private conversationService: ConversationService) {}
 

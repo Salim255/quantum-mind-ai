@@ -25,7 +25,7 @@ export class ConversationService {
     return this.conversationHttpService.sendMessage(payload).pipe(
       tap((response: ConversationResponse) => {
         const answer_payload: AnswerPayload = response.data.answer;
-        this.messageService.setMessage(answer_payload);
+
       })
     );
   }
@@ -72,13 +72,11 @@ export class ConversationService {
     ]);
 
 
-
     this.conversationHttpService
     .sendStreamMessage(payload)
     .subscribe({
       next: (chunk: string) => {
-
-        this.messageService.setStreamResponseSubject(chunk);
+        this.appendMessageContent(assistantMessage.id, chunk);
       },
       error: (err) => {console.log(err)},
       complete: () => {}
@@ -90,10 +88,7 @@ export class ConversationService {
   }
 
   fetChConversation():Observable<Conversation>{
-    const conversation = new Conversation(
-            'conv-1',
-              []
-            );
+    const conversation = new Conversation('conv-1', []);
 
     return of(conversation).pipe(
       tap((conversation: Conversation) => {
@@ -108,6 +103,28 @@ export class ConversationService {
 
   getCurrentConversation(): Conversation | null{
     return this.conversationSubject.value;
+  }
+
+  private appendMessageContent(
+    messageId: string,
+    chunk: string
+  ): void {
+
+    const conversation =
+      this.getCurrentConversation();
+
+    if (!conversation) {
+      return;
+    }
+
+    conversation.appendContent(
+      messageId,
+      chunk
+    );
+
+    this.conversationSubject.next(
+      conversation
+    );
   }
 
   private appendMessages(

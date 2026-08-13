@@ -4,24 +4,11 @@ import { AnswerPayload } from "./conversation-http.service";
 
 @Injectable({providedIn: "root"})
 export class MessageService {
-  private streamingResponseSubject = new BehaviorSubject<string | null>(this.loadFromSession())
+  private streamingResponseSubject = new BehaviorSubject<string | null>(null)
   private messageSubject = new BehaviorSubject<AnswerPayload | null>(null)
 
   constructor(){}
 
-  completeStreamResponseSubject():void{
-    this.streamingResponseSubject.complete();
-  }
-
-  setMessage(message: AnswerPayload){
-    this.messageSubject.next(message)
-  }
-
-  setStreamResponseSubject(response: string | null) {
-    this.streamingResponseSubject.next(response);
-    if(!response) return
-    this.saveMessageToSession(response);
-  }
 
   get getStreamResponse$(): Observable<string | null>{
     return this.streamingResponseSubject.asObservable();
@@ -31,12 +18,5 @@ export class MessageService {
     return this.messageSubject.asObservable()
   }
 
-  private saveMessageToSession(msg: string) {
-    sessionStorage.setItem('currentMessage', JSON.stringify(msg));
-  }
 
-  private loadFromSession(): string | null {
-    const data = sessionStorage.getItem('currentMessage');
-    return data ? JSON.parse(data) : null;
-  }
 }
