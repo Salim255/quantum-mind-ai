@@ -3,38 +3,60 @@
 /* ============================================================
    DASH HEADER
 ============================================================ */
+
 .dash-header {
+
   display: flex;
+
   flex-direction: column;
 
-  background: var(--color-surface);
+  background:
+    var(--color-surface);
+
   border-bottom:
-    var(--border-divider)
+    var(--border-thin)
     solid
     var(--color-border);
 
   position: sticky;
+
   top: 0;
+
   z-index: 100;
 }
 
+
+/* ============================================================
+   HEADER CONTENT
+============================================================ */
+
 .dash-header__content {
+
   height: 64px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  padding-inline: var(--page-padding-desktop);
+  padding-inline:
+    var(--space-4);
 }
 
+
+/* ============================================================
+   BREADCRUMB
+============================================================ */
+
 .dash-header__breadcrumb {
+
   padding:
-    var(--space-sm)
-    var(--page-padding-desktop);
+    var(--space-2)
+    var(--space-4);
 
   border-top:
-    var(--border-divider)
+    var(--border-thin)
     solid
     var(--color-border-subtle);
 
@@ -42,40 +64,67 @@
     var(--color-surface-subtle);
 
   display: flex;
+
   justify-content: space-between;
 }
 
 
+/* ============================================================
+   IDENTITY
+============================================================ */
+
 .dash-header__identity {
+
   display: flex;
+
   align-items: center;
-  gap: var(--component-gap-md);
+
+  gap:
+    var(--component-gap-md);
 }
+
+
+/* ============================================================
+   MENU
+============================================================ */
+
 .dash-header__menu {
+
   width: 40px;
+
   height: 40px;
 
   display: grid;
+
   place-items: center;
 
   border:
-    var(--border-button)
+    var(--border-thin)
     solid
     transparent;
 
-  border-radius: 10px;
+  border-radius:
+    var(--radius-md);
 
-  background: transparent;
+  background:
+    transparent;
 
-  color: var(--color-text-secondary);
+  color:
+    var(--color-text-secondary);
 
-  cursor: pointer;
+  cursor:
+    pointer;
 
   transition:
-    background .2s,
-    border-color .2s,
-    color .2s;
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
+
+
+/* ============================================================
+   MENU — HOVER
+============================================================ */
 
 .dash-header__menu:hover {
 
@@ -86,6 +135,11 @@
     var(--color-border);
 }
 
+
+/* ============================================================
+   MENU — ACTIVE
+============================================================ */
+
 .dash-header__menu:active {
 
   background:
@@ -95,78 +149,112 @@
     var(--color-primary);
 }
 
-.dash-header__menu iconify-icon {
 
-    font-size:22px;
+/* ============================================================
+   MENU ICON
+============================================================ */
+
+.dash-header__menu
+iconify-icon {
+
+  font-size:
+    22px;
 }
+
+
+/* ============================================================
+   BRAND
+============================================================ */
 
 .dash-header__brand span {
 
-    font-size:
-      var(--text-heading-sm-size);
+  font-size:
+    var(--text-heading-sm-size);
 
-    font-weight:
-      var(--text-heading-sm-weight);
+  font-weight:
+    var(--text-heading-sm-weight);
 
-    line-height:
-      var(--text-heading-sm-line);
+  line-height:
+    var(--text-heading-sm-line);
 
-    color:
-      var(--color-text-primary);
+  color:
+    var(--color-text-primary);
 
-    letter-spacing:
-      -.02em;
+  letter-spacing:
+    -.02em;
 }
 
-.dash-header__brand small{
 
-    font-size:
-      var(--text-caption-size);
+/* ============================================================
+   BRAND CONTEXT
+============================================================ */
 
-    color:
-      var(--color-text-muted);
+.dash-header__brand small {
+
+  font-size:
+    var(--text-label-sm-size);
+
+  color:
+    var(--color-text-muted);
 }
+
+
+/* ============================================================
+   HEADER BUTTON
+============================================================ */
+
 .dash-header__btn {
 
-    height:40px;
+  height:
+    40px;
 
-    padding-inline:
-      var(--space-lg);
+  padding-inline:
+    var(--space-4);
 
-    display:flex;
-    align-items:center;
+  display:
+    flex;
 
-    border:
-      var(--border-button)
-      solid
-      var(--color-border);
+  align-items:
+    center;
 
-    border-radius:999px;
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border);
 
-    background:
-      var(--color-surface);
+  border-radius:
+    var(--radius-full);
 
-    color:
-      var(--color-text-primary);
+  background:
+    var(--color-surface);
 
-    font-size:
-      var(--text-label-md-size);
+  color:
+    var(--color-text-primary);
 
-    font-weight:
-      var(--text-label-md-weight);
+  font-size:
+    var(--text-label-md-size);
 
-    cursor:pointer;
+  font-weight:
+    var(--text-label-md-weight);
 
-    transition:
-      background .2s,
-      border-color .2s;
+  cursor:
+    pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
-.dash-header__btn:hover{
 
-    background:
-      var(--color-surface-muted);
+/* ============================================================
+   BUTTON — HOVER
+============================================================ */
 
-    border-color:
-      var(--color-border-strong);
+.dash-header__btn:hover {
+
+  background:
+    var(--color-surface-muted);
+
+  border-color:
+    var(--color-border-strong);
 }

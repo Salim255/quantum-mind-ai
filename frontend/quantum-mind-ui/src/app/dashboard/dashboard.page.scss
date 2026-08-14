@@ -19,7 +19,7 @@ DASHBOARD PAGE
 
   scroll-margin-top: 90rem;
 
-
+  padding: 0 var(--page-padding-md);
   /* ========================================================
   CONTENT
   ======================================================== */
@@ -128,11 +128,22 @@ DASHBOARD PAGE
   ASIDE
   ======================================================== */
   &__aside {
-
     position: sticky;
+
+    top: 0;
 
     min-width: 0;
 
+    padding-top:
+      var(--space-4);
+
+    padding-right:
+      var(--space-4);
+
+    border-right:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
     app-aside-layout {
       width: 100%;
     }

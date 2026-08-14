@@ -1,99 +1,109 @@
-/* ==========================================================
+/* ============================================================
    BREAD CRUMBS
-========================================================== */
+============================================================ */
 
 .bread-crumbs {
 
-    display: inline-flex;
+  display: inline-flex;
 
-    align-items: center;
+  align-items: center;
 
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 
-    gap: var(--space-xs);
-
+  gap:
+    var(--space-1);
 }
 
 
-
-/* ==========================================================
+/* ============================================================
    LINK
-========================================================== */
+============================================================ */
 
 .bread-crumbs__link {
 
-    display: inline-flex;
+  display: inline-flex;
 
-    align-items: center;
+  align-items: center;
 
-    justify-content: center;
+  justify-content: center;
 
-    min-height: 2.8rem;
+  min-height:
+    2.8rem;
 
-    padding-inline: var(--space-xs);
+  padding-inline:
+    var(--space-1);
 
-    border-radius: .6rem;
+  border-radius:
+    var(--radius-md);
 
-    text-decoration: none;
+  text-decoration: none;
 
-    color: var(--color-text-secondary);
+  color:
+    var(--color-text-secondary);
 
-    font-size: var(--text-body-sm-size);
+  font-size:
+    var(--text-body-sm-size);
 
-    font-weight: var(--text-body-sm-weight);
+  font-weight:
+    var(--text-body-sm-weight);
 
-    line-height: var(--text-body-sm-line);
+  line-height:
+    var(--text-body-sm-line);
 
-    transition:
-        color var(--motion-hover),
-        background var(--motion-hover);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
 
-    &:hover {
 
-        color: var(--color-text-primary);
+  &:hover {
 
-        background: var(--color-surface-muted);
+    color:
+      var(--color-text-primary);
 
-    }
-
+    background:
+      var(--color-surface-muted);
+  }
 }
 
 
-
-/* ==========================================================
+/* ============================================================
    ACTIVE
-========================================================== */
+============================================================ */
 
 .bread-crumbs__link--active {
 
-    color: var(--color-primary);
+  color:
+    var(--color-primary);
 
-    font-weight: var(--text-label-lg-weight);
+  font-weight:
+    var(--text-label-lg-weight);
 
-    pointer-events: none;
-
+  pointer-events:
+    none;
 }
 
 
-
-/* ==========================================================
+/* ============================================================
    SEPARATOR
-========================================================== */
+============================================================ */
 
 .bread-crumbs__separator {
 
-    display: inline-flex;
+  display: inline-flex;
 
-    align-items: center;
+  align-items: center;
 
-    justify-content: center;
+  justify-content: center;
 
-    color: var(--color-text-disabled);
+  color:
+    var(--color-text-disabled);
 
-    font-size: var(--text-caption-size);
+  font-size:
+    var(--text-label-sm-size);
 
-    font-weight: var(--text-caption-weight);
+  font-weight:
+    var(--text-label-sm-weight);
 
-    user-select: none;
-
+  user-select:
+    none;
 }

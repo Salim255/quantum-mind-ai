@@ -6,7 +6,7 @@
   width: 100%;
   min-height: 42px;
 
-  padding-inline: var(--space-md);
+  padding-inline: var(--space-4);
 
   border:
     var(--border-button)
@@ -20,7 +20,7 @@
   color: var(--color-text-secondary);
 
   text-decoration: none;
-
+  //padding: 0 var( --page-padding-lg);
   transition:
     background .18s ease,
     color .18s ease,
