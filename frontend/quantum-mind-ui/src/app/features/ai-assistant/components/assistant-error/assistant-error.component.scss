@@ -1,0 +1,152 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   ASSISTANT ERROR
+   ------------------------------------------------------------
+   Compact contextual error state.
+
+   The error state should feel:
+   - clear
+   - calm
+   - contextual
+   - recoverable
+
+   It should communicate failure without dominating
+   the conversation UI.
+============================================================ */
+
+
+.assistant-error {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: var(--space-3);
+
+  max-width: 100%;
+
+  padding:
+    var(--space-2)
+    var(--space-3);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-error-border);
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    var(--color-error-soft);
+
+  color:
+    var(--color-text-primary);
+
+  overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   ERROR ICON
+============================================================ */
+
+.assistant-error__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 2.8rem;
+
+  height: 2.8rem;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-error-border);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-white);
+
+  color:
+    var(--color-error);
+}
+
+
+.assistant-error__icon iconify-icon {
+
+  display: block;
+
+  width: 1.5rem;
+
+  height: 1.5rem;
+}
+
+
+/* ============================================================
+   ERROR LABEL
+============================================================ */
+
+.assistant-error__label {
+
+  color:
+    var(--color-text-primary);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--font-medium);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  overflow-wrap:
+    anywhere;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@include respond(tab-port) {
+
+  .assistant-error {
+
+    width: 100%;
+
+  }
+
+}
+
+
+@include respond(phone) {
+
+  .assistant-error {
+
+    gap: var(--space-2);
+
+    padding:
+      var(--space-2);
+
+  }
+
+
+  .assistant-error__icon {
+
+    width: 2.6rem;
+
+    height: 2.6rem;
+
+  }
+
+}

@@ -11,6 +11,7 @@ import { AssistantConversationPHComponent } from "./components/assistant-convers
 import { AssistantMessageComponent } from "./components/assistant-message/assistant-message.component";
 import { FormsModule } from "@angular/forms";
 import { AssistantThinkingComponent } from "./components/assistant-thinking/assistant-thinking.component";
+import { AssistantErrorComponent } from "./components/assistant-error/assistant-error.component";
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { AssistantThinkingComponent } from "./components/assistant-thinking/assi
     CommonModule
   ],
   declarations: [
+    AssistantErrorComponent,
     AssistantThinkingComponent,
     AssistantMessageComponent,
     AssistantConversationPHComponent,

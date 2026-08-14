@@ -1,12 +1,22 @@
 @use "../../../../../styles/mixins/queries" as *;
+
+
 /* ============================================================
    ASSISTANT HEADER
    ------------------------------------------------------------
-   Quantum AI
-   Premium minimal / restrained AI identity
+   Quantum Mind
+   Premium AI surface / restrained elevation
+
+   The header is intentionally separated from the conversation
+   through a subtle bottom border + elevation rather than a
+   heavy card shadow.
 ============================================================ */
 
 .assistant-header {
+
+  position: relative;
+
+  z-index: 2;
 
   display: flex;
 
@@ -30,10 +40,20 @@
   border-bottom:
     var(--border-thin)
     solid
-    var(--color-border-subtle);
+    var(--color-border);
 
   background:
     var(--color-surface);
+
+  /*
+   * Very restrained elevation.
+   *
+   * The header should feel like a distinct layer without
+   * looking like a floating card.
+   */
+  box-shadow:
+    0 .4rem 1.2rem rgba(16, 24, 40, .04);
+
 }
 
 
@@ -56,9 +76,13 @@
 
 /* ============================================================
    AI ICON
+   ------------------------------------------------------------
+   This is the visual anchor of the assistant.
 ============================================================ */
 
 .assistant-header__icon {
+
+  position: relative;
 
   flex-shrink: 0;
 
@@ -84,16 +108,56 @@
   color:
     var(--color-primary);
 
+  /*
+   * Subtle depth around the AI identity.
+   */
+  box-shadow:
+    0 .2rem .6rem rgba(37, 99, 235, .08);
+
   transition:
     background var(--transition-fast),
     border-color var(--transition-fast),
     color var(--transition-fast),
     box-shadow var(--transition-fast);
+
+}
+
+
+/*
+ * Tiny inner highlight.
+ *
+ * Gives the icon container a little more depth without
+ * introducing another color token.
+ */
+
+.assistant-header__icon::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: .3rem;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    calc(var(--radius-lg) - .2rem);
+
+  opacity: .45;
+
+  pointer-events: none;
 }
 
 
 .assistant-header__icon
 iconify-icon {
+
+  position: relative;
+
+  z-index: 1;
 
   display: flex;
 
@@ -145,9 +209,11 @@ iconify-icon {
   letter-spacing:
     var(--text-heading-sm-tracking);
 
-  text-overflow: ellipsis;
+  text-overflow:
+    ellipsis;
 
-  white-space: nowrap;
+  white-space:
+    nowrap;
 }
 
 
@@ -157,12 +223,33 @@ iconify-icon {
 
 .assistant-header__context {
 
-  display: block;
+  display: inline-flex;
+
+  align-items: center;
+
+  width: fit-content;
+
+  max-width: 100%;
 
   overflow: hidden;
 
+  padding:
+    .15rem
+    .55rem;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-full);
+
+  background:
+    var(--color-surface-subtle);
+
   color:
-    var(--color-text-secondary);
+    var(--color-text-muted);
 
   font-size:
     var(--text-label-sm-size);
@@ -176,9 +263,11 @@ iconify-icon {
   letter-spacing:
     var(--text-label-sm-tracking);
 
-  text-overflow: ellipsis;
+  text-overflow:
+    ellipsis;
 
-  white-space: nowrap;
+  white-space:
+    nowrap;
 }
 
 
@@ -187,6 +276,8 @@ iconify-icon {
 ============================================================ */
 
 .assistant-header__close {
+
+  position: relative;
 
   flex-shrink: 0;
 
@@ -203,13 +294,13 @@ iconify-icon {
   border:
     var(--border-thin)
     solid
-    transparent;
+    var(--color-border-subtle);
 
   border-radius:
     var(--radius-md);
 
   background:
-    transparent;
+    var(--color-surface-subtle);
 
   color:
     var(--color-text-secondary);
@@ -221,7 +312,9 @@ iconify-icon {
   transition:
     background var(--transition-fast),
     color var(--transition-fast),
-    border-color var(--transition-fast);
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 
@@ -234,9 +327,9 @@ iconify-icon {
 
   display: flex;
 
-  width: 1.8rem;
+  width: 1.7rem;
 
-  height: 1.8rem;
+  height: 1.7rem;
 }
 
 
@@ -246,14 +339,18 @@ iconify-icon {
 
 .assistant-header__close:hover {
 
+  border-color:
+    var(--color-border);
+
   background:
-    var(--color-surface-muted);
+    var(--color-surface-hover);
 
   color:
     var(--color-text-primary);
 
-  border-color:
-    var(--color-border-subtle);
+  box-shadow:
+    0 .2rem .6rem rgba(16, 24, 40, .06);
+
 }
 
 
@@ -264,7 +361,11 @@ iconify-icon {
 .assistant-header__close:active {
 
   background:
-    var(--color-border-subtle);
+    var(--color-surface-muted);
+
+  transform:
+    scale(.96);
+
 }
 
 
@@ -281,27 +382,23 @@ iconify-icon {
 
   outline-offset:
     .2rem;
+
 }
 
 
 /* ============================================================
-   IDENTITY — SUBTLE AI INTERACTION
+   HEADER — SUBTLE AI PRESENCE
 ============================================================ */
 
-.assistant-header__identity:hover
+.assistant-header:hover
 .assistant-header__icon {
-
-  background:
-    var(--color-primary);
 
   border-color:
     var(--color-primary);
 
-  color:
-    var(--color-text-inverse);
-
   box-shadow:
-    var(--shadow-xs);
+    0 .3rem .9rem rgba(37, 99, 235, .12);
+
 }
 
 
@@ -317,6 +414,10 @@ iconify-icon {
 
     padding:
       var(--space-3);
+
+    box-shadow:
+      0 .3rem .8rem rgba(16, 24, 40, .04);
+
   }
 
 
@@ -325,6 +426,7 @@ iconify-icon {
     width: 3.6rem;
 
     height: 3.6rem;
+
   }
 
 
@@ -332,5 +434,67 @@ iconify-icon {
 
     max-width:
       20rem;
+
   }
+
+
+  .assistant-header__close {
+
+    width: 3.4rem;
+
+    height: 3.4rem;
+
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .assistant-header {
+
+    gap:
+      var(--space-2);
+
+  }
+
+
+  .assistant-header__identity {
+
+    gap:
+      var(--space-2);
+
+  }
+
+
+  .assistant-header__icon {
+
+    width: 3.4rem;
+
+    height: 3.4rem;
+
+  }
+
+
+  .assistant-header__icon
+  iconify-icon {
+
+    width: 1.6rem;
+
+    height: 1.6rem;
+
+  }
+
+
+  .assistant-header__context {
+
+    max-width:
+      16rem;
+
+  }
+
 }

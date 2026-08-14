@@ -11,8 +11,8 @@
   @if (message().role === "assistant") {
 
     <!-- ==================================================
-         AI AVATAR
-         ================================================== -->
+    AI AVATAR
+    ================================================== -->
     <div
       class="assistant-message__avatar"
       aria-hidden="true"
@@ -24,67 +24,35 @@
 
 
     <!-- ==================================================
-         THINKING
-         ================================================== -->
+    THINKING
+    ================================================== -->
     @if (message().status === "thinking") {
       <app-assistant-thinking></app-assistant-thinking>
     }
 
     <!-- ==================================================
-         ERROR
-         ================================================== -->
+    ERROR
+    ================================================== -->
     @else if (message().status === "error") {
-
-      <div
-        class="assistant-message__state
-               assistant-message__state--error"
-        role="alert"
-      >
-
-        <span
-          class="assistant-message__state-icon"
-          aria-hidden="true"
-        >
-          <iconify-icon
-            icon="lucide:triangle-alert"
-          ></iconify-icon>
-        </span>
-
-        <div class="assistant-message__state-content">
-
-          <span class="assistant-message__state-label">
-            Something went wrong
-          </span>
-
-          <span class="assistant-message__state-description">
-            The assistant couldn't generate a response.
-          </span>
-
-        </div>
-
-      </div>
-
+      <app-assistant-error></app-assistant-error>
     }
 
-
     <!-- ==================================================
-         RESPONSE
-         ================================================== -->
+    RESPONSE
+    ================================================== -->
     @else {
-
       <div
         class="assistant-message__content"
         [innerHTML]="responseHtml()"
       ></div>
-
     }
 
   }
 
 
   <!-- ==================================================
-       USER MESSAGE
-       ================================================== -->
+  USER MESSAGE
+  ================================================== -->
   @else {
 
     <div
