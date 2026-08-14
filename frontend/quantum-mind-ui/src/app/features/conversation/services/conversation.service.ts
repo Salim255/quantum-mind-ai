@@ -1,72 +1,54 @@
 import { Injectable } from "@angular/core";
-import {
-  AnswerPayload,
-  ConversationHttpService,
-  ConversationPayload,
-  ConversationResponse
-} from "./conversation-http.service";
+import { ConversationHttpService, ConversationPayload } from "./conversation-http.service";
 import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { Conversation } from "../model/conversation.model";
-import { QuestionService } from "./question.service";
 import { AssistantMessage } from "../../ai-assistant/components/assistant-message/assistant-message.component";
-import { AssistantConversation } from "../../ai-assistant/components/assistant-conversation/assistant-conversation.component";
 
 @Injectable({providedIn: "root"})
 export class ConversationService {
   private conversationSubject = new BehaviorSubject<Conversation| null>(null);
 
-  constructor(
-    private questionService: QuestionService,
-    private conversationHttpService: ConversationHttpService,
-  ){}
+  constructor(private conversationHttpService: ConversationHttpService){}
 
 
-  private createUserMessage(
-    payload: ConversationPayload
-  ): AssistantMessage {
+  private createUserMessage(message: string): AssistantMessage {
 
     return {
       id: crypto.randomUUID(),
-      conversationId: payload.conversation_id,
+      conversationId: this.getCurrentConversation()?.getConversationId() ?? "",
       role: "user",
-      content: payload.message,
+      content: message,
       createdAt: new Date(),
     };
   }
 
 
-  private createAssistantMessage(
-    conversationId: string
-  ): AssistantMessage {
+  private createAssistantMessage(): AssistantMessage {
 
     return {
       id: crypto.randomUUID(),
-      conversationId,
+      conversationId: this.getCurrentConversation()?.getConversationId() ?? "",
       role: "assistant",
       content: "",
       createdAt: new Date(),
     };
   }
 
-  private createAssistantConversation(
-    title: string,
-  ): AssistantConversation {
 
-    const now = new Date();
+  sendStreamMessage(
+    payload: ConversationPayload & { title: string }
+  ): void {
 
-    return {
-      id: crypto.randomUUID(),
-      title,
-      createdAt: now,
-      updatedAt: now,
-    };
-  }
-  sendStreamMessage(payload: ConversationPayload): void {
+    if(!this.getCurrentConversation()){
+      this.createAssistantConversation(payload.title);
+    }
+
+
     //1 Create user message
-    const userMessage = this.createUserMessage(payload);
+    const userMessage = this.createUserMessage(payload.message);
 
     //2 Create assistant message
-    const assistantMessage = this.createAssistantMessage(payload.conversation_id);
+    const assistantMessage = this.createAssistantMessage();
 
     // 3. Add both messages to the current conversation
     this.appendMessages([
@@ -74,12 +56,14 @@ export class ConversationService {
       assistantMessage,
     ]);
 
-    console.log("We are going to the next")
     this.conversationHttpService
-    .sendStreamMessage(payload)
+    .sendStreamMessage({
+      conversation_id: this.getCurrentConversation()?.getConversationId() ?? "",
+      message: payload.message
+    })
     .subscribe({
       next: (chunk: string) => {
-        console.log(chunk, "helo from chunk");
+
         this.appendMessageContent(assistantMessage.id, chunk);
       },
       error: (err) => {console.log(err)},
@@ -91,15 +75,6 @@ export class ConversationService {
     this.conversationSubject.next(conversation);
   }
 
-  fetChConversation():Observable<Conversation>{
-    const conversation = new Conversation('conv-1', []);
-
-    return of(conversation).pipe(
-      tap((conversation: Conversation) => {
-        this.setConversation(conversation);
-      })
-    );
-  }
 
   get getConversation(): Observable<Conversation | null> {
     return this.conversationSubject.asObservable();
@@ -117,7 +92,6 @@ export class ConversationService {
     const conversation =
       this.getCurrentConversation();
 
-    console.log(conversation);
     if (!conversation) {
       return;
     }
@@ -148,6 +122,16 @@ export class ConversationService {
     this.conversationSubject.next(
       conversation
     );
+  }
+
+  private createAssistantConversation(
+      title: string,
+    ): void {
+
+    this.setConversation(new Conversation(
+      crypto.randomUUID(),
+      title,
+    ))
   }
 
 }

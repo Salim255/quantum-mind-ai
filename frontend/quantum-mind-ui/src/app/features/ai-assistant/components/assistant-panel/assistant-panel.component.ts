@@ -30,8 +30,7 @@ export class AssistantPanelComponent implements OnInit, OnDestroy {
     this.conversationSubscription = this.conversationService
     .getConversation
     .subscribe(conversation => {
-      console.log(conversation),"hello from conversation";
-      this.messages.set(conversation?.getMessages() ?? []);
+      this.messages.set(conversation?.getMessages()? [...conversation?.getMessages()]: []);
     })
   }
 

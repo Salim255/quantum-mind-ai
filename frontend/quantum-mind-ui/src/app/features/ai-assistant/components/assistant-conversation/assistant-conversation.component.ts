@@ -33,7 +33,7 @@ export class AssistantConversationComponent {
     this.conversationSubscription = this.conversationService
       .getConversation
       .subscribe(conversation => {
-        this.messages.set(conversation?.getMessages() ?? []);
+        this.messages.set(conversation?.getMessages()? [...conversation?.getMessages()]: []);
       })
   }
 

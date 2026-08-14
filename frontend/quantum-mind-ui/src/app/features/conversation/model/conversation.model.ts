@@ -103,8 +103,8 @@ export class Conversation {
     const message =
       this.messages[existingIndex];
 
+    this.messages[existingIndex] = {...message, content: chunk}
 
-    message.content += chunk;
 
 
     this.updatedAt = new Date();

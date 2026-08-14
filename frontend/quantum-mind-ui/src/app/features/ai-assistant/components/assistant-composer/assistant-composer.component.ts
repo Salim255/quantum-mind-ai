@@ -14,6 +14,6 @@ export class AssistantComposerComponent {
 
   onSubmit(){
     const payload: ConversationPayload = { conversation_id: "", message: this.message};
-    this.conservationService.sendStreamMessage(payload);
+    this.conservationService.sendStreamMessage({...payload, title: "fake title"});
   }
 }

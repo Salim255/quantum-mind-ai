@@ -18,7 +18,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
   constructor(private conversationService: ConversationService) {}
 
   ngOnInit(): void {
-    this.conversationService.fetChConversation().subscribe();
     this.subscribeToConversation()
   }
 
