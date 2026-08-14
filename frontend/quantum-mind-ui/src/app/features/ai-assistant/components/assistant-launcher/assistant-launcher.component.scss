@@ -1,0 +1,205 @@
+/* ============================================================
+   ASSISTANT LAUNCHER
+   ------------------------------------------------------------
+   Clean / soft / discreet AI control
+============================================================ */
+
+.assistant-launcher {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  min-height:
+    3.8rem;
+
+  padding:
+    var(--space-1)
+    var(--space-2);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-pill);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-text-secondary);
+
+  cursor:
+    pointer;
+
+  appearance:
+    none;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.assistant-launcher__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    2.8rem;
+
+  height:
+    2.8rem;
+
+  border-radius:
+    var(--radius-circle);
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+.assistant-launcher__icon
+iconify-icon {
+
+  display: flex;
+
+  width:
+    1.5rem;
+
+  height:
+    1.5rem;
+}
+
+
+/* ============================================================
+   LABEL
+============================================================ */
+
+.assistant-launcher__label {
+
+  padding-right:
+    var(--space-2);
+
+  color:
+    var(--color-text-secondary);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   SOFT HOVER
+============================================================ */
+
+.assistant-launcher:hover {
+
+  background:
+    var(--color-surface-subtle);
+
+  border-color:
+    var(--color-border);
+
+  color:
+    var(--color-text-primary);
+}
+
+
+.assistant-launcher:hover
+.assistant-launcher__label {
+
+  color:
+    var(--color-text-primary);
+}
+
+
+.assistant-launcher:hover
+.assistant-launcher__icon {
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary-hover);
+}
+
+
+/* ============================================================
+   ACTIVE
+============================================================ */
+
+.assistant-launcher:active {
+
+  background:
+    var(--color-surface-muted);
+
+  border-color:
+    var(--color-border);
+
+  transform:
+    scale(.99);
+}
+
+
+/* ============================================================
+   FOCUS
+============================================================ */
+
+.assistant-launcher:focus-visible {
+
+  outline:
+    var(--border-thin)
+    solid
+    var(--color-primary);
+
+  outline-offset:
+    .2rem;
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .assistant-launcher {
+
+    transition:
+      background var(--transition-fast),
+      border-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+}
