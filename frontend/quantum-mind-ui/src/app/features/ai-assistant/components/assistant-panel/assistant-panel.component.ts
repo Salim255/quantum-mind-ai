@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   OnDestroy,
   OnInit,
@@ -16,7 +15,7 @@ import { AssistantMessage } from '../assistant-message/assistant-message.compone
   styleUrl: './assistant-panel.component.scss',
   standalone: false
 })
-export class AssistantPanelComponent implements OnInit, OnDestroy{
+export class AssistantPanelComponent implements OnInit, OnDestroy {
   private conversationSubscription!: Subscription;
   readonly close = output<void>();
   messages = signal<AssistantMessage[]>([]);
@@ -28,7 +27,10 @@ export class AssistantPanelComponent implements OnInit, OnDestroy{
   }
 
   subscribeToConversation(){
-    this.conversationSubscription = this.conversationService.getConversation.subscribe(conversation => {
+    this.conversationSubscription = this.conversationService
+    .getConversation
+    .subscribe(conversation => {
+      console.log(conversation),"hello from conversation";
       this.messages.set(conversation?.getMessages() ?? []);
     })
   }

@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { Conversation } from "../model/conversation.model";
 import { QuestionService } from "./question.service";
 import { AssistantMessage } from "../../ai-assistant/components/assistant-message/assistant-message.component";
+import { AssistantConversation } from "../../ai-assistant/components/assistant-conversation/assistant-conversation.component";
 
 @Injectable({providedIn: "root"})
 export class ConversationService {
@@ -47,6 +48,19 @@ export class ConversationService {
     };
   }
 
+  private createAssistantConversation(
+    title: string,
+  ): AssistantConversation {
+
+    const now = new Date();
+
+    return {
+      id: crypto.randomUUID(),
+      title,
+      createdAt: now,
+      updatedAt: now,
+    };
+  }
   sendStreamMessage(payload: ConversationPayload): void {
     //1 Create user message
     const userMessage = this.createUserMessage(payload);
@@ -60,11 +74,12 @@ export class ConversationService {
       assistantMessage,
     ]);
 
-
+    console.log("We are going to the next")
     this.conversationHttpService
     .sendStreamMessage(payload)
     .subscribe({
       next: (chunk: string) => {
+        console.log(chunk, "helo from chunk");
         this.appendMessageContent(assistantMessage.id, chunk);
       },
       error: (err) => {console.log(err)},
@@ -102,6 +117,7 @@ export class ConversationService {
     const conversation =
       this.getCurrentConversation();
 
+    console.log(conversation);
     if (!conversation) {
       return;
     }

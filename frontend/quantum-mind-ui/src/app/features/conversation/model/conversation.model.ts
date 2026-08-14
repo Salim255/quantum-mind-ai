@@ -1,21 +1,40 @@
-import { AssistantMessage } from "../../ai-assistant/components/assistant-message/assistant-message.component";
+import {
+  AssistantMessage,
+} from "../../ai-assistant/components/assistant-message/assistant-message.component";
+
 
 export class Conversation {
 
-  private conversation_id: string;
+  private readonly conversationId: string;
+
+  private title: string;
+
+  private readonly createdAt: Date;
+
+  private updatedAt: Date;
 
   private messages: AssistantMessage[];
 
   // messageId → index in messages array
-  private messagesMap: Map<string, number> = new Map();
+  private readonly messagesMap:
+    Map<string, number> = new Map();
 
 
   constructor(
-    conversation_id: string,
+    conversationId: string,
+    title: string,
+    createdAt: Date = new Date(),
+    updatedAt: Date = createdAt,
     messages: AssistantMessage[] = [],
   ) {
 
-    this.conversation_id = conversation_id;
+    this.conversationId = conversationId;
+
+    this.title = title;
+
+    this.createdAt = createdAt;
+
+    this.updatedAt = updatedAt;
 
     this.messages = messages;
 
@@ -23,7 +42,9 @@ export class Conversation {
   }
 
 
-  appendMessage(message: AssistantMessage): void {
+  appendMessage(
+    message: AssistantMessage,
+  ): void {
 
     const existingIndex =
       this.messagesMap.get(message.id);
@@ -33,6 +54,8 @@ export class Conversation {
     if (existingIndex !== undefined) {
 
       this.messages[existingIndex] = message;
+
+      this.updatedAt = new Date();
 
       return;
     }
@@ -47,13 +70,19 @@ export class Conversation {
       message.id,
       this.messages.length - 1,
     );
+
+
+    this.updatedAt = new Date();
   }
 
 
-  appendMessages(messages: AssistantMessage[]): void {
-    messages.forEach(message => {
-      this.appendMessage(message);
-    });
+  appendMessages(
+    messages: AssistantMessage[],
+  ): void {
+
+    messages.forEach(message =>
+      this.appendMessage(message),
+    );
   }
 
 
@@ -61,6 +90,7 @@ export class Conversation {
     messageId: string,
     chunk: string,
   ): void {
+
     const existingIndex =
       this.messagesMap.get(messageId);
 
@@ -75,19 +105,44 @@ export class Conversation {
 
 
     message.content += chunk;
+
+
+    this.updatedAt = new Date();
   }
 
 
   private buildMessagesMap(): void {
 
-    this.messages.forEach((message, index) => {
+    this.messages.forEach(
+      (message, index) => {
 
-      this.messagesMap.set(
-        message.id,
-        index,
-      );
+        this.messagesMap.set(
+          message.id,
+          index,
+        );
 
-    });
+      },
+    );
+  }
+
+
+  getConversationId(): string {
+    return this.conversationId;
+  }
+
+
+  getTitle(): string {
+    return this.title;
+  }
+
+
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+
+  getUpdatedAt(): Date {
+    return this.updatedAt;
   }
 
 
@@ -96,15 +151,14 @@ export class Conversation {
   }
 
 
-  getConversationId(): string {
-    return this.conversation_id;
-  }
-
-
   toJSON() {
     return {
-      conversation_id: this.conversation_id,
+      id: this.conversationId,
+      title: this.title,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
       messages: [...this.messages],
     };
   }
+
 }
