@@ -20,6 +20,7 @@ export interface AssistantMessage {
   id: string;
   conversationId: string;
   role: AssistantMessageRole;
+  isThinking?: boolean,
   content: string;
   createdAt: Date;
 }
@@ -35,7 +36,6 @@ export class AssistantMessageComponent {
 
   readonly message =
     input.required<AssistantMessage>();
-
 
   /**
    * Converts the assistant response from Markdown

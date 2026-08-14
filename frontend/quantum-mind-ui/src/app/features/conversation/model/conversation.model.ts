@@ -103,7 +103,7 @@ export class Conversation {
     const message =
       this.messages[existingIndex];
 
-    this.messages[existingIndex] = {...message, content: chunk}
+    this.messages[existingIndex] = {...message, content: chunk, isThinking: false}
 
 
 
