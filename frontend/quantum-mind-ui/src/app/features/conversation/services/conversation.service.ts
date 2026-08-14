@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ConversationHttpService, ConversationPayload } from "./conversation-http.service";
 import { BehaviorSubject, Observable, of, tap } from "rxjs";
 import { Conversation } from "../model/conversation.model";
-import { AssistantMessage } from "../../ai-assistant/components/assistant-message/assistant-message.component";
+import { AssistantMessage, AssistantMessageStatus } from "../../ai-assistant/components/assistant-message/assistant-message.component";
 
 @Injectable({providedIn: "root"})
 export class ConversationService {
@@ -64,11 +64,14 @@ export class ConversationService {
     })
     .subscribe({
       next: (chunk: string) => {
-
         this.appendMessageContent(assistantMessage.id, chunk);
       },
-      error: (err) => {console.log(err)},
-      complete: () => {}
+      error: (err) => {
+        this.updateMessageStatus(assistantMessage.id, 'error')
+      },
+      complete: () => {
+        this.updateMessageStatus(assistantMessage.id, 'complete');
+      }
     });
   }
 
@@ -106,6 +109,29 @@ export class ConversationService {
       conversation
     );
   }
+
+    private updateMessageStatus(
+    messageId: string,
+    status: AssistantMessageStatus
+  ): void {
+
+    const conversation =
+      this.getCurrentConversation();
+
+    if (!conversation) {
+      return;
+    }
+
+    conversation.updateMessageStatus(
+      messageId,
+      status
+    );
+
+    this.conversationSubject.next(
+      conversation
+    );
+  }
+
 
   private appendMessages(
     messages: AssistantMessage[]

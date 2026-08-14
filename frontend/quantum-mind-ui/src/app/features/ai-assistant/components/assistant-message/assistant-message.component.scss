@@ -1,18 +1,32 @@
 /* ============================================================
    ASSISTANT MESSAGE
+   ------------------------------------------------------------
+   Rich AI response surface.
+
+   The assistant response is generated from Markdown and may
+   contain arbitrary semantic HTML. This layer therefore owns
+   the complete readable-content typography and spacing system.
+
+   Design principles:
+   - User messages are compact and contained.
+   - AI messages are open and editorial.
+   - Typography creates hierarchy.
+   - Surfaces are used only when they add meaning.
+   - No hardcoded pixel values.
 ============================================================ */
 
 .assistant-message {
 
   display: flex;
+  align-items: flex-start;
 
   width: 100%;
-
   min-width: 0;
 
   gap: var(--component-gap-sm);
 
   color: var(--color-text-primary);
+
 }
 
 
@@ -24,7 +38,11 @@
 
   justify-content: flex-end;
 
-  padding-left: var(--space-8);
+  padding-inline-start:
+    var(--space-8);
+
+  padding-block-end:
+    var(--space-3);
 
 }
 
@@ -32,13 +50,9 @@
 .assistant-message--user
 .assistant-message__content {
 
-  max-width:
-    75%;
-
-  padding: var(--space-3) var(--space-4);
-
-  background:
-    var(--color-primary-soft);
+  padding:
+    var(--space-3)
+    var(--space-4);
 
   border:
     var(--border-thin)
@@ -51,6 +65,9 @@
     var(--radius-sm)
     var(--radius-xl);
 
+  background:
+    var(--color-primary-soft);
+
   color:
     var(--color-text-primary);
 
@@ -65,13 +82,10 @@
 
   overflow-wrap:
     anywhere;
+
 }
 
 
-.assistant-message--user {
-  padding-bottom: var(--space-2);
-  padding-top: var(--space-6);
-}
 /* ============================================================
    ASSISTANT MESSAGE
 ============================================================ */
@@ -80,8 +94,12 @@
 
   align-items: flex-start;
 
-  padding-right:
+  padding-inline-end:
     var(--space-6);
+
+  padding-block-end:
+    var(--space-5);
+
 }
 
 
@@ -92,14 +110,14 @@
 
   min-width: 0;
 
-  padding-top:
+  padding-block-start:
     var(--space-1);
 
   color:
     var(--color-text-primary);
 
   font-size:
-    var(--text-body-sm-size);
+    var(--text-body-md-size);
 
   font-weight:
     var(--text-body-md-weight);
@@ -109,26 +127,25 @@
 
   overflow-wrap:
     anywhere;
+
 }
 
 
 /* ============================================================
-   AI ICON
+   AI IDENTITY MARK
 ============================================================ */
 
 .assistant-message__avatar {
 
-  flex-shrink: 0;
-
   display: grid;
-
   place-items: center;
 
-  width: 3.2rem;
+  flex-shrink: 0;
 
+  width: 3.2rem;
   height: 3.2rem;
 
-  margin-top:
+  margin-block-start:
     var(--space-1);
 
   border:
@@ -144,6 +161,7 @@
 
   color:
     var(--color-primary);
+
 }
 
 
@@ -152,9 +170,935 @@ iconify-icon {
 
   display: block;
 
-  width: 1.6rem;
+  font-size:
+    var(--text-base);
 
-  height: 1.6rem;
+}
+
+
+/* ============================================================
+   RICH AI CONTENT
+   ------------------------------------------------------------
+   Everything below applies only to injected assistant HTML.
+============================================================ */
+
+.assistant-message--assistant
+.assistant-message__content {
+
+
+  /* ==========================================================
+     PARAGRAPHS
+  ========================================================== */
+
+  p {
+
+    margin: 0;
+
+  }
+
+
+  p + p {
+
+    margin-block-start:
+      var(--component-gap-md);
+
+  }
+
+
+  /* ==========================================================
+     HEADINGS
+  ========================================================== */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+
+    margin: 0;
+
+    color:
+      var(--color-text-primary);
+
+    font-weight:
+      var(--font-semibold);
+
+    line-height:
+      var(--leading-tight);
+
+  }
+
+
+  h1 {
+
+    margin-block-start:
+      var(--section-gap-md);
+
+    margin-block-end:
+      var(--component-gap-md);
+
+    font-size:
+      var(--heading-xl-size);
+
+    letter-spacing:
+      var(--heading-xl-tracking);
+
+  }
+
+
+  h2 {
+
+    margin-block-start:
+      var(--section-gap-md);
+
+    margin-block-end:
+      var(--component-gap-md);
+
+    font-size:
+      var(--heading-lg-size);
+
+    letter-spacing:
+      var(--heading-lg-tracking);
+
+  }
+
+
+  h3 {
+
+    margin-block-start:
+      var(--section-gap-sm);
+
+    margin-block-end:
+      var(--component-gap-sm);
+
+    font-size:
+      var(--heading-md-size);
+
+    letter-spacing:
+      var(--heading-md-tracking);
+
+  }
+
+
+  h4 {
+
+    margin-block-start:
+      var(--component-gap-lg);
+
+    margin-block-end:
+      var(--component-gap-sm);
+
+    font-size:
+      var(--heading-sm-size);
+
+  }
+
+
+  h5,
+  h6 {
+
+    margin-block-start:
+      var(--component-gap-md);
+
+    margin-block-end:
+      var(--component-gap-xs);
+
+    font-size:
+      var(--text-base);
+
+  }
+
+
+  /* ==========================================================
+     FIRST / LAST ELEMENT RHYTHM
+  ========================================================== */
+
+  > :first-child {
+
+    margin-block-start: 0;
+
+  }
+
+
+  > :last-child {
+
+    margin-block-end: 0;
+
+  }
+
+
+  /* ==========================================================
+     TEXT EMPHASIS
+  ========================================================== */
+
+  strong,
+  b {
+
+    color:
+      var(--color-text-primary);
+
+    font-weight:
+      var(--font-semibold);
+
+  }
+
+
+  em,
+  i {
+
+    color:
+      var(--color-text-secondary);
+
+  }
+
+
+  u {
+
+    text-decoration-thickness:
+      .1rem;
+
+    text-underline-offset:
+      .2rem;
+
+  }
+
+
+  del,
+  s {
+
+    color:
+      var(--color-text-tertiary);
+
+    text-decoration-thickness:
+      .1rem;
+
+  }
+
+
+  mark {
+
+    padding-inline:
+      var(--space-1);
+
+    border-radius:
+      var(--radius-xs);
+
+    background:
+      var(--color-warning-soft);
+
+    color:
+      var(--color-text-primary);
+
+  }
+
+
+  /* ==========================================================
+     LINKS
+  ========================================================== */
+
+  a {
+
+    color:
+      var(--color-primary);
+
+    font-weight:
+      var(--font-medium);
+
+    text-decoration:
+      underline;
+
+    text-decoration-color:
+      var(--color-primary-border);
+
+    text-decoration-thickness:
+      .1rem;
+
+    text-underline-offset:
+      .2rem;
+
+    transition:
+      color var(--transition-fast),
+      text-decoration-color var(--transition-fast);
+
+  }
+
+
+  a:hover {
+
+    color:
+      var(--color-primary-hover);
+
+    text-decoration-color:
+      var(--color-primary);
+
+  }
+
+
+  /* ==========================================================
+     UNORDERED / ORDERED LISTS
+  ========================================================== */
+
+  ul,
+  ol {
+
+    margin-block:
+      var(--component-gap-md);
+
+    padding-inline-start:
+      var(--space-6);
+
+  }
+
+
+  ul {
+
+    list-style:
+      disc;
+
+  }
+
+
+  ol {
+
+    list-style:
+      decimal;
+
+  }
+
+
+  li {
+
+    padding-inline-start:
+      var(--space-1);
+
+  }
+
+
+  li + li {
+
+    margin-block-start:
+      var(--space-2);
+
+  }
+
+
+  li > ul,
+  li > ol {
+
+    margin-block:
+      var(--space-2);
+
+  }
+
+
+  /* ==========================================================
+     TASK LISTS
+  ========================================================== */
+
+  ul:has(input[type="checkbox"]) {
+
+    padding-inline-start:
+      0;
+
+    list-style:
+      none;
+
+  }
+
+
+  li:has(input[type="checkbox"]) {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap:
+      var(--component-gap-xs);
+
+  }
+
+
+  input[type="checkbox"] {
+
+    flex-shrink: 0;
+
+    margin-block-start:
+      .35rem;
+
+    accent-color:
+      var(--color-primary);
+
+  }
+
+
+  /* ==========================================================
+     BLOCKQUOTE
+  ========================================================== */
+
+  blockquote {
+
+    margin-block:
+      var(--component-gap-lg);
+
+    padding-block:
+      var(--space-2);
+
+    padding-inline-start:
+      var(--space-4);
+
+    border-inline-start:
+      var(--border-medium)
+      solid
+      var(--color-primary-border);
+
+    color:
+      var(--color-text-secondary);
+
+  }
+
+
+  blockquote p {
+
+    color:
+      inherit;
+
+  }
+
+
+  /* ==========================================================
+     HORIZONTAL RULE
+  ========================================================== */
+
+  hr {
+
+    height:
+      var(--border-thin);
+
+    margin-block:
+      var(--section-gap-md);
+
+    border: 0;
+
+    background:
+      var(--color-border-subtle);
+
+  }
+
+
+  /* ==========================================================
+     INLINE CODE
+  ========================================================== */
+
+  :not(pre) > code {
+
+    display: inline;
+
+    padding:
+      .2rem
+      var(--space-1);
+
+    border:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    border-radius:
+      var(--radius-sm);
+
+    background:
+      var(--color-surface-muted);
+
+    color:
+      var(--color-text-primary);
+
+    font-family:
+      var(--font-family-mono);
+
+    font-size:
+      var(--code-size);
+
+    font-weight:
+      var(--code-weight);
+
+    line-height:
+      var(--code-line-height);
+
+  }
+
+
+  /* ==========================================================
+     CODE BLOCK
+  ========================================================== */
+
+  pre {
+
+    position: relative;
+
+    max-width: 100%;
+
+    margin-block:
+      var(--component-gap-lg);
+
+    padding:
+      var(--space-5);
+
+    overflow-x: auto;
+
+    border:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    border-radius:
+      var(--radius-lg);
+
+    background:
+      var(--color-surface-muted);
+
+    color:
+      var(--color-text-primary);
+
+    font-family:
+      var(--font-family-mono);
+
+    font-size:
+      var(--code-size);
+
+    font-weight:
+      var(--code-weight);
+
+    line-height:
+      var(--code-line-height);
+
+    tab-size: 2;
+
+  }
+
+
+  pre code {
+
+    display: block;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 0;
+
+    background: transparent;
+
+    color: inherit;
+
+    font: inherit;
+
+    white-space: pre;
+
+  }
+
+
+  /* ==========================================================
+     TABLES
+  ========================================================== */
+
+  table {
+
+    width: 100%;
+
+    margin-block:
+      var(--component-gap-lg);
+
+    border-collapse:
+      separate;
+
+    border-spacing: 0;
+
+    overflow: hidden;
+
+    border:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    border-radius:
+      var(--radius-lg);
+
+    background:
+      var(--color-surface);
+
+  }
+
+
+  thead {
+
+    background:
+      var(--color-surface-muted);
+
+  }
+
+
+  th,
+  td {
+
+    padding:
+      var(--space-3)
+      var(--space-4);
+
+    border-block-end:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    text-align: start;
+
+    vertical-align: top;
+
+  }
+
+
+  th {
+
+    color:
+      var(--color-text-primary);
+
+    font-size:
+      var(--label-md-size);
+
+    font-weight:
+      var(--label-md-weight);
+
+    line-height:
+      var(--label-md-line-height);
+
+  }
+
+
+  td {
+
+    color:
+      var(--color-text-secondary);
+
+  }
+
+
+  tr:last-child td {
+
+    border-block-end: 0;
+
+  }
+
+
+  /* ==========================================================
+     IMAGES
+  ========================================================== */
+
+  img {
+
+    display: block;
+
+    max-width: 100%;
+
+    height: auto;
+
+    margin-block:
+      var(--component-gap-lg);
+
+    border:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    border-radius:
+      var(--radius-lg);
+
+  }
+
+
+  /* ==========================================================
+     FIGURES
+  ========================================================== */
+
+  figure {
+
+    margin:
+      var(--component-gap-lg)
+      0;
+
+  }
+
+
+  figcaption {
+
+    margin-block-start:
+      var(--component-gap-xs);
+
+    color:
+      var(--color-text-tertiary);
+
+    font-size:
+      var(--caption-size);
+
+    line-height:
+      var(--caption-line-height);
+
+  }
+
+
+  /* ==========================================================
+     SUPERSCRIPT / SUBSCRIPT
+  ========================================================== */
+
+  sup,
+  sub {
+
+    font-size:
+      var(--text-xs);
+
+    line-height:
+      var(--leading-none);
+
+  }
+
+
+  /* ==========================================================
+     KEYBOARD
+  ========================================================== */
+
+  kbd {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height:
+      2.4rem;
+
+    padding-inline:
+      var(--space-2);
+
+    border:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    border-bottom-width:
+      var(--border-medium);
+
+    border-radius:
+      var(--radius-sm);
+
+    background:
+      var(--color-surface-muted);
+
+    color:
+      var(--color-text-secondary);
+
+    font-family:
+      var(--font-family-mono);
+
+    font-size:
+      var(--text-xs);
+
+  }
+
+
+  /* ==========================================================
+     DEFINITION LIST
+  ========================================================== */
+
+  dl {
+
+    margin-block:
+      var(--component-gap-lg);
+
+  }
+
+
+  dt {
+
+    margin-block-start:
+      var(--component-gap-md);
+
+    color:
+      var(--color-text-primary);
+
+    font-weight:
+      var(--font-semibold);
+
+  }
+
+
+  dd {
+
+    margin-inline-start:
+      var(--space-4);
+
+    color:
+      var(--color-text-secondary);
+
+  }
+
+
+  /* ==========================================================
+     DETAILS / SUMMARY
+  ========================================================== */
+
+  details {
+
+    margin-block:
+      var(--component-gap-md);
+
+    padding:
+      var(--space-3)
+      var(--space-4);
+
+    border:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    border-radius:
+      var(--radius-lg);
+
+    background:
+      var(--color-surface-muted);
+
+  }
+
+
+  summary {
+
+    cursor: pointer;
+
+    color:
+      var(--color-text-primary);
+
+    font-weight:
+      var(--font-medium);
+
+  }
+
+
+  /* ==========================================================
+     MATHJAX
+     ----------------------------------------------------------
+     Keep mathematical content visually aligned with the
+     surrounding assistant typography.
+  ========================================================== */
+
+  mjx-container {
+
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+  }
+
+
+  mjx-container[display="true"] {
+
+    margin-block:
+      var(--component-gap-lg) !important;
+
+  }
+
+
+  /* ==========================================================
+     SELECTION
+  ========================================================== */
+
+  ::selection {
+
+    background:
+      var(--color-primary-soft);
+
+    color:
+      var(--color-primary);
+
+  }
+
+}
+
+/* ============================================================
+   ERROR STATE
+============================================================ */
+
+.assistant-message__state--error {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap:
+    var(--component-gap-sm);
+
+  max-width: 100%;
+
+  border-color:
+    var(--color-error-border);
+
+  background:
+    var(--color-error-soft);
+
+  color:
+    var(--color-error);
+
+}
+
+
+.assistant-message__state-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  font-size:
+    var(--text-sm);
+
+}
+
+
+.assistant-message__state-content {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap:
+    var(--space-1);
+
+}
+
+
+.assistant-message__state-label {
+
+  font-size:
+    var(--label-md-size);
+
+  font-weight:
+    var(--label-md-weight);
+
+  line-height:
+    var(--label-md-line-height);
+
+}
+
+
+.assistant-message__state-description {
+
+  color:
+    var(--color-text-secondary);
+
+  font-size:
+    var(--caption-size);
+
+  line-height:
+    var(--caption-line-height);
+
 }
 
 
@@ -166,8 +1110,9 @@ iconify-icon {
 
   .assistant-message--user {
 
-    padding-left:
+    padding-inline-start:
       var(--space-4);
+
   }
 
 
@@ -175,13 +1120,51 @@ iconify-icon {
   .assistant-message__content {
 
     max-width:
-      85%;
+      86%;
+
   }
 
 
   .assistant-message--assistant {
 
-    padding-right:
+    padding-inline-end:
       var(--space-3);
+
   }
+
+
+  .assistant-message--assistant
+  .assistant-message__content {
+
+    font-size:
+      var(--text-body-sm-size);
+
+  }
+
+
+  .assistant-message--assistant
+  .assistant-message__content
+  table {
+
+    display: block;
+
+    overflow-x: auto;
+
+  }
+
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .assistant-message__spinner {
+
+    animation: none;
+
+  }
+
 }

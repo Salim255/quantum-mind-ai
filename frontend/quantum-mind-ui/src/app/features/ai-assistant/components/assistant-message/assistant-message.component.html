@@ -10,6 +10,9 @@
 
   @if (message().role === "assistant") {
 
+    <!-- ==================================================
+         AI AVATAR
+         ================================================== -->
     <div
       class="assistant-message__avatar"
       aria-hidden="true"
@@ -19,12 +22,71 @@
       ></iconify-icon>
     </div>
 
-    <div
-      class="assistant-message__content"
-      [innerHTML]="responseHtml()"
-    ></div>
 
-  } @else {
+    <!-- ==================================================
+         THINKING
+         ================================================== -->
+    @if (message().status === "thinking") {
+
+      <app-assistant-thinking></app-assistant-thinking>
+    }
+
+    <!-- ==================================================
+         ERROR
+         ================================================== -->
+    @else if (message().status === "error") {
+
+      <div
+        class="assistant-message__state
+               assistant-message__state--error"
+        role="alert"
+      >
+
+        <span
+          class="assistant-message__state-icon"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:triangle-alert"
+          ></iconify-icon>
+        </span>
+
+        <div class="assistant-message__state-content">
+
+          <span class="assistant-message__state-label">
+            Something went wrong
+          </span>
+
+          <span class="assistant-message__state-description">
+            The assistant couldn't generate a response.
+          </span>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- ==================================================
+         RESPONSE
+         ================================================== -->
+    @else {
+
+      <div
+        class="assistant-message__content"
+        [innerHTML]="responseHtml()"
+      ></div>
+
+    }
+
+  }
+
+
+  <!-- ==================================================
+       USER MESSAGE
+       ================================================== -->
+  @else {
 
     <div
       class="assistant-message__content"

@@ -10,6 +10,7 @@ import { AssistantComposerComponent } from "./components/assistant-composer/assi
 import { AssistantConversationPHComponent } from "./components/assistant-conversation-p-h/assistant-conversation-p-h.component";
 import { AssistantMessageComponent } from "./components/assistant-message/assistant-message.component";
 import { FormsModule } from "@angular/forms";
+import { AssistantThinkingComponent } from "./components/assistant-thinking/assistant-thinking.component";
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { FormsModule } from "@angular/forms";
     CommonModule
   ],
   declarations: [
+    AssistantThinkingComponent,
     AssistantMessageComponent,
     AssistantConversationPHComponent,
     AssistantComposerComponent,

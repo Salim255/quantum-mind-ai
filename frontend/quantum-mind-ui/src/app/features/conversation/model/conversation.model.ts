@@ -1,4 +1,7 @@
-import { AssistantMessage, AssistantMessageStatus} from "../../ai-assistant/components/assistant-message/assistant-message.component";
+import {
+  AssistantMessage,
+  AssistantMessageStatus,
+} from "../../ai-assistant/components/assistant-message/assistant-message.component";
 
 
 export class Conversation {
@@ -128,9 +131,11 @@ export class Conversation {
     const message =
       this.messages[existingIndex];
 
-    this.messages[existingIndex] = {...message, content: chunk, status: 'streaming'}
-
-
+    this.messages[existingIndex] = {
+      ...message,
+      content: chunk,
+      status: 'streaming'
+    }
 
     this.updatedAt = new Date();
   }

@@ -60,7 +60,7 @@ export class AssistantMessageComponent {
       if (message.role !== "assistant") {
         return "";
       }
-
+      console.log(message.status, "hello from status")
       return marked.parse(
         message.content,
       ) as string;
