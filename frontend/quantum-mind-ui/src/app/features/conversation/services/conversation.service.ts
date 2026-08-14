@@ -29,7 +29,7 @@ export class ConversationService {
       id: crypto.randomUUID(),
       conversationId: this.getCurrentConversation()?.getConversationId() ?? "",
       role: "assistant",
-      isThinking: true,
+      status: 'thinking',
       content: "",
       createdAt: new Date(),
     };

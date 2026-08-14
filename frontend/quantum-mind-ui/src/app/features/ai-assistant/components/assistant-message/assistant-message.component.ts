@@ -16,11 +16,17 @@ export type AssistantMessageRole =
   | "user"
   | "assistant";
 
+export type AssistantMessageStatus =
+| "thinking"
+| "streaming"
+| "complete"
+| "error";
+
 export interface AssistantMessage {
   id: string;
   conversationId: string;
   role: AssistantMessageRole;
-  isThinking?: boolean,
+  status?: AssistantMessageStatus,
   content: string;
   createdAt: Date;
 }
