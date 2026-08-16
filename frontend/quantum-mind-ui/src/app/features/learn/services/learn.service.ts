@@ -22,7 +22,6 @@ export class LearnService {
     return this.learnHttpService.getLearnTopics().pipe(
       tap((response) => {
         const topics = response.data.topics;
-
         this.learnTopicSubject.next(topics);
       })
     );

@@ -1,5 +1,8 @@
-import { AfterViewInit, Component, ElementRef, QueryList, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, computed, ElementRef, QueryList, signal, ViewChildren } from "@angular/core";
 import { PageAsideService } from "../../../../shared/service/page-aside-content.service";
+import { TopicWithSectionsDTO } from "../../interfaces/topic-with-sections.dto";
+import { LearnService } from "../../services/learn.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-quantum-logic",
@@ -12,13 +15,38 @@ export class QuantumLogicPage implements AfterViewInit{
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
 
-  constructor(private pageAsideService: PageAsideService){}
+  private quantumLogicTopicsSubscription!: Subscription;
+
+  quantumLogicTopic = signal<TopicWithSectionsDTO | null>(null);
+
+  quantumLogicBlocksSections = computed(() => {
+    return {
+      blocks: (this.quantumLogicTopic()?.blocks ?? []).sort((a, b) => a.display_order - b.display_order),
+      sections: (this.quantumLogicTopic()?.sections ?? []).sort((a,b) => a.order_index - b.order_index),
+    }
+  });
+
+  constructor(
+    private learnService: LearnService,
+    private pageAsideService: PageAsideService
+  ){}
+
+  ngOnInit(): void {
+    this.subscribeToLearnTopics();
+  }
 
   ngAfterViewInit(): void {
     this.observeSections();
   }
 
-    private observeSections(): void {
+  subscribeToLearnTopics(){
+    this.quantumLogicTopicsSubscription = this.learnService.getTopicItem$(6)
+    .subscribe((data: TopicWithSectionsDTO | null) => {
+      this.quantumLogicTopic.set(data);
+    })
+  }
+
+  private observeSections(): void {
 
       this.observer = new IntersectionObserver(
         entries => {
@@ -51,6 +79,7 @@ export class QuantumLogicPage implements AfterViewInit{
   }
 
   ngOnDestroy(): void {
+    this.quantumLogicTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
   }
 }

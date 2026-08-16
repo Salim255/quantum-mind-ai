@@ -46,7 +46,6 @@ export class BellInequalityPage implements OnInit, AfterViewInit {
   }
 
   private observeSections(): void {
-
       this.observer = new IntersectionObserver(
         entries => {
 
