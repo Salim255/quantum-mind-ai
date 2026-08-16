@@ -1,5 +1,8 @@
-import { AfterViewInit, Component, ElementRef, QueryList, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, computed, ElementRef, OnInit, QueryList, signal, ViewChildren } from "@angular/core";
 import { PageAsideService } from "../../../../shared/service/page-aside-content.service";
+import { TopicWithSectionsDTO } from "../../interfaces/topic-with-sections.dto";
+import { LearnService } from "../../services/learn.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-bell-inequality-page",
@@ -7,15 +10,39 @@ import { PageAsideService } from "../../../../shared/service/page-aside-content.
   styleUrl: "./bell-inequality.page.scss",
   standalone: false
 })
-export class BellInequalityPage implements AfterViewInit {
+export class BellInequalityPage implements OnInit, AfterViewInit {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
+  private bellTopicsSubscription!: Subscription;
 
-  constructor(private pageAsideService: PageAsideService){}
+  bellTopic = signal<TopicWithSectionsDTO | null>(null);
+
+  bellBlocksSections = computed(() => {
+    return {
+      blocks: (this.bellTopic()?.blocks ?? []).sort((a, b) => a.display_order - b.display_order),
+      sections: (this.bellTopic()?.sections ?? []).sort((a,b) => a.order_index - b.order_index),
+    }
+  });
+
+  constructor(
+    private learnService: LearnService,
+    private pageAsideService: PageAsideService
+  ){}
+
+  ngOnInit(): void {
+    this.subscribeToLearnTopics();
+  }
 
   ngAfterViewInit(): void {
     this.observeSections();
+  }
+
+  subscribeToLearnTopics(){
+    this.bellTopicsSubscription = this.learnService.getTopicItem$(4)
+    .subscribe((data: TopicWithSectionsDTO | null) => {
+      this.bellTopic.set(data);
+    })
   }
 
   private observeSections(): void {
@@ -52,5 +79,6 @@ export class BellInequalityPage implements AfterViewInit {
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.bellTopicsSubscription?.unsubscribe();
   }
 }
