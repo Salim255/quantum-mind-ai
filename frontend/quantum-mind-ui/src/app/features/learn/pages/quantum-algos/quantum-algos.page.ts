@@ -22,9 +22,9 @@ export class QuantumAlgosPage implements OnInit, AfterViewInit, OnDestroy {
 
   quantumAlgosBlocksSections = computed(() => {
     return {
-      blocks: (this. quantumAlgosTopic()?.blocks ?? [])
+      blocks: (this.quantumAlgosTopic()?.blocks ?? [])
         .sort((a, b) => a.display_order - b.display_order),
-      sections: (this. quantumAlgosTopic()?.sections ?? [])
+      sections: (this.quantumAlgosTopic()?.sections ?? [])
         .sort((a,b) => a.order_index - b.order_index),
     }
   });
@@ -37,6 +37,7 @@ export class QuantumAlgosPage implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.subscribeToLearnTopics();
   }
+
   ngAfterViewInit(): void {
     this.observeSections();
   }
