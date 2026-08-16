@@ -1,0 +1,33 @@
+<as-split
+  class="split-panel"
+  [direction]="direction()"
+  unit="percent"
+  [gutterSize]="gutterSize()"
+>
+
+  <as-split-area
+    [size]="sizes()[0]"
+    [minSize]="minSizes()[0]"
+    [maxSize]="maxSizes()[0]"
+  >
+
+    <div class="split-panel__area">
+      <ng-content select="[split-panel-primary]"></ng-content>
+    </div>
+
+  </as-split-area>
+
+
+  <as-split-area
+    [size]="sizes()[1]"
+    [minSize]="minSizes()[1]"
+    [maxSize]="maxSizes()[1]"
+  >
+
+    <div class="split-panel__area">
+      <ng-content select="[split-panel-secondary]"></ng-content>
+    </div>
+
+  </as-split-area>
+
+</as-split>

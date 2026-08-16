@@ -1,26 +1,27 @@
 /* ============================================================
    QUANTUM MIND
-
    LESSON
-
+   ------------------------------------------------------------
    Shared by every learning chapter.
-
 ============================================================ */
 
+
 .lesson {
+
   display: flex;
+
   flex-direction: column;
 
-  gap: var(--section-gap-lg);
-  //min-height: 0;
-  //height: 100%;
-  //width: 100%;
+  gap:
+    var(--component-gap-lg);
+
 
   section:last-child {
-      padding-bottom: 20rem;
+
+    padding-bottom:
+      20rem;
   }
 }
-
 
 
 /* ============================================================
@@ -28,19 +29,22 @@
 ============================================================ */
 
 .lesson__header {
+
   display: flex;
+
   flex-direction: column;
 
-  gap: var(--component-gap-sm);
+  gap:
+    var(--component-gap-sm);
 
-  padding-bottom: var(--section-gap-md);
+  padding-bottom:
+    var(--space-6);
 
   border-bottom:
-    var(--border-divider)
+    var(--border-thin)
     solid
     var(--color-border-subtle);
 }
-
 
 
 /* ============================================================
@@ -48,19 +52,24 @@
 ============================================================ */
 
 .lesson__title {
+
   margin: 0;
 
-  color: var(--color-text-primary);
+  color:
+    var(--color-text-primary);
 
-  font-size: var(--text-display-sm-size);
+  font-size:
+    var(--text-display-sm-size);
 
-  font-weight: var(--text-display-sm-weight);
+  font-weight:
+    var(--text-display-sm-weight);
 
-  line-height: var(--text-display-sm-line);
+  line-height:
+    var(--text-display-sm-line);
 
-  letter-spacing: var(--text-display-sm-tracking);
+  letter-spacing:
+    var(--text-display-sm-tracking);
 }
-
 
 
 /* ============================================================
@@ -68,19 +77,24 @@
 ============================================================ */
 
 .lesson__summary {
+
+  max-width:
+    60rem;
+
   margin: 0;
 
-  max-width: var(--content-width-md);
+  color:
+    var(--color-text-secondary);
 
-  color: var(--color-text-secondary);
+  font-size:
+    var(--text-body-lg-size);
 
-  font-size: var(--text-body-lg-size);
+  font-weight:
+    var(--text-body-lg-weight);
 
-  font-weight: var(--text-body-lg-weight);
-
-  line-height: var(--text-body-lg-line);
+  line-height:
+    var(--text-body-lg-line);
 }
-
 
 
 /* ============================================================
@@ -88,14 +102,17 @@
 ============================================================ */
 
 .lesson__section {
+
   display: flex;
+
   flex-direction: column;
 
-  gap: var(--component-gap-md);
+  gap:
+    var(--component-gap-md);
 
-  scroll-margin-top: 88px;
+  scroll-margin-top:
+    8.8rem;
 }
-
 
 
 /* ============================================================
@@ -103,19 +120,24 @@
 ============================================================ */
 
 .lesson__heading {
+
   margin: 0;
 
-  color: var(--color-text-primary);
+  color:
+    var(--color-text-primary);
 
-  font-size: var(--text-heading-lg-size);
+  font-size:
+    var(--text-heading-lg-size);
 
-  font-weight: var(--text-heading-lg-weight);
+  font-weight:
+    var(--text-heading-lg-weight);
 
-  line-height: var(--text-heading-lg-line);
+  line-height:
+    var(--text-heading-lg-line);
 
-  letter-spacing: var(--text-heading-lg-tracking);
+  letter-spacing:
+    var(--text-heading-lg-tracking);
 }
-
 
 
 /* ============================================================
@@ -123,25 +145,32 @@
 ============================================================ */
 
 .lesson__paragraph {
+
+  max-width:
+    60rem;
+
   margin: 0;
 
-  max-width: var(--content-width-md);
+  color:
+    var(--color-text-secondary);
 
-  color: var(--color-text-secondary);
+  font-size:
+    var(--text-body-lg-size);
 
-  font-size: var(--text-body-lg-size);
+  font-weight:
+    var(--text-body-lg-weight);
 
-  font-weight: var(--text-body-lg-weight);
-
-  line-height: var(--text-body-lg-line);
+  line-height:
+    var(--text-body-lg-line);
 }
 
 
+.lesson__paragraph
++ .lesson__paragraph {
 
-.lesson__paragraph + .lesson__paragraph {
-  margin-top: var(--component-gap-sm);
+  margin-top:
+    var(--component-gap-sm);
 }
-
 
 
 /* ============================================================
@@ -149,20 +178,26 @@
 ============================================================ */
 
 .lesson a {
-  color: var(--color-primary);
 
-  text-decoration: none;
+  color:
+    var(--color-primary);
+
+  text-decoration:
+    none;
 
   transition:
-    color .18s ease;
+    color var(--transition-fast);
 }
+
 
 .lesson a:hover {
-  color: var(--color-primary-hover);
 
-  text-decoration: underline;
+  color:
+    var(--color-primary-hover);
+
+  text-decoration:
+    underline;
 }
-
 
 
 /* ============================================================
@@ -171,24 +206,31 @@
 
 .lesson ul,
 .lesson ol {
+
   display: flex;
+
   flex-direction: column;
 
-  gap: var(--component-gap-xs);
+  gap:
+    var(--component-gap-xs);
+
+  max-width:
+    60rem;
 
   margin: 0;
 
-  padding-left: var(--space-xl);
+  padding-left:
+    var(--space-6);
 
-  max-width: var(--content-width-md);
+  color:
+    var(--color-text-secondary);
 
-  color: var(--color-text-secondary);
+  font-size:
+    var(--text-body-lg-size);
 
-  font-size: var(--text-body-lg-size);
-
-  line-height: var(--text-body-lg-line);
+  line-height:
+    var(--text-body-lg-line);
 }
-
 
 
 /* ============================================================
@@ -196,9 +238,10 @@
 ============================================================ */
 
 .lesson li::marker {
-  color: var(--color-text-muted);
-}
 
+  color:
+    var(--color-text-muted);
+}
 
 
 /* ============================================================
@@ -206,11 +249,13 @@
 ============================================================ */
 
 .lesson strong {
-  color: var(--color-text-primary);
 
-  font-weight: 600;
+  color:
+    var(--color-text-primary);
+
+  font-weight:
+    600;
 }
-
 
 
 /* ============================================================
@@ -218,11 +263,13 @@
 ============================================================ */
 
 .lesson em {
-  color: var(--color-text-primary);
 
-  font-style: italic;
+  color:
+    var(--color-text-primary);
+
+  font-style:
+    italic;
 }
-
 
 
 /* ============================================================
@@ -230,52 +277,69 @@
 ============================================================ */
 
 .lesson blockquote {
+
+  max-width:
+    60rem;
+
   margin: 0;
 
   padding:
-    var(--card-padding-md);
+    var(--space-4);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
 
   border-left:
-    var(--border-width-emphasis)
+    var(--border-thick)
     solid
     var(--color-primary);
 
-  border-radius: var(--radius-panel);
+  border-radius:
+    var(--radius-md);
 
-  background: var(--color-primary-soft);
+  background:
+    var(--color-primary-soft);
 
-  color: var(--color-text-secondary);
-
-  max-width: var(--content-width-md);
+  color:
+    var(--color-text-secondary);
 }
-
 
 
 /* ============================================================
-   CODE
+   INLINE CODE
 ============================================================ */
 
 .lesson code {
+
   padding:
-    var(--space-xs)
-    var(--space-sm);
+    var(--space-1)
+    var(--space-2);
 
   border:
-    var(--border-card)
+    var(--border-thin)
     solid
     var(--color-border-subtle);
 
-  border-radius: var(--radius-badge);
+  border-radius:
+    var(--radius-sm);
 
-  background: var(--color-surface-subtle);
+  background:
+    var(--color-surface-muted);
 
-  font-family: var(--font-family-mono);
+  color:
+    var(--color-text-primary);
 
-  font-size: var(--text-code-size);
+  font-family:
+    var(--font-family-mono);
 
-  line-height: var(--text-code-line);
+  font-size:
+    var(--text-code-size);
+
+  line-height:
+    var(--text-code-line);
 }
-
 
 
 /* ============================================================
@@ -283,30 +347,42 @@
 ============================================================ */
 
 .lesson pre {
+
+  max-width:
+    100%;
+
   margin: 0;
 
-  padding: var(--card-padding-md);
+  padding:
+    var(--space-4);
 
-  overflow-x: auto;
+  overflow-x:
+    auto;
 
   border:
-    var(--border-card)
+    var(--border-thin)
     solid
     var(--color-border-subtle);
 
-  border-radius: var(--radius-panel);
+  border-radius:
+    var(--radius-md);
 
-  background: var(--color-surface-subtle);
+  background:
+    var(--color-surface-subtle);
 }
 
+
 .lesson pre code {
+
   padding: 0;
 
   border: 0;
 
-  background: transparent;
-}
+  border-radius: 0;
 
+  background:
+    transparent;
+}
 
 
 /* ============================================================
@@ -314,20 +390,22 @@
 ============================================================ */
 
 .lesson img {
+
   display: block;
 
   width: 100%;
 
-  max-width: var(--content-width-lg);
+  max-width:
+    72rem;
 
   border:
-    var(--border-card)
+    var(--border-thin)
     solid
     var(--color-border-subtle);
 
-  border-radius: var(--radius-panel);
+  border-radius:
+    var(--radius-md);
 }
-
 
 
 /* ============================================================
@@ -335,5 +413,10 @@
 ============================================================ */
 
 .lesson ::selection {
-  background: var(--color-primary-soft);
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
 }

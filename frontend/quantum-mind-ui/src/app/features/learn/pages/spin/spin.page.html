@@ -5,16 +5,13 @@
     </h1>
 
     <p class="lesson__summary">
-   <!--     {{ spanTopic()?.description }} -->
-    @for(block of  topicBlocks(); track $index){
-        <p [id]="block.id">
+    <!--     {{ spanTopic()?.description }} -->
+      @for(block of  topicBlocks(); track $index){
+        <ng-container>
           {{ block.content }}
-        </p>
-      }
+        </ng-container>
+        }
     </p>
-
-
-
   </header>
 
 
@@ -32,170 +29,5 @@
       }
     </section>
   }
-
-
-
-<!--   <section
-    #pageSection
-    class="lesson__section"
-    id="measurements-in-same-direction">
-    <h2 class="lesson__heading">Measurements in the Same Direction</h2>
-    <p class="lesson__paragraph">
-      In quantum systems, measurements are consistent when repeated in the same direction.
-
-      If we measure a particle’s property (like spin) and then immediately measure
-      it again in the same way, we always get the same result. The system behaves as if the first measurement “sets” the outcome for that direction.
-
-      For example, if a particle is measured as “up” in a given direction, a second measurement
-      in that exact same direction will also give “up”. The same applies if the first result is “down”.
-
-      This is not limited to one orientation. Any chosen measurement direction behaves the same way: once measured, repeating the same test produces identical outcomes.
-    </p>
-  </section>
-
-  <section
-    #pageSection
-    class="lesson__section"
-    id="measurements-different-directions">
-    <h2 class="lesson__heading">Measurements in Different Directions</h2>
-
-    <p class="lesson__paragraph">
-      In quantum systems, the outcome of a measurement depends strongly on the direction in which it is made.
-      When a particle’s spin is first measured in one direction (for example, vertical),
-      and then measured again in a different direction (for example, horizontal), the results are not predictable from the first measurement.
-      Even if the particle was fully determined in the first direction,
-      the second measurement behaves randomly: half of the results tend to align one way, and half the opposite way.
-      This shows that different measurement directions are independent, and knowing
-      the result in one direction does not determine the result in another.
-    </p>
-  </section>
-
-
-  <section
-    #pageSection
-    class="lesson__section"
-    id="measurements">
-    <h2 class="lesson__heading">Measurements in Quantum Systems</h2>
-    <p class="lesson__paragraph">
-      In classical mechanics, measurements are treated as external inputs to a system. We assume that we can measure quantities such as position or velocity without significantly affecting the system itself.
-      or example, measuring the speed of a thrown ball using light or radar does interact with the ball, but the effect is so small that it can be ignored. This justifies the classical idea that measurements do not meaningfully disturb the system being studied.
-      <strong>What changes in quantum mechanics</strong>
-      In quantum physics, we study very small systems such as atoms and electrons. At this scale, any measurement necessarily involves an interaction that significantly affects the system.
-      Because of this, we can no longer treat measurement as something external or negligible. It becomes part of the physical process being described.
-      Importantly, this effect is not modeled as a function of measurement strength (for example, stronger or weaker magnets). Instead,
-      the theory assumes that the act of measuring itself changes the system in a well-defined way, independent of how the measurement is physically implemented.
-      <strong>Key idea</strong>
-      In quantum mechanics, measurement is not just observation —
-        it is an interaction that changes the state of the system according to the rules of the theory.
-      <strong>Why it matters ?</strong>
-      This is a fundamental departure from classical physics and is essential for understanding why quantum systems behave differently,
-      especially when multiple measurements are performed in sequence.
-    </p>
-  </section>
-
-
-  <section
-    #pageSection
-    class="lesson__section"
-    id="randomness">
-    <h2 class="lesson__heading">Randomness in Quantum Mechanics</h2>
-    <p class="lesson__paragraph">Quantum mechanics introduces genuine randomness in the outcomes of measurements.
-
-      For example, if we measure the spin of electrons first in one direction and then in another, the results form a sequence of outcomes like Ns and Ss that appear completely random.
-       Each new measurement does not allow us to predict the next result with certainty.
-
-
-      This behavior is similar to classical randomness examples like coin tosses,
-      where we also get unpredictable sequences of heads and tails.
-
-    <strong>Classical randomness (coin toss)</strong>
-
-      In classical physics, a coin toss is not truly random.
-      If we knew all the exact initial conditions (force, angle, position,
-      air resistance, etc.), we could in principle predict the result exactly.
-
-    The randomness we observe comes from small variations we cannot control or measure precisely — not from the system itself.
-    So classical randomness is apparent randomness, caused by sensitivity to initial conditions.
-
-    <strong>Quantum randomness</strong>
-   In quantum mechanics, randomness is fundamentally different.
-
-      Even with complete knowledge of the system, the outcome of a measurement cannot be predicted exactly. The result is inherently probabilistic.
-
-
-      This means the sequence of measurement outcomes is considered truly random, not just unpredictable due to missing information.
-
-    <strong>Interpretation question</strong>
-
-      This idea led to deep debate in physics. Einstein believed that quantum randomness
-      might hide deeper unknown variables that would make outcomes deterministic.
-
-
-      This is known as the <strong>hidden variable hypothesis</strong>.
-
-
-      <strong>What we know today</strong>
-      Experiments designed to test hidden variable theories have been performed many times.
-      The results strongly support the idea that quantum randomness is real and cannot be explained by simple hidden hidden variables
-
-      <strong>Why it matters ?</strong>
-      This randomness is a core feature of quantum systems like electron spin and photon polarization, which are used to define the concept of a qubit.
-    </p>
-  </section>
-
-  <section
-  #pageSection
-  class="lesson__section"
-  id="photons-and-polarization">
-  <h2 class="lesson__heading">Photons and Polarization</h2>
-
-  <p class="lesson__paragraph">Quantum behavior is not limited to microscopic particles like electrons.
-    A similar effect can be observed using light, through an experiment with polarized filters.
-    Light can be thought of as having different polarization directions.
-    A polarizing filter only allows light aligned with its orientation to pass through, while blocking other directions.
-  </p>
-
-  <h3 class="lesson__heading">Key experiment (three filters)</h3>
-  <ol>
-    <li>If two polarizing filters are aligned, light passes through both easily.</li>
-    <li>If one filter is rotated by 90°, no light passes through the pair.</li>
-    <li>Surprisingly, if a third filter is inserted between them at 45°, some light begins to pass through again.</li>
-  </ol>
-  <p class="lesson__paragraph">This is unexpected, because adding an extra filter increases the amount of light that gets through.</p>
-
-  <h3 class="lesson__heading">Quantum interpretation</h3>
-  <p class="lesson__paragraph">This behavior mirrors quantum measurements:
-    <span>
-      <ul>
-        <li>A polarizing filter acts like a measurement device.</li>
-        <li>Each filter asks a “yes/no” question about the photon’s polarization.</li>
-        <li>If the answer is “yes”, the photon passes through and can be measured again.</li>
-        <li>If the answer is “no”, the photon is absorbed and the process stops.</li>
-      </ul>
-    </span>
-  </p>
-
-
-  <h3 class="lesson__heading">Connection to quantum measurement</h3>
-  <p class="lesson__paragraph">
-    With two aligned filters, we are effectively repeating
-    the same measurement, so the result is consistent.
-    With a 90° rotation, we are asking a different but related question,
-    which produces a different outcome.
-    With the 45° filter inserted, we introduce an intermediate measurement that changes the state of the photons, allowing some to pass through the
-    final filter even though they would not have passed directly.
-  </p>
-
-  <h3 class="lesson__heading">Key idea</h3>
-  <p class="lesson__paragraph">Measurements in quantum systems do not just reveal information —
-    they actively change the state of the system, which affects future measurements.
-  </p>
-
-  <h3 class="lesson__heading">Why it matters</h3>
-  <p class="lesson__paragraph">
-    This experiment shows that quantum behavior can be observed in simple optical setups and is not limited to abstract or microscopic particle experiments.
-    It directly connects to the same principles used in electron spin and qubits.
-  </p>
-</section> -->
 
 </div>

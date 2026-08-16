@@ -90,6 +90,7 @@ export class SpinPage  implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.spinTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
   }
 }

@@ -1,5 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, signal, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, computed, ElementRef, OnInit, QueryList, signal, ViewChildren } from "@angular/core";
 import { PageAsideService } from "../../../../shared/service/page-aside-content.service";
+import { TopicWithSectionsDTO } from "../../interfaces/topic-with-sections.dto";
+import { Subscription } from "rxjs";
+import { LearnService } from "../../services/learn.service";
 
 
 @Component({
@@ -8,16 +11,41 @@ import { PageAsideService } from "../../../../shared/service/page-aside-content.
   styleUrls: ["./mathematics.page.scss"],
   standalone: false
 })
-export class MathematicsPage implements AfterViewInit {
+export class MathematicsPage implements OnInit, AfterViewInit {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
   htmlSections = signal<any[]>([]);
 
-  constructor(private pageAsideService: PageAsideService){}
+  private mathsTopicsSubscription!: Subscription;
+  mathsTopic = signal<TopicWithSectionsDTO | null>(null);
+
+  mathBlocksSections = computed(() => {
+      return {
+        blocks: (this.mathsTopic()?.blocks ?? []).sort((a, b) => a.display_order - b.display_order),
+        sections: (this.mathsTopic()?.sections ?? []).sort((a,b) => a.order_index - b.order_index),
+      }
+  });
+
+  constructor(
+    private learnService: LearnService,
+    private pageAsideService: PageAsideService
+  ){}
+
+  ngOnInit(): void {
+    this.subscribeToLearnTopics();
+  }
 
   ngAfterViewInit(): void {
     this.observeSections();
+  }
+
+  subscribeToLearnTopics(){
+    this.mathsTopicsSubscription = this.learnService.getTopicItem$(1)
+    .subscribe((data: TopicWithSectionsDTO | null) => {
+      this.mathsTopic.set(data);
+      console.log(this.mathsTopic());
+    })
   }
 
   equation =
@@ -64,6 +92,7 @@ export class MathematicsPage implements AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.mathsTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
   }
 }
