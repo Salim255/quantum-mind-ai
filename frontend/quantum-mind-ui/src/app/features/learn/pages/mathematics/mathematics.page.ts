@@ -15,9 +15,9 @@ export class MathematicsPage implements OnInit, AfterViewInit {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
-  htmlSections = signal<any[]>([]);
 
   private mathsTopicsSubscription!: Subscription;
+
   mathsTopic = signal<TopicWithSectionsDTO | null>(null);
 
   mathBlocksSections = computed(() => {
@@ -44,7 +44,6 @@ export class MathematicsPage implements OnInit, AfterViewInit {
     this.mathsTopicsSubscription = this.learnService.getTopicItem$(1)
     .subscribe((data: TopicWithSectionsDTO | null) => {
       this.mathsTopic.set(data);
-      console.log(this.mathsTopic());
     })
   }
 

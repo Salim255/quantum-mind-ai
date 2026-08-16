@@ -22,11 +22,14 @@
       #pageSection
       [id]="section.slug">
       <h2 class="lesson__heading"> {{section.title}} </h2>
-        @for(block of  section.blocks; track block.id){
-
-        <p [id]="block.id" class="lesson__paragraph">
-            {{ block.content }}
-        </p>
+        @for(block of section.blocks; track block.id){
+          @if(block.type === 'equation') {
+            <app-equation [latex]="block.content"></app-equation>
+          } @else {
+            <p [id]="block.id" class="lesson__paragraph">
+              {{ block.content }}
+            </p>
+          }
       }
     </section>
   }

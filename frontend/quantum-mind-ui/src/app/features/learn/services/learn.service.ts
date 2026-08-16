@@ -22,6 +22,7 @@ export class LearnService {
     return this.learnHttpService.getLearnTopics().pipe(
       tap((response) => {
         const topics = response.data.topics;
+
         this.learnTopicSubject.next(topics);
       })
     );
@@ -34,7 +35,8 @@ export class LearnService {
         if (!topics) {
           return null
         } else {
-          const topic: TopicWithSectionsDTO | undefined = topics.find(t => t.display_order === topicOrder);
+          const topic: TopicWithSectionsDTO | undefined =
+            topics.find(t => t.display_order === topicOrder);
 
           return topic || null
         }
