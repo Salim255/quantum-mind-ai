@@ -5,8 +5,9 @@
   height: 100%;
   min-width: 0;
   width: 100%;
+  min-width: 20rem;
   background: var(--color-surface);
-
+  padding-left:  var(--space-4);
   border-right:
     var(--border-divider)
     solid

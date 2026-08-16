@@ -3,15 +3,15 @@
 .learn-page {
   display: grid;
   grid-template-columns:  1fr auto;
-  gap: 2rem;
   min-height: 0;
   height: 100%;
   overflow: hidden;
   &__content {
     min-height: 0;
     height: 100%;
-    overflow: hidden;
+    overflow-y: auto;
     overscroll-behavior: contain;
+      pointer-events: auto;
   }
 
   app-content-aside {

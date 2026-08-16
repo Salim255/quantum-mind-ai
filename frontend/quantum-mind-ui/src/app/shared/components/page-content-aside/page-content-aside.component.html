@@ -28,48 +28,6 @@
       </li>
 
     }
-
-
-    @for (item of sections(); track item.id) {
-
-      <li class="page-content-nav__item">
-
-        <button
-          [appScrollTo]="item.id"
-          [scrollContainer]="scrollContainer"
-          type="button"
-          class="page-content-nav__link"
-          [class.page-content-nav__link--active]="activeSection() === item.id"
-        >
-          <span class="page-content-nav__label">
-            {{ item.name }}
-          </span>
-        </button>
-
-      </li>
-
-    }
-
-
-    @for (item of sections(); track item.id) {
-
-      <li class="page-content-nav__item">
-
-        <button
-          [appScrollTo]="item.id"
-          [scrollContainer]="scrollContainer"
-          type="button"
-          class="page-content-nav__link"
-          [class.page-content-nav__link--active]="activeSection() === item.id"
-        >
-          <span class="page-content-nav__label">
-            {{ item.name }}
-          </span>
-        </button>
-
-      </li>
-
-    }
   </ul>
 
 </nav>

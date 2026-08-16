@@ -17,9 +17,7 @@ DASHBOARD PAGE
 
   overflow: hidden;
 
-  scroll-margin-top: 90rem;
-
-  padding: 0 var(--page-padding-md);
+  //padding: 0 var(--page-padding-md);
   /* ========================================================
   CONTENT
   ======================================================== */
@@ -33,8 +31,7 @@ DASHBOARD PAGE
 
     display: grid;
 
-    grid-template-columns:
-      repeat(12, minmax(0, 1fr));
+    grid-template-columns: repeat(12, minmax(0, 1fr));
 
     overflow: hidden;
   }
@@ -54,7 +51,7 @@ DASHBOARD PAGE
     width: 100%;
     height: 100%;
 
-    overflow: auto;
+    pointer-events: auto;
   }
 
 
@@ -63,7 +60,7 @@ DASHBOARD PAGE
   ======================================================== */
   &__assistant-panel {
 
-    grid-column: 13 / 13;
+    grid-column: 1 / -1;
     grid-row: 1;
 
     min-width: 0;
@@ -74,16 +71,26 @@ DASHBOARD PAGE
 
     overflow: hidden;
 
-    opacity: 0;
     visibility: hidden;
-    pointer-events: none;
 
-
+    opacity: 0;
     background: transparent;
 
-    as-split-area:first-child {
-      pointer-events: auto;
+    &--active {
+      grid-column: 4 / -1;
+
+      width: 100%;
+      pointer-events: none;
+      opacity: 1;
+      visibility: visible;
+
+
+      ::ng-deep .as-split-gutter {
+        pointer-events: auto;
+        cursor: col-resize;
+      }
     }
+
 
 
     as-split-area {
@@ -95,17 +102,6 @@ DASHBOARD PAGE
         height: 100%;
         overflow: hidden;
       }
-    }
-
-    &--active {
-      grid-column: 4 / -1;
-
-      width: 100%;
-
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-
     }
   }
 
@@ -155,6 +151,8 @@ DASHBOARD PAGE
     min-width: 0;
     width: 100%;
     height: 100%;
+
+    pointer-events: auto;
   }
 
   /* ========================================================

@@ -1,55 +1,96 @@
+/* ============================================================
+   ASIDE NAV LINK
+============================================================ */
+
 .aside-nav-link {
+
   display: flex;
+
   align-items: center;
-  gap: var(--component-gap-sm);
+
+  gap:
+    var(--component-gap-sm);
 
   width: 100%;
-  min-height: 42px;
 
-  padding-inline: var(--space-4);
+  min-height: 2.8rem;
+
+  padding:
+    var(--space-2)
+    var(--space-3);
 
   border:
-    var(--border-button)
+    var(--border-thin)
     solid
     transparent;
 
-  border-radius: var(--radius-md);
+  //border-radius: var( --radius-pill);
 
-  background: transparent;
+  background:
+    transparent;
 
-  color: var(--color-text-secondary);
+  color:
+    var(--color-text-secondary);
 
   text-decoration: none;
-  //padding: 0 var( --page-padding-lg);
+
   transition:
-    background .18s ease,
-    color .18s ease,
-    border-color .18s ease;
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+
 }
+
+
+/* ============================================================
+   HOVER
+============================================================ */
 
 .aside-nav-link:hover {
-  background: var(--color-surface-muted);
 
-  color: var(--color-text-primary);
+  background:
+    var(--color-surface-muted);
 
-  border-color: var(--color-border-subtle);
+  color:
+    var(--color-text-primary);
+
+  border-color:
+    var(--color-border-subtle);
 }
 
+
+/* ============================================================
+   ICON
+============================================================ */
+
 .aside-nav-link__icon {
+
   flex-shrink: 0;
 
   display: grid;
+
   place-items: center;
 
-  font-size: 18px;
+  width: 1.8rem;
 
-  color: inherit;
+  height: 1.8rem;
 
-  opacity: .9;
+  color:
+    inherit;
+
+  opacity: .85;
 }
 
+
+/* ============================================================
+   LABEL
+============================================================ */
+
 .aside-nav-link__label {
+
   flex: 1;
+
+  min-width: 0;
 
   overflow: hidden;
 
@@ -57,17 +98,58 @@
 
   white-space: nowrap;
 
-  font-size: var(--text-body-md-size);
+  font-size:
+    var(--text-body-md-size);
 
-  font-weight: var(--text-body-md-weight);
+  font-weight:
+    var(--text-body-md-weight);
 
-  line-height: var(--text-body-md-line);
+  line-height:
+    var(--text-body-md-line);
 }
 
+
+/* ============================================================
+   ACTIVE
+============================================================ */
+
 .aside-nav-link--active {
-  background: var(--color-primary-soft);
 
-  color: var(--color-primary);
+  background:
+    var(--color-primary-soft);
 
-  border-color: var(--color-primary-border);
+  color:
+    var(--color-primary);
+
+  border-color:
+    var(--color-primary-border);
+
+}
+
+
+/* ============================================================
+   ACTIVE — HOVER
+============================================================ */
+
+.aside-nav-link--active:hover {
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary-hover);
+
+  border-color:
+    var(--color-primary-border);
+}
+
+
+/* ============================================================
+   ACTIVE ICON
+============================================================ */
+
+.aside-nav-link--active
+.aside-nav-link__icon {
+
+  opacity: 1;
 }
