@@ -1,157 +1,35 @@
 <div class="entanglement-page lesson">
   <header class="lesson__header">
     <h1 class="lesson__title">
-      Entanglement
+      {{ entanglementTopic()?.title }}
     </h1>
 
     <p class="lesson__summary">
-      summary
+      {{ entanglementTopic()?.description }}
     </p>
+
+    @for(block of entanglementBlocksSections().blocks; track $index){
+      <p [id]="block.id" class="lesson__paragraph">
+        {{ block.content }}
+      </p>
+    }
   </header>
 
-  <section
+  @for(section of entanglementBlocksSections().sections; track section.id){
+    <section
     class="lesson__section"
-    #pageSection id="alice-bob-not-entangled">
-    <h2 class="lesson__heading">Alice and Bob’s Qubits Are Not Entangled</h2>
-    <p class="lesson__paragraph">
-     serunt numquam, id iure, veniam nam. Ipsum accusamus quidem autem quibusdam.
-      Consectetur sunt neque deserunt voluptatem molestiae ea iusto aliquid sed corrupti, eum, tenetur, corporis fuga odit in vel velit temporibus! Reiciendis quisquam quidem velit vel tenetur quibusdam commodi sit quis!
-      Omnis, aliquid. Doloribus itaque enim iste recusandae nisi inventore ex sequi doloremque possimus voluptatibus minima eius, magni, officia nemo neque fuga error quidem molestias quas impedit. Hic alias qui quisquam.
-      Aliquid totam, assumenda necessitatibus alias incidunt tenetur exercitationem nobis voluptatum! Veniam ullam, enim quisquam doloribus expedita nihil iusto doloremque, eveniet iure minima voluptatum commodi neque, repudiandae at praesentium mollitia quos.
-      Unde excepturi laudantium, consequuntur porro vero nisi, optio nesciunt non ipsam dolorum eum sequi aliquid iusto ad voluptatum pariatur reprehenderit iure voluptas accusamus eius explicabo nobis earum. Iusto, placeat unde.
-      Quod consequuntur eius dolorem assumenda recusandae fuga aperiam quas repellat illo ratione cupiditate, neque voluptas tempora nesciunt quia debitis aliquam? Laboriosam provident illo magnam dolore aut, possimus deserunt autem nulla.
-      Quo excepturi ipsam magnam inventore blanditiis atque similique error quibusdam nulla officia aut deserunt, quaerat deleniti sunt illo nisi sint quasi architecto magni et. Facere consectetur in eos eaque suscipit.
-      Qui provident eaque, amet id cumque nam at beatae fugit neque deleniti dolore, odit unde? Rem at officiis architecto doloribus possimus rerum praesentium incidunt temporibus et quidem cum, quia culpa.
-      Maxime molestias nostrum praesentium libero quam eaque vitae atque laudantium fuga dignissimos, odit quaerat incidunt, rem modi est possimus delectus et expedita ab excepturi dolore sed. Earum vero quia minus.
-      Accusamus, nemo culpa similique soluta, eveniet fugit unde rerum, aliquid dolorum aspernatur nisi quidem. Porro nulla non doloribus, vel repellendus, quia rerum dolore veniam fugiat, velit deserunt illo quidem iste.
-      Eum itaque iure ab adipisci minus perferendis error cumque dignissimos omnis ex expedita quidem tempora quae vitae repellat cupiditate nemo consectetur necessitatibus quia natus ea, voluptatibus distinctio quo eaque? Quisquam.
-      Magnam quam delectus soluta nesciunt, quaerat asperiores voluptates, beatae distinctio nisi doloribus consequatur quidem repellendus facilis maiores! Totam atque maiores soluta assumenda at, quisquam omnis, quis aut sunt doloribus provident?
-      Totam, doloribus voluptates dolorum sint sunt quo nisi necessitatibus maiores incidunt dolores iste enim distinctio atque. Consectetur commodi, pariatur cupiditate voluptas earum adipisci atque vitae non? Quibusdam sequi omnis unde.
-    </p>
-  </section>
-  <section
-    class="lesson__section"
-    #pageSection id="unentangled-qubits-calculation">
-    <h2 class="lesson__heading">Unentangled Qubits Calculation</h2>
-    <p class="lesson__paragraph">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quia, assumenda iste, non veniam libero laudantium earum modi odit optio repellendus laboriosam illo quas esse? Iusto officiis fuga cupiditate natus?
-      Aliquid in deleniti non pariatur aliquam suscipit incidunt iusto quidem, consequuntur dolorem enim, veniam laboriosam dolor beatae nemo! Officia maiores repudiandae ut quae corrupti repellendus doloribus eos neque est deserunt.
-      Ratione officiis alias ullam modi quisquam ad laboriosam consequuntur, perspiciatis, nulla accusamus est, enim vel cupiditate optio possimus exercitationem reiciendis qui laudantium asperiores. Dolorum sunt voluptatum exercitationem et, consequatur deserunt.
-      Tempora, id ab. Aut laudantium nesciunt perferendis repudiandae excepturi voluptates quaerat optio hic vel veniam eos enim eius, ipsum voluptatum provident ullam tempore sint in assumenda exercitationem laborum esse? Quaerat?
-      Voluptatem dolorum maxime ipsa iure neque, suscipit, laboriosam ipsam eum aliquam perferendis cupiditate eius accusantium fugiat earum nulla dolor cumque expedita ducimus laudantium! Minus eligendi quaerat magni asperiores non! Magnam?
-      Ducimus quam sint enim fugit, hic reiciendis autem, eum ratione laboriosam ex maiores, molestias animi labore assumenda libero iste eligendi quis omnis harum? Voluptas illum molestiae soluta placeat dicta voluptatum?
-      Nostrum explicabo sint deleniti, ex deserunt labore ad dignissimos nesciunt quidem iste doloremque similique suscipit enim minus commodi dolor impedit odio! Quibusdam ad expedita veritatis quis possimus? Ad, eius atque!
-      Necessitatibus hic corrupti enim doloremque repudiandae odio minus nobis cum, eligendi omnis sunt ad illum iusto. Aliquam quaerat deleniti, similique a doloribus ipsam eos, doloremque totam quae quis quibusdam aperiam?
-      Libero sapiente doloremque facilis voluptas incidunt consequatur veritatis nemo in, nostrum culpa dolores. Ipsum officiis ea totam velit beatae, pariatur natus aut assumenda iure itaque, sit exercitationem laboriosam repellendus quod.
-      Perspiciatis voluptas eius provident facilis dolorem atque officiis, sapiente magnam ad doloremque sint iusto repellendus nihil consequatur harum perferendis suscipit officia quos. Magnam ut placeat, vero dolore commodi totam ullam!
-    </p>
-  </section>
-
-  <section
-    class="lesson__section"
-    #pageSection  id="entangled-qubits-calculation">
-    <h2 class="lesson__heading">Entangled Qubits Calculation</h2>
-     <p class="lesson__paragraph">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quia, assumenda iste, non veniam libero laudantium earum modi odit optio repellendus laboriosam illo quas esse? Iusto officiis fuga cupiditate natus?
-      Aliquid in deleniti non pariatur aliquam suscipit incidunt iusto quidem, consequuntur dolorem enim, veniam laboriosam dolor beatae nemo! Officia maiores repudiandae ut quae corrupti repellendus doloribus eos neque est deserunt.
-      Ratione officiis alias ullam modi quisquam ad laboriosam consequuntur, perspiciatis, nulla accusamus est, enim vel cupiditate optio possimus exercitationem reiciendis qui laudantium asperiores. Dolorum sunt voluptatum exercitationem et, consequatur deserunt.
-      Tempora, id ab. Aut laudantium nesciunt perferendis repudiandae excepturi voluptates quaerat optio hic vel veniam eos enim eius, ipsum voluptatum provident ullam tempore sint in assumenda exercitationem laborum esse? Quaerat?
-      Voluptatem dolorum maxime ipsa iure neque, suscipit, laboriosam ipsam eum aliquam perferendis cupiditate eius accusantium fugiat earum nulla dolor cumque expedita ducimus laudantium! Minus eligendi quaerat magni asperiores non! Magnam?
-      Ducimus quam sint enim fugit, hic reiciendis autem, eum ratione laboriosam ex maiores, molestias animi labore assumenda libero iste eligendi quis omnis harum? Voluptas illum molestiae soluta placeat dicta voluptatum?
-      Nostrum explicabo sint deleniti, ex deserunt labore ad dignissimos nesciunt quidem iste doloremque similique suscipit enim minus commodi dolor impedit odio! Quibusdam ad expedita veritatis quis possimus? Ad, eius atque!
-      Necessitatibus hic corrupti enim doloremque repudiandae odio minus nobis cum, eligendi omnis sunt ad illum iusto. Aliquam quaerat deleniti, similique a doloribus ipsam eos, doloremque totam quae quis quibusdam aperiam?
-      Libero sapiente doloremque facilis voluptas incidunt consequatur veritatis nemo in, nostrum culpa dolores. Ipsum officiis ea totam velit beatae, pariatur natus aut assumenda iure itaque, sit exercitationem laboriosam repellendus quod.
-      Perspiciatis voluptas eius provident facilis dolorem atque officiis, sapiente magnam ad doloremque sint iusto repellendus nihil consequatur harum perferendis suscipit officia quos. Magnam ut placeat, vero dolore commodi totam ullam!
-    </p>
-  </section>
-
-  <section
-    class="lesson__section"
-    #pageSection  id="superluminal-communication">
-    <h2 class="lesson__heading">Superluminal Communication</h2>
-     <p class="lesson__paragraph">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quia, assumenda iste, non veniam libero laudantium earum modi odit optio repellendus laboriosam illo quas esse? Iusto officiis fuga cupiditate natus?
-      Aliquid in deleniti non pariatur aliquam suscipit incidunt iusto quidem, consequuntur dolorem enim, veniam laboriosam dolor beatae nemo! Officia maiores repudiandae ut quae corrupti repellendus doloribus eos neque est deserunt.
-      Ratione officiis alias ullam modi quisquam ad laboriosam consequuntur, perspiciatis, nulla accusamus est, enim vel cupiditate optio possimus exercitationem reiciendis qui laudantium asperiores. Dolorum sunt voluptatum exercitationem et, consequatur deserunt.
-      Tempora, id ab. Aut laudantium nesciunt perferendis repudiandae excepturi voluptates quaerat optio hic vel veniam eos enim eius, ipsum voluptatum provident ullam tempore sint in assumenda exercitationem laborum esse? Quaerat?
-      Voluptatem dolorum maxime ipsa iure neque, suscipit, laboriosam ipsam eum aliquam perferendis cupiditate eius accusantium fugiat earum nulla dolor cumque expedita ducimus laudantium! Minus eligendi quaerat magni asperiores non! Magnam?
-      Ducimus quam sint enim fugit, hic reiciendis autem, eum ratione laboriosam ex maiores, molestias animi labore assumenda libero iste eligendi quis omnis harum? Voluptas illum molestiae soluta placeat dicta voluptatum?
-      Nostrum explicabo sint deleniti, ex deserunt labore ad dignissimos nesciunt quidem iste doloremque similique suscipit enim minus commodi dolor impedit odio! Quibusdam ad expedita veritatis quis possimus? Ad, eius atque!
-      Necessitatibus hic corrupti enim doloremque repudiandae odio minus nobis cum, eligendi omnis sunt ad illum iusto. Aliquam quaerat deleniti, similique a doloribus ipsam eos, doloremque totam quae quis quibusdam aperiam?
-      Libero sapiente doloremque facilis voluptas incidunt consequatur veritatis nemo in, nostrum culpa dolores. Ipsum officiis ea totam velit beatae, pariatur natus aut assumenda iure itaque, sit exercitationem laboriosam repellendus quod.
-      Perspiciatis voluptas eius provident facilis dolorem atque officiis, sapiente magnam ad doloremque sint iusto repellendus nihil consequatur harum perferendis suscipit officia quos. Magnam ut placeat, vero dolore commodi totam ullam!
-    </p>
-  </section>
-
-  <section
-    class="lesson__section"
-    #pageSection  id="standard-basis-tensor-products">
-    <h2 class="lesson__heading">The Standard Basis for Tensor Products</h2>
-     <p class="lesson__paragraph">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quia, assumenda iste, non veniam libero laudantium earum modi odit optio repellendus laboriosam illo quas esse? Iusto officiis fuga cupiditate natus?
-      Aliquid in deleniti non pariatur aliquam suscipit incidunt iusto quidem, consequuntur dolorem enim, veniam laboriosam dolor beatae nemo! Officia maiores repudiandae ut quae corrupti repellendus doloribus eos neque est deserunt.
-      Ratione officiis alias ullam modi quisquam ad laboriosam consequuntur, perspiciatis, nulla accusamus est, enim vel cupiditate optio possimus exercitationem reiciendis qui laudantium asperiores. Dolorum sunt voluptatum exercitationem et, consequatur deserunt.
-      Tempora, id ab. Aut laudantium nesciunt perferendis repudiandae excepturi voluptates quaerat optio hic vel veniam eos enim eius, ipsum voluptatum provident ullam tempore sint in assumenda exercitationem laborum esse? Quaerat?
-      Voluptatem dolorum maxime ipsa iure neque, suscipit, laboriosam ipsam eum aliquam perferendis cupiditate eius accusantium fugiat earum nulla dolor cumque expedita ducimus laudantium! Minus eligendi quaerat magni asperiores non! Magnam?
-      Ducimus quam sint enim fugit, hic reiciendis autem, eum ratione laboriosam ex maiores, molestias animi labore assumenda libero iste eligendi quis omnis harum? Voluptas illum molestiae soluta placeat dicta voluptatum?
-      Nostrum explicabo sint deleniti, ex deserunt labore ad dignissimos nesciunt quidem iste doloremque similique suscipit enim minus commodi dolor impedit odio! Quibusdam ad expedita veritatis quis possimus? Ad, eius atque!
-      Necessitatibus hic corrupti enim doloremque repudiandae odio minus nobis cum, eligendi omnis sunt ad illum iusto. Aliquam quaerat deleniti, similique a doloribus ipsam eos, doloremque totam quae quis quibusdam aperiam?
-      Libero sapiente doloremque facilis voluptas incidunt consequatur veritatis nemo in, nostrum culpa dolores. Ipsum officiis ea totam velit beatae, pariatur natus aut assumenda iure itaque, sit exercitationem laboriosam repellendus quod.
-      Perspiciatis voluptas eius provident facilis dolorem atque officiis, sapiente magnam ad doloremque sint iusto repellendus nihil consequatur harum perferendis suscipit officia quos. Magnam ut placeat, vero dolore commodi totam ullam!
-    </p>
-  </section>
-
-  <section
-    class="lesson__section"
-    #pageSection  id="how-to-entangle-qubits">
-    <h2  class="lesson__heading">How Do You Entangle Qubits?</h2>
-     <p class="lesson__paragraph">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quia, assumenda iste, non veniam libero laudantium earum modi odit optio repellendus laboriosam illo quas esse? Iusto officiis fuga cupiditate natus?
-      Aliquid in deleniti non pariatur aliquam suscipit incidunt iusto quidem, consequuntur dolorem enim, veniam laboriosam dolor beatae nemo! Officia maiores repudiandae ut quae corrupti repellendus doloribus eos neque est deserunt.
-      Ratione officiis alias ullam modi quisquam ad laboriosam consequuntur, perspiciatis, nulla accusamus est, enim vel cupiditate optio possimus exercitationem reiciendis qui laudantium asperiores. Dolorum sunt voluptatum exercitationem et, consequatur deserunt.
-      Tempora, id ab. Aut laudantium nesciunt perferendis repudiandae excepturi voluptates quaerat optio hic vel veniam eos enim eius, ipsum voluptatum provident ullam tempore sint in assumenda exercitationem laborum esse? Quaerat?
-      Voluptatem dolorum maxime ipsa iure neque, suscipit, laboriosam ipsam eum aliquam perferendis cupiditate eius accusantium fugiat earum nulla dolor cumque expedita ducimus laudantium! Minus eligendi quaerat magni asperiores non! Magnam?
-      Ducimus quam sint enim fugit, hic reiciendis autem, eum ratione laboriosam ex maiores, molestias animi labore assumenda libero iste eligendi quis omnis harum? Voluptas illum molestiae soluta placeat dicta voluptatum?
-      Nostrum explicabo sint deleniti, ex deserunt labore ad dignissimos nesciunt quidem iste doloremque similique suscipit enim minus commodi dolor impedit odio! Quibusdam ad expedita veritatis quis possimus? Ad, eius atque!
-      Necessitatibus hic corrupti enim doloremque repudiandae odio minus nobis cum, eligendi omnis sunt ad illum iusto. Aliquam quaerat deleniti, similique a doloribus ipsam eos, doloremque totam quae quis quibusdam aperiam?
-      Libero sapiente doloremque facilis voluptas incidunt consequatur veritatis nemo in, nostrum culpa dolores. Ipsum officiis ea totam velit beatae, pariatur natus aut assumenda iure itaque, sit exercitationem laboriosam repellendus quod.
-      Perspiciatis voluptas eius provident facilis dolorem atque officiis, sapiente magnam ad doloremque sint iusto repellendus nihil consequatur harum perferendis suscipit officia quos. Magnam ut placeat, vero dolore commodi totam ullam!
-    </p>
-  </section>
-
-  <section
-    class="lesson__section"
-    #pageSection  id="cnot-gate-entanglement">
-    <h2 class="lesson__heading">Using the CNOT Gate to Entangle Qubits</h2>
-    <p class="lesson__paragraph">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quia, assumenda iste, non veniam libero laudantium earum modi odit optio repellendus laboriosam illo quas esse? Iusto officiis fuga cupiditate natus?
-      Aliquid in deleniti non pariatur aliquam suscipit incidunt iusto quidem, consequuntur dolorem enim, veniam laboriosam dolor beatae nemo! Officia maiores repudiandae ut quae corrupti repellendus doloribus eos neque est deserunt.
-      Ratione officiis alias ullam modi quisquam ad laboriosam consequuntur, perspiciatis, nulla accusamus est, enim vel cupiditate optio possimus exercitationem reiciendis qui laudantium asperiores. Dolorum sunt voluptatum exercitationem et, consequatur deserunt.
-      Tempora, id ab. Aut laudantium nesciunt perferendis repudiandae excepturi voluptates quaerat optio hic vel veniam eos enim eius, ipsum voluptatum provident ullam tempore sint in assumenda exercitationem laborum esse? Quaerat?
-      Voluptatem dolorum maxime ipsa iure neque, suscipit, laboriosam ipsam eum aliquam perferendis cupiditate eius accusantium fugiat earum nulla dolor cumque expedita ducimus laudantium! Minus eligendi quaerat magni asperiores non! Magnam?
-      Ducimus quam sint enim fugit, hic reiciendis autem, eum ratione laboriosam ex maiores, molestias animi labore assumenda libero iste eligendi quis omnis harum? Voluptas illum molestiae soluta placeat dicta voluptatum?
-      Nostrum explicabo sint deleniti, ex deserunt labore ad dignissimos nesciunt quidem iste doloremque similique suscipit enim minus commodi dolor impedit odio! Quibusdam ad expedita veritatis quis possimus? Ad, eius atque!
-      Necessitatibus hic corrupti enim doloremque repudiandae odio minus nobis cum, eligendi omnis sunt ad illum iusto. Aliquam quaerat deleniti, similique a doloribus ipsam eos, doloremque totam quae quis quibusdam aperiam?
-      Libero sapiente doloremque facilis voluptas incidunt consequatur veritatis nemo in, nostrum culpa dolores. Ipsum officiis ea totam velit beatae, pariatur natus aut assumenda iure itaque, sit exercitationem laboriosam repellendus quod.
-      Perspiciatis voluptas eius provident facilis dolorem atque officiis, sapiente magnam ad doloremque sint iusto repellendus nihil consequatur harum perferendis suscipit officia quos. Magnam ut placeat, vero dolore commodi totam ullam!
-    </p>
-  </section>
-
-  <section
-    class="lesson__section"
-    #pageSection  id="entangled-quantum-clocks">
-    <h2 class="lesson__heading">Entangled Quantum Clocks</h2>
-    <p class="lesson__paragraph">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quia, assumenda iste, non veniam libero laudantium earum modi odit optio repellendus laboriosam illo quas esse? Iusto officiis fuga cupiditate natus?
-      Aliquid in deleniti non pariatur aliquam suscipit incidunt iusto quidem, consequuntur dolorem enim, veniam laboriosam dolor beatae nemo! Officia maiores repudiandae ut quae corrupti repellendus doloribus eos neque est deserunt.
-      Ratione officiis alias ullam modi quisquam ad laboriosam consequuntur, perspiciatis, nulla accusamus est, enim vel cupiditate optio possimus exercitationem reiciendis qui laudantium asperiores. Dolorum sunt voluptatum exercitationem et, consequatur deserunt.
-      Tempora, id ab. Aut laudantium nesciunt perferendis repudiandae excepturi voluptates quaerat optio hic vel veniam eos enim eius, ipsum voluptatum provident ullam tempore sint in assumenda exercitationem laborum esse? Quaerat?
-      Voluptatem dolorum maxime ipsa iure neque, suscipit, laboriosam ipsam eum aliquam perferendis cupiditate eius accusantium fugiat earum nulla dolor cumque expedita ducimus laudantium! Minus eligendi quaerat magni asperiores non! Magnam?
-      Ducimus quam sint enim fugit, hic reiciendis autem, eum ratione laboriosam ex maiores, molestias animi labore assumenda libero iste eligendi quis omnis harum? Voluptas illum molestiae soluta placeat dicta voluptatum?
-      Nostrum explicabo sint deleniti, ex deserunt labore ad dignissimos nesciunt quidem iste doloremque similique suscipit enim minus commodi dolor impedit odio! Quibusdam ad expedita veritatis quis possimus? Ad, eius atque!
-      Necessitatibus hic corrupti enim doloremque repudiandae odio minus nobis cum, eligendi omnis sunt ad illum iusto. Aliquam quaerat deleniti, similique a doloribus ipsam eos, doloremque totam quae quis quibusdam aperiam?
-      Libero sapiente doloremque facilis voluptas incidunt consequatur veritatis nemo in, nostrum culpa dolores. Ipsum officiis ea totam velit beatae, pariatur natus aut assumenda iure itaque, sit exercitationem laboriosam repellendus quod.
-      Perspiciatis voluptas eius provident facilis dolorem atque officiis, sapiente magnam ad doloremque sint iusto repellendus nihil consequatur harum perferendis suscipit officia quos. Magnam ut placeat, vero dolore commodi totam ullam!
-    </p>
-  </section>
+    #pageSection
+    [id]="section.slug">
+    <h2 class="lesson__heading"> {{section.title}} </h2>
+      @for(block of section.blocks; track block.id){
+        @if(block.type === 'equation') {
+          <app-equation [latex]="block.content"></app-equation>
+        } @else {
+          <p [id]="block.id" class="lesson__paragraph">
+            {{ block.content }}
+          </p>
+        }
+    }
+    </section>
+  }
 </div>

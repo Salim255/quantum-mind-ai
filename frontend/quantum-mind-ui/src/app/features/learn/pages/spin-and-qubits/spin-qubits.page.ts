@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, ElementRef, QueryList, signal, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, computed, ElementRef, OnInit, QueryList, signal, ViewChildren } from "@angular/core";
 import { PageAsideService } from "../../../../shared/service/page-aside-content.service";
 import { Subscription } from "rxjs";
 import { TopicWithSectionsDTO } from "../../interfaces/topic-with-sections.dto";
@@ -10,7 +10,7 @@ import { LearnService } from "../../services/learn.service";
   styleUrls: ["./spin-qubits.page.scss"],
   standalone: false
 })
-export class SpinQubitsPage implements AfterViewInit {
+export class SpinQubitsPage implements OnInit, AfterViewInit {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
@@ -33,16 +33,18 @@ export class SpinQubitsPage implements AfterViewInit {
   ){}
 
 
+  ngOnInit(): void {
+    this.subscribeToLearnTopics();
+  }
+
   ngAfterViewInit(): void {
     this.observeSections();
-    this.subscribeToLearnTopics();
   }
 
 
   subscribeToLearnTopics(){
     this.spinQuTopicsSubscription = this.learnService.getTopicItem$(2)
     .subscribe((data: TopicWithSectionsDTO | null) => {
-      console.log(data, "Hello from spin q");
       this.spinQuTopic.set(data);
     })
   }
