@@ -1,5 +1,8 @@
-import { Component, ElementRef, QueryList, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, computed, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChildren } from "@angular/core";
 import { PageAsideService } from "../../../../shared/service/page-aside-content.service";
+import { TopicWithSectionsDTO } from "../../interfaces/topic-with-sections.dto";
+import { LearnService } from "../../services/learn.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-quantum-algos-page",
@@ -7,18 +10,46 @@ import { PageAsideService } from "../../../../shared/service/page-aside-content.
   styleUrl: "./quantum-algos.page.scss",
   standalone: false
 })
-export class QuantumAlgosPage {
+export class QuantumAlgosPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
 
-  constructor(private pageAsideService: PageAsideService){}
 
+  private quantumAlgosTopicsSubscription!: Subscription;
+
+  quantumAlgosTopic = signal<TopicWithSectionsDTO | null>(null);
+
+  quantumAlgosBlocksSections = computed(() => {
+    return {
+      blocks: (this. quantumAlgosTopic()?.blocks ?? [])
+        .sort((a, b) => a.display_order - b.display_order),
+      sections: (this. quantumAlgosTopic()?.sections ?? [])
+        .sort((a,b) => a.order_index - b.order_index),
+    }
+  });
+
+  constructor(
+    private learnService: LearnService,
+    private pageAsideService: PageAsideService
+  ){}
+
+  ngOnInit(): void {
+    this.subscribeToLearnTopics();
+  }
   ngAfterViewInit(): void {
     this.observeSections();
   }
 
-    private observeSections(): void {
+
+  subscribeToLearnTopics(){
+    this.quantumAlgosTopicsSubscription = this.learnService.getTopicItem$(7)
+    .subscribe((data: TopicWithSectionsDTO | null) => {
+      this.quantumAlgosTopic.set(data);
+    })
+  }
+
+  private observeSections(): void {
 
       this.observer = new IntersectionObserver(
         entries => {
@@ -51,6 +82,7 @@ export class QuantumAlgosPage {
   }
 
   ngOnDestroy(): void {
+    this.quantumAlgosTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
   }
 }

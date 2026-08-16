@@ -21,8 +21,10 @@ export class QuantumLogicPage implements AfterViewInit{
 
   quantumLogicBlocksSections = computed(() => {
     return {
-      blocks: (this.quantumLogicTopic()?.blocks ?? []).sort((a, b) => a.display_order - b.display_order),
-      sections: (this.quantumLogicTopic()?.sections ?? []).sort((a,b) => a.order_index - b.order_index),
+      blocks: (this.quantumLogicTopic()?.blocks ?? [])
+        .sort((a, b) => a.display_order - b.display_order),
+      sections: (this.quantumLogicTopic()?.sections ?? [])
+        .sort((a,b) => a.order_index - b.order_index),
     }
   });
 
