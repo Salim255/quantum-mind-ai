@@ -9,7 +9,7 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        loadChildren: () => import("../features/conversation/conversation.module").then(m => m.ConversationModule)
+        loadChildren: () => import("../features/overview/overview.module").then((m) => m.OverviewModule)
       },
       {
         path: "learn",

@@ -1,91 +1,146 @@
 <div class="app-overview">
 
   <header class="app-overview__header">
+
     <span class="app-overview__eyebrow">
       QuantumMind
     </span>
 
     <h1 class="app-overview__title">
-      Understand quantum computing from the ground up.
+      Learn quantum computing.
     </h1>
 
     <p class="app-overview__intro">
-      Explore the fundamental concepts of quantum computing,
-      build connections between them, and deepen your understanding
-      at your own pace.
+      Explore the fundamentals of quantum computing, test your
+      understanding, and build your knowledge step by step.
     </p>
+
   </header>
 
 
-  <d class="app-overview__content">
+  <main class="app-overview__content">
 
-    <!-- LEARNING -->
     <section class="app-overview__section">
 
       <div class="app-overview__section-header">
+
         <h2 class="app-overview__heading">
-          Your learning space
+          Explore
         </h2>
 
         <p class="app-overview__description">
-          Explore concepts, follow the connections between them,
-          and return to any topic whenever you want.
+          Build a clear understanding of quantum computing through
+          focused concepts, from the foundations to more advanced ideas.
         </p>
+
       </div>
 
-      <div class="app-overview__actions">
+      <a
+        routerLink="/learn"
+        class="app-overview__action"
+      >
+        <span class="app-overview__action-title">
+          Continue learning
+        </span>
 
-        <a
-          routerLink="/learn"
-          class="app-overview__action"
+        <span class="app-overview__action-description">
+          Explore quantum concepts and discover how they connect.
+        </span>
+
+        <span class="app-overview__action-icon">
+          <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+        </span>
+      </a>
+
+    </section>
+
+
+    <section class="app-overview__section">
+
+      <div class="app-overview__section-header">
+
+        <h2 class="app-overview__heading">
+          Test your knowledge
+        </h2>
+
+        <p class="app-overview__description">
+          Challenge yourself with questions designed to reinforce
+          what you have learned and reveal where to go deeper.
+        </p>
+
+      </div>
+
+      <a
+        routerLink="/quiz"
+        class="app-overview__action"
+      >
+        <span class="app-overview__action-title">
+          Check your understanding
+        </span>
+
+        <span class="app-overview__action-description">
+          Test what you know and identify concepts worth revisiting.
+        </span>
+
+        <span class="app-overview__action-icon">
+          <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+        </span>
+      </a>
+
+    </section>
+
+
+    <section class="app-overview__section">
+
+      <div class="app-overview__section-header">
+
+        <h2 class="app-overview__heading">
+          Track your progress
+        </h2>
+
+        <p class="app-overview__description">
+          See what you have explored, how your understanding is
+          developing, and where you can continue.
+        </p>
+
+      </div>
+
+      <a
+        routerLink="/dashboard"
+        class="app-overview__action"
+      >
+        <span class="app-overview__action-title">
+          View your progress
+        </span>
+
+        <span class="app-overview__action-description">
+          Visualize your learning journey and keep moving forward.
+        </span>
+
+        <span class="app-overview__action-icon">
+          <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+        </span>
+      </a>
+
+    </section>
+
+
+    <section class="app-overview__assistant">
+
+      <p class="app-overview__assistant-text">
+        Need another perspective?
+        <button
+          type="button"
+          class="app-overview__assistant-trigger"
+          (click)="onOpenAssistant()"
         >
-          <span class="app-overview__action-title">
-            Explore quantum computing
-          </span>
-
-          <span class="app-overview__action-description">
-            Start exploring the fundamental concepts.
-          </span>
-        </a>
-
-      </div>
+          Ask the AI Assistant
+        </button>
+        about a concept, calculation, or question.
+      </p>
 
     </section>
 
-
-    <!-- ASSISTANT -->
-    <section class="app-overview__section">
-
-      <div class="app-overview__section-header">
-        <h2 class="app-overview__heading">
-          Learn with the AI Assistant
-        </h2>
-
-        <p class="app-overview__description">
-          Ask questions, clarify concepts, work through mathematics,
-          or explore an idea whenever you need another perspective.
-        </p>
-      </div>
-
-    </section>
-
-
-    <!-- PROGRESS -->
-    <section class="app-overview__section">
-
-      <div class="app-overview__section-header">
-        <h2 class="app-overview__heading">
-          Your progress
-        </h2>
-
-        <p class="app-overview__description">
-          Continue from where you left off and build your understanding
-          step by step.
-        </p>
-      </div>
-
-    </section>
-
-  </div>
+  </main>
 
 </div>

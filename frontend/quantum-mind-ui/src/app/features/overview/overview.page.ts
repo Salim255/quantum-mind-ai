@@ -1,12 +1,16 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-overview-page',
-  standalone: true,
-  imports: [RouterLink],
   templateUrl: './overview.page.html',
   styleUrl: './overview.page.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
-export class OverviewPage {}
+export class OverviewPage implements OnInit {
+  constructor(){}
+
+  ngOnInit(): void {
+
+  }
+}
