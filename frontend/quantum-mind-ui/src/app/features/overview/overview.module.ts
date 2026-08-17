@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { OverviewRoutingModule } from "./overview-routing.module";
 import { OverviewPage } from "./overview.page";
 
@@ -8,6 +8,9 @@ import { OverviewPage } from "./overview.page";
     CommonModule,
     OverviewRoutingModule
   ],
-  declarations: [OverviewPage]
+  declarations: [OverviewPage],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 export class OverviewModule {}

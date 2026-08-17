@@ -1,0 +1,20 @@
+<nav
+  class="aside-primary-nav"
+  aria-label="Primary navigation"
+>
+  <ul class="aside-primary-nav__list">
+
+    @for (nav of items(); track $index) {
+
+      <li class="aside-primary-nav__item">
+
+        <app-aside-nav-link
+          [nav]="nav"
+          [iconOnly]="true"
+        />
+
+      </li>
+
+    }
+  </ul>
+</nav>

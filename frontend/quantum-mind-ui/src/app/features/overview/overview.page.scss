@@ -1,73 +1,76 @@
 @use "../../../styles/mixins/queries" as *;
-/* ============================================================
-   APP OVERVIEW
-============================================================ */
-.app-overview {
+/* ==========================================================
+   OVERVIEW
+========================================================== */
+
+.overview {
 
   display: flex;
   flex-direction: column;
 
   width: 100%;
+  min-height: 0;
   min-width: 0;
-
-  gap: var(--section-gap-lg);
+  height: 100%;
+  margin-inline: auto;
 
   padding:
-    var(--space-6)
-    var(--space-6)
-    var(--space-8);
+    var(--page-padding-lg)
+    var(--page-padding-lg)
+    var(--space-12);
+
 }
 
 
-/* ============================================================
-   HEADER
-============================================================ */
+/* ==========================================================
+   INTRO
+========================================================== */
 
-.app-overview__header {
+.overview__intro {
 
-  display: flex;
-  flex-direction: column;
+  max-width:
+    var(--content-xs);
 
-  max-width: var(--content-width-lg);
-
-  gap: var(--component-gap-sm);
+  margin-bottom:
+    var(--section-gap-lg);
 }
 
 
-/* ============================================================
+/* ==========================================================
    EYEBROW
-============================================================ */
+========================================================== */
 
-.app-overview__eyebrow {
+.overview__eyebrow {
 
-  color: var(--color-primary);
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-text-muted);
 
   font-size:
     var(--text-label-sm-size);
 
   font-weight:
-    var(--text-label-sm-weight);
+    var(--text-label-md-weight);
 
   line-height:
     var(--text-label-sm-line);
 
   letter-spacing:
-    .08em;
-
-  text-transform:
-    uppercase;
+    var(--text-label-sm-tracking);
 }
 
 
-/* ============================================================
+/* ==========================================================
    TITLE
-============================================================ */
+========================================================== */
 
-.app-overview__title {
+.overview__title {
 
   margin: 0;
-
-  max-width: var(--content-width-lg);
 
   color:
     var(--color-text-primary);
@@ -76,7 +79,7 @@
     var(--text-display-sm-size);
 
   font-weight:
-    var(--text-display-sm-weight);
+    var(--text-heading-sm-weight);
 
   line-height:
     var(--text-display-sm-line);
@@ -86,15 +89,19 @@
 }
 
 
-/* ============================================================
-   INTRO
-============================================================ */
+/* ==========================================================
+   DESCRIPTION
+========================================================== */
 
-.app-overview__intro {
+.overview__description {
 
-  margin: 0;
+  max-width:
+    var(--content-sm);
 
-  max-width: var(--content-width-md);
+  margin:
+    var(--component-gap-md)
+    0
+    0;
 
   color:
     var(--color-text-secondary);
@@ -110,193 +117,179 @@
 }
 
 
-/* ============================================================
-   CONTENT
-============================================================ */
+/* ==========================================================
+   FEATURES
+========================================================== */
 
-.app-overview__content {
+.overview__features {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-lg);
+}
+
+
+/* ==========================================================
+   FEATURE
+========================================================== */
+
+.overview__feature {
 
   display: flex;
   flex-direction: column;
 
-  max-width: var(--content-width-lg);
+  min-width: 0;
+  min-height:
+    var(--space-12);
 
-  gap: var(--section-gap-lg);
+  padding:
+    var(--card-padding-md);
+
+  border:
+    var(--border-default)
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
 }
 
 
-/* ============================================================
-   SECTION
-============================================================ */
+/* ==========================================================
+   FEATURE TOP
+========================================================== */
 
-.app-overview__section {
+.overview__feature-top {
 
   display: flex;
-  flex-direction: column;
 
-  gap: var(--component-gap-md);
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom:
+    var(--section-gap-sm);
 }
 
 
-/* ============================================================
-   SECTION HEADER
-============================================================ */
+/* ==========================================================
+   FEATURE ICON
+========================================================== */
 
-.app-overview__section-header {
+.overview__feature-icon {
 
-  display: flex;
-  flex-direction: column;
+  display: grid;
 
-  gap: var(--component-gap-xs);
-}
+  place-items: center;
 
+  width:
+    var(--space-8);
 
-/* ============================================================
-   HEADING
-============================================================ */
+  height:
+    var(--space-8);
 
-.app-overview__heading {
+  border:
+    var(--border-default)
+    var(--color-border-subtle);
 
-  margin: 0;
+  border-radius:
+    var(--radius-md);
 
-  color:
-    var(--color-text-primary);
-
-  font-size:
-    var(--text-heading-md-size);
-
-  font-weight:
-    var(--text-heading-md-weight);
-
-  line-height:
-    var(--text-heading-md-line);
-
-  letter-spacing:
-    var(--text-heading-md-tracking);
-}
-
-
-/* ============================================================
-   DESCRIPTION
-============================================================ */
-
-.app-overview__description {
-
-  margin: 0;
-
-  max-width: var(--content-width-md);
+  background:
+    var(--color-surface-subtle);
 
   color:
     var(--color-text-secondary);
 
   font-size:
     var(--text-body-md-size);
-
-  font-weight:
-    var(--text-body-md-weight);
-
-  line-height:
-    var(--text-body-md-line);
 }
 
 
-/* ============================================================
-   ACTIONS
-============================================================ */
+/* ==========================================================
+   FEATURE INDEX
+========================================================== */
 
-.app-overview__actions {
-
-  display: flex;
-
-  width: 100%;
-}
-
-
-/* ============================================================
-   ACTION
-============================================================ */
-
-.app-overview__action {
-
-  display: flex;
-  flex-direction: column;
-
-  gap: var(--space-xs);
-
-  width: 100%;
-  max-width: var(--content-width-md);
-
-  padding:
-    var(--space-4);
-
-  border:
-    var(--border-thin)
-    solid
-    var(--color-border-subtle);
-
-  border-radius:
-    var(--radius-lg);
-
-  background:
-    var(--color-surface);
+.overview__feature-index {
 
   color:
-    var(--color-text-primary);
+    var(--color-text-muted);
 
-  text-decoration: none;
+  font-size:
+    var(--text-label-sm-size);
 
-  transition:
-    background var(--transition-fast),
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+  font-weight:
+    var(--text-label-sm-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
 
-/* ============================================================
-   ACTION — HOVER
-============================================================ */
+/* ==========================================================
+   FEATURE BODY
+========================================================== */
 
-.app-overview__action:hover {
+.overview__feature-body {
 
-  background:
-    var(--color-surface-subtle);
-
-  border-color:
-    var(--color-border);
-
-  box-shadow:
-    0 .2rem .8rem rgba(16, 24, 40, .04);
+  margin-top:
+    auto;
 }
 
 
-/* ============================================================
-   ACTION TITLE
-============================================================ */
+/* ==========================================================
+   FEATURE TITLE
+========================================================== */
 
-.app-overview__action-title {
+.overview__feature-title {
+
+  max-width:
+    var(--content-xs);
+
+  margin: 0;
 
   color:
     var(--color-text-primary);
 
   font-size:
-    var(--text-label-lg-size);
+    var(--text-heading-sm-size);
 
   font-weight:
-    var(--text-label-lg-weight);
+    var(--text-heading-sm-weight);
 
   line-height:
-    var(--text-label-lg-line);
+    var(--text-heading-sm-line);
+
+  letter-spacing:
+    var(--text-heading-sm-tracking);
 }
 
 
-/* ============================================================
-   ACTION DESCRIPTION
-============================================================ */
+/* ==========================================================
+   FEATURE DESCRIPTION
+========================================================== */
 
-.app-overview__action-description {
+.overview__feature-description {
+
+  max-width:
+    var(--content-sm);
+
+  margin:
+    var(--component-gap-xs)
+    0
+    0;
 
   color:
-    var(--color-text-muted);
+    var(--color-text-secondary);
 
   font-size:
     var(--text-body-sm-size);
@@ -309,65 +302,211 @@
 }
 
 
-/* ============================================================
+/* ==========================================================
+   AI FEATURE
+========================================================== */
+
+
+
+
+/* ==========================================================
+   WIDE FEATURE
+========================================================== */
+
+.overview__feature--wide {
+
+  grid-column:
+    1 / -1;
+
+  min-height:
+    var(--space-11);
+
+  flex-direction:
+    row;
+
+  align-items:
+    stretch;
+
+  justify-content:
+    space-between;
+
+  gap:
+    var(--section-gap-lg);
+
+  margin-bottom: 10rem;
+}
+
+
+/* ==========================================================
+   WIDE FEATURE MAIN
+========================================================== */
+
+.overview__feature-wide-main {
+
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+.overview__feature-wide-main
+.overview__feature-top {
+
+  margin-bottom:
+    var(--component-gap-md);
+}
+
+
+.overview__feature-wide-main
+.overview__feature-title {
+
+  max-width:
+    var(--content-sm);
+}
+
+
+.overview__feature-wide-main
+.overview__feature-description {
+
+  max-width:
+    var(--content-md);
+}
+
+
+/* ==========================================================
+   WIDE FEATURE NOTE
+========================================================== */
+
+.overview__feature-wide-note {
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-end;
+
+  min-width:
+    var(--content-xs);
+
+  padding-bottom:
+    var(--space-1);
+
+  color:
+    var(--color-text-muted);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-align:
+    right;
+}
+
+
+/* ==========================================================
    TABLET
-============================================================ */
+========================================================== */
 
 @include respond(tab-port) {
 
-  .app-overview {
+  .overview {
 
     padding:
-      var(--space-5)
-      var(--space-5)
-      var(--space-7);
+      var(--page-padding-md)
+      var(--page-padding-md)
+      var(--space-10);
+  }
+
+
+  .overview__features {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .overview__feature--wide {
+
+    grid-column:
+      1 / -1;
+  }
+
+
+  .overview__feature-wide-note {
+
+    min-width:
+      var(--content-xs);
   }
 
 }
 
 
-/* ============================================================
-   PHONE
-============================================================ */
+/* ==========================================================
+   MOBILE
+========================================================== */
 
 @include respond(phone) {
 
-  .app-overview {
-
-    gap:
-      var(--section-gap-md);
+  .overview {
 
     padding:
-      var(--space-4)
-      var(--space-4)
-      var(--space-6);
+      var(--page-padding-sm)
+      var(--page-padding-sm)
+      var(--space-10);
   }
 
 
-  .app-overview__content {
+  .overview__intro {
+
+    margin-bottom:
+      var(--section-gap-md);
+  }
+
+
+  .overview__features {
+
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .overview__feature {
+
+    min-height:
+      auto;
+  }
+
+
+  .overview__feature--wide {
+
+    grid-column:
+      auto;
+
+    flex-direction:
+      column;
 
     gap:
       var(--section-gap-md);
   }
 
 
-  .app-overview__title {
+  .overview__feature-wide-note {
 
-    font-size:
-      var(--text-heading-xl-size);
+    min-width:
+      0;
 
-    line-height:
-      var(--text-heading-xl-line);
-  }
+    padding:
+      0;
 
-
-  .app-overview__intro {
-
-    font-size:
-      var(--text-body-md-size);
-
-    line-height:
-      var(--text-body-md-line);
+    text-align:
+      left;
   }
 
 }

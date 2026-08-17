@@ -1,146 +1,186 @@
-<div class="app-overview">
+<div class="overview">
 
-  <header class="app-overview__header">
+  <!-- ==================================================
+       IDENTITY
+  ================================================== -->
 
-    <span class="app-overview__eyebrow">
-      QuantumMind
+  <section class="overview__intro">
+
+    <span class="overview__eyebrow">
+      QUANTUM MIND
     </span>
 
-    <h1 class="app-overview__title">
+    <h1 class="overview__title">
       Learn quantum computing.
     </h1>
 
-    <p class="app-overview__intro">
-      Explore the fundamentals of quantum computing, test your
-      understanding, and build your knowledge step by step.
+    <p class="overview__description">
+      Explore the fundamentals of quantum computing, understand
+      how they work, and build the knowledge needed to go further.
     </p>
 
-  </header>
+  </section>
 
 
-  <main class="app-overview__content">
+  <!-- ==================================================
+       EXPERIENCE
+  ================================================== -->
 
-    <section class="app-overview__section">
+  <section class="overview__features">
 
-      <div class="app-overview__section-header">
+    <!-- ==================================================
+         FOUNDATIONS
+    ================================================== -->
 
-        <h2 class="app-overview__heading">
-          Explore
+    <article class="overview__feature">
+
+      <div class="overview__feature-top">
+
+        <span class="overview__feature-icon">
+          <iconify-icon icon="lucide:atom"></iconify-icon>
+        </span>
+
+        <span class="overview__feature-index">
+          01
+        </span>
+
+      </div>
+
+      <div class="overview__feature-body">
+
+        <h2 class="overview__feature-title">
+          Quantum foundations
         </h2>
 
-        <p class="app-overview__description">
-          Build a clear understanding of quantum computing through
-          focused concepts, from the foundations to more advanced ideas.
+        <p class="overview__feature-description">
+          Learn the core principles, mathematics, and building
+          blocks of quantum computation.
         </p>
 
       </div>
 
-      <a
-        routerLink="/learn"
-        class="app-overview__action"
-      >
-        <span class="app-overview__action-title">
-          Continue learning
+    </article>
+
+
+    <!-- ==================================================
+         EXPLORATION
+    ================================================== -->
+
+    <article class="overview__feature">
+
+      <div class="overview__feature-top">
+
+        <span class="overview__feature-icon">
+          <iconify-icon icon="lucide:layers-3"></iconify-icon>
         </span>
 
-        <span class="app-overview__action-description">
-          Explore quantum concepts and discover how they connect.
+        <span class="overview__feature-index">
+          02
         </span>
 
-        <span class="app-overview__action-icon">
-          <iconify-icon icon="lucide:arrow-right"></iconify-icon>
-        </span>
-      </a>
+      </div>
 
-    </section>
+      <div class="overview__feature-body">
 
-
-    <section class="app-overview__section">
-
-      <div class="app-overview__section-header">
-
-        <h2 class="app-overview__heading">
-          Test your knowledge
+        <h2 class="overview__feature-title">
+          Explore concepts
         </h2>
 
-        <p class="app-overview__description">
-          Challenge yourself with questions designed to reinforce
-          what you have learned and reveal where to go deeper.
+        <p class="overview__feature-description">
+          Study each topic at your own pace, from first principles
+          to deeper applications.
         </p>
 
       </div>
 
-      <a
-        routerLink="/quiz"
-        class="app-overview__action"
-      >
-        <span class="app-overview__action-title">
-          Check your understanding
+    </article>
+
+
+    <!-- ==================================================
+         AI
+    ================================================== -->
+
+    <article class="overview__feature overview__feature--ai">
+
+      <div class="overview__feature-top">
+
+        <span class="overview__feature-icon">
+          <iconify-icon icon="lucide:sparkles"></iconify-icon>
         </span>
 
-        <span class="app-overview__action-description">
-          Test what you know and identify concepts worth revisiting.
+        <span class="overview__feature-index">
+          03
         </span>
 
-        <span class="app-overview__action-icon">
-          <iconify-icon icon="lucide:arrow-right"></iconify-icon>
-        </span>
-      </a>
+      </div>
 
-    </section>
+      <div class="overview__feature-body">
 
-
-    <section class="app-overview__section">
-
-      <div class="app-overview__section-header">
-
-        <h2 class="app-overview__heading">
-          Track your progress
+        <h2 class="overview__feature-title">
+          AI-assisted learning
         </h2>
 
-        <p class="app-overview__description">
-          See what you have explored, how your understanding is
-          developing, and where you can continue.
+        <p class="overview__feature-description">
+          Ask questions, clarify concepts, and work through
+          difficult ideas with an AI assistant.
         </p>
 
       </div>
 
-      <a
-        routerLink="/dashboard"
-        class="app-overview__action"
-      >
-        <span class="app-overview__action-title">
-          View your progress
+    </article>
+
+
+    <!-- ==================================================
+         PROGRESS
+    ================================================== -->
+
+    <article class="overview__feature overview__feature--wide">
+
+      <div class="overview__feature-wide-main">
+
+        <div class="overview__feature-top">
+
+          <span class="overview__feature-icon">
+            <iconify-icon
+              icon="lucide:chart-no-axes-combined"
+            ></iconify-icon>
+          </span>
+
+          <span class="overview__feature-index">
+            04
+          </span>
+
+        </div>
+
+        <div class="overview__feature-body">
+
+          <h2 class="overview__feature-title">
+            Measure your understanding
+          </h2>
+
+          <p class="overview__feature-description">
+            Test your knowledge, identify gaps, and track your
+            progress as you learn.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="overview__feature-wide-note">
+
+        <span>
+          Learn at your own pace.
         </span>
 
-        <span class="app-overview__action-description">
-          Visualize your learning journey and keep moving forward.
+        <span>
+          Go deeper when you are ready.
         </span>
 
-        <span class="app-overview__action-icon">
-          <iconify-icon icon="lucide:arrow-right"></iconify-icon>
-        </span>
-      </a>
+      </div>
 
-    </section>
+    </article>
 
-
-    <section class="app-overview__assistant">
-
-      <p class="app-overview__assistant-text">
-        Need another perspective?
-        <button
-          type="button"
-          class="app-overview__assistant-trigger"
-          (click)="onOpenAssistant()"
-        >
-          Ask the AI Assistant
-        </button>
-        about a concept, calculation, or question.
-      </p>
-
-    </section>
-
-  </main>
+  </section>
 
 </div>
