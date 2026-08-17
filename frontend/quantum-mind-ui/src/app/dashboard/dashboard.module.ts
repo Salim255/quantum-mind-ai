@@ -10,6 +10,8 @@ import { AsideNavLinkComponent } from "./components/aide-nav-link/aside-nav-link
 import { SharedModule } from "../shared/shared.module";
 import { AngularSplitModule } from 'angular-split';
 import { AIAssistantModule } from "../features/ai-assistant/ai-assistant.module";
+import { AsidePrimaryNavComponent } from "./components/aside-primary-nav/aside-primary-nav.component";
+import { AsideSecondaryNavComponent } from "./components/aside-secondary-nav/aside-secondary-nav.component";
 
 @NgModule({
   imports: [
@@ -20,6 +22,8 @@ import { AIAssistantModule } from "../features/ai-assistant/ai-assistant.module"
     DashboardRoutingModule
   ],
   declarations: [
+    AsideSecondaryNavComponent,
+    AsidePrimaryNavComponent,
     AsideNavLinkComponent,
     BreadCrumbsComponent,
     AsideLayoutComponent,
