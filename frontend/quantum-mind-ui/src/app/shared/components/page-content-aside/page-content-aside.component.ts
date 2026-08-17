@@ -15,7 +15,7 @@ export class PageContentAsideComponent implements OnInit {
   private pageAsideContentSubscription!: Subscription;
   private currentSectionIdSubscription!: Subscription;
 
-  sections = signal<any []>([]);
+  sections = signal<{id: string, name: string } []>([]);
 
   protected activeSection = signal<string>('');
 
@@ -25,12 +25,13 @@ export class PageContentAsideComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscribeToPageAsideContent();
-    this. subscribeToSectionId();
+    this.subscribeToSectionId();
   }
 
   private subscribeToSectionId(){
     this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
       id => {
+        console.log("Hello from section Id", id)
         if(id) {
           this.activeSection.set(id);
         }
@@ -41,6 +42,7 @@ export class PageContentAsideComponent implements OnInit {
   private subscribeToPageAsideContent(): void{
     this.pageAsideContentSubscription = this.contentService.getPageAsideContent$.subscribe(sections =>
     {
+      console.log(sections);
       this.sections.set(sections)
     }
     )

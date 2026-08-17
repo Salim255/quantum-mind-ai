@@ -56,6 +56,7 @@ export class SpinQubitsPage implements OnInit, AfterViewInit {
           entry => entry.isIntersecting
         );
 
+        console.log(visibleEntry, "hello");
         if (!visibleEntry) {
           return;
         }

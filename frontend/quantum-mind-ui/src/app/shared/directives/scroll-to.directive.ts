@@ -13,6 +13,8 @@ export class ScrollToDirective {
     event.preventDefault();
 
 
+    console.log(this.targetId)
+
     const container = this.scrollContainer;
     const target = document.getElementById(this.targetId) as HTMLElement | null;
 
