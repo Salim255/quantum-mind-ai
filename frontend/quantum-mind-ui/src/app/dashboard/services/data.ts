@@ -1,6 +1,5 @@
 import {
   BELL_INEQUALITY,
-  CLASSICAL_LOGIC,
   ENTANGLEMENT,
   LINEAR_ALGEBRA,
   QUANTUM_ALGOS,
@@ -91,13 +90,6 @@ export const NAVIGATION: NavItem[] = [
         path: '/learn/bell-inequality',
         icon: 'lucide:waypoints',
         sections: BELL_INEQUALITY
-      },
-      {
-        id: 'classical-logic',
-        name: 'Classical Logic',
-        path: '/learn/classical-logic',
-        icon: 'lucide:binary',
-        sections: CLASSICAL_LOGIC
       },
       {
         id: 'quantum-logic',
