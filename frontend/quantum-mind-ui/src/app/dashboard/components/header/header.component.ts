@@ -1,4 +1,6 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { Component, signal } from "@angular/core";
+import { MobileMenuComponent } from "../mobile-menu/mobile-menu.component";
+
 
 @Component({
   selector: "app-header",
@@ -7,4 +9,21 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
   standalone: false,
 })
 
-export class HeaderComponent {}
+export class HeaderComponent {
+
+  protected readonly isMobileMenuOpen = signal(true);
+
+  protected readonly mobileMenuConfig = {
+
+  component: MobileMenuComponent,
+
+  size: 'full' as const,
+
+  showClose: false,
+
+  closeOnBackdrop: true,
+
+  closeOnEscape: true,
+};
+
+}

@@ -3,41 +3,55 @@
   aria-label="Mobile navigation"
 >
 
-  <header class="mobile-menu__header">
-
-    <div class="mobile-menu__identity">
-
-      <span class="mobile-menu__mark">
-        QM
-      </span>
-
-      <span class="mobile-menu__title">
-        Quantum Mind
-      </span>
-
-    </div>
-
-
-    <button
-      class="mobile-menu__close"
-      type="button"
-      aria-label="Close navigation"
-    >
-      <iconify-icon
-        icon="lucide:x"
-        aria-hidden="true"
-      ></iconify-icon>
-    </button>
-
-  </header>
-
-
   <nav
     class="mobile-menu__navigation"
     aria-label="Main navigation"
   >
 
-    <!-- Navigation items -->
+    <ul class="mobile-menu__list">
+
+      @for (nav of items()?.children; track nav.path) {
+
+        <li class="mobile-menu__item">
+
+          <a
+            class="mobile-menu__link"
+            [routerLink]="nav.path"
+            routerLinkActive="mobile-menu__link--active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="onNavigate(nav)"
+          >
+
+            @if (nav.icon) {
+
+              <span
+                class="mobile-menu__link-icon"
+                aria-hidden="true"
+              >
+                <iconify-icon
+                  [icon]="nav.icon"
+                />
+              </span>
+
+            }
+
+            <span class="mobile-menu__link-label">
+              {{ nav.name }}
+            </span>
+
+            <iconify-icon
+              class="mobile-menu__link-chevron"
+              icon="lucide:chevron-right"
+              aria-hidden="true"
+            />
+
+          </a>
+
+        </li>
+
+      }
+
+    </ul>
 
   </nav>
 

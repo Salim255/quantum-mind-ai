@@ -6,192 +6,129 @@
    MOBILE MENU
    ------------------------------------------------------------
    Mobile navigation content.
-
-   Overlay positioning, backdrop and layering are handled
-   by the application's shared overlay system.
-
-   This component owns only its internal layout and styling.
 ============================================================ */
 
 .mobile-menu {
 
-  /* ==========================================================
-     BASE
-  ========================================================== */
-
   display: flex;
+
   flex-direction: column;
 
-  width: min(32rem, 100%);
-
+  width: 100%;
   height: 100%;
 
+  min-width: 0;
   min-height: 0;
 
   background: var(--color-surface);
 
-  border:
-    var(--border-default)
-    var(--color-border-subtle);
 
-  border-radius: var(--space-3);
+  /* ==========================================================
+     NAVIGATION
+  ========================================================== */
 
-  overflow: hidden;
+  &__navigation {
+
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding:
+      var(--space-3)
+      var(--card-padding-md);
+
+    overscroll-behavior: contain;
+  }
 
 
   /* ==========================================================
-     HEADER
+     LIST
   ========================================================== */
 
-  &__header {
+  &__list {
 
     display: flex;
-    align-items: center;
-    justify-content: space-between;
 
+    flex-direction: column;
+
+    gap: var(--space-1);
+
+    margin: var(--space-0);
+
+    padding: var(--space-0);
+
+    list-style: none;
+  }
+
+
+  /* ==========================================================
+     ITEM
+  ========================================================== */
+
+  &__item {
+
+    width: 100%;
+  }
+
+
+  /* ==========================================================
+     LINK
+  ========================================================== */
+
+  &__link {
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
     min-height: var(--space-10);
 
-    padding-inline: var(--page-padding-md);
+    gap: var(--component-gap-md);
 
-    flex: 0 0 auto;
+    padding:
+      var(--space-2)
+      var(--space-3);
 
-    border-bottom:
+    color: var(--color-text-secondary);
+
+    background: transparent;
+
+    border:
       var(--border-default)
-      var(--color-border-subtle);
-  }
+      transparent;
 
-
-  /* ==========================================================
-     IDENTITY
-  ========================================================== */
-
-  &__identity {
-
-    display: flex;
-    align-items: center;
-
-    gap: var(--component-gap-sm);
-
-    min-width: 0;
-  }
-
-
-  /* ==========================================================
-     BRAND MARK
-  ========================================================== */
-
-  &__mark {
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: var(--space-7);
-    height: var(--space-7);
-
-    flex: 0 0 auto;
-
-    color: var(--color-text-inverse);
-
-    background: var(--color-primary);
-
-    border-radius: var(--space-2);
-
-    font-family: var(--font-family-base);
-
-    font-size: var(--text-xs);
-    font-weight: var(--font-bold);
-    line-height: var(--leading-none);
-
-    letter-spacing: var(--tracking-tight);
-  }
-
-
-  /* ==========================================================
-     TITLE
-  ========================================================== */
-
-  &__title {
-
-    overflow: hidden;
-
-    color: var(--color-text-primary);
+    border-radius: var(--space-3);
 
     font-family: var(--font-family-base);
 
     font-size: var(--text-label-lg-size);
-    font-weight: var(--text-label-lg-weight);
-    line-height: var(--text-label-lg-line);
 
-    letter-spacing: var(--tracking-tight);
+    font-weight:
+      var(--text-label-lg-weight);
 
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+    line-height:
+      var(--text-label-lg-line);
 
-
-  /* ==========================================================
-     CLOSE
-  ========================================================== */
-
-  &__close {
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: var(--space-8);
-    height: var(--space-8);
-
-    flex: 0 0 auto;
-
-    padding: var(--space-0);
-
-    color: var(--color-text-secondary);
-
-    background: var(--color-surface);
-
-    border:
-      var(--border-default)
-      var(--color-border);
-
-    border-radius: var(--space-3);
-
-    cursor: pointer;
+    text-decoration: none;
 
     transition:
-      background-color 160ms ease,
-      border-color 160ms ease,
       color 160ms ease,
-      transform 160ms ease;
-
-
-    iconify-icon {
-
-      width: var(--text-lg);
-      height: var(--text-lg);
-    }
+      background-color 160ms ease,
+      border-color 160ms ease;
 
 
     &:hover {
 
       color: var(--color-text-primary);
 
-      background: var(--color-surface-muted);
+      background:
+        var(--color-surface-muted);
 
-      border-color: var(--color-border-strong);
-    }
-
-
-    &:active {
-
-      color: var(--color-primary);
-
-      background: var(--color-primary-soft);
-
-      border-color: var(--color-primary-border);
-
-      transform: scale(.96);
+      border-color:
+        var(--color-border-subtle);
     }
 
 
@@ -204,27 +141,126 @@
 
       outline-offset: var(--space-1);
     }
+
+
+    &--active {
+
+      color: var(--color-primary);
+
+      background:
+        var(--color-primary-soft);
+
+      border-color:
+        var(--color-primary-border);
+
+      font-weight: var(--font-semibold);
+
+
+      .mobile-menu__link-icon {
+
+        color: var(--color-primary);
+
+        background:
+          var(--color-surface);
+
+        border-color:
+          var(--color-primary-border);
+      }
+
+
+      .mobile-menu__link-chevron {
+
+        color: var(--color-primary);
+      }
+    }
   }
 
 
   /* ==========================================================
-     NAVIGATION
+     LINK ICON
   ========================================================== */
 
-  &__navigation {
+  &__link-icon {
 
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
 
-    flex: 1;
+    align-items: center;
+    justify-content: center;
 
-    min-height: 0;
+    width: var(--space-8);
+    height: var(--space-8);
 
-    gap: var(--component-gap-xs);
+    flex: 0 0 auto;
 
-    padding: var(--page-padding-md);
+    color: var(--color-text-muted);
 
-    overflow-y: auto;
+    background:
+      var(--color-surface-muted);
+
+    border:
+      var(--border-default)
+      var(--color-border-subtle);
+
+    border-radius: var(--space-2);
+
+    transition:
+      color 160ms ease,
+      background-color 160ms ease,
+      border-color 160ms ease;
+
+
+    iconify-icon {
+
+      width: var(--text-lg);
+      height: var(--text-lg);
+    }
+  }
+
+
+  /* ==========================================================
+     LABEL
+  ========================================================== */
+
+  &__link-label {
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    flex: 1 1 auto;
+
+    color: inherit;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+  }
+
+
+  /* ==========================================================
+     CHEVRON
+  ========================================================== */
+
+  &__link-chevron {
+
+    width: var(--text-sm);
+    height: var(--text-sm);
+
+    flex: 0 0 auto;
+
+    color: var(--color-text-disabled);
+
+    transition:
+      color 160ms ease,
+      transform 160ms ease;
+  }
+
+
+  &__link:hover &__link-chevron {
+
+    color: var(--color-text-secondary);
+
+    transform: translateX(var(--space-1));
   }
 
 
@@ -234,7 +270,11 @@
 
   @include respond(tab-port) {
 
-    width: 100%;
+    &__navigation {
+
+      padding-inline:
+        var(--page-padding-sm);
+    }
   }
 
 
@@ -242,18 +282,22 @@
      PHONE
   ========================================================== */
 
-  @include respond(phone) {
-
-    border-radius: var(--space-0);
-
-    border-inline: var(--border-none);
-
-    &__header {
-      padding-inline: var(--page-padding-xs);
-    }
+  @include respond(phone-lg) {
 
     &__navigation {
-      padding-inline: var(--page-padding-xs);
+
+      padding:
+        var(--space-3)
+        var(--page-padding-xs);
+    }
+
+
+    &__link {
+
+      min-height: var(--space-10);
+
+      padding-inline:
+        var(--space-2);
     }
   }
 }

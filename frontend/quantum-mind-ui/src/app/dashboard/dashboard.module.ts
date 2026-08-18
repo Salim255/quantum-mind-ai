@@ -24,7 +24,7 @@ import { MobileMenuComponent } from "./components/mobile-menu/mobile-menu.compon
     DashboardRoutingModule
   ],
   declarations: [
-     MobileMenuComponent,
+    MobileMenuComponent,
     SecondaryAsideNavLinkComponent,
     PrimaryAsideNavLinkComponent,
     AsideSecondaryNavComponent,

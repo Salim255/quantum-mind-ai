@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,13 +16,10 @@ export type OverlayWidth =
 
 @Component({
   selector: 'app-overlay',
-  standalone: true,
+  standalone: false,
+
   templateUrl: './app-overlay.component.html',
   styleUrl: './app-overlay.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ]
 })
 export class AppOverlayComponent {
 

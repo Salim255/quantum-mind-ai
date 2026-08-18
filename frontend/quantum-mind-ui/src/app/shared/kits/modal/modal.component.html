@@ -1,0 +1,88 @@
+<app-overlay
+  [open]="true"
+  [closeOnBackdrop]="config().closeOnBackdrop ?? true"
+  [closeOnEscape]="config().closeOnEscape ?? true"
+  [width]="config().size ?? 'md'"
+  (closed)="close()"
+>
+
+  <div class="app-modal">
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    @if (
+      config().title ||
+      config().subtitle ||
+      config().showClose !== false
+    ) {
+
+      <header class="app-modal__header">
+
+        @if (
+          config().title ||
+          config().subtitle
+        ) {
+
+          <div class="app-modal__heading">
+
+            @if (config().title) {
+
+              <h2 class="app-modal__title">
+                {{ config().title }}
+              </h2>
+
+            }
+
+            @if (config().subtitle) {
+
+              <p class="app-modal__subtitle">
+                {{ config().subtitle }}
+              </p>
+
+            }
+
+          </div>
+
+        }
+
+
+        @if (config().showClose !== false) {
+
+          <button
+            class="app-modal__close"
+            type="button"
+            aria-label="Close modal"
+            (click)="close()"
+          >
+
+            <iconify-icon
+              icon="lucide:x"
+              aria-hidden="true"
+            />
+
+          </button>
+
+        }
+
+      </header>
+
+    }
+
+
+    <!-- ======================================================
+         CONTENT
+    ======================================================= -->
+
+    <div class="app-modal__content">
+
+      <ng-container
+        *ngComponentOutlet="config().component"
+      />
+
+    </div>
+
+  </div>
+
+</app-overlay>

@@ -15,12 +15,10 @@
       [class.app-overlay__panel--md]="width() === 'md'"
       [class.app-overlay__panel--lg]="width() === 'lg'"
       [class.app-overlay__panel--full]="width() === 'full'"
-      role="dialog"
-      aria-modal="true"
-      [attr.aria-label]="title()"
+      [attr.aria-label]="title() || null"
     >
 
-      @if (title() || showClose()) {
+      @if (title() || subtitle() || showClose()) {
 
         <header class="app-overlay__header">
 
@@ -44,7 +42,6 @@
 
           }
 
-
           @if (showClose()) {
 
             <button
@@ -56,7 +53,7 @@
               <iconify-icon
                 icon="lucide:x"
                 aria-hidden="true"
-              ></iconify-icon>
+              />
             </button>
 
           }
@@ -67,9 +64,7 @@
 
 
       <div class="app-overlay__content">
-
         <ng-content />
-
       </div>
 
     </section>
