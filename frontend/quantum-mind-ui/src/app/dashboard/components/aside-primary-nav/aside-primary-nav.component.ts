@@ -1,4 +1,4 @@
-import { Component, signal } from "@angular/core";
+import { Component, Input, signal } from "@angular/core";
 import { EventType, NavigationEnd, Router } from "@angular/router";
 import { filter, Subscription } from "rxjs";
 import { AsideNavService, NavItem } from "../../services/aside-nav.service";
@@ -10,9 +10,7 @@ import { AsideNavService, NavItem } from "../../services/aside-nav.service";
   standalone: false
 })
 export class AsidePrimaryNavComponent {
-  items = signal<NavItem| null>(null)
-
-  currentPageNavSubscription!: Subscription;
+  @Input() items!: NavItem| null
 
   constructor(
     private router: Router,
@@ -21,20 +19,9 @@ export class AsidePrimaryNavComponent {
 
   ngOnInit(): void {
     this.listenToRouter()
-    this.subscribeToCurrentPageNav()
   }
 
-  subscribeToCurrentPageNav(): void{
-    this.currentPageNavSubscription = this.asideNavService
-    .getCurrentPageNav$.subscribe((value: NavItem | null) => {
-      if(!value) {
-        const url = this.router.url === '/' ? '/home' : this.router.url;
-        this.asideNavService.setCurrentPageUrl(url);
-        return
-      }
-      this.items.set(value);
-    })
-  }
+
 
   listenToRouter(): void {
      this.router.events.pipe(
@@ -46,7 +33,4 @@ export class AsidePrimaryNavComponent {
       });
   }
 
-  ngOnDestroy() {
-    this.currentPageNavSubscription?.unsubscribe()
-  }
 }

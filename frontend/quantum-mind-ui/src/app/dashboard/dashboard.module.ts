@@ -6,12 +6,13 @@ import { HeaderComponent } from "./components/header/header.component";
 import { WrapperLayoutComponent } from "./components/wrapper-layout/wrapper-layout.component";
 import { AsideLayoutComponent } from "./components/aside-layout/aside-layout.component";
 import { BreadCrumbsComponent } from "./components/bread-crumbs/bread-crumbs.component";
-import { AsideNavLinkComponent } from "./components/aide-nav-link/aside-nav-link.component";
+import { SecondaryAsideNavLinkComponent } from "./components/secondary-aide-nav-link/secondary-aside-nav-link.component";
 import { SharedModule } from "../shared/shared.module";
 import { AngularSplitModule } from 'angular-split';
 import { AIAssistantModule } from "../features/ai-assistant/ai-assistant.module";
 import { AsidePrimaryNavComponent } from "./components/aside-primary-nav/aside-primary-nav.component";
 import { AsideSecondaryNavComponent } from "./components/aside-secondary-nav/aside-secondary-nav.component";
+import { PrimaryAsideNavLinkComponent } from "./components/primary-aide-nav-link/primary-aside-nav-link.component";
 
 @NgModule({
   imports: [
@@ -22,9 +23,10 @@ import { AsideSecondaryNavComponent } from "./components/aside-secondary-nav/asi
     DashboardRoutingModule
   ],
   declarations: [
+    SecondaryAsideNavLinkComponent,
+    PrimaryAsideNavLinkComponent,
     AsideSecondaryNavComponent,
     AsidePrimaryNavComponent,
-    AsideNavLinkComponent,
     BreadCrumbsComponent,
     AsideLayoutComponent,
     WrapperLayoutComponent,

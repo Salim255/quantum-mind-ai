@@ -3,12 +3,12 @@ import { NavItem } from "../../services/aside-nav.service";
 import { ContentService } from "../../../features/learn/services/content.service";
 
 @Component({
-  selector: "app-aside-nav-link",
-  templateUrl: "./aside-nav-link.component.html",
-  styleUrl: "./aside-nav-link.component.scss",
+  selector: "app-secondary-aside-nav-link",
+  templateUrl: "./secondary-aside-nav-link.component.html",
+  styleUrl: "./secondary-aside-nav-link.component.scss",
   standalone: false
 })
-export class AsideNavLinkComponent {
+export class SecondaryAsideNavLinkComponent {
   @Input() nav!: NavItem
 
   constructor(private contentService: ContentService){}

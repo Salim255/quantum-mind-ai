@@ -1,61 +1,91 @@
+/* ==========================================================
+   ASIDE LAYOUT
+========================================================== */
+
 .aside-layout {
-  display: flex;
-  flex-direction: column;
-  padding-block: var(--space-sm);
-  height: 100%;
-  min-width: 0;
-  width: 100%;
-  min-width: 20rem;
-  background: var(--color-surface);
-  padding-left:  var(--space-4);
-  border-right:
-    var(--border-divider)
-    solid
-    var(--color-border);
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(13, minmax(0, 1fr));
+
+  grid-template-rows:
+    1fr;
+
+  width:
+    30rem;
+
+  height:
+    100%;
+
+  min-width:
+    0;
+
+  min-height:
+    0;
 }
 
-.aside-layout__list {
-  display: flex;
-  flex-direction: column;
 
-  gap: 4px;
+/* ==========================================================
+   PRIMARY NAVIGATION
+========================================================== */
 
-  margin: 0;
-  padding: var(--space-md);
+.aside-layout__primary-nav {
 
-  list-style: none;
+  grid-column:
+    1 / 8;
 
-  min-width: 0;
-  width: 100%;
-}
-app-aside-nav-link {
-  min-width: 0;
-  width: 100%;
-}
-.aside-layout__link {
-  display: flex;
-}
+  grid-row:
+    1;
 
-.aside-layout__section {
-  display: flex;
-  flex-direction: column;
+  position: relative;
 
-  gap: var(--space-xs);
-}
+  z-index: 2;
 
-.aside-layout__section + .aside-layout__section {
-  margin-top: var(--space-lg);
+  min-width:
+    0;
+
+  min-height:
+    0;
+
+  transition:
+    grid-column .18s ease;
+
+    background-color: yellow;
 }
 
-.aside-layout__title {
-  padding-inline: var(--space-md);
 
-  color: var(--color-text-muted);
+/* ==========================================================
+   PRIMARY NAVIGATION — HOVER
+========================================================== */
 
-  font-size: var(--text-label-sm-size);
-  font-weight: var(--text-label-sm-weight);
-  line-height: var(--text-label-sm-line);
+.aside-layout__primary-nav:hover {
 
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  grid-column:
+    1 / -1;
+  background-color: red;
+}
+
+
+/* ==========================================================
+   SECONDARY NAVIGATION
+========================================================== */
+
+.aside-layout__secondary-nav {
+
+  grid-column:
+    1 / -1;
+
+  grid-row:
+    1;
+
+  position: relative;
+
+  z-index: 1;
+
+  min-width:
+    0;
+
+  min-height:
+    0;
 }
