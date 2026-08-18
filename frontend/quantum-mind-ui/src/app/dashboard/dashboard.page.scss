@@ -151,10 +151,6 @@
   ======================================================== */
 
   @include respond(tab-port) {
-    &__wrapper {
-      grid-template-columns: 0 minmax(0, 1fr);
-    }
-
     &__aside {
       display: none;
     }

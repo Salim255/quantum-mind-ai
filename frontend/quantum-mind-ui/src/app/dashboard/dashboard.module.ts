@@ -13,6 +13,7 @@ import { AIAssistantModule } from "../features/ai-assistant/ai-assistant.module"
 import { AsidePrimaryNavComponent } from "./components/aside-primary-nav/aside-primary-nav.component";
 import { AsideSecondaryNavComponent } from "./components/aside-secondary-nav/aside-secondary-nav.component";
 import { PrimaryAsideNavLinkComponent } from "./components/primary-aide-nav-link/primary-aside-nav-link.component";
+import { MobileMenuComponent } from "./components/mobile-menu/mobile-menu.component";
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { PrimaryAsideNavLinkComponent } from "./components/primary-aide-nav-link
     DashboardRoutingModule
   ],
   declarations: [
+     MobileMenuComponent,
     SecondaryAsideNavLinkComponent,
     PrimaryAsideNavLinkComponent,
     AsideSecondaryNavComponent,

@@ -1,33 +1,69 @@
 <header class="dash-header">
 
-  <div class="dash-header__content">
-    <!-- LEFT IDENTITY -->
-    <div class="dash-header__identity">
-      <button
-        class="dash-header__menu"
-        type="button"
-        aria-label="Open navigation"
-      >
-        <iconify-icon
-          icon="lucide:panel-left">
-        </iconify-icon>
+  <div class="dash-header__top">
 
-      </button>
+    <div class="dash-header__identity">
 
       <div class="dash-header__brand">
-        <span>
+
+        <span class="dash-header__brand-mark">
+          QM
+        </span>
+
+        <span class="dash-header__brand-name">
           Quantum Mind
         </span>
+
       </div>
+
     </div>
 
-    <!-- USER -->
-    <button class="dash-header__btn">
-      Guest
+
+    <!-- Desktop account action -->
+    <button
+      class="dash-header__user"
+      type="button"
+    >
+      <span class="dash-header__user-avatar">
+        G
+      </span>
+
+      <span class="dash-header__user-name">
+        Guest
+      </span>
+
+      <iconify-icon
+        class="dash-header__user-chevron"
+        icon="lucide:chevron-down"
+      ></iconify-icon>
     </button>
+
+
+    <!-- Mobile navigation action -->
+    <button
+      class="dash-header__mobile-menu"
+      type="button"
+      aria-label="Open navigation"
+    >
+      <iconify-icon
+        icon="lucide:menu"
+        aria-hidden="true"
+      ></iconify-icon>
+    </button>
+
   </div>
-  <div class="dash-header__breadcrumb">
-    <app-bread-crumbs/>
-    <app-assistant-launcher/>
+
+
+  <div class="dash-header__bottom">
+
+    <div class="dash-header__breadcrumb">
+      <app-bread-crumbs />
+    </div>
+
+    <div class="dash-header__assistant">
+      <app-assistant-launcher />
+    </div>
+
   </div>
+
 </header>

@@ -1,205 +1,158 @@
+@use "../../../../../styles/mixins/queries" as *;
 /* ============================================================
+   QUANTUM MIND
    ASSISTANT LAUNCHER
    ------------------------------------------------------------
-   Clean / soft / discreet AI control
+   Compact entry point for the AI assistant.
+
+   Designed to feel like a native product action rather
+   than a promotional AI button.
+
+   Consumes only Quantum Mind design-system tokens.
 ============================================================ */
 
 .assistant-launcher {
 
+  /* ==========================================================
+     BASE
+  ========================================================== */
+
   display: inline-flex;
-
   align-items: center;
+  justify-content: center;
 
-  gap:
-    var(--space-2);
+  gap: var(--component-gap-xs);
 
-  min-height:
-    3.8rem;
+  min-height: var(--space-7);
 
   padding:
-    var(--space-1)
-    var(--space-2);
+    var(--space-2)
+    var(--space-3);
+
+  color: var(--color-primary);
+
+  background: var(--color-primary-soft);
 
   border:
-    var(--border-thin)
-    solid
-    var(--color-border-subtle);
+    var(--border-default)
+    var(--color-primary-border);
 
-  border-radius:
-    var(--radius-pill);
+  border-radius: var(--space-2);
 
-  background:
-    var(--color-surface);
+  font-family: var(--font-family-base);
 
-  color:
-    var(--color-text-secondary);
-
-  cursor:
-    pointer;
-
-  appearance:
-    none;
+  cursor: pointer;
 
   transition:
-    background var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast);
-}
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
 
 
-/* ============================================================
-   ICON
-============================================================ */
+  /* ==========================================================
+     HOVER
+  ========================================================== */
 
-.assistant-launcher__icon {
+  &:hover {
 
-  display: grid;
+    color: var(--color-primary-hover);
 
-  place-items: center;
+    background: var(--color-surface);
 
-  flex-shrink: 0;
+    border-color: var(--color-primary);
 
-  width:
-    2.8rem;
-
-  height:
-    2.8rem;
-
-  border-radius:
-    var(--radius-circle);
-
-  background:
-    var(--color-primary-soft);
-
-  color:
-    var(--color-primary);
-
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast);
-}
-
-
-.assistant-launcher__icon
-iconify-icon {
-
-  display: flex;
-
-  width:
-    1.5rem;
-
-  height:
-    1.5rem;
-}
-
-
-/* ============================================================
-   LABEL
-============================================================ */
-
-.assistant-launcher__label {
-
-  padding-right:
-    var(--space-2);
-
-  color:
-    var(--color-text-secondary);
-
-  font-size:
-    var(--text-label-sm-size);
-
-  font-weight:
-    var(--text-label-sm-weight);
-
-  line-height:
-    var(--text-label-sm-line);
-
-  white-space:
-    nowrap;
-}
-
-
-/* ============================================================
-   SOFT HOVER
-============================================================ */
-
-.assistant-launcher:hover {
-
-  background:
-    var(--color-surface-subtle);
-
-  border-color:
-    var(--color-border);
-
-  color:
-    var(--color-text-primary);
-}
-
-
-.assistant-launcher:hover
-.assistant-launcher__label {
-
-  color:
-    var(--color-text-primary);
-}
-
-
-.assistant-launcher:hover
-.assistant-launcher__icon {
-
-  background:
-    var(--color-primary-soft);
-
-  color:
-    var(--color-primary-hover);
-}
-
-
-/* ============================================================
-   ACTIVE
-============================================================ */
-
-.assistant-launcher:active {
-
-  background:
-    var(--color-surface-muted);
-
-  border-color:
-    var(--color-border);
-
-  transform:
-    scale(.99);
-}
-
-
-/* ============================================================
-   FOCUS
-============================================================ */
-
-.assistant-launcher:focus-visible {
-
-  outline:
-    var(--border-thin)
-    solid
-    var(--color-primary);
-
-  outline-offset:
-    .2rem;
-}
-
-
-/* ============================================================
-   REDUCED MOTION
-============================================================ */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .assistant-launcher {
-
-    transition:
-      background var(--transition-fast),
-      border-color var(--transition-fast),
-      color var(--transition-fast);
+    transform: translateY(-1px);
   }
 
+
+  /* ==========================================================
+     ACTIVE
+  ========================================================== */
+
+  &:active {
+
+    color: var(--color-primary-active);
+
+    background: var(--color-primary-soft);
+
+    border-color: var(--color-primary-active);
+
+    transform: translateY(0);
+  }
+
+
+  /* ==========================================================
+     FOCUS
+  ========================================================== */
+
+  &:focus-visible {
+
+    outline:
+      var(--border-medium)
+      solid
+      var(--color-primary-border);
+
+    outline-offset: var(--space-1);
+  }
+
+
+  /* ==========================================================
+     ICON
+  ========================================================== */
+
+  &__icon {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--text-base);
+    height: var(--text-base);
+
+    flex: 0 0 auto;
+
+    color: currentColor;
+
+    transition: transform 160ms ease;
+  }
+
+
+  &:hover &__icon {
+    transform: rotate(-8deg) scale(1.05);
+  }
+
+
+  /* ==========================================================
+     LABEL
+  ========================================================== */
+
+  &__label {
+
+    color: currentColor;
+
+    font-size: var(--text-button-size);
+    font-weight: var(--text-button-weight);
+    line-height: var(--text-button-line);
+    letter-spacing: var(--text-button-tracking);
+
+    white-space: nowrap;
+  }
+
+
+  /* ==========================================================
+     TABLET
+  ========================================================== */
+
+  @include respond(tab-port) {
+
+    &__label {
+      display: none;
+    }
+
+    padding: var(--space-2);
+
+    width: var(--space-7);
+    height: var(--space-7);
+  }
 }
