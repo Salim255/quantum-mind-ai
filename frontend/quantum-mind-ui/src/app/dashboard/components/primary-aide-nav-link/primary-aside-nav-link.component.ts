@@ -9,6 +9,7 @@ import { ContentService } from "../../../features/learn/services/content.service
   standalone: false
 })
 export class PrimaryAsideNavLinkComponent {
+  @Input() iconOnly!: boolean;
   @Input() nav!: NavItem
 
   constructor(private contentService: ContentService){}

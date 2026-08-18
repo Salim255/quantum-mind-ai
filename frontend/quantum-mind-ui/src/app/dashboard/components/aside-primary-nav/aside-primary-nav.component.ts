@@ -1,4 +1,4 @@
-import { Component, Input, signal } from "@angular/core";
+import { Component, HostListener, Input, signal } from "@angular/core";
 import { EventType, NavigationEnd, Router } from "@angular/router";
 import { filter, Subscription } from "rxjs";
 import { AsideNavService, NavItem } from "../../services/aside-nav.service";
@@ -12,6 +12,7 @@ import { AsideNavService, NavItem } from "../../services/aside-nav.service";
 export class AsidePrimaryNavComponent {
   @Input() items!: NavItem| null
 
+  isExpanded = signal<boolean>(false)
   constructor(
     private router: Router,
     private asideNavService: AsideNavService
@@ -31,6 +32,22 @@ export class AsidePrimaryNavComponent {
 
           this.asideNavService.setCurrentPageUrl(url)
       });
+  }
+
+
+  @HostListener('mouseenter')
+  onMouseEnter(): void {
+
+    this.isExpanded.set(true);
+
+  }
+
+
+  @HostListener('mouseleave')
+  onMouseLeave(): void {
+
+    this.isExpanded.set(false);
+
   }
 
 }

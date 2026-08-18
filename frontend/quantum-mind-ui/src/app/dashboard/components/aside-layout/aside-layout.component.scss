@@ -33,7 +33,7 @@
 .aside-layout__primary-nav {
 
   grid-column:
-    1 / 8;
+    1 / 3;
 
   grid-row:
     1;
@@ -51,7 +51,8 @@
   transition:
     grid-column .18s ease;
 
-    background-color: yellow;
+  background:
+    var(--color-surface-muted);
 }
 
 
@@ -63,7 +64,6 @@
 
   grid-column:
     1 / -1;
-  background-color: red;
 }
 
 

@@ -9,11 +9,13 @@
       <li class="aside-primary-nav__item">
 
         <app-primary-aside-nav-link
+          [iconOnly]="!isExpanded()"
           [nav]="nav"
-          [iconOnly]="true"
         />
 
       </li>
+
     }
+
   </ul>
 </nav>
