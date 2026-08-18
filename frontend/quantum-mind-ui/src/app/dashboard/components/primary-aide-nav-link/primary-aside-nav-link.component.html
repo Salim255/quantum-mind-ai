@@ -5,22 +5,17 @@
   [routerLinkActiveOptions]="{ exact: true }"
   (click)="onNavigate(nav)"
 >
-
   @if (nav.icon) {
-
     <iconify-icon
       class="primary-aside-nav-link__icon"
       [icon]="nav.icon"
     />
-
   }
 
-  @if (!iconOnly) {
-
-    <span class="primary-aside-nav-link__label">
-      {{ nav.name }}
-    </span>
-
-  }
-
+  <span
+    class="primary-aside-nav-link__label"
+    [class.primary-aside-nav-link__label--hidden]="iconOnly"
+  >
+    {{ nav.name }}
+  </span>
 </a>

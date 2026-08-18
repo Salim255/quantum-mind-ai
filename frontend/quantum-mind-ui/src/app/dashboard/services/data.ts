@@ -107,7 +107,7 @@ export const NAVIGATION: NavItem[] = [
       },
       {
         id: 'quantum-impact',
-        name: 'Quantum Computing Impact',
+        name: 'Quantum Impact',
         path: '/learn/quantum-impact',
         icon: 'lucide:sparkles',
         sections: QUANTUM_IMPACT

@@ -42,11 +42,10 @@ export class AsideLayoutComponent {
     })
   }
 
-  private setHideSecondaryStatus(url: string){
-    if(url !== '/home') this.hideSecondaryNav.set(false);
-
-    if (url === '/home') this.hideSecondaryNav.set(true);
+  private setHideSecondaryStatus(url: string): void {
+    this.hideSecondaryNav.set(url === '/home');
   }
+
   listenToRouter(): void {
      this.router.events.pipe(
         filter(event => event.type === EventType.NavigationEnd)

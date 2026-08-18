@@ -121,11 +121,29 @@ export const QUANTUM_ALGOS = [
 
 //9 Impact of Quantum Computing
 export const QUANTUM_IMPACT = [
-  { id: "shors-algorithm-and-cryptanalysis", name: "Shor’s Algorithm and Cryptanalysis" },
-  { id: "grovers-algorithm-and-searching-data", name: "Grover’s Algorithm and Searching Data" },
-  { id: "chemistry-and-simulation", name: "Chemistry and Simulation" },
-  { id: "hardware", name: "Hardware" },
-  { id: "quantum-supremacy-and-parallel-universes", name: "Quantum Supremacy and Parallel Universes" },
-  { id: "computation", name: "Computation" }
+  {
+    id: "shors-algorithm-and-cryptanalysis",
+    name: "Shor’s Algorithm and Cryptanalysis"
+  },
+  {
+    id: "grovers-algorithm-and-searching-data",
+    name: "Grover’s Algorithm and Searching Data"
+  },
+  {
+    id: "chemistry-and-simulation",
+    name: "Chemistry and Simulation"
+  },
+  {
+    id: "hardware",
+    name: "Hardware"
+  },
+  {
+    id: "quantum-supremacy-and-parallel-universes",
+    name: "Quantum Supremacy and Parallel Universes"
+   },
+  {
+    id: "computation",
+    name: "Computation"
+  }
 ];
 
