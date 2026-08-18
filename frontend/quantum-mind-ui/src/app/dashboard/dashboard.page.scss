@@ -130,16 +130,11 @@ DASHBOARD PAGE
 
     min-width: 0;
 
-    padding-top:
-      var(--space-4);
-
-    padding-right:
-      var(--space-4);
-
     border-right:
       var(--border-thin)
       solid
       var(--color-border-subtle);
+
     app-aside-layout {
       width: 100%;
     }

@@ -10,29 +10,17 @@ import { AsideNavService, NavItem } from "../../services/aside-nav.service";
   standalone: false
 })
 export class AsidePrimaryNavComponent {
-  @Input() items!: NavItem| null
+  items = signal< NavItem| null>(null);
 
-  isExpanded = signal<boolean>(false)
-  constructor(
-    private router: Router,
-    private asideNavService: AsideNavService
-  ) {}
+  isExpanded = signal<boolean>(false);
+
+  constructor(private asideNavService: AsideNavService) {}
 
   ngOnInit(): void {
-    this.listenToRouter()
+    this.items.set(this.asideNavService.getPrimaryNavData());
   }
 
 
-
-  listenToRouter(): void {
-     this.router.events.pipe(
-        filter(event => event.type === EventType.NavigationEnd)
-      ).subscribe((event: NavigationEnd) => {
-          const url = event.url === '/' ? '/home' : this.router.url;
-
-          this.asideNavService.setCurrentPageUrl(url)
-      });
-  }
 
 
   @HostListener('mouseenter')

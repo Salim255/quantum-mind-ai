@@ -15,6 +15,8 @@ export class AsideLayoutComponent {
 
   currentPageNavSubscription!: Subscription;
 
+  hideSecondaryNav = signal<boolean>(true);
+
   constructor(
     private router: Router,
     private asideNavService: AsideNavService
@@ -31,17 +33,27 @@ export class AsideLayoutComponent {
       if(!value) {
         const url = this.router.url === '/' ? '/home' : this.router.url;
         this.asideNavService.setCurrentPageUrl(url);
+
+        this.setHideSecondaryStatus(url);
+
         return
       }
       this.items.set(value);
     })
   }
 
+  private setHideSecondaryStatus(url: string){
+    if(url !== '/home') this.hideSecondaryNav.set(false);
+
+    if (url === '/home') this.hideSecondaryNav.set(true);
+  }
   listenToRouter(): void {
      this.router.events.pipe(
         filter(event => event.type === EventType.NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
           const url = event.url === '/' ? '/home' : this.router.url;
+
+          this.setHideSecondaryStatus(url);
 
           this.asideNavService.setCurrentPageUrl(url)
       });

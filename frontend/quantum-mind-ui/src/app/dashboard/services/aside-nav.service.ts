@@ -37,6 +37,10 @@ export class AsideNavService {
     return this.currentPageUrlSubject.asObservable()
   }
 
+  getPrimaryNavData(): NavItem | null  {
+    return this.getAsideNav('/home') ?? null;
+  }
+
   private getAsideNav(currentRoute: string): NavItem | undefined {
     return NAVIGATION.find(item =>
       currentRoute.startsWith(item.path)
