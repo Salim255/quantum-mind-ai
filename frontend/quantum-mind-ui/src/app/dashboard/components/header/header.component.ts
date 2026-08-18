@@ -1,6 +1,8 @@
-import { Component, signal } from "@angular/core";
+import { Component, CUSTOM_ELEMENTS_SCHEMA, signal } from "@angular/core";
 import { MobileMenuComponent } from "../mobile-menu/mobile-menu.component";
-
+import { EventType, NavigationEnd, Router } from "@angular/router";
+import { AsideNavService, NavItem } from "../../services/aside-nav.service";
+import { filter, Subscription } from "rxjs";
 
 @Component({
   selector: "app-header",
@@ -11,7 +13,7 @@ import { MobileMenuComponent } from "../mobile-menu/mobile-menu.component";
 
 export class HeaderComponent {
 
-  protected readonly isMobileMenuOpen = signal(true);
+  protected readonly isMobileMenuOpen = signal(false);
 
   protected readonly mobileMenuConfig = {
 

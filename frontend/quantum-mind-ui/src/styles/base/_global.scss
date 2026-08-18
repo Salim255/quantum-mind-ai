@@ -1,0 +1,13 @@
+@use "../../styles/mixins/queries" as *;
+
+.mobile-menu-modal {
+  display: none;
+}
+
+@include respond(tab-port) {
+
+  .mobile-menu-modal {
+    display: block;
+  }
+
+}

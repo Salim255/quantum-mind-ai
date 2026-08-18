@@ -69,8 +69,11 @@
 </header>
 
 
-<!-- <app-overlay [width]="'full'" [open]="true"> -->
-
-<app-modal [config]="mobileMenuConfig"> </app-modal>
+@if(isMobileMenuOpen()){
+  <app-modal
+    class="mobile-menu-modal"
+    [config]="mobileMenuConfig">
+  </app-modal>
+}
 
 
