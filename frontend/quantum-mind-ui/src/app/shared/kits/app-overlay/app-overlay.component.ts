@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  CUSTOM_ELEMENTS_SCHEMA,
   HostListener,
   input,
   output,
@@ -18,6 +19,9 @@ export type OverlayWidth =
   templateUrl: './app-overlay.component.html',
   styleUrl: './app-overlay.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 export class AppOverlayComponent {
 

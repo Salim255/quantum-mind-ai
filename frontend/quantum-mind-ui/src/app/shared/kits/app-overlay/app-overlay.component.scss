@@ -1,0 +1,326 @@
+@use "../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   QUANTUM MIND
+   APP OVERLAY
+   ------------------------------------------------------------
+   Shared application overlay primitive.
+
+   The overlay owns:
+   - backdrop
+   - panel
+   - header
+   - close action
+   - content container
+
+   Projected content owns its own UI.
+============================================================ */
+
+.app-overlay {
+
+  /* ==========================================================
+     HOST CONTAINER
+  ========================================================== */
+
+  position: fixed;
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--page-padding-md);
+
+  pointer-events: auto;
+
+
+  /* ==========================================================
+     BACKDROP
+  ========================================================== */
+
+  &__backdrop {
+
+    position: absolute;
+    inset: 0;
+
+    background: var(--color-ink);
+
+    opacity: .32;
+  }
+
+
+  /* ==========================================================
+     PANEL
+  ========================================================== */
+
+  &__panel {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    max-height: 100%;
+
+    min-height: 0;
+
+    background: var(--color-surface);
+
+    border:
+      var(--border-default)
+      var(--color-border-subtle);
+
+    border-radius: var(--space-4);
+
+    overflow: hidden;
+
+
+    /* ========================================================
+       WIDTHS
+    ======================================================== */
+
+    &--sm {
+      max-width: var(--content-xs);
+    }
+
+    &--md {
+      max-width: var(--content-sm);
+    }
+
+    &--lg {
+      max-width: var(--content-md);
+    }
+
+    &--full {
+      max-width: var(--content-xl);
+    }
+  }
+
+
+  /* ==========================================================
+     HEADER
+  ========================================================== */
+
+  &__header {
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: var(--component-gap-md);
+
+    flex: 0 0 auto;
+
+    padding: var(--card-padding-md);
+
+    border-bottom:
+      var(--border-default)
+      var(--color-border-subtle);
+  }
+
+
+  /* ==========================================================
+     HEADING
+  ========================================================== */
+
+  &__heading {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: var(--component-gap-xs);
+
+    min-width: 0;
+  }
+
+
+  /* ==========================================================
+     TITLE
+  ========================================================== */
+
+  &__title {
+
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-family: var(--font-family-base);
+
+    font-size: var(--text-heading-lg-size);
+    font-weight: var(--text-heading-lg-weight);
+    line-height: var(--text-heading-lg-line);
+
+    letter-spacing: var(--text-heading-lg-tracking);
+  }
+
+
+  /* ==========================================================
+     SUBTITLE
+  ========================================================== */
+
+  &__subtitle {
+
+    margin: 0;
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-family-base);
+
+    font-size: var(--text-body-sm-size);
+    font-weight: var(--text-body-sm-weight);
+    line-height: var(--text-body-sm-line);
+  }
+
+
+  /* ==========================================================
+     CLOSE
+  ========================================================== */
+
+  &__close {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--space-8);
+    height: var(--space-8);
+
+    flex: 0 0 auto;
+
+    padding: var(--space-0);
+
+    color: var(--color-text-secondary);
+
+    background: transparent;
+
+    border:
+      var(--border-default)
+      transparent;
+
+    border-radius: var(--space-3);
+
+    cursor: pointer;
+
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease,
+      transform 160ms ease;
+
+
+    iconify-icon {
+
+      width: var(--text-lg);
+      height: var(--text-lg);
+    }
+
+
+    &:hover {
+
+      color: var(--color-text-primary);
+
+      background: var(--color-surface-muted);
+
+      border-color: var(--color-border-subtle);
+    }
+
+
+    &:active {
+
+      color: var(--color-primary);
+
+      background: var(--color-primary-soft);
+
+      border-color: var(--color-primary-border);
+
+      transform: scale(.96);
+    }
+
+
+    &:focus-visible {
+
+      outline:
+        var(--border-medium)
+        solid
+        var(--color-primary-border);
+
+      outline-offset: var(--space-1);
+    }
+  }
+
+
+  /* ==========================================================
+     CONTENT
+  ========================================================== */
+
+  &__content {
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding: var(--card-padding-md);
+  }
+
+
+  /* ==========================================================
+     TABLET
+  ========================================================== */
+
+  @include respond(tab-port) {
+
+    padding: var(--page-padding-sm);
+
+    &__panel {
+
+      border-radius: var(--space-3);
+    }
+  }
+
+
+  /* ==========================================================
+     PHONE
+  ========================================================== */
+
+  @include respond(phone-lg) {
+
+    align-items: flex-end;
+
+    padding: var(--space-0);
+
+
+    &__panel {
+
+      width: 100%;
+
+      max-width: none;
+
+      max-height: 92%;
+
+      border-radius:
+        var(--space-4)
+        var(--space-4)
+        var(--space-0)
+        var(--space-0);
+    }
+
+
+    &__header {
+
+      padding: var(--card-padding-md);
+    }
+
+
+    &__content {
+
+      padding: var(--card-padding-md);
+    }
+  }
+}
