@@ -1,7 +1,19 @@
 @use "../../../styles/mixins/queries" as *;
-/* ==========================================================
+
+
+/* ============================================================
    OVERVIEW
-========================================================== */
+   ------------------------------------------------------------
+   Main entry surface for the learning experience.
+
+   Direction:
+   - centered
+   - editorial
+   - minimal
+   - calm
+   - generous internal spacing
+   - stable typography
+============================================================ */
 
 .overview {
 
@@ -9,46 +21,54 @@
   flex-direction: column;
 
   width: 100%;
-  min-height: 0;
   min-width: 0;
-  height: 100%;
-  margin-inline: auto;
+  min-height: 100%;
+
+  max-width:
+    var(--content-xl);
+
+  margin-inline:
+    auto;
 
   padding:
-    var(--page-padding-lg)
-    var(--page-padding-lg)
-    var(--space-12);
+    var(--page-padding-lg);
 
+  box-sizing:
+    border-box;
+
+  color:
+    var(--color-text-primary);
 }
 
 
-/* ==========================================================
+/* ============================================================
    INTRO
-========================================================== */
+============================================================ */
 
 .overview__intro {
 
+  width: 100%;
   max-width:
-    var(--content-xs);
+    var(--content-md);
 
   margin-bottom:
     var(--section-gap-lg);
 }
 
 
-/* ==========================================================
+/* ============================================================
    EYEBROW
-========================================================== */
+============================================================ */
 
 .overview__eyebrow {
 
   display: block;
 
   margin-bottom:
-    var(--component-gap-xs);
+    var(--component-gap-sm);
 
   color:
-    var(--color-text-muted);
+    var(--color-gray-6);
 
   font-size:
     var(--text-label-sm-size);
@@ -60,20 +80,23 @@
     var(--text-label-sm-line);
 
   letter-spacing:
-    var(--text-label-sm-tracking);
+    .08em;
+
+  text-transform:
+    uppercase;
 }
 
 
-/* ==========================================================
+/* ============================================================
    TITLE
-========================================================== */
+============================================================ */
 
 .overview__title {
 
   margin: 0;
 
   color:
-    var(--color-text-primary);
+    var(--color-gray-10);
 
   font-size:
     var(--text-display-sm-size);
@@ -86,17 +109,20 @@
 
   letter-spacing:
     var(--text-display-sm-tracking);
+
+  text-wrap:
+    balance;
 }
 
 
-/* ==========================================================
+/* ============================================================
    DESCRIPTION
-========================================================== */
+============================================================ */
 
 .overview__description {
 
   max-width:
-    var(--content-sm);
+    var(--content-md);
 
   margin:
     var(--component-gap-md)
@@ -104,7 +130,7 @@
     0;
 
   color:
-    var(--color-text-secondary);
+    var(--color-gray-7);
 
   font-size:
     var(--text-body-lg-size);
@@ -114,12 +140,15 @@
 
   line-height:
     var(--text-body-lg-line);
+
+  text-wrap:
+    pretty;
 }
 
 
-/* ==========================================================
+/* ============================================================
    FEATURES
-========================================================== */
+============================================================ */
 
 .overview__features {
 
@@ -129,13 +158,15 @@
     repeat(3, minmax(0, 1fr));
 
   gap:
-    var(--component-gap-lg);
+    var(--component-gap-md);
+
+  width: 100%;
 }
 
 
-/* ==========================================================
+/* ============================================================
    FEATURE
-========================================================== */
+============================================================ */
 
 .overview__feature {
 
@@ -144,13 +175,17 @@
 
   min-width: 0;
   min-height:
-    var(--space-12);
+    21rem;
 
   padding:
-    var(--card-padding-md);
+    var(--space-6);
+
+  box-sizing:
+    border-box;
 
   border:
-    var(--border-default)
+    var(--border-thin)
+    solid
     var(--color-border-subtle);
 
   border-radius:
@@ -158,12 +193,30 @@
 
   background:
     var(--color-surface);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 
-/* ==========================================================
+/* ============================================================
+   FEATURE HOVER
+============================================================ */
+
+.overview__feature:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
    FEATURE TOP
-========================================================== */
+============================================================ */
 
 .overview__feature-top {
 
@@ -173,20 +226,23 @@
 
   justify-content: space-between;
 
-  margin-bottom:
-    var(--section-gap-sm);
+  flex-shrink: 0;
+
+  width: 100%;
 }
 
 
-/* ==========================================================
+/* ============================================================
    FEATURE ICON
-========================================================== */
+============================================================ */
 
 .overview__feature-icon {
 
   display: grid;
 
   place-items: center;
+
+  flex-shrink: 0;
 
   width:
     var(--space-8);
@@ -195,7 +251,8 @@
     var(--space-8);
 
   border:
-    var(--border-default)
+    var(--border-thin)
+    solid
     var(--color-border-subtle);
 
   border-radius:
@@ -205,21 +262,23 @@
     var(--color-surface-subtle);
 
   color:
-    var(--color-text-secondary);
+    var(--color-gray-7);
 
   font-size:
     var(--text-body-md-size);
 }
 
 
-/* ==========================================================
+/* ============================================================
    FEATURE INDEX
-========================================================== */
+============================================================ */
 
 .overview__feature-index {
 
+  flex-shrink: 0;
+
   color:
-    var(--color-text-muted);
+    var(--color-gray-5);
 
   font-size:
     var(--text-label-sm-size);
@@ -235,30 +294,39 @@
 }
 
 
-/* ==========================================================
+/* ============================================================
    FEATURE BODY
-========================================================== */
+   ------------------------------------------------------------
+   The body owns the vertical space.
+   This prevents the title/description from being compressed.
+============================================================ */
 
 .overview__feature-body {
 
-  margin-top:
-    auto;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-end;
+
+  flex: 1;
+
+  min-width: 0;
+
+  padding-top:
+    var(--space-8);
 }
 
 
-/* ==========================================================
+/* ============================================================
    FEATURE TITLE
-========================================================== */
+============================================================ */
 
 .overview__feature-title {
-
-  max-width:
-    var(--content-xs);
 
   margin: 0;
 
   color:
-    var(--color-text-primary);
+    var(--color-gray-9);
 
   font-size:
     var(--text-heading-sm-size);
@@ -271,25 +339,25 @@
 
   letter-spacing:
     var(--text-heading-sm-tracking);
+
+  text-wrap:
+    balance;
 }
 
 
-/* ==========================================================
+/* ============================================================
    FEATURE DESCRIPTION
-========================================================== */
+============================================================ */
 
 .overview__feature-description {
 
-  max-width:
-    var(--content-sm);
-
   margin:
-    var(--component-gap-xs)
+    var(--component-gap-sm)
     0
     0;
 
   color:
-    var(--color-text-secondary);
+    var(--color-gray-7);
 
   font-size:
     var(--text-body-sm-size);
@@ -299,102 +367,134 @@
 
   line-height:
     var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
 }
 
 
-/* ==========================================================
+/* ============================================================
    AI FEATURE
-========================================================== */
+============================================================ */
+
+.overview__feature--ai {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
 
 
+.overview__feature--ai
+.overview__feature-icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-primary);
+}
 
 
-/* ==========================================================
+/* ============================================================
    WIDE FEATURE
-========================================================== */
+   ------------------------------------------------------------
+   Deliberately different composition.
+============================================================ */
 
 .overview__feature--wide {
 
   grid-column:
     1 / -1;
 
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(16rem, .42fr);
+
   min-height:
-    var(--space-11);
-
-  flex-direction:
-    row;
-
-  align-items:
-    stretch;
-
-  justify-content:
-    space-between;
+    18rem;
 
   gap:
     var(--section-gap-lg);
 
-  margin-bottom: 10rem;
+  margin-bottom:
+    var(--space-12);
 }
 
 
-/* ==========================================================
-   WIDE FEATURE MAIN
-========================================================== */
+/* ============================================================
+   WIDE MAIN
+============================================================ */
 
 .overview__feature-wide-main {
 
   display: flex;
   flex-direction: column;
 
-  flex: 1;
-
   min-width: 0;
 }
 
+
+/* ============================================================
+   WIDE MAIN TOP
+============================================================ */
 
 .overview__feature-wide-main
 .overview__feature-top {
 
   margin-bottom:
-    var(--component-gap-md);
+    var(--space-8);
 }
 
+
+/* ============================================================
+   WIDE MAIN BODY
+============================================================ */
 
 .overview__feature-wide-main
-.overview__feature-title {
+.overview__feature-body {
 
-  max-width:
-    var(--content-sm);
+  padding-top:
+    0;
+
+  justify-content:
+    flex-end;
 }
 
 
-.overview__feature-wide-main
-.overview__feature-description {
-
-  max-width:
-    var(--content-md);
-}
-
-
-/* ==========================================================
-   WIDE FEATURE NOTE
-========================================================== */
+/* ============================================================
+   WIDE NOTE
+============================================================ */
 
 .overview__feature-wide-note {
 
   display: flex;
   flex-direction: column;
 
+  align-items: flex-end;
+
   justify-content: flex-end;
 
-  min-width:
-    var(--content-xs);
+  min-width: 0;
 
-  padding-bottom:
-    var(--space-1);
+  padding:
+    var(--space-4)
+    0;
+
+  border-left:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
 
   color:
-    var(--color-text-muted);
+    var(--color-gray-6);
 
   font-size:
     var(--text-body-sm-size);
@@ -410,18 +510,29 @@
 }
 
 
-/* ==========================================================
+/* ============================================================
+   WIDE NOTE RHYTHM
+============================================================ */
+
+.overview__feature-wide-note span + span {
+
+  margin-top:
+    var(--space-2);
+}
+
+
+/* ============================================================
    TABLET
-========================================================== */
+   ------------------------------------------------------------
+   Layout only. Typography remains untouched.
+============================================================ */
 
 @include respond(tab-port) {
 
   .overview {
 
     padding:
-      var(--page-padding-md)
-      var(--page-padding-md)
-      var(--space-10);
+      var(--page-padding-md);
   }
 
 
@@ -436,51 +547,74 @@
 
     grid-column:
       1 / -1;
-  }
 
-
-  .overview__feature-wide-note {
-
-    min-width:
-      var(--content-xs);
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(14rem, .45fr);
   }
 
 }
 
 
-/* ==========================================================
-   MOBILE
-========================================================== */
+/* ============================================================
+   PHONE
+   ------------------------------------------------------------
+   Single-column composition.
+============================================================ */
 
 @include respond(phone) {
 
   .overview {
 
+    width: 100%;
+
+    max-width:
+      var(--content-md);
+
+    margin-inline:
+      auto;
+
     padding:
-      var(--page-padding-sm)
-      var(--page-padding-sm)
-      var(--space-10);
+      var(--page-padding-sm);
+
+    box-sizing:
+      border-box;
   }
 
 
   .overview__intro {
+
+    max-width:
+      none;
 
     margin-bottom:
       var(--section-gap-md);
   }
 
 
+  .overview__description {
+
+    max-width:
+      none;
+  }
+
+
   .overview__features {
 
     grid-template-columns:
-      1fr;
+      minmax(0, 1fr);
+
+    gap:
+      var(--component-gap-md);
   }
 
 
   .overview__feature {
 
+    width: 100%;
+
     min-height:
-      auto;
+      20rem;
   }
 
 
@@ -489,8 +623,11 @@
     grid-column:
       auto;
 
-    flex-direction:
-      column;
+    grid-template-columns:
+      1fr;
+
+    min-height:
+      auto;
 
     gap:
       var(--section-gap-md);
@@ -499,10 +636,20 @@
 
   .overview__feature-wide-note {
 
-    min-width:
-      0;
+    align-items:
+      flex-start;
 
     padding:
+      var(--space-4)
+      0
+      0;
+
+    border-top:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+
+    border-left:
       0;
 
     text-align:

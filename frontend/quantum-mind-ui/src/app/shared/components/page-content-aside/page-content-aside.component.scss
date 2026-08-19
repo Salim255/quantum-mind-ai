@@ -7,7 +7,6 @@
 .page-content-nav {
 
   display: flex;
-
   flex-direction: column;
 
   gap:
@@ -19,23 +18,23 @@
 
   overflow: hidden;
 
-  padding:
-    var(--space-4);
+  padding: var(--space-4) var(--space-4) var(--space-4);
 
   border-left:
     var(--border-thin)
     solid
     var(--color-border-subtle);
+  
 }
 
 
 /* ============================================================
-   TITLE
+TITLE
 ============================================================ */
 
 .page-content-nav__title {
 
-  margin: 0;
+  margin-bottom: var(--space-1);
 
   padding-bottom:
     var(--space-2);
@@ -62,6 +61,7 @@
 
   text-transform:
     uppercase;
+  overflow: hidden;
 }
 
 
@@ -98,7 +98,7 @@
   }
 
   li:last-child {
-    padding-bottom: 16rem;
+    margin-bottom: var(--space-4);
   }
 }
 
