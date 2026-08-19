@@ -7,7 +7,7 @@
    subtle separation, compact spacing and minimal elevation.
 ============================================================ */
 
-.assistant-panel__composer {
+.assistant-composer-footer {
 
   display: flex;
 
@@ -29,27 +29,19 @@
   background:
     var(--color-surface);
   padding-bottom: 2rem;
+
+
+  app-assistant-composer {
+    display: block;
+
+    width: 100%;
+  }
 }
 
-
 /* ============================================================
-   COMPOSER
+AI DISCLAIMER
 ============================================================ */
-
-.assistant-panel__composer
-app-assistant-composer {
-
-  display: block;
-
-  width: 100%;
-}
-
-
-/* ============================================================
-   AI DISCLAIMER
-============================================================ */
-
-.assistant-panel__hint {
+.assistant-composer-footer__hint {
 
   display: block;
 

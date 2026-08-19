@@ -2,24 +2,29 @@
   class="assistant-composer"
   (ngSubmit)="onSubmit()"
 >
+
   <textarea
     class="assistant-composer__input"
     rows="1"
     name="message"
     [(ngModel)]="message"
-    [value]="message"
     placeholder="Ask anything about this content..."
     aria-label="Ask the AI assistant"
   ></textarea>
+
 
   <button
     class="assistant-composer__send"
     type="submit"
     aria-label="Send message"
   >
+
     <iconify-icon
       class="assistant-composer__send-icon"
       icon="lucide:arrow-up"
+      aria-hidden="true"
     ></iconify-icon>
+
   </button>
+
 </form>

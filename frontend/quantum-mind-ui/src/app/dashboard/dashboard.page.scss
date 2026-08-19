@@ -149,10 +149,21 @@
   /* ========================================================
      TABLET
   ======================================================== */
-
   @include respond(tab-port) {
     &__aside {
       display: none;
     }
   }
 }
+
+@include respond(tab-land) {
+  .dashboard-page {
+    &__assistant-panel {
+
+      &--active {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+}
+
