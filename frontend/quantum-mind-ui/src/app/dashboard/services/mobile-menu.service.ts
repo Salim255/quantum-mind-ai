@@ -5,21 +5,20 @@ import { BehaviorSubject } from 'rxjs';
 export class MobileMenuService {
 
   /* ==========================================================
-     STATE
+  STATE
   ========================================================== */
   private readonly isOpenSubject =
     new BehaviorSubject<boolean>(false);
 
 
   /* ==========================================================
-     PUBLIC STATE
+  PUBLIC STATE
   ========================================================== */
-  readonly isOpen$ =
-    this.isOpenSubject.asObservable();
+  readonly isOpen$ = this.isOpenSubject.asObservable();
 
 
   /* ==========================================================
-     ACTIONS
+  ACTIONS
   ========================================================== */
   open(): void {
     this.isOpenSubject.next(true);

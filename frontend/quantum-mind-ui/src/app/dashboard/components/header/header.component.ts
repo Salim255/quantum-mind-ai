@@ -1,8 +1,10 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, signal } from "@angular/core";
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit, signal } from "@angular/core";
 import { MobileMenuComponent } from "../mobile-menu/mobile-menu.component";
 import { EventType, NavigationEnd, Router } from "@angular/router";
 import { AsideNavService, NavItem } from "../../services/aside-nav.service";
 import { filter, Subscription } from "rxjs";
+import { MobileMenuService } from "../../services/mobile-menu.service";
+import { ModalVariant } from "../../../shared/kits/modal/modal-config";
 
 @Component({
   selector: "app-header",
@@ -11,21 +13,50 @@ import { filter, Subscription } from "rxjs";
   standalone: false,
 })
 
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private isMobileMenuOpenSubscription!: Subscription;
 
-  protected readonly isMobileMenuOpen = signal(false);
+  isMobileMenuOpen = signal(false);
 
   protected readonly mobileMenuConfig = {
 
-  component: MobileMenuComponent,
+    component: MobileMenuComponent,
 
-  size: 'full' as const,
+    variant: 'menu' as ModalVariant,
 
-  showClose: false,
+    size: 'full' as const,
 
-  closeOnBackdrop: true,
+    title: 'Quantum Mind',
 
-  closeOnEscape: true,
-};
+    showClose: true,
+
+    closeOnBackdrop: true,
+
+    closeOnEscape: true,
+
+    onClose: () => {
+      this.mobileMenuService.close();
+    },
+  };
+
+  constructor(private mobileMenuService: MobileMenuService){}
+
+  ngOnInit(): void {
+    this.subscribeToMobileMenu(); 
+  }
+
+  onMobileMenu(){
+    this.mobileMenuService.toggle();
+  }
+
+  private subscribeToMobileMenu(){
+    this.isMobileMenuOpenSubscription = this.mobileMenuService.isOpen$.subscribe(stat => {
+        this.isMobileMenuOpen.set(stat);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.isMobileMenuOpenSubscription?.unsubscribe();
+  }
 
 }

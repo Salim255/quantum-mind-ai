@@ -27,8 +27,6 @@ export class ModalComponent {
 
 
   protected close(): void {
-
-    // For now, the parent controls whether
-    // the modal is rendered.
+    this.config()?.onClose?.()
   }
 }

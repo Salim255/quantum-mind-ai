@@ -6,11 +6,19 @@ export type ModalSize =
   | 'lg'
   | 'full';
 
+
+export type ModalVariant =
+  | 'default'
+  | 'menu';
+
+
 export interface ModalConfig<T = unknown> {
 
   component: Type<T>;
 
   data?: unknown;
+
+  variant?: ModalVariant;
 
   title?: string;
 
@@ -23,4 +31,6 @@ export interface ModalConfig<T = unknown> {
   closeOnEscape?: boolean;
 
   size?: ModalSize;
+
+  onClose?: () => void;
 }

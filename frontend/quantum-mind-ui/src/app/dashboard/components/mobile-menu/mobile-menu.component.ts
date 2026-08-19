@@ -1,8 +1,8 @@
 import { Component, signal } from "@angular/core";
 import { AsideNavService, NavItem } from "../../services/aside-nav.service";
-import { EventType, NavigationEnd, Router } from "@angular/router";
-import { filter, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { ContentService } from "../../../features/learn/services/content.service";
+import { MobileMenuService } from "../../services/mobile-menu.service";
 
 @Component({
   selector: "app-mobile-menu",
@@ -17,6 +17,7 @@ export class MobileMenuComponent {
 
 
   constructor(
+    private mobileMenuService: MobileMenuService,
     private contentService: ContentService,
     private asideNavService: AsideNavService
   ) {}
@@ -29,6 +30,8 @@ export class MobileMenuComponent {
     if(nav?.sections) {
       this.contentService.setPageAsideContent(nav.sections);
     }
+    
+    this.mobileMenuService.close();
   }
 
   subscribeToCurrentPageNav(): void{

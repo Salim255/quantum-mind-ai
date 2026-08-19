@@ -5,8 +5,13 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   HostListener,
   input,
+  OnDestroy,
+  OnInit,
   output,
+  signal,
 } from '@angular/core';
+import { MobileMenuService } from '../../../dashboard/services/mobile-menu.service';
+import { Subscription } from 'rxjs';
 
 export type OverlayWidth =
   | 'sm'
@@ -21,12 +26,10 @@ export type OverlayWidth =
   templateUrl: './app-overlay.component.html',
   styleUrl: './app-overlay.component.scss',
 })
-export class AppOverlayComponent {
-
+export class AppOverlayComponent implements OnInit, OnDestroy{
   /* ==========================================================
-     STATE
+  STATE
   ========================================================== */
-
   readonly open = input(false);
 
 
@@ -64,22 +67,20 @@ export class AppOverlayComponent {
   readonly closed = output<void>();
 
 
-  /* ==========================================================
-     CLOSE
-  ========================================================== */
+  private isMobileMenuOpenSubscription!: Subscription;
+  isMobileMenuOpen = signal(false);
 
+  constructor(private mobileMenuService: MobileMenuService){}
+
+  ngOnInit(): void {
+    this.subscribeToMobileMenu();
+  }
   protected close(): void {
 
     this.closed.emit();
   }
 
-
-  /* ==========================================================
-     BACKDROP
-  ========================================================== */
-
   protected onBackdropClick(): void {
-
     if (!this.closeOnBackdrop()) {
       return;
     }
@@ -89,12 +90,15 @@ export class AppOverlayComponent {
 
 
   /* ==========================================================
-     ESCAPE
+  ESCAPE
   ========================================================== */
-
   @HostListener('document:keydown.escape')
   protected onEscape(): void {
-
+    
+    if (this.open() && this.isMobileMenuOpen() ){
+      this.mobileMenuService.close();
+    }
+    
     if (!this.open()) {
       return;
     }
@@ -104,5 +108,17 @@ export class AppOverlayComponent {
     }
 
     this.close();
+  }
+
+  private subscribeToMobileMenu(){
+    this.isMobileMenuOpenSubscription = this.mobileMenuService
+    .isOpen$
+    .subscribe(stat => {
+      this.isMobileMenuOpen.set(stat);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.isMobileMenuOpenSubscription?.unsubscribe();
   }
 }

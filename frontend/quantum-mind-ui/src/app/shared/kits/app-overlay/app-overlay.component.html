@@ -1,74 +1,34 @@
-@if (open()) {
 
-  <div class="app-overlay">
+<div class="app-overlay">
 
-    <div
-      class="app-overlay__backdrop"
-      (click)="onBackdropClick()"
-      aria-hidden="true"
-    ></div>
-
-
-    <section
-      class="app-overlay__panel"
-      [class.app-overlay__panel--sm]="width() === 'sm'"
-      [class.app-overlay__panel--md]="width() === 'md'"
-      [class.app-overlay__panel--lg]="width() === 'lg'"
-      [class.app-overlay__panel--full]="width() === 'full'"
-      [attr.aria-label]="title() || null"
-    >
-
-      @if (title() || subtitle() || showClose()) {
-
-        <header class="app-overlay__header">
-
-          @if (title() || subtitle()) {
-
-            <div class="app-overlay__heading">
-
-              @if (title()) {
-                <h2 class="app-overlay__title">
-                  {{ title() }}
-                </h2>
-              }
-
-              @if (subtitle()) {
-                <p class="app-overlay__subtitle">
-                  {{ subtitle() }}
-                </p>
-              }
-
-            </div>
-
-          }
-
-          @if (showClose()) {
-
-            <button
-              class="app-overlay__close"
-              type="button"
-              aria-label="Close"
-              (click)="close()"
-            >
-              <iconify-icon
-                icon="lucide:x"
-                aria-hidden="true"
-              />
-            </button>
-
-          }
-
-        </header>
-
-      }
+  <!-- ======================================================
+  BACKDROP
+  ======================================================= -->
+  <div
+    class="app-overlay__backdrop"
+    (click)="onBackdropClick()"
+    aria-hidden="true"
+  ></div>
 
 
-      <div class="app-overlay__content">
-        <ng-content />
-      </div>
+  <!-- ======================================================
+  PANEL
+  ======================================================= -->
+  <section
+    class="app-overlay__panel"
+    [class.app-overlay__panel--sm]="width() === 'sm'"
+    [class.app-overlay__panel--md]="width() === 'md'"
+    [class.app-overlay__panel--lg]="width() === 'lg'"
+    [class.app-overlay__panel--full]="width() === 'full'"
 
-    </section>
+  >
 
-  </div>
+    <div class="app-overlay__content">
 
-}
+      <ng-content />
+
+    </div>
+
+  </section>
+
+</div>
