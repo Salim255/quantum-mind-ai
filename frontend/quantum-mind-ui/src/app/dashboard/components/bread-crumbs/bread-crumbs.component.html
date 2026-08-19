@@ -1,23 +1,29 @@
-<nav class="bread-crumbs">
+<nav
+  class="bread-crumbs"
+  aria-label="Breadcrumb"
+>
 
-    @for(crumb of breadcrumbs(); track $index) {
+  @for (crumb of breadcrumbs(); track $index) {
 
-        <a
-            class="bread-crumbs__link"
-            [routerLink]="normalizeUrl(crumb.path)"
-            routerLinkActive="bread-crumbs__link--active"
-            [routerLinkActiveOptions]="{ exact: true }">
+    <a
+      class="bread-crumbs__link"
+      [routerLink]="normalizeUrl(crumb.path)"
+      routerLinkActive="bread-crumbs__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      {{ crumb.name }}
+    </a>
 
-            {{ crumb.name }}
+    @if (!$last) {
 
-        </a>
+      <iconify-icon
+        class="bread-crumbs__separator"
+        icon="lucide:chevron-right"
+        aria-hidden="true"
+      />
 
-        @if(!$last) {
-
-            <span class="bread-crumbs__separator">
-
-                /
-            </span>
-        }
     }
+
+  }
+
 </nav>

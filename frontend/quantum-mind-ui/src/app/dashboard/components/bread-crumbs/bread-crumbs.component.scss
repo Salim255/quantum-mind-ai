@@ -1,109 +1,182 @@
+@use "../../../../styles/mixins/queries" as *;
+
+
 /* ============================================================
-   BREAD CRUMBS
+   QUANTUM MIND
+   BREADCRUMBS
+   ------------------------------------------------------------
+   Contextual navigation for the application shell.
+
+   Design direction:
+   - quiet
+   - compact
+   - readable
+   - contextual
+   - low visual weight
 ============================================================ */
 
 .bread-crumbs {
 
-  display: inline-flex;
+  /* ==========================================================
+     BASE
+  ========================================================== */
 
+  display: flex;
   align-items: center;
 
-  flex-wrap: wrap;
+  min-width: 0;
 
-  gap:
-    var(--space-1);
-}
+  gap: var(--component-gap-xs);
 
+  color: var(--color-text-muted);
 
-/* ============================================================
-   LINK
-============================================================ */
+  font-family: var(--font-family-base);
 
-.bread-crumbs__link {
+  font-size: var(--text-xs);
+  font-weight: var(--text-medium);
+  line-height: var(--leading-normal);
 
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  min-height:
-    2.8rem;
-
-  padding-inline:
-    var(--space-1);
-
-  border-radius:
-    var(--radius-md);
-
-  text-decoration: none;
-
-  color:
-    var(--color-text-secondary);
-
-  font-size:
-    var(--text-body-sm-size);
-
-  font-weight:
-    var(--text-body-sm-weight);
-
-  line-height:
-    var(--text-body-sm-line);
-
-  transition:
-    color var(--transition-fast),
-    background var(--transition-fast);
+  white-space: nowrap;
 
 
-  &:hover {
+  /* ==========================================================
+     LINK
+  ========================================================== */
 
-    color:
-      var(--color-text-primary);
+  &__link {
 
-    background:
-      var(--color-surface-muted);
+    display: inline-flex;
+    align-items: center;
+
+    min-width: 0;
+    max-width: var(--content-xs);
+
+    padding:
+      var(--space-1)
+      var(--space-1);
+
+    color: var(--color-text-muted);
+
+    background: transparent;
+
+    border:
+      var(--border-default)
+      transparent;
+
+    border-radius: var(--space-2);
+
+    text-decoration: none;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    transition:
+      color 140ms ease,
+      background-color 140ms ease,
+      border-color 140ms ease;
+
+
+    /* ========================================================
+       HOVER
+    ======================================================== */
+
+    &:hover {
+
+      color: var(--color-text-primary);
+
+      background: var(--color-surface-muted);
+
+      border-color: var(--color-border-subtle);
+    }
+
+
+    /* ========================================================
+       ACTIVE
+    ======================================================== */
+
+    &--active {
+
+      color: var(--color-text-secondary);
+
+      font-weight: var(--font-medium);
+    }
+
+
+    /* ========================================================
+       FOCUS
+    ======================================================== */
+
+    &:focus-visible {
+
+      outline:
+        var(--border-medium)
+        solid
+        var(--color-primary-border);
+
+      outline-offset: var(--space-1);
+    }
   }
-}
 
 
-/* ============================================================
-   ACTIVE
-============================================================ */
+  /* ==========================================================
+     SEPARATOR
+  ========================================================== */
 
-.bread-crumbs__link--active {
+  &__separator {
 
-  color:
-    var(--color-primary);
+    width: var(--text-xs);
+    height: var(--text-xs);
 
-  font-weight:
-    var(--text-label-lg-weight);
+    flex: 0 0 auto;
 
-  pointer-events:
-    none;
-}
+    color: var(--color-text-muted);
+
+    opacity: .55;
+  }
 
 
-/* ============================================================
-   SEPARATOR
-============================================================ */
+  /* ==========================================================
+     TABLET
+  ========================================================== */
 
-.bread-crumbs__separator {
+  @include respond(tab-port) {
 
-  display: inline-flex;
+    font-size: var(--text-xs);
 
-  align-items: center;
+    gap: var(--component-gap-xs);
 
-  justify-content: center;
 
-  color:
-    var(--color-text-disabled);
+    &__link {
 
-  font-size:
-    var(--text-label-sm-size);
+      max-width: var(--content-2xs);
+    }
+  }
 
-  font-weight:
-    var(--text-label-sm-weight);
 
-  user-select:
-    none;
+  /* ==========================================================
+     PHONE
+  ========================================================== */
+
+  @include respond(phone-lg) {
+
+    gap: var(--space-0);
+
+
+    &__link {
+
+      max-width: var(--content-3xs);
+
+      padding:
+        var(--space-1)
+        var(--space-1);
+    }
+
+
+    &__separator {
+
+      width: var(--text-xs);
+      height: var(--text-xs);
+    }
+  }
 }
