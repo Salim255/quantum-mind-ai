@@ -27,6 +27,6 @@ export class ModalComponent {
 
 
   protected close(): void {
-    this.config()?.onClose?.()
+    this.config()?.onClose?.();
   }
 }

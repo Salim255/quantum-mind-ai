@@ -5,9 +5,16 @@
    QUANTUM MIND
    DASH HEADER
    ------------------------------------------------------------
-   Application-level header.
+   Application shell header.
 
-   Consumes only Quantum Mind design-system tokens.
+   Design direction:
+   - compact
+   - quiet
+   - precise
+   - soft
+   - enterprise
+   - balanced
+   - touch-friendly
 ============================================================ */
 
 .dash-header {
@@ -42,9 +49,11 @@
     align-items: center;
     justify-content: space-between;
 
-    min-height: var(--space-10);
+    min-height: var(--space-9);
 
-    padding-inline: var(--page-padding-md);
+    padding:
+      var(--space-1)
+      var(--page-padding-md);
   }
 
 
@@ -56,8 +65,6 @@
 
     display: flex;
     align-items: center;
-
-    gap: var(--component-gap-sm);
 
     min-width: 0;
   }
@@ -72,7 +79,7 @@
     display: inline-flex;
     align-items: center;
 
-    gap: var(--component-gap-xs);
+    gap: var(--component-gap-sm);
 
     min-width: 0;
   }
@@ -80,6 +87,8 @@
 
   /* ==========================================================
      BRAND MARK
+     ----------------------------------------------------------
+     Shared visual footprint with the mobile menu.
   ========================================================== */
 
   &__brand-mark {
@@ -121,9 +130,9 @@
 
     font-family: var(--font-family-base);
 
-    font-size: var(--text-label-lg-size);
-    font-weight: var(--text-label-lg-weight);
-    line-height: var(--text-label-lg-line);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    line-height: var(--leading-normal);
 
     letter-spacing: var(--tracking-tight);
 
@@ -151,7 +160,7 @@
       var(--space-1)
       var(--space-1);
 
-    color: var(--color-text-primary);
+    color: var(--color-text-secondary);
 
     background: transparent;
 
@@ -164,21 +173,26 @@
     cursor: pointer;
 
     transition:
-      background-color 160ms ease,
-      border-color 160ms ease,
-      color 160ms ease;
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease;
+
 
     &:hover {
 
-      background: var(--color-surface-muted);
+      color: var(--color-text-primary);
+
+      background: var(--color-surface-subtle);
 
       border-color: var(--color-border-subtle);
     }
 
+
     &:active {
 
-      background: var(--color-surface-hover);
+      background: var(--color-surface-muted);
     }
+
 
     &:focus-visible {
 
@@ -211,7 +225,11 @@
 
     background: var(--color-primary-soft);
 
-    border-radius: var(--space-2);
+    border:
+      var(--border-default)
+      var(--color-primary-border);
+
+    border-radius: 50%;
 
     font-family: var(--font-family-base);
 
@@ -235,9 +253,9 @@
 
     font-family: var(--font-family-base);
 
-    font-size: var(--text-label-md-size);
-    font-weight: var(--text-label-md-weight);
-    line-height: var(--text-label-md-line);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    line-height: var(--leading-normal);
 
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -257,129 +275,126 @@
 
     color: var(--color-text-muted);
 
-    transition: color 160ms ease;
+    transition:
+      color 140ms ease;
   }
 
+
   &__user:hover &__user-chevron {
+
     color: var(--color-text-secondary);
   }
 
 
   /* ==========================================================
      MOBILE MENU
+     ----------------------------------------------------------
+     Same visual footprint as the QM brand mark.
   ========================================================== */
 
-  /* ==========================================================
-   MOBILE MENU
-   ----------------------------------------------------------
-   Compact navigation action for smaller screens.
-========================================================== */
+  &__mobile-menu {
 
-&__mobile-menu {
+    display: none;
 
-  display: none;
-
-  align-items: center;
-  justify-content: center;
-
-  width: var(--space-8);
-  height: var(--space-8);
-
-  flex: 0 0 auto;
-
-  padding: var(--space-0);
-
-  color: var(--color-text-secondary);
-
-  background: var(--color-surface);
-
-  border:
-    var(--border-default)
-    var(--color-border);
-
-  border-radius: var(--space-3);
-
-  cursor: pointer;
-
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease,
-    transform 160ms ease;
-
-
-  /* ========================================================
-     ICON
-  ======================================================== */
-
-  iconify-icon {
-
-    width: var(--text-lg);
-    height: var(--text-lg);
-    display: flex;
+    align-items: center;
     justify-content: center;
+
+    width: var(--space-7);
+    height: var(--space-7);
+
     flex: 0 0 auto;
-  }
 
+    padding: var(--space-0);
 
-  /* ========================================================
-     HOVER
-  ======================================================== */
-
-  &:hover {
-
-    color: var(--color-text-primary);
+    color: var(--color-text-secondary);
 
     background: var(--color-surface-muted);
 
-    border-color: var(--color-border-strong);
+    border:
+      var(--border-default)
+      var(--color-border-subtle);
+
+    border-radius: var(--space-2);
+
+    cursor: pointer;
+
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease,
+      box-shadow 140ms ease,
+      transform 140ms ease;
+
+
+    /* ========================================================
+       ICON
+    ======================================================== */
+
+    iconify-icon {
+
+      width: var(--text-md);
+      height: var(--text-md);
+
+      flex: 0 0 auto;
+    }
+
+
+    /* ========================================================
+       HOVER
+    ======================================================== */
+
+    &:hover {
+
+      color: var(--color-text-primary);
+
+      background: var(--color-surface-hover);
+
+      border-color: var(--color-border-strong);
+
+      box-shadow:
+        0
+        1px
+        3px
+        rgb(0 0 0 / 0.04);
+    }
+
+
+    /* ========================================================
+       ACTIVE
+    ======================================================== */
+
+    &:active {
+
+      color: var(--color-primary);
+
+      background: var(--color-primary-soft);
+
+      border-color: var(--color-primary-border);
+
+      box-shadow: none;
+
+      transform: scale(.97);
+    }
+
+
+    /* ========================================================
+       FOCUS
+    ======================================================== */
+
+    &:focus-visible {
+
+      outline:
+        var(--border-medium)
+        solid
+        var(--color-primary-border);
+
+      outline-offset: var(--space-1);
+    }
   }
-
-
-  /* ========================================================
-     ACTIVE
-  ======================================================== */
-
-  &:active {
-
-    color: var(--color-primary);
-
-    background: var(--color-primary-soft);
-
-    border-color: var(--color-primary-border);
-
-    transform: scale(.96);
-  }
-
-
-  /* ========================================================
-     FOCUS
-  ======================================================== */
-
-  &:focus-visible {
-
-    outline:
-      var(--border-medium)
-      solid
-      var(--color-primary-border);
-
-    outline-offset: var(--space-1);
-  }
-
-
-  /* ========================================================
-     TABLET PORTRAIT
-  ======================================================== */
-
-  @include respond(tab-port) {
-
-    display: inline-flex;
-  }
-}
 
 
   /* ==========================================================
-     BOTTOM
+     BOTTOM / CONTEXT BAR
   ========================================================== */
 
   &__bottom {
@@ -388,11 +403,13 @@
     align-items: center;
     justify-content: space-between;
 
-    min-height: var(--space-9);
+    min-height: var(--space-8);
 
-    gap: var(--component-gap-lg);
+    gap: var(--component-gap-md);
 
     padding-inline: var(--page-padding-md);
+
+    background: var(--color-surface-subtle);
 
     border-top:
       var(--border-default)
@@ -415,9 +432,9 @@
 
     font-family: var(--font-family-base);
 
-    font-size: var(--text-body-sm-size);
+    font-size: var(--text-xs);
     font-weight: var(--text-body-sm-weight);
-    line-height: var(--text-body-sm-line);
+    line-height: var(--leading-normal);
   }
 
 
@@ -431,54 +448,167 @@
     align-items: center;
 
     flex: 0 0 auto;
+
+    margin-left: auto;
   }
 
 
   /* ==========================================================
      TABLET LANDSCAPE
+     ----------------------------------------------------------
+     Mobile/tablet shell starts here.
   ========================================================== */
 
   @include respond(tab-land) {
 
-    &__top,
+    &__top {
+
+      min-height: var(--space-10);
+
+      /*
+       * Vertical + horizontal breathing room.
+       */
+      padding:
+        var(--space-2)
+        var(--space-5);
+    }
+
+
     &__bottom {
-      padding-inline: var(--page-padding-sm);
+
+      min-height: var(--space-8);
+
+      padding:
+        var(--space-1)
+        var(--space-5);
+    }
+
+
+    &__user {
+
+      display: none;
+    }
+
+
+    &__mobile-menu {
+
+      display: inline-flex;
+    }
+
+
+    &__brand-name {
+
+      display: none;
     }
   }
 
 
   /* ==========================================================
-     TABLET PORTRAIT
-     ----------------------------------------------------------
-     Guest account control disappears.
-     Mobile menu becomes available.
+     LARGE PHONE
   ========================================================== */
 
-  @include respond(tab-port) {
+  @include respond(phone-lg) {
 
-    &__user {
-      display: none;
+    &__top {
+
+      min-height: var(--space-10);
+
+      padding:
+        var(--space-2)
+        var(--space-4);
     }
 
-    &__mobile-menu {
-      display: inline-flex;
-    }
 
-    &__brand-name {
-      display: none;
+    &__bottom {
+
+      min-height: var(--space-8);
+
+      padding:
+        var(--space-1)
+        var(--space-4);
+
+      gap: var(--component-gap-sm);
     }
   }
 
 
   /* ==========================================================
      PHONE
+     ----------------------------------------------------------
+     Maintain comfortable vertical and horizontal rhythm.
   ========================================================== */
 
   @include respond(phone) {
 
-    &__top,
+    &__top {
+
+      min-height: var(--space-10);
+
+      padding:
+        var(--space-2)
+        var(--space-4);
+    }
+
+
     &__bottom {
-      padding-inline: var(--page-padding-xs);
+
+      min-height: var(--space-8);
+
+      padding:
+        var(--space-2)
+        var(--space-4);
+    }
+
+
+    &__brand {
+
+      gap: var(--component-gap-sm);
+    }
+
+
+    /*
+     * Keep exactly the same footprint as the QM mark.
+     */
+    &__brand-mark,
+    &__mobile-menu {
+
+      width: var(--space-7);
+      height: var(--space-7);
+    }
+  }
+
+
+  /* ==========================================================
+     VERY SMALL PHONE
+  ========================================================== */
+
+  @include respond(phone-sm) {
+
+    &__top {
+
+      min-height: var(--space-10);
+
+      padding:
+        var(--space-2)
+        var(--space-3);
+    }
+
+
+    &__bottom {
+
+      min-height: var(--space-8);
+
+      padding:
+        var(--space-2)
+        var(--space-3);
+    }
+
+
+    &__brand-mark,
+    &__mobile-menu {
+
+      width: var(--space-7);
+      height: var(--space-7);
     }
   }
 }
