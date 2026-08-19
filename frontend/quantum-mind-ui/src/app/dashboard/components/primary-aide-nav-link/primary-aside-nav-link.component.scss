@@ -1,67 +1,244 @@
+@use "../../../../styles/mixins/queries" as *;
+
+
+
+
 .primary-aside-nav-link {
+
+  /* ==========================================================
+     BASE
+  ========================================================== */
+
+  position: relative;
+
   display: flex;
   align-items: center;
-  gap: var(--component-gap-sm);
+
   width: 100%;
   min-width: 0;
-  min-height: 2.8rem;
-  padding: var(--space-2) var(--space-3);
-  border: var(--border-thin) solid transparent;
-  background: transparent;
+  
+  min-height: var(--space-6);
+
+  padding: var(--space-1);
+
+  gap: var(--component-gap-sm);
+
   color: var(--color-text-secondary);
+
+  background: transparent;
+
+  border:
+    var(--border-default)
+    transparent;
+
+  border-radius: var(--space-3);
+
   text-decoration: none;
+
+  cursor: pointer;
+
   overflow: hidden;
-  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
-}
 
-.primary-aside-nav-link__icon {
-  flex: 0 0 1.8rem;
-  display: grid;
-  place-items: center;
-  width: 1.8rem;
-  height: 1.8rem;
-  color: inherit;
-  opacity: .85;
-}
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease;
 
-.primary-aside-nav-link__label {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: var(--text-body-md-size);
-  font-weight: var(--text-body-md-weight);
-  line-height: var(--text-body-md-line);
-  opacity: 1;
-  visibility: visible;
-  transition: opacity var(--transition-fast), visibility var(--transition-fast);
-}
 
-.primary-aside-nav-link__label--hidden {
-  opacity: 0;
-  visibility: hidden;
-}
+  /* ==========================================================
+     HOVER
+  ========================================================== */
 
-.primary-aside-nav-link:hover {
-  background: var(--color-surface-muted);
-  color: var(--color-text-primary);
-  border-color: var(--color-border-subtle);
-}
+  &:hover {
 
-.primary-aside-nav-link--active {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
-  border-color: var(--color-primary-border);
-}
+    color: var(--color-text-primary);
 
-.primary-aside-nav-link--active:hover {
-  background: var(--color-primary-soft);
-  color: var(--color-primary-hover);
-  border-color: var(--color-primary-border);
-}
+    background: var(--color-surface-muted);
 
-.primary-aside-nav-link--active
-.primary-aside-nav-link__icon {
-  opacity: 1;
+    border-color: var(--color-border-subtle);
+  }
+
+
+  /* ==========================================================
+     ACTIVE
+  ========================================================== */
+
+  &--active {
+
+    color: var(--color-text-primary);
+
+    background: var(--color-primary-soft);
+
+    border-color: var(--color-primary-border);
+
+
+    &::before {
+
+      position: absolute;
+
+      top: 50%;
+      left: 0;
+
+      width: var(--border-medium);
+      height: var(--space-5);
+
+      content: "";
+
+      background: var(--color-primary);
+
+      border-radius:
+        0
+        var(--space-1)
+        var(--space-1)
+        0;
+
+      transform: translateY(-50%);
+    }
+
+
+    .primary-aside-nav-link__icon {
+
+      color: var(--color-primary);
+    }
+  }
+
+
+  /* ==========================================================
+     FOCUS
+  ========================================================== */
+
+  &:focus-visible {
+
+    outline:
+      var(--border-medium)
+      solid
+      var(--color-primary-border);
+
+    outline-offset: var(--space-1);
+  }
+
+
+  /* ==========================================================
+     ACTIVE PRESS
+  ========================================================== */
+
+  &:active {
+
+    background: var(--color-primary-soft);
+
+    border-color: var(--color-primary-border);
+
+    transform: scale(.99);
+  }
+
+
+  /* ==========================================================
+     ICON
+  ========================================================== */
+
+  &__icon {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--space-7);
+    height: var(--space-7);
+
+    flex: 0 0 var(--space-7);
+
+    color: var(--color-text-muted);
+
+    transition:
+      color 140ms ease,
+      transform 140ms ease;
+
+
+    iconify-icon {
+
+      width: var(--text-md);
+      height: var(--text-md);
+    }
+  }
+
+
+  /* ==========================================================
+     LABEL
+  ========================================================== */
+
+  &__label {
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: inherit;
+
+    font-family: var(--font-family-base);
+
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    line-height: var(--leading-normal);
+
+    letter-spacing: var(--tracking-tight);
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    opacity: 1;
+
+    transform: translateX(0);
+
+    transition:
+      opacity 140ms ease,
+      transform 180ms ease;
+
+
+    /* ========================================================
+       HIDDEN
+    ======================================================== */
+
+    &--hidden {
+
+      width: 0;
+
+      opacity: 0;
+
+      transform: translateX(-4px);
+
+      pointer-events: none;
+    }
+  }
+
+
+  /* ==========================================================
+     HOVER ICON
+  ========================================================== */
+
+  &:hover &__icon {
+
+    color: var(--color-text-primary);
+  }
+
+
+  /* ==========================================================
+     TABLET
+  ========================================================== */
+
+  @include respond(tab-port) {
+
+    min-height: var(--space-9);
+  }
+
+
+  /* ==========================================================
+     PHONE
+  ========================================================== */
+
+  @include respond(phone-lg) {
+
+    min-height: var(--space-10);
+
+    border-radius: var(--space-3);
+  }
 }

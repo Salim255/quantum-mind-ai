@@ -1,127 +1,244 @@
-/* ============================================================
-   ASIDE NAV LINK
-============================================================ */
+@use "../../../../styles/mixins/queries" as *;
+
+
+
 
 .secondary-aside-nav-link {
 
-  display: flex;
+  /* ==========================================================
+     BASE
+  ========================================================== */
 
+  position: relative;
+
+  display: flex;
   align-items: center;
 
-  gap:
-    var(--component-gap-sm);
-
   width: 100%;
+  min-width: 0;
+  
+  min-height: var(--space-6);
 
-  min-height: 2.8rem;
+  padding: var(--space-1);
 
-  padding:
-    var(--space-2)
-    var(--space-3);
+  gap: var(--component-gap-sm);
+
+  color: var(--color-text-secondary);
+
+  background: transparent;
 
   border:
-    var(--border-thin)
-    solid
+    var(--border-default)
     transparent;
 
-  //border-radius: var( --radius-pill);
-
-  background:
-    transparent;
-
-  color:
-    var(--color-text-secondary);
+  border-radius: var(--space-3);
 
   text-decoration: none;
 
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    border-color var(--transition-fast);
-}
-
-
-/* ============================================================
-   HOVER
-============================================================ */
-
-.secondary-aside-nav-link:hover {
-
-  background:
-    var(--color-surface-muted);
-
-  color:
-    var(--color-text-primary);
-
-  border-color:
-    var(--color-border-subtle);
-}
-
-
-/* ============================================================
-   ICON
-============================================================ */
-
-.secondary-aside-nav-link__icon {
-
-  flex-shrink: 0;
-
-  display: grid;
-
-  place-items: center;
-
-  width: 1.8rem;
-
-  height: 1.8rem;
-
-  color:
-    inherit;
-
-  opacity: .85;
-}
-
-
-/* ============================================================
-   LABEL
-============================================================ */
-
-.secondary-aside-nav-link__label {
-
-  flex: 1;
-
-  min-width: 0;
+  cursor: pointer;
 
   overflow: hidden;
 
-  text-overflow: ellipsis;
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease;
 
-  white-space: nowrap;
 
-  font-size:
-    var(--text-body-md-size);
+  /* ==========================================================
+     HOVER
+  ========================================================== */
 
-  font-weight:
-    var(--text-body-md-weight);
+  &:hover {
 
-  line-height:
-    var(--text-body-md-line);
+    color: var(--color-text-primary);
+
+    background: var(--color-surface-muted);
+
+    border-color: var(--color-border-subtle);
+  }
+
+
+  /* ==========================================================
+     ACTIVE
+  ========================================================== */
+
+  &--active {
+
+    color: var(--color-text-primary);
+
+    background: var(--color-primary-soft);
+
+    border-color: var(--color-primary-border);
+
+
+    &::before {
+
+      position: absolute;
+
+      top: 50%;
+      left: 0;
+
+      width: var(--border-medium);
+      height: var(--space-5);
+
+      content: "";
+
+      background: var(--color-primary);
+
+      border-radius:
+        0
+        var(--space-1)
+        var(--space-1)
+        0;
+
+      transform: translateY(-50%);
+    }
+
+
+    .secondary-aside-nav-link__icon {
+
+      color: var(--color-primary);
+    }
+  }
+
+
+  /* ==========================================================
+     FOCUS
+  ========================================================== */
+
+  &:focus-visible {
+
+    outline:
+      var(--border-medium)
+      solid
+      var(--color-primary-border);
+
+    outline-offset: var(--space-1);
+  }
+
+
+  /* ==========================================================
+     ACTIVE PRESS
+  ========================================================== */
+
+  &:active {
+
+    background: var(--color-primary-soft);
+
+    border-color: var(--color-primary-border);
+
+    transform: scale(.99);
+  }
+
+
+  /* ==========================================================
+     ICON
+  ========================================================== */
+
+  &__icon {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--space-7);
+    height: var(--space-7);
+
+    flex: 0 0 var(--space-7);
+
+    color: var(--color-text-muted);
+
+    transition:
+      color 140ms ease,
+      transform 140ms ease;
+
+
+    iconify-icon {
+
+      width: var(--text-md);
+      height: var(--text-md);
+    }
+  }
+
+
+  /* ==========================================================
+     LABEL
+  ========================================================== */
+
+  &__label {
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: inherit;
+
+    font-family: var(--font-family-base);
+
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    line-height: var(--leading-normal);
+
+    letter-spacing: var(--tracking-tight);
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    opacity: 1;
+
+    transform: translateX(0);
+
+    transition:
+      opacity 140ms ease,
+      transform 180ms ease;
+
+
+    /* ========================================================
+       HIDDEN
+    ======================================================== */
+
+    &--hidden {
+
+      width: 0;
+
+      opacity: 0;
+
+      transform: translateX(-4px);
+
+      pointer-events: none;
+    }
+  }
+
+
+  /* ==========================================================
+     HOVER ICON
+  ========================================================== */
+
+  &:hover &__icon {
+
+    color: var(--color-text-primary);
+  }
+
+
+  /* ==========================================================
+     TABLET
+  ========================================================== */
+
+  @include respond(tab-port) {
+
+    min-height: var(--space-9);
+  }
+
+
+  /* ==========================================================
+     PHONE
+  ========================================================== */
+
+  @include respond(phone-lg) {
+
+    min-height: var(--space-10);
+
+    border-radius: var(--space-3);
+  }
 }
-
-
-/* ============================================================
-   ACTIVE
-============================================================ */
-
-.secondary-aside-nav-link--active {
-
-  background:
-    var(--color-primary-soft);
-
-  color:
-    var(--color-primary);
-
-  border-color:
-    var(--color-primary-border);
-
-}
-
