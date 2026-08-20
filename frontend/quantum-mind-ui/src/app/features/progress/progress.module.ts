@@ -7,6 +7,8 @@ import { ProgressSnapshotComponent } from "./components/progress-snapshot/progre
 import { ProgressKnowledgeComponent } from "./components/progress-knowledge/progress-knowledge.component";
 import { ProgressKnowledgeCardComponent } from "./components/progress-knowledge-card/progress-knowledge-card.component";
 import { ProgressActivityComponent } from "./components/progress-activity/progress-activity.component";
+import { ProgressInsightCardComponent } from "./components/progress-insight-card/progress-insight-card.component";
+import { ProgressInsightsComponent } from "./components/progress-insights/progress-insights.component";
 
 @NgModule({
   imports: [
@@ -14,6 +16,8 @@ import { ProgressActivityComponent } from "./components/progress-activity/progre
     ProgressRoutingModule,
   ],
   declarations: [
+    ProgressInsightsComponent,
+    ProgressInsightCardComponent,
     ProgressActivityComponent,
     ProgressKnowledgeCardComponent,
     ProgressKnowledgeComponent,

@@ -1,0 +1,376 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS INSIGHT CARD
+   ------------------------------------------------------------
+   Individual learning insight.
+
+   Direction:
+   - soft
+   - premium
+   - restrained
+   - spacious
+   - actionable
+============================================================ */
+
+.progress-insight-card {
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: start;
+
+  gap:
+    var(--space-5);
+
+  min-width: 0;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--motion-fast),
+    background var(--motion-fast);
+}
+
+
+.progress-insight-card:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   STRENGTH
+============================================================ */
+
+.progress-insight-card--strength {
+
+  border-color:
+    var(--color-success-border);
+
+  background:
+    var(--color-success-soft);
+}
+
+
+.progress-insight-card--strength:hover {
+
+  border-color:
+    var(--color-success-border);
+
+  background:
+    var(--color-success-soft);
+}
+
+
+/* ============================================================
+   FOCUS
+============================================================ */
+
+.progress-insight-card--focus {
+
+  border-color:
+    var(--color-warning-border);
+
+  background:
+    var(--color-warning-soft);
+}
+
+
+.progress-insight-card--focus:hover {
+
+  border-color:
+    var(--color-warning-border);
+
+  background:
+    var(--color-warning-soft);
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.progress-insight-card__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+}
+
+
+/* ============================================================
+   STRENGTH ICON
+============================================================ */
+
+.progress-insight-card--strength
+.progress-insight-card__icon {
+
+  border-color:
+    var(--color-success-border);
+
+  color:
+    var(--color-success);
+}
+
+
+/* ============================================================
+   FOCUS ICON
+============================================================ */
+
+.progress-insight-card--focus
+.progress-insight-card__icon {
+
+  border-color:
+    var(--color-warning-border);
+
+  color:
+    var(--color-warning);
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.progress-insight-card__content {
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   LABEL
+============================================================ */
+
+.progress-insight-card__label {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.progress-insight-card__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  letter-spacing:
+    var(--text-heading-sm-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.progress-insight-card__description {
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   ACTION
+============================================================ */
+
+.progress-insight-card__action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  align-self: end;
+
+  gap:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    1;
+
+  text-decoration:
+    none;
+
+  transition:
+    color var(--motion-fast);
+}
+
+
+.progress-insight-card__action:hover {
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .progress-insight-card {
+
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+
+  .progress-insight-card__action {
+
+    grid-column:
+      2;
+
+    justify-self:
+      start;
+
+    align-self:
+      auto;
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-insight-card {
+
+    gap:
+      var(--space-4);
+
+    padding:
+      var(--space-5);
+  }
+
+
+  .progress-insight-card__action {
+
+    grid-column:
+      2;
+  }
+
+}

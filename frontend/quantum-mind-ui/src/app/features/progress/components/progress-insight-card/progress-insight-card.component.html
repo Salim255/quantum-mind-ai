@@ -1,0 +1,64 @@
+<article
+  class="progress-insight-card"
+  [class.progress-insight-card--strength]="variant() === 'strength'"
+  [class.progress-insight-card--focus]="variant() === 'focus'"
+>
+
+  <!-- ==================================================
+       ICON
+  ================================================== -->
+
+  <div
+    class="progress-insight-card__icon"
+    aria-hidden="true"
+  >
+
+    <iconify-icon
+      [icon]="icon()"
+    ></iconify-icon>
+
+  </div>
+
+
+  <!-- ==================================================
+       CONTENT
+  ================================================== -->
+
+  <div class="progress-insight-card__content">
+
+    <span class="progress-insight-card__label">
+      {{ label() }}
+    </span>
+
+    <h2 class="progress-insight-card__title">
+      {{ title() }}
+    </h2>
+
+    <p class="progress-insight-card__description">
+      {{ description() }}
+    </p>
+
+  </div>
+
+
+  <!-- ==================================================
+       ACTION
+  ================================================== -->
+
+  <a
+    class="progress-insight-card__action"
+    [routerLink]="actionLink()"
+  >
+
+    <span>
+      {{ actionLabel() }}
+    </span>
+
+    <iconify-icon
+      icon="lucide:arrow-up-right"
+      aria-hidden="true"
+    ></iconify-icon>
+
+  </a>
+
+</article>

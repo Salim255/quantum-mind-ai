@@ -1,0 +1,64 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS INSIGHTS
+   ------------------------------------------------------------
+   Learning strengths and focus areas.
+
+   Direction:
+   - balanced
+   - editorial
+   - calm
+   - actionable
+   - consistent with dashboard surfaces
+============================================================ */
+
+.progress-insights {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .progress-insights {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-insights {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+}
