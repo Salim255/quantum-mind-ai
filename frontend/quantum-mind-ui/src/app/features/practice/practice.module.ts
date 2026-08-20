@@ -6,11 +6,15 @@ import { PracticeHomeComponent } from "./components/practice-home/practice-home.
 import { PracticeHomeHeaderComponent } from "./components/practice-home-header/practice-home-header.component";
 import { PracticePurposeComponent } from "./components/practice-purpose/practice-purpose.component";
 import { PracticePrincipleCardComponent } from "./components/practice-principle-card/practice-principle-card.component";
+import { PracticePathsComponent } from "./components/practice-paths/practice-paths.component";
+import { PracticePathCardComponent } from "./components/practice-path-card/practice-path-card.component";
 
 @NgModule({
   imports: [CommonModule, PracticeRoutingModule],
   declarations: [
     PracticePage,
+    PracticePathCardComponent,
+    PracticePathsComponent,
     PracticePrincipleCardComponent,
     PracticePurposeComponent,
     PracticeHomeHeaderComponent,

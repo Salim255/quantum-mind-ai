@@ -1,0 +1,55 @@
+<section
+  class="practice-paths"
+  aria-labelledby="practice-paths-title"
+>
+
+  <!-- ==================================================
+       SECTION HEADER
+  ================================================== -->
+
+  <div class="practice-paths__header">
+
+    <span class="practice-paths__label">
+      WAYS TO PRACTICE
+    </span>
+
+    <h2
+      id="practice-paths-title"
+      class="practice-paths__title"
+    >
+      Choose the kind of practice you need.
+    </h2>
+
+    <p class="practice-paths__description">
+      Start with a broad review or focus your attention on
+      a specific topic. Both paths are designed to reinforce
+      what you have learned.
+    </p>
+
+  </div>
+
+
+  <!-- ==================================================
+       PATHS
+  ================================================== -->
+
+  <div class="practice-paths__list">
+
+    <app-practice-path-card
+      icon="lucide:brain-circuit"
+      title="General quiz"
+      description="Test your understanding across multiple topics with a balanced mix of questions."
+      route="/practice/general"
+    ></app-practice-path-card>
+
+
+    <app-practice-path-card
+      icon="lucide:layers-3"
+      title="Explore by topic"
+      description="Choose a specific topic and practice the concepts you want to understand more deeply."
+      route="/practice/topics"
+    ></app-practice-path-card>
+
+  </div>
+
+</section>
