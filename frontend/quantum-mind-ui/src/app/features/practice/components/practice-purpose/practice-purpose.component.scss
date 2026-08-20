@@ -1,0 +1,197 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PRACTICE PURPOSE
+   ------------------------------------------------------------
+   Explains why practice matters.
+
+   Direction:
+   - editorial
+   - structured
+   - spacious
+   - restrained
+   - consistent with Progress sections
+============================================================ */
+
+.practice-purpose {
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.practice-purpose__header {
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  max-width:
+    var(--content-lg);
+
+  margin-bottom:
+    var(--component-gap-lg);
+}
+
+
+/* ============================================================
+   SECTION LABEL
+============================================================ */
+
+.practice-purpose__label {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   SECTION TITLE
+============================================================ */
+
+.practice-purpose__title {
+
+  max-width:
+    var(--content-md);
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--text-heading-md-weight);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   SECTION DESCRIPTION
+============================================================ */
+
+.practice-purpose__description {
+
+  max-width:
+    56rem;
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   PRINCIPLES
+============================================================ */
+
+.practice-purpose__principles {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .practice-purpose {
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+
+  .practice-purpose__principles {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .practice-purpose__header {
+
+    margin-bottom:
+      var(--component-gap-lg);
+  }
+
+
+  .practice-purpose__principles {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+}
