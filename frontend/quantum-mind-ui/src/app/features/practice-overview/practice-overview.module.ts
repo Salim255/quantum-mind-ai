@@ -11,6 +11,7 @@ import { PracticeOverviewProgressComponent } from "./components/practice-overvie
 import { PracticeOverviewProgressCardComponent } from "./components/practice-overview-progress-card/practice-overview-progress-card.component";
 import { PracticeOverviewActivityComponent } from "./components/practice-overview-activity/practice-overview-activity.component";
 import { PracticeOverviewActivityRowComponent } from "./components/practice-overview-activity-row/practice-overview-activity-row.component";
+import { PracticeOverviewFooterComponent } from "./components/practice-overview-footer/practice-overview-footer.component";
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { PracticeOverviewActivityRowComponent } from "./components/practice-over
     OverviewRoutingModule
   ],
   declarations: [
+    PracticeOverviewFooterComponent,
     PracticeOverviewActivityRowComponent,
     PracticeOverviewActivityComponent,
     PracticeOverviewProgressCardComponent,
