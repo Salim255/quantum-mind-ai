@@ -1,0 +1,299 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PRACTICE PATH CARD
+   ------------------------------------------------------------
+   Interactive practice entry point.
+
+   Direction:
+   - soft
+   - premium
+   - restrained
+   - clear interaction
+   - no heavy elevation
+============================================================ */
+
+.practice-path-card {
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap:
+    var(--space-5);
+
+  min-width: 0;
+
+  min-height:
+    12rem;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+
+/* ============================================================
+   HOVER
+============================================================ */
+
+.practice-path-card:hover {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+/* ============================================================
+   FOCUS
+============================================================ */
+
+.practice-path-card:focus-visible {
+
+  outline:
+    var(--border-medium)
+    solid
+    var(--color-primary);
+
+  outline-offset:
+    var(--space-1);
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.practice-path-card__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+/* ============================================================
+   ICON HOVER
+============================================================ */
+
+.practice-path-card:hover
+.practice-path-card__icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.practice-path-card__content {
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.practice-path-card__title {
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  text-wrap:
+    balance;
+
+  transition:
+    color var(--transition-fast);
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.practice-path-card__description {
+
+  max-width:
+    48rem;
+
+  margin-top:
+    var(--component-gap-sm);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   ARROW
+============================================================ */
+
+.practice-path-card__arrow {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-8);
+
+  height:
+    var(--space-8);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-body-md-size);
+
+  transition:
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+
+/* ============================================================
+   ARROW HOVER
+============================================================ */
+
+.practice-path-card:hover
+.practice-path-card__arrow {
+
+  color:
+    var(--color-primary);
+
+  transform:
+    translateX(var(--space-1));
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .practice-path-card {
+
+    min-height:
+      11rem;
+
+    padding:
+      var(--space-5);
+
+    gap:
+      var(--space-4);
+  }
+
+
+  .practice-path-card__arrow {
+
+    width:
+      var(--space-7);
+
+    height:
+      var(--space-7);
+  }
+
+}

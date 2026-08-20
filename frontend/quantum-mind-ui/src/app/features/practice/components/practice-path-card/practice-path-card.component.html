@@ -1,0 +1,50 @@
+<a
+  class="practice-path-card"
+  [routerLink]="route()"
+>
+
+  <!-- ==================================================
+       ICON
+  ================================================== -->
+
+  <span
+    class="practice-path-card__icon"
+    aria-hidden="true"
+  >
+    <iconify-icon
+      [icon]="icon()"
+    ></iconify-icon>
+  </span>
+
+
+  <!-- ==================================================
+       CONTENT
+  ================================================== -->
+
+  <span class="practice-path-card__content">
+
+    <span class="practice-path-card__title">
+      {{ title() }}
+    </span>
+
+    <span class="practice-path-card__description">
+      {{ description() }}
+    </span>
+
+  </span>
+
+
+  <!-- ==================================================
+       ACTION
+  ================================================== -->
+
+  <span
+    class="practice-path-card__arrow"
+    aria-hidden="true"
+  >
+    <iconify-icon
+      icon="lucide:arrow-right"
+    ></iconify-icon>
+  </span>
+
+</a>

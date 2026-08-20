@@ -8,11 +8,13 @@ import { PracticePurposeComponent } from "./components/practice-purpose/practice
 import { PracticePrincipleCardComponent } from "./components/practice-principle-card/practice-principle-card.component";
 import { PracticePathsComponent } from "./components/practice-paths/practice-paths.component";
 import { PracticePathCardComponent } from "./components/practice-path-card/practice-path-card.component";
+import { PracticeGuidanceComponent } from "./components/practice-guidance/practice-guidance.component";
 
 @NgModule({
   imports: [CommonModule, PracticeRoutingModule],
   declarations: [
     PracticePage,
+    PracticeGuidanceComponent,
     PracticePathCardComponent,
     PracticePathsComponent,
     PracticePrincipleCardComponent,
