@@ -11,6 +11,7 @@ import { ProgressInsightCardComponent } from "./components/progress-insight-card
 import { ProgressInsightsComponent } from "./components/progress-insights/progress-insights.component";
 import { ProgressAchievementsComponent } from "./components/progress-achievements/progress-achievements.component";
 import { ProgressAchievementCardComponent } from "./components/progress-achievement-card/progress-achievement-card.component";
+import { ProgressRankingComponent } from "./components/progress-ranking/progress-ranking.component";
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ProgressAchievementCardComponent } from "./components/progress-achievem
     ProgressRoutingModule,
   ],
   declarations: [
+    ProgressRankingComponent,
     ProgressAchievementCardComponent,
     ProgressAchievementsComponent,
     ProgressInsightsComponent,

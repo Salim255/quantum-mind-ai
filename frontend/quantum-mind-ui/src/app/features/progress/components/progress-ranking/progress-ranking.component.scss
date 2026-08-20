@@ -1,0 +1,420 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS RANKING
+   ------------------------------------------------------------
+   Community ranking surface.
+
+   Direction:
+   - soft
+   - modern
+   - premium
+   - restrained
+   - subtle primary emphasis
+============================================================ */
+
+.progress-ranking {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap:
+    var(--section-gap-md);
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+
+  padding:
+    var(--space-8);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-primary-soft),
+      var(--color-surface)
+    );
+}
+
+
+/* ============================================================
+   MAIN
+============================================================ */
+
+.progress-ranking__main {
+
+  min-width: 0;
+}
+
+
+.progress-ranking__label {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-primary);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.progress-ranking__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--text-heading-md-weight);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.progress-ranking__description {
+
+  max-width:
+    42rem;
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   POSITION
+============================================================ */
+
+.progress-ranking__position {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  flex-shrink: 0;
+
+  min-width:
+    8rem;
+
+  padding-left:
+    var(--section-gap-md);
+
+  border-left:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+}
+
+
+/* ============================================================
+   POSITION LABEL
+============================================================ */
+
+.progress-ranking__position-label {
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+}
+
+
+/* ============================================================
+   POSITION VALUE
+============================================================ */
+
+.progress-ranking__position-value {
+
+  margin-top:
+    var(--space-1);
+
+  color:
+    var(--color-gray-10);
+
+  font-size:
+    var(--text-heading-lg-size);
+
+  font-weight:
+    var(--text-heading-lg-weight);
+
+  line-height:
+    1;
+
+  letter-spacing:
+    var(--text-heading-lg-tracking);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   POSITION CONTEXT
+============================================================ */
+
+.progress-ranking__position-context {
+
+  margin-top:
+    var(--space-2);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   ACTION
+============================================================ */
+
+.progress-ranking__action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  min-height:
+    var(--control-height-md);
+
+  padding:
+    0
+    var(--space-4);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    1;
+
+  text-decoration:
+    none;
+
+  transition:
+    border-color var(--motion-fast),
+    background var(--motion-fast),
+    color var(--motion-fast);
+}
+
+
+.progress-ranking__action:hover {
+
+  border-color:
+    var(--color-primary);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .progress-ranking {
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+  }
+
+
+  .progress-ranking__action {
+
+    grid-column:
+      1 / -1;
+
+    justify-self:
+      start;
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-ranking {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+
+    gap:
+      var(--component-gap-lg);
+
+    margin-bottom:
+      var(--section-gap-lg);
+
+    padding:
+      var(--space-6);
+  }
+
+
+  .progress-ranking__position {
+
+    align-items:
+      flex-start;
+
+    min-width:
+      0;
+
+    padding:
+      var(--space-4)
+      0
+      0;
+
+    border-top:
+      var(--border-thin)
+      solid
+      var(--color-primary-border);
+
+    border-left:
+      0;
+  }
+
+
+  .progress-ranking__position-context {
+
+    white-space:
+      normal;
+  }
+
+
+  .progress-ranking__action {
+
+    grid-column:
+      auto;
+
+    justify-self:
+      stretch;
+
+    width:
+      100%;
+  }
+
+}
