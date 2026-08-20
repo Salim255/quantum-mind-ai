@@ -1,0 +1,147 @@
+/* ============================================================
+   ACTIVITY ROW
+============================================================ */
+
+.practice-overview-activity-row {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(12rem, 1fr)
+    minmax(12rem, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap:
+    var(--space-6);
+
+  min-width: 0;
+
+  padding:
+    var(--space-4)
+    var(--space-6);
+
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  transition:
+    background var(--transition-fast);
+
+
+  &:not(:last-child) {
+
+    border-bottom:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+  }
+
+
+  &:hover {
+
+    background:
+      var(--color-surface-subtle);
+  }
+}
+
+
+/* ============================================================
+   TOPIC
+============================================================ */
+
+.practice-overview-activity-row__topic {
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   META
+============================================================ */
+
+.practice-overview-activity-row__meta {
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   SCORE
+============================================================ */
+
+.practice-overview-activity-row__score {
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   ARROW
+============================================================ */
+
+.practice-overview-activity-row__arrow {
+
+  color:
+    var(--color-gray-5);
+
+  transition:
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+
+.practice-overview-activity-row:hover
+.practice-overview-activity-row__arrow {
+
+  color:
+    var(--color-primary);
+
+  transform:
+    translateX(.15rem);
+}

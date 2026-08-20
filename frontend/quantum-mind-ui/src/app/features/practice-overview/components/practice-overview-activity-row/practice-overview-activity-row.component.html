@@ -1,0 +1,24 @@
+<a
+  class="practice-overview-activity-row"
+  [routerLink]="link()"
+>
+
+  <span class="practice-overview-activity-row__topic">
+    {{ topic() }}
+  </span>
+
+  <span class="practice-overview-activity-row__meta">
+    {{ meta() }}
+  </span>
+
+  <strong class="practice-overview-activity-row__score">
+    {{ score() }}
+  </strong>
+
+  <iconify-icon
+    class="practice-overview-activity-row__arrow"
+    icon="lucide:arrow-right"
+    aria-hidden="true"
+  ></iconify-icon>
+
+</a>

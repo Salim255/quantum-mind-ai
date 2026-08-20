@@ -1,0 +1,29 @@
+/* ============================================================
+   ACTIVITY
+============================================================ */
+
+.practice-overview-activity {
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  overflow: hidden;
+
+  background: var(--color-surface);
+  app-practice-overview-activity-row:not(:last-child) {
+    border-bottom:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+  } 
+}
