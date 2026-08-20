@@ -1,0 +1,214 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PRACTICE PRINCIPLE CARD
+   ------------------------------------------------------------
+   Supporting learning principle.
+
+   Direction:
+   - soft
+   - editorial
+   - restrained
+   - consistent with Progress cards
+   - no unnecessary elevation
+============================================================ */
+
+.practice-principle-card {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap:
+    var(--space-5);
+
+  min-width: 0;
+
+  min-height:
+    100%;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+
+/* ============================================================
+   HOVER
+============================================================ */
+
+.practice-principle-card:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.practice-principle-card__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+/* ============================================================
+   ICON HOVER
+============================================================ */
+
+.practice-principle-card:hover
+.practice-principle-card__icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.practice-principle-card__content {
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.practice-principle-card__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.practice-principle-card__description {
+
+  max-width:
+    42rem;
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   PHONE
+   ------------------------------------------------------------
+   Geometry only. Typography remains controlled globally.
+============================================================ */
+
+@include respond(phone) {
+
+  .practice-principle-card {
+
+    gap:
+      var(--space-4);
+
+    padding:
+      var(--space-5);
+  }
+
+}

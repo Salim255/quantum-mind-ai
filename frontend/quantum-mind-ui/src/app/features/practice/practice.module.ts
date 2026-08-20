@@ -5,11 +5,13 @@ import { PracticeRoutingModule } from "./practice-routing.module";
 import { PracticeHomeComponent } from "./components/practice-home/practice-home.component";
 import { PracticeHomeHeaderComponent } from "./components/practice-home-header/practice-home-header.component";
 import { PracticePurposeComponent } from "./components/practice-purpose/practice-purpose.component";
+import { PracticePrincipleCardComponent } from "./components/practice-principle-card/practice-principle-card.component";
 
 @NgModule({
   imports: [CommonModule, PracticeRoutingModule],
   declarations: [
     PracticePage,
+    PracticePrincipleCardComponent,
     PracticePurposeComponent,
     PracticeHomeHeaderComponent,
     PracticeHomeComponent

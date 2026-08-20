@@ -6,7 +6,7 @@ import {
 
 @Component({
   selector: 'app-practice-purpose',
-  standalone: true,
+  standalone: false,
   templateUrl: './practice-purpose.component.html',
   styleUrl: './practice-purpose.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
