@@ -1,202 +1,770 @@
-<div class="overview">
+<div class="practice-overview">
 
   <!-- ==================================================
-       INTRO
+       HEADER
   ================================================== -->
 
-  <section class="overview__intro">
+  <header class="practice-overview__header">
 
-    <span class="overview__eyebrow">
-      LEARNING SPACE
+    <span class="practice-overview__eyebrow">
+      PRACTICE OVERVIEW
     </span>
 
-    <h1 class="overview__title">
-      Build your understanding.
+    <h1 class="practice-overview__title">
+      Understand your progress.
     </h1>
 
-    <p class="overview__description">
-      Start with the fundamentals, develop your intuition,
-      and gradually move toward the ideas that make quantum
-      computation possible.
+    <p class="practice-overview__description">
+      See what you have mastered, what you are currently working on,
+      and which topics deserve more attention.
     </p>
+
+  </header>
+
+
+  <!-- ==================================================
+       PRACTICE SNAPSHOT
+  ================================================== -->
+
+  <section
+    class="practice-overview__snapshot"
+    aria-label="Practice snapshot"
+  >
+
+    <!-- ==================================================
+         IN PROGRESS
+    ================================================== -->
+
+    <article class="practice-overview__metric">
+
+      <div class="practice-overview__metric-top">
+
+        <span class="practice-overview__metric-icon">
+          <iconify-icon
+            icon="lucide:play-circle"
+          ></iconify-icon>
+        </span>
+
+        <span class="practice-overview__metric-label">
+          IN PROGRESS
+        </span>
+
+      </div>
+
+      <div class="practice-overview__metric-value">
+        3
+      </div>
+
+      <p class="practice-overview__metric-description">
+        Quizzes waiting to be completed.
+      </p>
+
+      <a
+        class="practice-overview__metric-action"
+        routerLink="/practice/in-progress"
+      >
+        Continue practicing
+
+        <iconify-icon
+          icon="lucide:arrow-right"
+          aria-hidden="true"
+        ></iconify-icon>
+      </a>
+
+    </article>
+
+
+    <!-- ==================================================
+         COMPLETED
+    ================================================== -->
+
+    <article class="practice-overview__metric">
+
+      <div class="practice-overview__metric-top">
+
+        <span class="practice-overview__metric-icon">
+          <iconify-icon
+            icon="lucide:circle-check"
+          ></iconify-icon>
+        </span>
+
+        <span class="practice-overview__metric-label">
+          COMPLETED
+        </span>
+
+      </div>
+
+      <div class="practice-overview__metric-value">
+        12
+      </div>
+
+      <p class="practice-overview__metric-description">
+        Quizzes completed so far.
+      </p>
+
+      <a
+        class="practice-overview__metric-action"
+        routerLink="/practice/completed"
+      >
+        View completed
+
+        <iconify-icon
+          icon="lucide:arrow-right"
+          aria-hidden="true"
+        ></iconify-icon>
+      </a>
+
+    </article>
+
+
+    <!-- ==================================================
+         AVERAGE
+    ================================================== -->
+
+    <article class="practice-overview__metric">
+
+      <div class="practice-overview__metric-top">
+
+        <span class="practice-overview__metric-icon">
+          <iconify-icon
+            icon="lucide:target"
+          ></iconify-icon>
+        </span>
+
+        <span class="practice-overview__metric-label">
+          AVERAGE SCORE
+        </span>
+
+      </div>
+
+      <div class="practice-overview__metric-value">
+        78%
+      </div>
+
+      <p class="practice-overview__metric-description">
+        Across your completed quizzes.
+      </p>
+
+      <span class="practice-overview__metric-context">
+        Based on recent attempts
+      </span>
+
+    </article>
 
   </section>
 
 
   <!-- ==================================================
-       LEARNING EXPERIENCE
+       STRENGTHS
   ================================================== -->
 
   <section
-    class="overview__features"
-    aria-label="Learning experience"
+    class="practice-overview__section"
+    aria-labelledby="practice-strengths-title"
   >
 
-    <!-- ==================================================
-         FOUNDATIONS
-    ================================================== -->
+    <header class="practice-overview__section-header">
 
-    <article class="overview__feature">
+      <div>
 
-      <div class="overview__feature-top">
+        <span class="practice-overview__section-eyebrow">
+          STRENGTHS
+        </span>
 
-        <span
-          class="overview__feature-icon"
-          aria-hidden="true"
+        <h2
+          id="practice-strengths-title"
+          class="practice-overview__section-title"
         >
-          <iconify-icon icon="lucide:atom"></iconify-icon>
-        </span>
-
-        <span class="overview__feature-index">
-          01
-        </span>
-
-      </div>
-
-      <div class="overview__feature-body">
-
-        <h2 class="overview__feature-title">
-          Start from first principles
+          Concepts you understand well.
         </h2>
 
-        <p class="overview__feature-description">
-          Establish the mathematical and conceptual foundations
-          needed to reason about quantum systems with confidence.
+        <p class="practice-overview__section-description">
+          Topics where your recent quiz results show consistent
+          understanding.
         </p>
 
       </div>
 
-    </article>
+      <a
+        class="practice-overview__section-action"
+        routerLink="/practice/completed"
+      >
+        View completed
 
-
-    <!-- ==================================================
-         CONCEPTS
-    ================================================== -->
-
-    <article class="overview__feature">
-
-      <div class="overview__feature-top">
-
-        <span
-          class="overview__feature-icon"
+        <iconify-icon
+          icon="lucide:arrow-up-right"
           aria-hidden="true"
+        ></iconify-icon>
+      </a>
+
+    </header>
+
+
+    <div class="practice-overview__topic-grid">
+
+      <!-- ==================================================
+           STRENGTH
+      ================================================== -->
+
+      <a
+        class="practice-overview__topic-card"
+        routerLink="/practice/topics/superposition"
+      >
+
+        <div class="practice-overview__topic-top">
+
+          <span class="practice-overview__topic-icon">
+            <iconify-icon
+              icon="lucide:layers-3"
+            ></iconify-icon>
+          </span>
+
+          <span class="practice-overview__topic-score">
+            92%
+          </span>
+
+        </div>
+
+        <div class="practice-overview__topic-body">
+
+          <h3 class="practice-overview__topic-title">
+            Superposition
+          </h3>
+
+          <p class="practice-overview__topic-description">
+            Strong understanding across recent attempts.
+          </p>
+
+        </div>
+
+      </a>
+
+
+      <!-- ==================================================
+           STRENGTH
+      ================================================== -->
+
+      <a
+        class="practice-overview__topic-card"
+        routerLink="/practice/topics/measurement"
+      >
+
+        <div class="practice-overview__topic-top">
+
+          <span class="practice-overview__topic-icon">
+            <iconify-icon
+              icon="lucide:scan-eye"
+            ></iconify-icon>
+          </span>
+
+          <span class="practice-overview__topic-score">
+            88%
+          </span>
+
+        </div>
+
+        <div class="practice-overview__topic-body">
+
+          <h3 class="practice-overview__topic-title">
+            Measurement
+          </h3>
+
+          <p class="practice-overview__topic-description">
+            Reliable performance across recent quizzes.
+          </p>
+
+        </div>
+
+      </a>
+
+
+      <!-- ==================================================
+           STRENGTH
+      ================================================== -->
+
+      <a
+        class="practice-overview__topic-card"
+        routerLink="/practice/topics/quantum-gates"
+      >
+
+        <div class="practice-overview__topic-top">
+
+          <span class="practice-overview__topic-icon">
+            <iconify-icon
+              icon="lucide:git-branch"
+            ></iconify-icon>
+          </span>
+
+          <span class="practice-overview__topic-score">
+            84%
+          </span>
+
+        </div>
+
+        <div class="practice-overview__topic-body">
+
+          <h3 class="practice-overview__topic-title">
+            Quantum gates
+          </h3>
+
+          <p class="practice-overview__topic-description">
+            Good command of the core operations and their behavior.
+          </p>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       WEAKNESSES
+  ================================================== -->
+
+  <section
+    class="practice-overview__section"
+    aria-labelledby="practice-weaknesses-title"
+  >
+
+    <header class="practice-overview__section-header">
+
+      <div>
+
+        <span class="practice-overview__section-eyebrow">
+          NEEDS ATTENTION
+        </span>
+
+        <h2
+          id="practice-weaknesses-title"
+          class="practice-overview__section-title"
         >
-          <iconify-icon icon="lucide:layers-3"></iconify-icon>
-        </span>
-
-        <span class="overview__feature-index">
-          02
-        </span>
-
-      </div>
-
-      <div class="overview__feature-body">
-
-        <h2 class="overview__feature-title">
-          Explore ideas in depth
+          Concepts worth revisiting.
         </h2>
 
-        <p class="overview__feature-description">
-          Move through each concept at your own pace, connecting
-          intuitive explanations with the mathematics behind them.
+        <p class="practice-overview__section-description">
+          Topics where your results suggest that another pass
+          through the lessons could strengthen your understanding.
         </p>
 
       </div>
 
-    </article>
+      <a
+        class="practice-overview__section-action"
+        routerLink="/practice/topics"
+      >
+        Explore topics
 
-
-    <!-- ==================================================
-         AI ASSISTANT
-    ================================================== -->
-
-    <article class="overview__feature overview__feature--ai">
-
-      <div class="overview__feature-top">
-
-        <span
-          class="overview__feature-icon"
+        <iconify-icon
+          icon="lucide:arrow-up-right"
           aria-hidden="true"
-        >
-          <iconify-icon icon="lucide:sparkles"></iconify-icon>
-        </span>
+        ></iconify-icon>
+      </a>
 
-        <span class="overview__feature-index">
-          03
-        </span>
-
-      </div>
-
-      <div class="overview__feature-body">
-
-        <h2 class="overview__feature-title">
-          Learn with an AI assistant
-        </h2>
-
-        <p class="overview__feature-description">
-          Ask questions, unpack difficult steps, explore equations,
-          and get another perspective whenever something is unclear.
-        </p>
-
-      </div>
-
-    </article>
+    </header>
 
 
-    <!-- ==================================================
-         PROGRESS
-    ================================================== -->
+    <div class="practice-overview__topic-grid">
 
-    <article class="overview__feature overview__feature--wide">
+      <!-- ==================================================
+           WEAKNESS
+      ================================================== -->
 
-      <div class="overview__feature-wide-main">
+      <a
+        class="practice-overview__topic-card practice-overview__topic-card--attention"
+        routerLink="/practice/topics/entanglement"
+      >
 
-        <div class="overview__feature-top">
+        <div class="practice-overview__topic-top">
 
-          <span
-            class="overview__feature-icon"
-            aria-hidden="true"
-          >
+          <span class="practice-overview__topic-icon">
+            <iconify-icon
+              icon="lucide:network"
+            ></iconify-icon>
+          </span>
+
+          <span class="practice-overview__topic-score">
+            61%
+          </span>
+
+        </div>
+
+        <div class="practice-overview__topic-body">
+
+          <h3 class="practice-overview__topic-title">
+            Entanglement
+          </h3>
+
+          <p class="practice-overview__topic-description">
+            Review the fundamentals and try another quiz.
+          </p>
+
+        </div>
+
+      </a>
+
+
+      <!-- ==================================================
+           WEAKNESS
+      ================================================== -->
+
+      <a
+        class="practice-overview__topic-card practice-overview__topic-card--attention"
+        routerLink="/practice/topics/probability"
+      >
+
+        <div class="practice-overview__topic-top">
+
+          <span class="practice-overview__topic-icon">
             <iconify-icon
               icon="lucide:chart-no-axes-combined"
             ></iconify-icon>
           </span>
 
-          <span class="overview__feature-index">
-            04
+          <span class="practice-overview__topic-score">
+            58%
           </span>
 
         </div>
 
-        <div class="overview__feature-body">
+        <div class="practice-overview__topic-body">
 
-          <h2 class="overview__feature-title">
-            Turn knowledge into understanding
-          </h2>
+          <h3 class="practice-overview__topic-title">
+            Quantum probability
+          </h3>
 
-          <p class="overview__feature-description">
-            Test what you know, identify what needs more attention,
-            and strengthen your understanding as you progress.
+          <p class="practice-overview__topic-description">
+            Some ideas may benefit from another explanation.
           </p>
 
         </div>
 
-      </div>
+      </a>
 
-      <div class="overview__feature-wide-note">
 
-        <span>
-          Learn deliberately.
-        </span>
+      <!-- ==================================================
+           WEAKNESS
+      ================================================== -->
 
-        <span>
-          Go deeper when it matters.
-        </span>
+      <a
+        class="practice-overview__topic-card practice-overview__topic-card--attention"
+        routerLink="/practice/topics/bloch-sphere"
+      >
 
-      </div>
+        <div class="practice-overview__topic-top">
 
-    </article>
+          <span class="practice-overview__topic-icon">
+            <iconify-icon
+              icon="lucide:orbit"
+            ></iconify-icon>
+          </span>
+
+          <span class="practice-overview__topic-score">
+            64%
+          </span>
+
+        </div>
+
+        <div class="practice-overview__topic-body">
+
+          <h3 class="practice-overview__topic-title">
+            Bloch sphere
+          </h3>
+
+          <p class="practice-overview__topic-description">
+            Revisit the visual model before practicing again.
+          </p>
+
+        </div>
+
+      </a>
+
+    </div>
 
   </section>
+
+
+  <!-- ==================================================
+       IN PROGRESS
+  ================================================== -->
+
+  <section
+    class="practice-overview__section"
+    aria-labelledby="practice-progress-title"
+  >
+
+    <header class="practice-overview__section-header">
+
+      <div>
+
+        <span class="practice-overview__section-eyebrow">
+          IN PROGRESS
+        </span>
+
+        <h2
+          id="practice-progress-title"
+          class="practice-overview__section-title"
+        >
+          Continue where you stopped.
+        </h2>
+
+        <p class="practice-overview__section-description">
+          Your unfinished quizzes are ready whenever you are.
+        </p>
+
+      </div>
+
+      <a
+        class="practice-overview__section-action"
+        routerLink="/practice/in-progress"
+      >
+        View all
+
+        <iconify-icon
+          icon="lucide:arrow-up-right"
+          aria-hidden="true"
+        ></iconify-icon>
+      </a>
+
+    </header>
+
+
+    <div class="practice-overview__in-progress">
+
+      <a
+        class="practice-overview__progress-card"
+        routerLink="/practice/topics/qubits"
+      >
+
+        <div class="practice-overview__progress-main">
+
+          <span class="practice-overview__progress-icon">
+            <iconify-icon
+              icon="lucide:atom"
+            ></iconify-icon>
+          </span>
+
+          <span class="practice-overview__progress-content">
+
+            <span class="practice-overview__progress-title">
+              Qubits
+            </span>
+
+            <span class="practice-overview__progress-meta">
+              6 of 10 questions answered
+            </span>
+
+          </span>
+
+        </div>
+
+        <span class="practice-overview__progress-value">
+          60%
+        </span>
+
+      </a>
+
+
+      <a
+        class="practice-overview__progress-card"
+        routerLink="/practice/topics/measurement"
+      >
+
+        <div class="practice-overview__progress-main">
+
+          <span class="practice-overview__progress-icon">
+            <iconify-icon
+              icon="lucide:scan-eye"
+            ></iconify-icon>
+          </span>
+
+          <span class="practice-overview__progress-content">
+
+            <span class="practice-overview__progress-title">
+              Measurement
+            </span>
+
+            <span class="practice-overview__progress-meta">
+              3 of 8 questions answered
+            </span>
+
+          </span>
+
+        </div>
+
+        <span class="practice-overview__progress-value">
+          38%
+        </span>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       RECENT ACTIVITY
+  ================================================== -->
+
+  <section
+    class="practice-overview__section"
+    aria-labelledby="practice-activity-title"
+  >
+
+    <header class="practice-overview__section-header">
+
+      <div>
+
+        <span class="practice-overview__section-eyebrow">
+          RECENT ACTIVITY
+        </span>
+
+        <h2
+          id="practice-activity-title"
+          class="practice-overview__section-title"
+        >
+          Your latest attempts.
+        </h2>
+
+      </div>
+
+      <a
+        class="practice-overview__section-action"
+        routerLink="/practice/completed"
+      >
+        View history
+
+        <iconify-icon
+          icon="lucide:arrow-up-right"
+          aria-hidden="true"
+        ></iconify-icon>
+      </a>
+
+    </header>
+
+
+    <div class="practice-overview__activity">
+
+      <a
+        class="practice-overview__activity-row"
+        routerLink="/practice/topics/superposition/results"
+      >
+
+        <span class="practice-overview__activity-topic">
+          Superposition
+        </span>
+
+        <span class="practice-overview__activity-meta">
+          Completed · 2 days ago
+        </span>
+
+        <strong class="practice-overview__activity-score">
+          92%
+        </strong>
+
+        <iconify-icon
+          class="practice-overview__activity-arrow"
+          icon="lucide:arrow-right"
+          aria-hidden="true"
+        ></iconify-icon>
+
+      </a>
+
+
+      <a
+        class="practice-overview__activity-row"
+        routerLink="/practice/topics/quantum-gates/results"
+      >
+
+        <span class="practice-overview__activity-topic">
+          Quantum gates
+        </span>
+
+        <span class="practice-overview__activity-meta">
+          Completed · 5 days ago
+        </span>
+
+        <strong class="practice-overview__activity-score">
+          84%
+        </strong>
+
+        <iconify-icon
+          class="practice-overview__activity-arrow"
+          icon="lucide:arrow-right"
+          aria-hidden="true"
+        ></iconify-icon>
+
+      </a>
+
+
+      <a
+        class="practice-overview__activity-row"
+        routerLink="/practice/topics/measurement/results"
+      >
+
+        <span class="practice-overview__activity-topic">
+          Measurement
+        </span>
+
+        <span class="practice-overview__activity-meta">
+          Completed · 1 week ago
+        </span>
+
+        <strong class="practice-overview__activity-score">
+          88%
+        </strong>
+
+        <iconify-icon
+          class="practice-overview__activity-arrow"
+          icon="lucide:arrow-right"
+          aria-hidden="true"
+        ></iconify-icon>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       EXPLORE
+  ================================================== -->
+
+  <footer class="practice-overview__footer">
+
+    <div class="practice-overview__footer-content">
+
+      <span class="practice-overview__footer-eyebrow">
+        KEEP LEARNING
+      </span>
+
+      <h2 class="practice-overview__footer-title">
+        Ready for another challenge?
+      </h2>
+
+      <p class="practice-overview__footer-description">
+        Explore the available quizzes and choose the next concept
+        you want to strengthen.
+      </p>
+
+    </div>
+
+    <a
+      class="practice-overview__footer-action"
+      routerLink="/practice/topics"
+    >
+      Explore quizzes
+
+      <iconify-icon
+        icon="lucide:arrow-right"
+        aria-hidden="true"
+      ></iconify-icon>
+    </a>
+
+  </footer>
 
 </div>

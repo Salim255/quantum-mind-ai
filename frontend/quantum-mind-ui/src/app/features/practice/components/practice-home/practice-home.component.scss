@@ -969,7 +969,7 @@
    Typography remains untouched.
 ============================================================ */
 
-@include respond(tab-port) {
+@include respond(tab-land) {
 
   .practice-home {
 
@@ -1009,7 +1009,7 @@
    Typography is intentionally preserved.
 ============================================================ */
 
-@include respond(phone) {
+@include respond(tab-port) {
 
   .practice-home {
 

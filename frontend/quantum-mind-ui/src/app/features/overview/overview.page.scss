@@ -1,28 +1,29 @@
 @use "../../../styles/mixins/queries" as *;
-
-
 /* ============================================================
-   OVERVIEW
+   QUANTUM MIND
+   PRACTICE OVERVIEW
    ------------------------------------------------------------
-   Main entry surface for the learning experience.
+   Practice dashboard.
 
    Direction:
-   - centered
-   - editorial
-   - minimal
-   - calm
-   - generous internal spacing
-   - stable typography
+   - centered learning surface
+   - calm editorial hierarchy
+   - consistent card language
+   - clear distinction between progress and knowledge
+   - generous spacing
+   - restrained visual emphasis
 ============================================================ */
 
-.overview {
+.practice-overview {
 
   display: flex;
   flex-direction: column;
 
   width: 100%;
   min-width: 0;
-  min-height: 100%;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
 
   max-width:
     var(--content-xl);
@@ -37,30 +38,30 @@
     border-box;
 
   color:
-    var(--color-text-primary);
+    var(--color-gray-10);
 }
 
 
 /* ============================================================
-   INTRO
+   HEADER
 ============================================================ */
 
-.overview__intro {
+.practice-overview__header {
 
   width: 100%;
   max-width:
     var(--content-md);
 
   margin-bottom:
-    var(--section-gap-lg);
+    var(--section-gap-xl);
 }
 
 
 /* ============================================================
-   EYEBROW
+   HEADER EYEBROW
 ============================================================ */
 
-.overview__eyebrow {
+.practice-overview__eyebrow {
 
   display: block;
 
@@ -88,10 +89,10 @@
 
 
 /* ============================================================
-   TITLE
+   HEADER TITLE
 ============================================================ */
 
-.overview__title {
+.practice-overview__title {
 
   margin: 0;
 
@@ -116,10 +117,10 @@
 
 
 /* ============================================================
-   DESCRIPTION
+   HEADER DESCRIPTION
 ============================================================ */
 
-.overview__description {
+.practice-overview__description {
 
   max-width:
     var(--content-md);
@@ -147,10 +148,191 @@
 
 
 /* ============================================================
-   FEATURES
+   SECTION
 ============================================================ */
 
-.overview__features {
+.practice-overview__section {
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.practice-overview__section-header {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-8);
+
+  margin-bottom:
+    var(--component-gap-lg);
+}
+
+
+/* ============================================================
+   SECTION EYEBROW
+============================================================ */
+
+.practice-overview__section-eyebrow {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .07em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   SECTION TITLE
+============================================================ */
+
+.practice-overview__section-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--text-heading-md-weight);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   SECTION DESCRIPTION
+============================================================ */
+
+.practice-overview__section-description {
+
+  max-width:
+    var(--content-md);
+
+  margin:
+    var(--component-gap-xs)
+    0
+    0;
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   SECTION ACTION
+============================================================ */
+
+.practice-overview__section-action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  flex-shrink: 0;
+
+  gap:
+    var(--space-1);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-md-line);
+
+  text-decoration:
+    none;
+
+  transition:
+    color var(--transition-fast);
+
+
+  iconify-icon {
+
+    font-size:
+      1rem;
+
+    transition:
+      transform var(--transition-fast);
+  }
+
+
+  &:hover {
+
+    color:
+      var(--color-primary);
+
+    iconify-icon {
+
+      transform:
+        translate(0.12rem, -0.12rem);
+    }
+  }
+}
+
+
+/* ============================================================
+   SNAPSHOT
+============================================================ */
+
+.practice-overview__snapshot {
 
   display: grid;
 
@@ -161,21 +343,25 @@
     var(--component-gap-md);
 
   width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
 }
 
 
 /* ============================================================
-   FEATURE
+   METRIC CARD
 ============================================================ */
 
-.overview__feature {
+.practice-overview__metric {
 
   display: flex;
   flex-direction: column;
 
   min-width: 0;
+
   min-height:
-    21rem;
+    15rem;
 
   padding:
     var(--space-6);
@@ -193,32 +379,14 @@
 
   background:
     var(--color-surface);
-
-  transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast);
 }
 
 
 /* ============================================================
-   FEATURE HOVER
+   METRIC TOP
 ============================================================ */
 
-.overview__feature:hover {
-
-  border-color:
-    var(--color-border);
-
-  background:
-    var(--color-surface-subtle);
-}
-
-
-/* ============================================================
-   FEATURE TOP
-============================================================ */
-
-.overview__feature-top {
+.practice-overview__metric-top {
 
   display: flex;
 
@@ -226,29 +394,28 @@
 
   justify-content: space-between;
 
-  flex-shrink: 0;
-
-  width: 100%;
+  gap:
+    var(--space-4);
 }
 
 
 /* ============================================================
-   FEATURE ICON
+   METRIC ICON
 ============================================================ */
 
-.overview__feature-icon {
+.practice-overview__metric-icon {
 
   display: grid;
 
   place-items: center;
-
-  flex-shrink: 0;
 
   width:
     var(--space-8);
 
   height:
     var(--space-8);
+
+  flex-shrink: 0;
 
   border:
     var(--border-thin)
@@ -270,12 +437,10 @@
 
 
 /* ============================================================
-   FEATURE INDEX
+   METRIC LABEL
 ============================================================ */
 
-.overview__feature-index {
-
-  flex-shrink: 0;
+.practice-overview__metric-label {
 
   color:
     var(--color-gray-5);
@@ -284,10 +449,42 @@
     var(--text-label-sm-size);
 
   font-weight:
-    var(--text-label-sm-weight);
+    var(--text-label-md-weight);
 
   line-height:
     var(--text-label-sm-line);
+
+  letter-spacing:
+    .06em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   METRIC VALUE
+============================================================ */
+
+.practice-overview__metric-value {
+
+  margin-top:
+    auto;
+
+  color:
+    var(--color-gray-10);
+
+  font-size:
+    2.75rem;
+
+  font-weight:
+    var(--text-heading-lg-weight);
+
+  line-height:
+    1;
+
+  letter-spacing:
+    -0.03em;
 
   font-variant-numeric:
     tabular-nums;
@@ -295,13 +492,289 @@
 
 
 /* ============================================================
-   FEATURE BODY
-   ------------------------------------------------------------
-   The body owns the vertical space.
-   This prevents the title/description from being compressed.
+   METRIC DESCRIPTION
 ============================================================ */
 
-.overview__feature-body {
+.practice-overview__metric-description {
+
+  max-width:
+    var(--content-xs);
+
+  margin:
+    var(--component-gap-xs)
+    0
+    0;
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+}
+
+
+/* ============================================================
+   METRIC CONTEXT
+============================================================ */
+
+.practice-overview__metric-context {
+
+  margin-top:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-caption-size);
+
+  font-weight:
+    var(--text-caption-weight);
+
+  line-height:
+    var(--text-caption-line);
+}
+
+
+/* ============================================================
+   METRIC ACTION
+============================================================ */
+
+.practice-overview__metric-action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-1);
+
+  width: fit-content;
+
+  margin-top:
+    var(--component-gap-md);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  text-decoration:
+    none;
+
+  transition:
+    color var(--transition-fast);
+
+
+  iconify-icon {
+
+    transition:
+      transform var(--transition-fast);
+  }
+
+
+  &:hover {
+
+    color:
+      var(--color-primary);
+
+    iconify-icon {
+
+      transform:
+        translateX(.15rem);
+    }
+  }
+}
+
+
+/* ============================================================
+   TOPIC GRID
+============================================================ */
+
+.practice-overview__topic-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   TOPIC CARD
+============================================================ */
+
+.practice-overview__topic-card {
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  min-height:
+    15rem;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+
+
+  &:hover {
+
+    border-color:
+      var(--color-border);
+
+    background:
+      var(--color-surface-subtle);
+
+    transform:
+      translateY(-1px);
+  }
+}
+
+
+/* ============================================================
+   TOPIC CARD — ATTENTION
+============================================================ */
+
+.practice-overview__topic-card--attention {
+
+  border-color:
+    var(--color-warning-border);
+
+  background:
+    var(--color-warning-soft);
+
+
+  &:hover {
+
+    border-color:
+      var(--color-warning);
+
+    background:
+      var(--color-warning-soft);
+  }
+}
+
+
+/* ============================================================
+   TOPIC TOP
+============================================================ */
+
+.practice-overview__topic-top {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-4);
+}
+
+
+/* ============================================================
+   TOPIC ICON
+============================================================ */
+
+.practice-overview__topic-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  width:
+    var(--space-8);
+
+  height:
+    var(--space-8);
+
+  flex-shrink: 0;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+}
+
+
+/* ============================================================
+   TOPIC SCORE
+============================================================ */
+
+.practice-overview__topic-score {
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   TOPIC BODY
+============================================================ */
+
+.practice-overview__topic-body {
 
   display: flex;
   flex-direction: column;
@@ -318,10 +791,10 @@
 
 
 /* ============================================================
-   FEATURE TITLE
+   TOPIC TITLE
 ============================================================ */
 
-.overview__feature-title {
+.practice-overview__topic-title {
 
   margin: 0;
 
@@ -346,13 +819,13 @@
 
 
 /* ============================================================
-   FEATURE DESCRIPTION
+   TOPIC DESCRIPTION
 ============================================================ */
 
-.overview__feature-description {
+.practice-overview__topic-description {
 
   margin:
-    var(--component-gap-sm)
+    var(--component-gap-xs)
     0
     0;
 
@@ -374,124 +847,179 @@
 
 
 /* ============================================================
-   AI FEATURE
+   IN PROGRESS
 ============================================================ */
 
-.overview__feature--ai {
+.practice-overview__in-progress {
 
-  border-color:
-    var(--color-primary-border);
+  display: flex;
+  flex-direction: column;
 
-  background:
-    var(--color-primary-soft);
-}
+  width: 100%;
 
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
 
-.overview__feature--ai
-.overview__feature-icon {
+  border-radius:
+    var(--radius-panel);
 
-  border-color:
-    var(--color-primary-border);
+  overflow: hidden;
 
   background:
     var(--color-surface);
-
-  color:
-    var(--color-primary);
 }
 
 
 /* ============================================================
-   WIDE FEATURE
-   ------------------------------------------------------------
-   Deliberately different composition.
+   PROGRESS CARD
 ============================================================ */
 
-.overview__feature--wide {
+.practice-overview__progress-card {
 
-  grid-column:
-    1 / -1;
+  display: flex;
 
-  display: grid;
+  align-items: center;
 
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(16rem, .42fr);
-
-  min-height:
-    18rem;
+  justify-content: space-between;
 
   gap:
-    var(--section-gap-lg);
-
-  margin-bottom:
-    var(--space-12);
-}
-
-
-/* ============================================================
-   WIDE MAIN
-============================================================ */
-
-.overview__feature-wide-main {
-
-  display: flex;
-  flex-direction: column;
-
-  min-width: 0;
-}
-
-
-/* ============================================================
-   WIDE MAIN TOP
-============================================================ */
-
-.overview__feature-wide-main
-.overview__feature-top {
-
-  margin-bottom:
-    var(--space-8);
-}
-
-
-/* ============================================================
-   WIDE MAIN BODY
-============================================================ */
-
-.overview__feature-wide-main
-.overview__feature-body {
-
-  padding-top:
-    0;
-
-  justify-content:
-    flex-end;
-}
-
-
-/* ============================================================
-   WIDE NOTE
-============================================================ */
-
-.overview__feature-wide-note {
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: flex-end;
-
-  justify-content: flex-end;
+    var(--space-6);
 
   min-width: 0;
 
   padding:
-    var(--space-4)
-    0;
+    var(--space-5)
+    var(--space-6);
 
-  border-left:
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  transition:
+    background var(--transition-fast);
+
+
+  &:not(:last-child) {
+
+    border-bottom:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+  }
+
+
+  &:hover {
+
+    background:
+      var(--color-surface-subtle);
+  }
+}
+
+
+/* ============================================================
+   PROGRESS MAIN
+============================================================ */
+
+.practice-overview__progress-main {
+
+  display: flex;
+
+  align-items: center;
+
+  min-width: 0;
+
+  gap:
+    var(--space-4);
+}
+
+
+/* ============================================================
+   PROGRESS ICON
+============================================================ */
+
+.practice-overview__progress-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  width:
+    var(--space-8);
+
+  height:
+    var(--space-8);
+
+  flex-shrink: 0;
+
+  border:
     var(--border-thin)
     solid
     var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+}
+
+
+/* ============================================================
+   PROGRESS CONTENT
+============================================================ */
+
+.practice-overview__progress-content {
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   PROGRESS TITLE
+============================================================ */
+
+.practice-overview__progress-title {
+
+  overflow: hidden;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   PROGRESS META
+============================================================ */
+
+.practice-overview__progress-meta {
+
+  margin-top:
+    var(--space-1);
 
   color:
     var(--color-gray-6);
@@ -499,58 +1027,429 @@
   font-size:
     var(--text-body-sm-size);
 
-  font-weight:
-    var(--text-body-sm-weight);
-
   line-height:
     var(--text-body-sm-line);
-
-  text-align:
-    right;
 }
 
 
 /* ============================================================
-   WIDE NOTE RHYTHM
+   PROGRESS VALUE
 ============================================================ */
 
-.overview__feature-wide-note span + span {
+.practice-overview__progress-value {
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-primary);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   ACTIVITY
+============================================================ */
+
+.practice-overview__activity {
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  overflow: hidden;
+
+  background:
+    var(--color-surface);
+}
+
+
+/* ============================================================
+   ACTIVITY ROW
+============================================================ */
+
+.practice-overview__activity-row {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(12rem, 1fr)
+    minmax(12rem, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap:
+    var(--space-6);
+
+  min-width: 0;
+
+  padding:
+    var(--space-4)
+    var(--space-6);
+
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  transition:
+    background var(--transition-fast);
+
+
+  &:not(:last-child) {
+
+    border-bottom:
+      var(--border-thin)
+      solid
+      var(--color-border-subtle);
+  }
+
+
+  &:hover {
+
+    background:
+      var(--color-surface-subtle);
+  }
+}
+
+
+/* ============================================================
+   ACTIVITY TOPIC
+============================================================ */
+
+.practice-overview__activity-topic {
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   ACTIVITY META
+============================================================ */
+
+.practice-overview__activity-meta {
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   ACTIVITY SCORE
+============================================================ */
+
+.practice-overview__activity-score {
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   ACTIVITY ARROW
+============================================================ */
+
+.practice-overview__activity-arrow {
+
+  color:
+    var(--color-gray-5);
+
+  transition:
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+
+.practice-overview__activity-row:hover
+.practice-overview__activity-arrow {
+
+  color:
+    var(--color-primary);
+
+  transform:
+    translateX(.15rem);
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.practice-overview__footer {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-8);
+
+  width: 100%;
 
   margin-top:
+    var(--space-4);
+
+  margin-bottom:
+    var(--space-12);
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   FOOTER CONTENT
+============================================================ */
+
+.practice-overview__footer-content {
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   FOOTER EYEBROW
+============================================================ */
+
+.practice-overview__footer-eyebrow {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  letter-spacing:
+    .06em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   FOOTER TITLE
+============================================================ */
+
+.practice-overview__footer-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+}
+
+
+/* ============================================================
+   FOOTER DESCRIPTION
+============================================================ */
+
+.practice-overview__footer-description {
+
+  max-width:
+    var(--content-sm);
+
+  margin:
+    var(--component-gap-xs)
+    0
+    0;
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  line-height:
+    var(--text-body-sm-line);
+}
+
+
+/* ============================================================
+   FOOTER ACTION
+============================================================ */
+
+.practice-overview__footer-action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  gap:
     var(--space-2);
+
+  min-height:
+    2.75rem;
+
+  padding:
+    0
+    var(--space-4);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  text-decoration:
+    none;
+
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+
+
+  &:hover {
+
+    border-color:
+      var(--color-primary-border);
+
+    background:
+      var(--color-primary-soft);
+
+    color:
+      var(--color-primary);
+  }
 }
 
 
 /* ============================================================
    TABLET
    ------------------------------------------------------------
-   Layout only. Typography remains untouched.
+   Layout changes only.
+   Typography remains untouched.
 ============================================================ */
 
 @include respond(tab-port) {
 
-  .overview {
+  .practice-overview {
 
     padding:
       var(--page-padding-md);
   }
 
 
-  .overview__features {
+  .practice-overview__snapshot {
 
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
   }
 
 
-  .overview__feature--wide {
-
-    grid-column:
-      1 / -1;
+  .practice-overview__topic-grid {
 
     grid-template-columns:
-      minmax(0, 1fr)
-      minmax(14rem, .45fr);
+      repeat(2, minmax(0, 1fr));
   }
 
 }
@@ -559,12 +1458,13 @@
 /* ============================================================
    PHONE
    ------------------------------------------------------------
-   Single-column composition.
+   One clear column.
+   No typography scaling.
 ============================================================ */
 
 @include respond(phone) {
 
-  .overview {
+  .practice-overview {
 
     width: 100%;
 
@@ -582,78 +1482,113 @@
   }
 
 
-  .overview__intro {
+  .practice-overview__header {
 
     max-width:
       none;
 
     margin-bottom:
-      var(--section-gap-md);
+      var(--section-gap-lg);
   }
 
 
-  .overview__description {
+  .practice-overview__section-header {
 
-    max-width:
-      none;
-  }
+    align-items:
+      flex-start;
 
-
-  .overview__features {
-
-    grid-template-columns:
-      minmax(0, 1fr);
+    flex-direction:
+      column;
 
     gap:
       var(--component-gap-md);
   }
 
 
-  .overview__feature {
+  .practice-overview__section-action {
 
-    width: 100%;
-
-    min-height:
-      20rem;
+    align-self:
+      flex-start;
   }
 
 
-  .overview__feature--wide {
-
-    grid-column:
-      auto;
+  .practice-overview__snapshot {
 
     grid-template-columns:
       1fr;
-
-    min-height:
-      auto;
-
-    gap:
-      var(--section-gap-md);
   }
 
 
-  .overview__feature-wide-note {
+  .practice-overview__topic-grid {
+
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .practice-overview__metric,
+  .practice-overview__topic-card {
+
+    min-height:
+      15rem;
+  }
+
+
+  .practice-overview__activity-row {
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+
+    gap:
+      var(--space-3);
+  }
+
+
+  .practice-overview__activity-meta {
+
+    grid-column:
+      1;
+
+    grid-row:
+      2;
+  }
+
+
+  .practice-overview__activity-score {
+
+    grid-column:
+      2;
+
+    grid-row:
+      1 / span 2;
+  }
+
+
+  .practice-overview__activity-arrow {
+
+    display:
+      none;
+  }
+
+
+  .practice-overview__footer {
 
     align-items:
       flex-start;
 
-    padding:
-      var(--space-4)
-      0
-      0;
+    flex-direction:
+      column;
 
-    border-top:
-      var(--border-thin)
-      solid
-      var(--color-border-subtle);
+    gap:
+      var(--space-6);
+  }
 
-    border-left:
-      0;
 
-    text-align:
-      left;
+  .practice-overview__footer-action {
+
+    width:
+      100%;
   }
 
 }
