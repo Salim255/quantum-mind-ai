@@ -1,0 +1,237 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS ACHIEVEMENT CARD
+   ------------------------------------------------------------
+   Individual learning milestone.
+
+   Direction:
+   - soft
+   - premium
+   - restrained
+   - clear completion state
+============================================================ */
+
+.progress-achievement-card {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+
+  min-height:
+    8.5rem;
+
+  padding:
+    var(--space-5);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--motion-fast),
+    background var(--motion-fast);
+}
+
+
+/* ============================================================
+   COMPLETE
+============================================================ */
+
+.progress-achievement-card--complete {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+.progress-achievement-card--complete:hover {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+/* ============================================================
+   LOCKED
+============================================================ */
+
+.progress-achievement-card--locked {
+
+  opacity:
+    .62;
+}
+
+
+.progress-achievement-card--locked:hover {
+
+  opacity:
+    .78;
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.progress-achievement-card__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-md-size);
+}
+
+
+/* ============================================================
+   COMPLETE ICON
+============================================================ */
+
+.progress-achievement-card--complete
+.progress-achievement-card__icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.progress-achievement-card__content {
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.progress-achievement-card__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.progress-achievement-card__description {
+
+  margin:
+    var(--component-gap-xs)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-achievement-card {
+
+    min-height:
+      auto;
+
+    padding:
+      var(--space-5);
+  }
+
+}

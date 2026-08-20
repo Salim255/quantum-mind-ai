@@ -1,0 +1,39 @@
+<article
+  class="progress-achievement-card"
+  [class.progress-achievement-card--complete]="variant() === 'complete'"
+  [class.progress-achievement-card--locked]="variant() === 'locked'"
+>
+
+  <!-- ==================================================
+       ICON
+  ================================================== -->
+
+  <span
+    class="progress-achievement-card__icon"
+    aria-hidden="true"
+  >
+
+    <iconify-icon
+      [icon]="icon()"
+    ></iconify-icon>
+
+  </span>
+
+
+  <!-- ==================================================
+       CONTENT
+  ================================================== -->
+
+  <div class="progress-achievement-card__content">
+
+    <h3 class="progress-achievement-card__title">
+      {{ title() }}
+    </h3>
+
+    <p class="progress-achievement-card__description">
+      {{ description() }}
+    </p>
+
+  </div>
+
+</article>
