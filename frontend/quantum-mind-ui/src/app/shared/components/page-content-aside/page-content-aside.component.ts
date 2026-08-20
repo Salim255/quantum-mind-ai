@@ -29,9 +29,11 @@ export class PageContentAsideComponent implements OnInit {
   }
 
   private subscribeToSectionId(){
-    this.currentSectionIdSubscription = this.pageAsideService.getCurrentSectionId$.subscribe(
+    this.currentSectionIdSubscription = this
+    .pageAsideService
+    .getCurrentSectionId$
+    .subscribe(
       id => {
-        console.log("Hello from section Id", id)
         if(id) {
           this.activeSection.set(id);
         }
@@ -40,12 +42,11 @@ export class PageContentAsideComponent implements OnInit {
   }
 
   private subscribeToPageAsideContent(): void{
-    this.pageAsideContentSubscription = this.contentService.getPageAsideContent$.subscribe(sections =>
-    {
-      console.log(sections);
-      this.sections.set(sections)
-    }
-    )
+    this.pageAsideContentSubscription = this.contentService
+      .getPageAsideContent$
+      .subscribe(
+        sections => { this.sections.set(sections) }
+      )
   }
 
   ngOnDestroy(): void {

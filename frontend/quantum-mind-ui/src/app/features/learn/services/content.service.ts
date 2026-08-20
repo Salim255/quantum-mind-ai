@@ -18,6 +18,7 @@ export class ContentService {
   }
 
   clearStorage(): void{
-    localStorage.removeItem("asideSections")
+    localStorage.removeItem("asideSections");
+    localStorage.removeItem("asideIsClose");
   }
 }

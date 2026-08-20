@@ -18,21 +18,15 @@ export const NAVIGATION: NavItem[] = [
     icon: 'lucide:house',
     children: [
       {
-        id: 'overview',
-        name: 'Overview',
-        path: '/home',
-        icon: 'lucide:layout-dashboard'
-      },
-      {
         id: 'learn',
         name: 'Learn',
         path: '/learn',
         icon: 'lucide:graduation-cap'
       },
       {
-        id: 'practice',
-        name: 'Practice',
-        path: '/practice',
+        id: 'quizzes',
+        name: 'Quizzes',
+        path: '/quizzes',
         icon: 'lucide:square-check-big'
       },
       {
@@ -41,12 +35,6 @@ export const NAVIGATION: NavItem[] = [
         path: '/progress',
         icon: 'lucide:chart-column'
       },
-      {
-        id: 'explore',
-        name: 'Explore',
-        path: '/explore',
-        icon: 'lucide:compass'
-      }
     ]
   },
 
@@ -116,23 +104,23 @@ export const NAVIGATION: NavItem[] = [
   },
 
   {
-    id: 'practice',
-    name: 'Practice',
-    path: '/practice',
+    id: 'quizzes',
+    name: 'Quizzes',
+    path: '/quizzes',
     icon: 'lucide:square-check-big',
     children: [
       {
-        id: 'quizzes',
-        name: 'Quizzes',
-        path: '/practice/quizzes',
-        icon: 'lucide:clipboard-check'
+        id: 'overview',
+        name: 'Overview',
+        path: '/quizzes/overview',
+        icon: 'lucide:dumbbell'
       },
       {
-        id: 'exercises',
-        name: 'Exercises',
-        path: '/practice/exercises',
-        icon: 'lucide:dumbbell'
-      }
+        id: 'explore',
+        name: 'Explore',
+        path: '/quizzes/explore',
+        icon: 'lucide:clipboard-check'
+      },
     ]
   },
 

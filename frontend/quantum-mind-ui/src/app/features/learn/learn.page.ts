@@ -23,32 +23,28 @@ export class LearnPage implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.listenToRouter();
-    this.subscribeToLearnTopics();
   }
 
-  subscribeToLearnTopics(){
-    this.learnTopicsSubscription = this.learnService.getLearnTopics$.subscribe(data => {
-    })
-  }
+
 
   listenToRouter(): void {
      this.router.events.pipe(
         filter(event => event.type === EventType.NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
           const url =  event.url;
-          if (url === '/learn') {
-            this.closeAside.set(false);
-            localStorage.setItem("asideIsClose", JSON.stringify(false));
-          } else {
-            this.closeAside.set(true);
-            localStorage.setItem("asideIsClose", JSON.stringify(true));
-          }
+          
+          this.closeAside.set(url.startsWith('/learn/'));
+          localStorage.setItem("asideIsClose", JSON.stringify(this.closeAside()));
+    
       });
   }
 
   ngOnDestroy(): void {
+
+    console.log("destroy")
     this.contentService.clearStorage();
     this.currentSectionIdSubscription?.unsubscribe();
     this.learnTopicsSubscription?.unsubscribe();
+
   }
 }

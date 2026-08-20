@@ -14,7 +14,7 @@ const routes:Routes = [
         component: PracticeHomeComponent
       },
       {
-        path: "quizzes",
+        path: "quizze",
         loadChildren: () => import("./pages/quiz-page/quiz.module").then((m) => m.QuizModule)
       }
     ]

@@ -20,7 +20,7 @@ const routes: Routes = [
         loadChildren: () => import("../features/explore/explore.module").then(m => m.ExploreModule)
       },
       {
-        path: "practice",
+        path: "quizzes",
         loadChildren: () => import("../features/practice/practice.module").then(m => m.PracticeModule)
       },
       {
