@@ -1,0 +1,199 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS ACHIEVEMENTS
+   ------------------------------------------------------------
+   Learning milestones.
+
+   Direction:
+   - clean
+   - calm
+   - spacious
+   - understated
+   - consistent with dashboard cards
+============================================================ */
+
+.progress-achievements {
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.progress-achievements__header {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--section-gap-md);
+
+  margin-bottom:
+    var(--component-gap-lg);
+}
+
+
+.progress-achievements__heading {
+
+  min-width: 0;
+}
+
+
+.progress-achievements__label {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+.progress-achievements__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--text-heading-md-weight);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+.progress-achievements__description {
+
+  max-width:
+    28rem;
+
+  margin: 0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   GRID
+============================================================ */
+
+.progress-achievements__grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .progress-achievements__header {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      var(--component-gap-sm);
+  }
+
+
+  .progress-achievements__description {
+
+    max-width:
+      none;
+  }
+
+
+  .progress-achievements__grid {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-achievements {
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+
+  .progress-achievements__grid {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+}

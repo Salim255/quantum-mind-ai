@@ -1,0 +1,65 @@
+<section
+  class="progress-achievements"
+  aria-labelledby="progress-achievements-title"
+>
+
+  <!-- ==================================================
+       SECTION HEADER
+  ================================================== -->
+
+  <header class="progress-achievements__header">
+
+    <div class="progress-achievements__heading">
+
+      <span class="progress-achievements__label">
+        MILESTONES
+      </span>
+
+      <h2
+        id="progress-achievements-title"
+        class="progress-achievements__title"
+      >
+        Progress worth noticing.
+      </h2>
+
+    </div>
+
+    <p class="progress-achievements__description">
+      Meaningful milestones from your learning journey.
+    </p>
+
+  </header>
+
+
+  <!-- ==================================================
+       ACHIEVEMENTS
+  ================================================== -->
+
+  <div class="progress-achievements__grid">
+
+    <app-progress-achievement-card
+      variant="complete"
+      title="First quiz completed"
+      description="You started testing your understanding."
+      icon="lucide:badge-check"
+    />
+
+
+    <app-progress-achievement-card
+      variant="complete"
+      title="Seven-day streak"
+      description="You practiced consistently for a full week."
+      icon="lucide:flame"
+    />
+
+
+    <app-progress-achievement-card
+      variant="locked"
+      title="Quantum explorer"
+      description="Complete a quiz in every major topic."
+      icon="lucide:lock"
+    />
+
+  </div>
+
+</section>
