@@ -18,8 +18,7 @@
 
   width: 100%;
 
-  margin-bottom:
-    var(--section-gap-xl);
+  margin-bottom: var(--section-gap-xl);
 }
 
 
@@ -157,19 +156,13 @@
    TABLET
 ============================================================ */
 
-@include respond(tab-port) {
-
-  .practice-purpose {
-
-    margin-bottom:
-      var(--section-gap-lg);
-  }
-
+@include respond(tab-land) {
 
   .practice-purpose__principles {
 
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
+
   }
 
 }
@@ -179,7 +172,7 @@
    PHONE
 ============================================================ */
 
-@include respond(phone) {
+@include respond(tab-port) {
 
   .practice-purpose__header {
 
@@ -192,6 +185,7 @@
 
     grid-template-columns:
       minmax(0, 1fr);
+
   }
 
 }

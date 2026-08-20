@@ -15,7 +15,7 @@ const routes:Routes = [
       },
       {
         path: "overview",
-        loadChildren: () => import("../overview/overview.module").then((m) => m.OverviewModule)
+        loadChildren: () => import("../practice-overview/practice-overview.module").then((m) => m.PracticeOverviewModule)
       },
       {
         path: "explore",
