@@ -1,10 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { ProgressPage } from "./progress.page";
+import { ProgressRoutingModule } from "./progress-routing.module";
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [ProgressPage]
+  imports: [CommonModule, ProgressRoutingModule],
+  declarations: [ProgressPage],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 
 export class ProgressModule {}

@@ -1,0 +1,1832 @@
+@use "../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS
+   ------------------------------------------------------------
+   Global learning dashboard.
+
+   Direction:
+   - centered
+   - editorial
+   - structured
+   - calm
+   - information-dense without feeling crowded
+   - consistent card language
+   - responsive through layout changes only
+============================================================ */
+
+.progress {
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+
+  max-width:
+    var(--content-xl);
+
+  margin-inline:
+    auto;
+
+  padding:
+    var(--page-padding-lg);
+
+  box-sizing:
+    border-box;
+
+  color:
+    var(--color-text-primary);
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.progress__header {
+
+  width: 100%;
+  max-width:
+    var(--content-lg);
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+.progress__eyebrow {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-sm);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+.progress__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-10);
+
+  font-size:
+    var(--text-display-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-display-sm-line);
+
+  letter-spacing:
+    var(--text-display-sm-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+.progress__description {
+
+  max-width:
+    var(--content-md);
+
+  margin:
+    var(--component-gap-md)
+    0
+    0;
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-lg-size);
+
+  font-weight:
+    var(--text-body-lg-weight);
+
+  line-height:
+    var(--text-body-lg-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   SNAPSHOT
+   ------------------------------------------------------------
+   Primary dashboard metrics.
+============================================================ */
+
+.progress__snapshot {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   METRIC
+============================================================ */
+
+.progress__metric {
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  min-height:
+    12rem;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+
+.progress__metric:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   PRIMARY METRIC
+============================================================ */
+
+.progress__metric--primary {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+.progress__metric--primary:hover {
+
+  border-color:
+    var(--color-primary-border);
+}
+
+
+/* ============================================================
+   METRIC TOP
+============================================================ */
+
+.progress__metric-top {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+}
+
+
+.progress__metric-label {
+
+  min-width: 0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+}
+
+
+.progress__metric-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-8);
+
+  height:
+    var(--space-8);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+}
+
+
+.progress__metric--primary
+.progress__metric-icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   METRIC VALUE
+============================================================ */
+
+.progress__metric-value {
+
+  margin-top:
+    auto;
+
+  color:
+    var(--color-gray-10);
+
+  font-size:
+    var(--text-display-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    1;
+
+  letter-spacing:
+    -.02em;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+.progress__metric-description {
+
+  max-width:
+    24rem;
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+}
+
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.progress__section-header {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--section-gap-md);
+
+  margin-bottom:
+    var(--component-gap-lg);
+}
+
+
+.progress__section-label {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+.progress__section-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--text-heading-md-weight);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+.progress__section-description {
+
+  max-width:
+    28rem;
+
+  margin:
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   KNOWLEDGE
+============================================================ */
+
+.progress__knowledge {
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+.progress__knowledge-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+}
+
+
+/* ============================================================
+   KNOWLEDGE CARD
+============================================================ */
+
+.progress__knowledge-card {
+
+  min-width: 0;
+
+  padding:
+    var(--space-6);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+
+.progress__knowledge-card:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   KNOWLEDGE TOP
+============================================================ */
+
+.progress__knowledge-top {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+}
+
+
+.progress__knowledge-identity {
+
+  display: flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+}
+
+
+.progress__knowledge-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+}
+
+
+.progress__knowledge-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-body-md-line);
+}
+
+
+.progress__knowledge-status {
+
+  display: block;
+
+  margin-top:
+    var(--space-1);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+}
+
+
+.progress__knowledge-score {
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   KNOWLEDGE BAR
+============================================================ */
+
+.progress__knowledge-bar {
+
+  position: relative;
+
+  width: 100%;
+  height:
+    var(--space-2);
+
+  margin-top:
+    var(--space-6);
+
+  overflow: hidden;
+
+  border-radius:
+    var(--radius-full);
+
+  background:
+    var(--color-gray-2);
+}
+
+
+.progress__knowledge-bar-fill {
+
+  display: block;
+
+  width: 0;
+  height: 100%;
+
+  border-radius:
+    inherit;
+
+  background:
+    var(--color-primary);
+
+  transition:
+    width var(--transition-medium);
+}
+
+
+/* ============================================================
+   ACTIVITY
+============================================================ */
+
+.progress__activity {
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+.progress__activity-card {
+
+  min-width: 0;
+
+  padding:
+    var(--space-6);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+}
+
+
+/* ============================================================
+   ACTIVITY SUMMARY
+============================================================ */
+
+.progress__activity-summary {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-6);
+
+  margin-bottom:
+    var(--space-6);
+}
+
+
+.progress__activity-summary > div {
+
+  display: flex;
+
+  align-items: baseline;
+
+  gap:
+    var(--space-2);
+}
+
+
+.progress__activity-value {
+
+  color:
+    var(--color-gray-10);
+
+  font-size:
+    var(--text-display-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    1;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+.progress__activity-label {
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+}
+
+
+.progress__activity-period {
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+}
+
+
+/* ============================================================
+   ACTIVITY CHART
+============================================================ */
+
+.progress__activity-chart {
+
+  width: 100%;
+  min-width: 0;
+}
+
+
+.progress__activity-placeholder {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height:
+    13rem;
+
+  border:
+    var(--border-thin)
+    dashed
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-body-sm-size);
+}
+
+
+/* ============================================================
+   INSIGHTS
+   ------------------------------------------------------------
+   Two consistent actionable cards.
+============================================================ */
+
+.progress__insights {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+.progress__insight {
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: start;
+
+  gap:
+    var(--space-5);
+
+  min-width: 0;
+
+  padding:
+    var(--space-6);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+
+.progress__insight:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+.progress__insight-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+}
+
+
+.progress__insight-content {
+
+  min-width: 0;
+}
+
+
+.progress__insight-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  text-wrap:
+    balance;
+}
+
+
+.progress__insight-description {
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+.progress__insight-action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  align-self: end;
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    1;
+
+  text-decoration:
+    none;
+
+  transition:
+    color var(--transition-fast);
+}
+
+
+.progress__insight-action:hover {
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   ACHIEVEMENTS
+============================================================ */
+
+.progress__achievements {
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+.progress__achievements-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+}
+
+
+.progress__achievement {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+
+  min-height:
+    8.5rem;
+
+  padding:
+    var(--space-5);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  opacity:
+    .6;
+}
+
+
+.progress__achievement--complete {
+
+  opacity:
+    1;
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+.progress__achievement-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-6);
+}
+
+
+.progress__achievement--complete
+.progress__achievement-icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  color:
+    var(--color-primary);
+}
+
+
+.progress__achievement-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-body-md-line);
+}
+
+
+.progress__achievement-description {
+
+  margin:
+    var(--component-gap-xs)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+}
+
+
+/* ============================================================
+   RANKING
+   ------------------------------------------------------------
+   Featured community surface.
+============================================================ */
+
+.progress__ranking {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap:
+    var(--section-gap-md);
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+
+  padding:
+    var(--space-8);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+.progress__ranking-main {
+
+  min-width: 0;
+}
+
+
+.progress__ranking-position {
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  flex-shrink: 0;
+
+  min-width:
+    8rem;
+
+  padding-left:
+    var(--section-gap-md);
+
+  border-left:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+}
+
+
+.progress__ranking-label {
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+}
+
+
+.progress__ranking-value {
+
+  margin-top:
+    var(--space-1);
+
+  color:
+    var(--color-gray-10);
+
+  font-size:
+    var(--text-heading-lg-size);
+
+  font-weight:
+    var(--text-heading-lg-weight);
+
+  line-height:
+    1;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+.progress__ranking-context {
+
+  margin-top:
+    var(--space-2);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+}
+
+
+.progress__ranking-action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  min-height:
+    var(--control-height-md);
+
+  padding:
+    0
+    var(--space-4);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    1;
+
+  text-decoration:
+    none;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+.progress__ranking-action:hover {
+
+  border-color:
+    var(--color-primary);
+
+  color:
+    var(--color-primary);
+
+  background:
+    var(--color-surface);
+}
+
+
+/* ============================================================
+   NEXT STEP
+   ------------------------------------------------------------
+   Final directional CTA.
+============================================================ */
+
+.progress__next {
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap:
+    var(--space-5);
+
+  width: 100%;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+}
+
+
+.progress__next-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-primary-border);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-primary-soft);
+
+  color:
+    var(--color-primary);
+}
+
+
+.progress__next-content {
+
+  min-width: 0;
+}
+
+
+.progress__next-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  text-wrap:
+    balance;
+}
+
+
+.progress__next-description {
+
+  max-width:
+    42rem;
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+.progress__next-action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  min-height:
+    var(--control-height-md);
+
+  padding:
+    0
+    var(--space-5);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-gray-9);
+
+  color:
+    var(--color-surface);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    1;
+
+  text-decoration:
+    none;
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+.progress__next-action:hover {
+
+  background:
+    var(--color-primary);
+
+  color:
+    var(--color-surface);
+}
+
+
+/* ============================================================
+   TABLET
+   ------------------------------------------------------------
+   Layout changes only.
+   Typography remains controlled by the global system.
+============================================================ */
+
+@include respond(tab-port) {
+
+  .progress {
+
+    padding:
+      var(--page-padding-md);
+  }
+
+
+  .progress__snapshot {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .progress__knowledge-grid {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .progress__achievements-grid {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .progress__ranking {
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+  }
+
+
+  .progress__ranking-action {
+
+    grid-column:
+      1 / -1;
+
+    justify-self:
+      start;
+  }
+
+
+  .progress__next {
+
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+
+  .progress__next-action {
+
+    grid-column:
+      2;
+
+    justify-self:
+      start;
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+   ------------------------------------------------------------
+   One-column composition.
+
+   Important:
+   Typography is NOT resized here.
+   Only geometry and spacing change.
+============================================================ */
+
+@include respond(phone) {
+
+  .progress {
+
+    width: 100%;
+
+    max-width:
+      var(--content-md);
+
+    margin-inline:
+      auto;
+
+    padding:
+      var(--page-padding-sm);
+
+    box-sizing:
+      border-box;
+  }
+
+
+  .progress__header {
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+
+  .progress__snapshot {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+
+    gap:
+      var(--component-gap-md);
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+
+  .progress__metric {
+
+    min-height:
+      11rem;
+  }
+
+
+  .progress__knowledge-grid {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+
+  .progress__section-header {
+
+    flex-direction:
+      column;
+
+    align-items:
+      flex-start;
+
+    gap:
+      var(--component-gap-sm);
+  }
+
+
+  .progress__section-description {
+
+    max-width:
+      none;
+  }
+
+
+  .progress__activity-summary {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      var(--component-gap-sm);
+  }
+
+
+  .progress__insights {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+
+  .progress__insight {
+
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+
+  .progress__insight-action {
+
+    grid-column:
+      2;
+
+    justify-self:
+      start;
+
+    align-self:
+      auto;
+  }
+
+
+  .progress__achievements-grid {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+
+  .progress__ranking {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+
+    gap:
+      var(--component-gap-lg);
+
+    padding:
+      var(--space-6);
+  }
+
+
+  .progress__ranking-position {
+
+    align-items:
+      flex-start;
+
+    min-width:
+      0;
+
+    padding:
+      var(--space-4)
+      0
+      0;
+
+    border-top:
+      var(--border-thin)
+      solid
+      var(--color-primary-border);
+
+    border-left:
+      0;
+  }
+
+
+  .progress__ranking-action {
+
+    grid-column:
+      auto;
+
+    justify-self:
+      stretch;
+
+    width:
+      100%;
+  }
+
+
+  .progress__next {
+
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+
+  .progress__next-action {
+
+    grid-column:
+      1 / -1;
+
+    width:
+      100%;
+
+    justify-self:
+      stretch;
+  }
+
+}

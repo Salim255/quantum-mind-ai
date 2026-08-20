@@ -1,3 +1,772 @@
-<div>
-  hello from progress
+<div class="progress">
+
+  <!-- ==================================================
+       HEADER
+  ================================================== -->
+
+  <header class="progress__header">
+
+    <span class="progress__eyebrow">
+      YOUR PROGRESS
+    </span>
+
+    <h1 class="progress__title">
+      See how your understanding is developing.
+    </h1>
+
+    <p class="progress__description">
+      Track your learning across quantum computing, understand
+      where you are strongest, and see what to focus on next.
+    </p>
+
+  </header>
+
+
+  <!-- ==================================================
+       SNAPSHOT
+  ================================================== -->
+
+  <section
+    class="progress__snapshot"
+    aria-label="Learning progress"
+  >
+
+    <!-- OVERALL MASTERY -->
+
+    <article class="progress__metric progress__metric--primary">
+
+      <div class="progress__metric-top">
+
+        <span class="progress__metric-label">
+          Overall mastery
+        </span>
+
+        <span class="progress__metric-icon">
+          <iconify-icon
+            icon="lucide:target"
+          ></iconify-icon>
+        </span>
+
+      </div>
+
+      <div class="progress__metric-value">
+        68%
+      </div>
+
+      <p class="progress__metric-description">
+        Across the concepts you have practiced so far.
+      </p>
+
+    </article>
+
+
+    <!-- LEARNING STREAK -->
+
+    <article class="progress__metric">
+
+      <div class="progress__metric-top">
+
+        <span class="progress__metric-label">
+          Learning streak
+        </span>
+
+        <span class="progress__metric-icon">
+          <iconify-icon
+            icon="lucide:flame"
+          ></iconify-icon>
+        </span>
+
+      </div>
+
+      <div class="progress__metric-value">
+        7 days
+      </div>
+
+      <p class="progress__metric-description">
+        Keep your momentum going.
+      </p>
+
+    </article>
+
+
+    <!-- QUIZZES -->
+
+    <article class="progress__metric">
+
+      <div class="progress__metric-top">
+
+        <span class="progress__metric-label">
+          Quizzes completed
+        </span>
+
+        <span class="progress__metric-icon">
+          <iconify-icon
+            icon="lucide:check-circle"
+          ></iconify-icon>
+        </span>
+
+      </div>
+
+      <div class="progress__metric-value">
+        24
+      </div>
+
+      <p class="progress__metric-description">
+        Practice sessions completed.
+      </p>
+
+    </article>
+
+
+    <!-- LEVEL -->
+
+    <article class="progress__metric">
+
+      <div class="progress__metric-top">
+
+        <span class="progress__metric-label">
+          Learning level
+        </span>
+
+        <span class="progress__metric-icon">
+          <iconify-icon
+            icon="lucide:arrow-up"
+          ></iconify-icon>
+        </span>
+
+      </div>
+
+      <div class="progress__metric-value">
+        12
+      </div>
+
+      <p class="progress__metric-description">
+        Based on your learning activity and mastery.
+      </p>
+
+    </article>
+
+  </section>
+
+
+  <!-- ==================================================
+       KNOWLEDGE
+  ================================================== -->
+
+  <section
+    class="progress__knowledge"
+    aria-labelledby="progress-knowledge-title"
+  >
+
+    <header class="progress__section-header">
+
+      <div>
+
+        <span class="progress__section-label">
+          KNOWLEDGE
+        </span>
+
+        <h2
+          id="progress-knowledge-title"
+          class="progress__section-title"
+        >
+          Understand where you stand.
+        </h2>
+
+      </div>
+
+      <p class="progress__section-description">
+        Your current mastery across the main areas of
+        quantum computing.
+      </p>
+
+    </header>
+
+
+    <div class="progress__knowledge-grid">
+
+
+      <!-- FOUNDATIONS -->
+
+      <article class="progress__knowledge-card">
+
+        <div class="progress__knowledge-top">
+
+          <div class="progress__knowledge-identity">
+
+            <span class="progress__knowledge-icon">
+              <iconify-icon
+                icon="lucide:atom"
+              ></iconify-icon>
+            </span>
+
+            <div>
+
+              <h3 class="progress__knowledge-title">
+                Foundations
+              </h3>
+
+              <span class="progress__knowledge-status">
+                Strong
+              </span>
+
+            </div>
+
+          </div>
+
+          <span class="progress__knowledge-score">
+            82%
+          </span>
+
+        </div>
+
+        <div class="progress__knowledge-bar">
+
+          <span
+            class="progress__knowledge-bar-fill"
+            style="width: 82%"
+          ></span>
+
+        </div>
+
+      </article>
+
+
+      <!-- LINEAR ALGEBRA -->
+
+      <article class="progress__knowledge-card">
+
+        <div class="progress__knowledge-top">
+
+          <div class="progress__knowledge-identity">
+
+            <span class="progress__knowledge-icon">
+              <iconify-icon
+                icon="lucide:plus"
+              ></iconify-icon>
+            </span>
+
+            <div>
+
+              <h3 class="progress__knowledge-title">
+                Linear algebra
+              </h3>
+
+              <span class="progress__knowledge-status">
+                Developing
+              </span>
+
+            </div>
+
+          </div>
+
+          <span class="progress__knowledge-score">
+            61%
+          </span>
+
+        </div>
+
+        <div class="progress__knowledge-bar">
+
+          <span
+            class="progress__knowledge-bar-fill"
+            style="width: 61%"
+          ></span>
+
+        </div>
+
+      </article>
+
+
+      <!-- QUANTUM PHENOMENA -->
+
+      <article class="progress__knowledge-card">
+
+        <div class="progress__knowledge-top">
+
+          <div class="progress__knowledge-identity">
+
+            <span class="progress__knowledge-icon">
+              <iconify-icon
+                icon="lucide:sparkles"
+              ></iconify-icon>
+            </span>
+
+            <div>
+
+              <h3 class="progress__knowledge-title">
+                Quantum phenomena
+              </h3>
+
+              <span class="progress__knowledge-status">
+                Developing
+              </span>
+
+            </div>
+
+          </div>
+
+          <span class="progress__knowledge-score">
+            67%
+          </span>
+
+        </div>
+
+        <div class="progress__knowledge-bar">
+
+          <span
+            class="progress__knowledge-bar-fill"
+            style="width: 67%"
+          ></span>
+
+        </div>
+
+      </article>
+
+
+      <!-- ALGORITHMS -->
+
+      <article class="progress__knowledge-card">
+
+        <div class="progress__knowledge-top">
+
+          <div class="progress__knowledge-identity">
+
+            <span class="progress__knowledge-icon">
+              <iconify-icon
+                icon="lucide:binary"
+              ></iconify-icon>
+            </span>
+
+            <div>
+
+              <h3 class="progress__knowledge-title">
+                Quantum algorithms
+              </h3>
+
+              <span class="progress__knowledge-status">
+                Needs attention
+              </span>
+
+            </div>
+
+          </div>
+
+          <span class="progress__knowledge-score">
+            42%
+          </span>
+
+        </div>
+
+        <div class="progress__knowledge-bar">
+
+          <span
+            class="progress__knowledge-bar-fill"
+            style="width: 42%"
+          ></span>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       ACTIVITY
+  ================================================== -->
+
+  <section
+    class="progress__activity"
+    aria-labelledby="progress-activity-title"
+  >
+
+    <header class="progress__section-header">
+
+      <div>
+
+        <span class="progress__section-label">
+          ACTIVITY
+        </span>
+
+        <h2
+          id="progress-activity-title"
+          class="progress__section-title"
+        >
+          Your learning rhythm.
+        </h2>
+
+      </div>
+
+      <p class="progress__section-description">
+        Consistent practice matters more than occasional
+        bursts of activity.
+      </p>
+
+    </header>
+
+
+    <div class="progress__activity-card">
+
+      <div class="progress__activity-summary">
+
+        <div>
+
+          <span class="progress__activity-value">
+            18
+          </span>
+
+          <span class="progress__activity-label">
+            practice sessions
+          </span>
+
+        </div>
+
+        <span class="progress__activity-period">
+          Last 30 days
+        </span>
+
+      </div>
+
+
+      <div class="progress__activity-chart">
+
+        <!-- Future chart / activity visualization -->
+
+        <div class="progress__activity-placeholder">
+
+          <span>Learning activity</span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       STRENGTHS / WEAKNESSES
+  ================================================== -->
+
+  <section
+    class="progress__insights"
+    aria-label="Learning insights"
+  >
+
+
+    <!-- STRENGTHS -->
+
+    <article class="progress__insight">
+
+      <div class="progress__insight-icon">
+
+        <iconify-icon
+          icon="lucide:trending-up"
+        ></iconify-icon>
+
+      </div>
+
+      <div class="progress__insight-content">
+
+        <span class="progress__section-label">
+          STRENGTH
+        </span>
+
+        <h2 class="progress__insight-title">
+          Quantum foundations
+        </h2>
+
+        <p class="progress__insight-description">
+          You consistently perform well on questions involving
+          qubits, states, and basic quantum concepts.
+        </p>
+
+      </div>
+
+      <a
+        class="progress__insight-action"
+        routerLink="/learn/foundations"
+      >
+        Review topic
+
+        <iconify-icon
+          icon="lucide:arrow-up-right"
+        ></iconify-icon>
+
+      </a>
+
+    </article>
+
+
+    <!-- WEAKNESS -->
+
+    <article class="progress__insight">
+
+      <div class="progress__insight-icon">
+
+        <iconify-icon
+          icon="lucide:circle-alert"
+        ></iconify-icon>
+
+      </div>
+
+      <div class="progress__insight-content">
+
+        <span class="progress__section-label">
+          FOCUS AREA
+        </span>
+
+        <h2 class="progress__insight-title">
+          Quantum algorithms
+        </h2>
+
+        <p class="progress__insight-description">
+          Recent attempts suggest that algorithmic reasoning
+          could benefit from another pass through the lessons.
+        </p>
+
+      </div>
+
+      <a
+        class="progress__insight-action"
+        routerLink="/learn/algorithms"
+      >
+        Review topic
+
+        <iconify-icon
+          icon="lucide:arrow-up-right"
+        ></iconify-icon>
+
+      </a>
+
+    </article>
+
+  </section>
+
+
+  <!-- ==================================================
+       ACHIEVEMENTS
+  ================================================== -->
+
+  <section
+    class="progress__achievements"
+    aria-labelledby="progress-achievements-title"
+  >
+
+    <header class="progress__section-header">
+
+      <div>
+
+        <span class="progress__section-label">
+          MILESTONES
+        </span>
+
+        <h2
+          id="progress-achievements-title"
+          class="progress__section-title"
+        >
+          Progress worth noticing.
+        </h2>
+
+      </div>
+
+      <p class="progress__section-description">
+        Meaningful milestones from your learning journey.
+      </p>
+
+    </header>
+
+
+    <div class="progress__achievements-grid">
+
+      <article class="progress__achievement progress__achievement--complete">
+
+        <span class="progress__achievement-icon">
+
+          <iconify-icon
+            icon="lucide:badge-check"
+          ></iconify-icon>
+
+        </span>
+
+        <div>
+
+          <h3 class="progress__achievement-title">
+            First quiz completed
+          </h3>
+
+          <p class="progress__achievement-description">
+            You started testing your understanding.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="progress__achievement progress__achievement--complete">
+
+        <span class="progress__achievement-icon">
+
+          <iconify-icon
+            icon="lucide:flame"
+          ></iconify-icon>
+
+        </span>
+
+        <div>
+
+          <h3 class="progress__achievement-title">
+            Seven-day streak
+          </h3>
+
+          <p class="progress__achievement-description">
+            You practiced consistently for a full week.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="progress__achievement">
+
+        <span class="progress__achievement-icon">
+
+          <iconify-icon
+            icon="lucide:lock"
+          ></iconify-icon>
+
+        </span>
+
+        <div>
+
+          <h3 class="progress__achievement-title">
+            Quantum explorer
+          </h3>
+
+          <p class="progress__achievement-description">
+            Complete a quiz in every major topic.
+          </p>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       COMMUNITY
+  ================================================== -->
+
+  <section
+    class="progress__ranking"
+    aria-labelledby="progress-ranking-title"
+  >
+
+    <div class="progress__ranking-main">
+
+      <span class="progress__section-label">
+        COMMUNITY
+      </span>
+
+      <h2
+        id="progress-ranking-title"
+        class="progress__section-title"
+      >
+        See how your progress compares.
+      </h2>
+
+      <p class="progress__section-description">
+        Compare your learning activity with other learners
+        and see how consistently you are progressing.
+      </p>
+
+    </div>
+
+
+    <div class="progress__ranking-position">
+
+      <span class="progress__ranking-label">
+        Your position
+      </span>
+
+      <strong class="progress__ranking-value">
+        #128
+      </strong>
+
+      <span class="progress__ranking-context">
+        Top 18% of learners
+      </span>
+
+    </div>
+
+
+    <a
+      class="progress__ranking-action"
+      routerLink="/progress/ranking"
+    >
+      View ranking
+
+      <iconify-icon
+        icon="lucide:arrow-up-right"
+      ></iconify-icon>
+
+    </a>
+
+  </section>
+
+
+  <!-- ==================================================
+       NEXT STEP
+  ================================================== -->
+
+  <section class="progress__next">
+
+    <div class="progress__next-icon">
+
+      <iconify-icon
+        icon="lucide:compass"
+      ></iconify-icon>
+
+    </div>
+
+    <div class="progress__next-content">
+
+      <span class="progress__section-label">
+        NEXT STEP
+      </span>
+
+      <h2 class="progress__next-title">
+        Strengthen quantum algorithms.
+      </h2>
+
+      <p class="progress__next-description">
+        Your current results suggest this is the area where
+        another focused session could make the biggest difference.
+      </p>
+
+    </div>
+
+    <a
+      class="progress__next-action"
+      routerLink="/practice/topics"
+    >
+      Continue learning
+
+      <iconify-icon
+        icon="lucide:arrow-right"
+      ></iconify-icon>
+
+    </a>
+
+  </section>
+
 </div>

@@ -6,12 +6,15 @@
 
     <p class="lesson__summary">
     <!--     {{ spanTopic()?.description }} -->
-      @for(block of  topicBlocks(); track $index){
-        <ng-container>
-          {{ block.content }}
-        </ng-container>
-        }
+     {{ spanTopic()?.description }}
     </p>
+
+
+    @for(block of topicBlocks(); track $index){
+      <p [id]="block.id" class="lesson__paragraph">
+        {{ block.content }}
+      </p>
+    }
   </header>
 
 
