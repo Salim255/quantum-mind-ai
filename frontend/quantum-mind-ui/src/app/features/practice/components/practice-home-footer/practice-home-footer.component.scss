@@ -1,0 +1,202 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PRACTICE HOME FOOTER
+   ------------------------------------------------------------
+   Supporting navigation.
+
+   Direction:
+   - quiet
+   - minimal
+   - editorial
+   - spacious
+   - consistent with the application
+============================================================ */
+
+.practice-home-footer {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-6);
+
+  width: 100%;
+
+  padding:
+    var(--space-5)
+    0;
+
+  box-sizing:
+    border-box;
+
+  border-top:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+}
+
+
+/* ============================================================
+   TEXT
+============================================================ */
+
+.practice-home-footer__text {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   LINK
+============================================================ */
+
+.practice-home-footer__link {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    1;
+
+  text-decoration:
+    none;
+
+  transition:
+    color var(--transition-fast);
+}
+
+
+/* ============================================================
+   LINK HOVER
+============================================================ */
+
+.practice-home-footer__link:hover {
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   LINK ICON
+============================================================ */
+
+.practice-home-footer__link iconify-icon {
+
+  font-size:
+    var(--text-body-md-size);
+
+  transition:
+    transform var(--transition-fast);
+}
+
+
+.practice-home-footer__link:hover iconify-icon {
+
+  transform:
+    translate(
+      var(--space-1),
+      calc(var(--space-1) * -1)
+    );
+}
+
+
+/* ============================================================
+   FOCUS
+============================================================ */
+
+.practice-home-footer__link:focus-visible {
+
+  outline:
+    var(--border-medium)
+    solid
+    var(--color-primary);
+
+  outline-offset:
+    var(--space-1);
+
+  border-radius:
+    var(--radius-sm);
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .practice-home-footer {
+
+    gap:
+      var(--space-5);
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .practice-home-footer {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      var(--component-gap-md);
+
+    padding:
+      var(--space-5)
+      0;
+  }
+
+
+  .practice-home-footer__link {
+
+    align-self:
+      flex-start;
+  }
+
+}
