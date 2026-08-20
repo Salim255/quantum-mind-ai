@@ -1,0 +1,235 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PRACTICE HEADER
+   ------------------------------------------------------------
+   Editorial page introduction.
+
+   Direction:
+   - Linear-inspired
+   - soft
+   - premium
+   - restrained
+   - spacious
+   - consistent with Progress
+   - subtle primary gradient
+   - no heavy visual decoration
+============================================================ */
+
+.practice-header {
+
+  position: relative;
+
+  width: 100%;
+
+  max-width:
+    var(--content-lg);
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   EYEBROW
+============================================================ */
+
+.practice-header__eyebrow {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  margin-bottom:
+    var(--component-gap-md);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   EYEBROW ACCENT
+============================================================ */
+
+.practice-header__eyebrow::before {
+
+  content: "";
+
+  display: block;
+
+  width:
+    var(--space-2);
+
+  height:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  border-radius:
+    var(--radius-circle);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  box-shadow:
+    0 0
+    var(--space-2)
+    rgb(37 99 235 / 18%);
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.practice-header__title {
+
+  max-width:
+    var(--content-md);
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-display-sm-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-display-sm-line);
+
+  letter-spacing:
+    var(--text-display-sm-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   TITLE ACCENT
+============================================================ */
+
+.practice-header__title::after {
+
+  content: "";
+
+  display: block;
+
+  width:
+    var(--space-10);
+
+  height:
+    .3rem;
+
+  margin-top:
+    var(--component-gap-md);
+
+  border-radius:
+    var(--radius-pill);
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  opacity:
+    .75;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.practice-header__description {
+
+  max-width:
+    var(--content-md);
+
+  margin:
+    var(--component-gap-md)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-lg-size);
+
+  font-weight:
+    var(--text-body-lg-weight);
+
+  line-height:
+    var(--text-body-lg-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .practice-header {
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .practice-header {
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+
+  .practice-header__description {
+
+    max-width:
+      none;
+  }
+
+}
