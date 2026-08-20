@@ -1,0 +1,78 @@
+<article class="practice-overview-metric-card">
+
+  <!-- ==================================================
+       TOP
+  ================================================== -->
+
+  <div class="practice-overview-metric-card__top">
+
+    <span
+      class="practice-overview-metric-card__icon"
+      aria-hidden="true"
+    >
+      <iconify-icon
+        [icon]="icon()"
+      ></iconify-icon>
+    </span>
+
+    <span class="practice-overview-metric-card__label">
+      {{ label() }}
+    </span>
+
+  </div>
+
+
+  <!-- ==================================================
+       VALUE
+  ================================================== -->
+
+  <div class="practice-overview-metric-card__value">
+    {{ value() }}
+  </div>
+
+
+  <!-- ==================================================
+       DESCRIPTION
+  ================================================== -->
+
+  <p class="practice-overview-metric-card__description">
+    {{ description() }}
+  </p>
+
+
+  <!-- ==================================================
+       ACTION
+  ================================================== -->
+
+  @if (actionLabel() && actionRoute()) {
+
+    <a
+      class="practice-overview-metric-card__action"
+      [routerLink]="actionRoute()"
+    >
+
+      {{ actionLabel() }}
+
+      <iconify-icon
+        icon="lucide:arrow-right"
+        aria-hidden="true"
+      ></iconify-icon>
+
+    </a>
+
+  }
+
+
+  <!-- ==================================================
+       CONTEXT
+  ================================================== -->
+
+  @if (context()) {
+
+    <span class="practice-overview-metric-card__context">
+      {{ context() }}
+    </span>
+
+  }
+
+</article>
