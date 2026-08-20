@@ -1,0 +1,332 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+/* ============================================================
+   PRACTICE OVERVIEW SECTION
+   ------------------------------------------------------------
+   Shared editorial section primitive.
+
+   Direction:
+   - Linear-inspired
+   - soft
+   - premium
+   - spacious
+   - restrained
+   - strong typography hierarchy
+   - no heavy containers
+============================================================ */
+
+.practice-overview-section {
+
+  width: 100%;
+
+  max-width:
+    var(--content-lg);
+
+  margin: 0;
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.practice-overview-section__header {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-8);
+
+  margin-bottom:
+    var(--component-gap-xl);
+}
+
+
+/* ============================================================
+   HEADING
+============================================================ */
+
+.practice-overview-section__heading {
+
+  min-width: 0;
+
+  max-width:
+    var(--content-md);
+}
+
+
+/* ============================================================
+   EYEBROW
+============================================================ */
+
+.practice-overview-section__eyebrow {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  margin-bottom:
+    var(--component-gap-sm);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   EYEBROW ACCENT
+============================================================ */
+
+.practice-overview-section__eyebrow::before {
+
+  content: "";
+
+  display: block;
+
+  width:
+    var(--space-2);
+
+  height:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  border-radius:
+    var(--radius-circle);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  box-shadow:
+    0 0
+    var(--space-2)
+    rgb(37 99 235 / 16%);
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.practice-overview-section__title {
+
+  max-width:
+    var(--content-md);
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-lg-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-heading-lg-line);
+
+  letter-spacing:
+    var(--text-heading-lg-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.practice-overview-section__description {
+
+  max-width:
+    var(--content-md);
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-body-md-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   ACTION
+============================================================ */
+
+.practice-overview-section__action {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  min-height:
+    var(--control-height-sm);
+
+  padding:
+    0
+    var(--space-1);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-md-line);
+
+  text-decoration: none;
+
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+
+.practice-overview-section__action iconify-icon {
+
+  font-size:
+    1rem;
+
+  transition:
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+
+.practice-overview-section__action:hover {
+
+  color:
+    var(--color-gray-9);
+}
+
+
+.practice-overview-section__action:hover iconify-icon {
+
+  transform:
+    translate(2px, -2px);
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.practice-overview-section__content {
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .practice-overview-section__header {
+
+    gap:
+      var(--space-6);
+
+    margin-bottom:
+      var(--component-gap-lg);
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .practice-overview-section__header {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap:
+      var(--component-gap-md);
+
+    margin-bottom:
+      var(--component-gap-lg);
+  }
+
+
+  .practice-overview-section__heading {
+
+    max-width: none;
+  }
+
+
+  .practice-overview-section__title {
+
+    max-width: none;
+  }
+
+
+  .practice-overview-section__description {
+
+    max-width: none;
+  }
+
+
+  .practice-overview-section__action {
+
+    padding: 0;
+  }
+
+}

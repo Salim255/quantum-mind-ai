@@ -6,6 +6,7 @@ import { PracticeOverviewHeaderComponent } from "./components/practice-overview-
 import { PracticeOverviewSnapshotComponent } from "./components/practice-overview-snapshot/practice-overview-snapshot.component";
 import { PracticeOverviewMetricCardComponent } from "./components/practice-overview-metric-card/practice-overview-metric-card.component";
 import { PracticeOverviewSectionComponent } from "./components/practice-overview-section/practice-overview-section.component";
+import { PracticeOverviewTopicCardComponent } from "./components/practice-overview-topic-card/practice-overview-topic-card.component";
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { PracticeOverviewSectionComponent } from "./components/practice-overview
     OverviewRoutingModule
   ],
   declarations: [
+    PracticeOverviewTopicCardComponent,
     PracticeOverviewSectionComponent,
     PracticeOverviewMetricCardComponent,
     PracticeOverviewSnapshotComponent,

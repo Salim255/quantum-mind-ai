@@ -1,0 +1,69 @@
+<section
+  class="practice-overview-section"
+  [attr.aria-labelledby]="labelledBy"
+>
+
+  <!-- ==================================================
+       HEADER
+  ================================================== -->
+
+  <header class="practice-overview-section__header">
+
+    <div class="practice-overview-section__heading">
+
+      <span class="practice-overview-section__eyebrow">
+        {{ eyebrow }}
+      </span>
+
+      <h2
+        class="practice-overview-section__title"
+        [id]="labelledBy"
+      >
+        {{ title }}
+      </h2>
+
+      @if (description) {
+
+        <p class="practice-overview-section__description">
+          {{ description }}
+        </p>
+
+      }
+
+    </div>
+
+
+    @if (actionLabel && actionLink) {
+
+      <a
+        class="practice-overview-section__action"
+        [routerLink]="actionLink"
+      >
+
+        <span>
+          {{ actionLabel }}
+        </span>
+
+        <iconify-icon
+          icon="lucide:arrow-up-right"
+          aria-hidden="true"
+        ></iconify-icon>
+
+      </a>
+
+    }
+
+  </header>
+
+
+  <!-- ==================================================
+       CONTENT
+  ================================================== -->
+
+  <div class="practice-overview-section__content">
+
+    <ng-content></ng-content>
+
+  </div>
+
+</section>

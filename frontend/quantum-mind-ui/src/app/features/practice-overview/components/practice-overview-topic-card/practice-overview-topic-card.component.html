@@ -1,0 +1,55 @@
+<a
+  class="practice-overview-topic-card"
+  [class.practice-overview-topic-card--attention]="variant === 'attention'"
+  [routerLink]="link"
+>
+
+  <!-- ==================================================
+       TOP
+  ================================================== -->
+
+  <div class="practice-overview-topic-card__top">
+
+    <span
+      class="practice-overview-topic-card__icon"
+      aria-hidden="true"
+    >
+      <iconify-icon
+        [icon]="icon"
+      ></iconify-icon>
+    </span>
+
+    <strong class="practice-overview-topic-card__score">
+      {{ score }}
+    </strong>
+
+  </div>
+
+
+  <!-- ==================================================
+       CONTENT
+  ================================================== -->
+
+  <div class="practice-overview-topic-card__content">
+
+    <h3 class="practice-overview-topic-card__title">
+      {{ title }}
+    </h3>
+
+    <p class="practice-overview-topic-card__description">
+      {{ description }}
+    </p>
+
+  </div>
+
+
+  <!-- ==================================================
+       FOOTER SIGNAL
+  ================================================== -->
+
+  <span
+    class="practice-overview-topic-card__indicator"
+    aria-hidden="true"
+  ></span>
+
+</a>

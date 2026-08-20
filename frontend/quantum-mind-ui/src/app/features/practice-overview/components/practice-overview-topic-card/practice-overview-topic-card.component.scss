@@ -1,0 +1,411 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+/* ============================================================
+   PRACTICE OVERVIEW TOPIC CARD
+   ------------------------------------------------------------
+   Direction:
+   - Linear-inspired
+   - soft
+   - premium
+   - restrained
+   - spacious
+   - subtle interaction
+============================================================ */
+
+.practice-overview-topic-card {
+
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-height:
+    12.5rem;
+
+  padding:
+    var(--space-6);
+
+  overflow: hidden;
+
+  border:
+    1px solid var(--color-gray-2);
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    var(--color-white);
+
+  color:
+    inherit;
+
+  text-decoration: none;
+
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+
+/* ============================================================
+   SOFT BACKGROUND GLOW
+============================================================ */
+
+.practice-overview-topic-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: -4rem;
+
+  right: -4rem;
+
+  width: 9rem;
+
+  height: 9rem;
+
+  border-radius:
+    var(--radius-circle);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgb(75 92 255 / 8%),
+      rgb(37 99 235 / 3%)
+    );
+
+  pointer-events: none;
+
+  opacity: .8;
+}
+
+
+/* ============================================================
+   TOP
+============================================================ */
+
+.practice-overview-topic-card__top {
+
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-4);
+
+  margin-bottom:
+    var(--space-6);
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.practice-overview-topic-card__icon {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  flex-shrink: 0;
+
+  border:
+    1px solid var(--color-gray-2);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-gray-1);
+
+  color:
+    var(--color-primary);
+
+  font-size:
+    1.125rem;
+}
+
+
+/* ============================================================
+   SCORE
+============================================================ */
+
+.practice-overview-topic-card__score {
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.practice-overview-topic-card__content {
+
+  position: relative;
+
+  z-index: 1;
+
+  flex: 1;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.practice-overview-topic-card__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-sm-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-heading-sm-line);
+
+  letter-spacing:
+    var(--text-heading-sm-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.practice-overview-topic-card__description {
+
+  max-width:
+    32rem;
+
+  margin:
+    var(--space-2)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   INDICATOR
+============================================================ */
+
+.practice-overview-topic-card__indicator {
+
+  position: absolute;
+
+  right:
+    var(--space-6);
+
+  bottom:
+    var(--space-5);
+
+  width:
+    var(--space-8);
+
+  height:
+    .2rem;
+
+  border-radius:
+    var(--radius-pill);
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  opacity:
+    .55;
+
+  transition:
+    width var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
+}
+
+
+/* ============================================================
+   HOVER
+============================================================ */
+
+.practice-overview-topic-card:hover {
+
+  border-color:
+    rgb(75 92 255 / 24%);
+
+  box-shadow:
+    0
+    var(--space-4)
+    var(--space-8)
+    rgb(15 23 42 / 7%);
+
+  transform:
+    translateY(-2px);
+}
+
+
+.practice-overview-topic-card:hover
+.practice-overview-topic-card__indicator {
+
+  width:
+    var(--space-10);
+
+  opacity:
+    .85;
+}
+
+
+/* ============================================================
+   ATTENTION VARIANT
+============================================================ */
+
+.practice-overview-topic-card--attention {
+
+  border-color:
+    var(--color-gray-2);
+}
+
+
+.practice-overview-topic-card--attention
+.practice-overview-topic-card__icon {
+
+  color:
+    var(--color-warning);
+}
+
+
+.practice-overview-topic-card--attention
+.practice-overview-topic-card__indicator {
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-warning),
+      var(--color-primary)
+    );
+
+  opacity:
+    .6;
+}
+
+
+.practice-overview-topic-card--attention:hover {
+
+  border-color:
+    rgb(245 158 11 / 24%);
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .practice-overview-topic-card {
+
+    min-height:
+      11.5rem;
+
+    padding:
+      var(--space-5);
+  }
+
+
+  .practice-overview-topic-card__top {
+
+    margin-bottom:
+      var(--space-5);
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .practice-overview-topic-card {
+
+    min-height:
+      auto;
+
+    padding:
+      var(--space-5);
+  }
+
+
+  .practice-overview-topic-card__top {
+
+    margin-bottom:
+      var(--space-4);
+  }
+
+
+  .practice-overview-topic-card__indicator {
+
+    right:
+      var(--space-5);
+
+    bottom:
+      var(--space-4);
+  }
+
+}

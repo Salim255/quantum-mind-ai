@@ -13,6 +13,45 @@
   <!-- ==================================================
   STRENGTHS
   ================================================== -->
+  <app-practice-overview-section
+  eyebrow="STRENGTHS"
+  title="Concepts you understand well."
+  description="Topics where your recent quiz results show consistent understanding."
+  actionLabel="View completed"
+  actionLink="/practice/completed"
+  labelledBy="practice-strengths-title"
+>
+
+  <div class="practice-overview__topic-grid">
+
+    <app-practice-overview-topic-card
+      title="Superposition"
+      description="Strong understanding across recent attempts."
+      score="92%"
+      icon="lucide:layers-3"
+      link="/practice/topics/superposition"
+    />
+
+    <app-practice-overview-topic-card
+      title="Measurement"
+      description="Reliable performance across recent quizzes."
+      score="88%"
+      icon="lucide:scan-eye"
+      link="/practice/topics/measurement"
+    />
+
+    <app-practice-overview-topic-card
+      title="Quantum gates"
+      description="Good command of the core operations and their behavior."
+      score="84%"
+      icon="lucide:git-branch"
+      link="/practice/topics/quantum-gates"
+    />
+
+  </div>
+
+</app-practice-overview-section>
+
   <section
     class="practice-overview__section"
     aria-labelledby="practice-strengths-title"
