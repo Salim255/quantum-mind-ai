@@ -1,0 +1,75 @@
+<section
+  class="progress-knowledge"
+  aria-labelledby="progress-knowledge-title"
+>
+
+  <!-- ==================================================
+       SECTION HEADER
+  ================================================== -->
+
+  <header class="progress-knowledge__header">
+
+    <div class="progress-knowledge__heading">
+
+      <span class="progress-knowledge__label">
+        KNOWLEDGE
+      </span>
+
+      <h2
+        id="progress-knowledge-title"
+        class="progress-knowledge__title"
+      >
+        Understand where you stand.
+      </h2>
+
+    </div>
+
+    <p class="progress-knowledge__description">
+      Your current mastery across the main areas of
+      quantum computing.
+    </p>
+
+  </header>
+
+
+  <!-- ==================================================
+       KNOWLEDGE GRID
+  ================================================== -->
+
+  <div class="progress-knowledge__grid">
+
+    <app-progress-knowledge-card
+      title="Foundations"
+      status="Strong"
+      score="82%"
+      icon="lucide:atom"
+      [progress]="82"
+    />
+
+    <app-progress-knowledge-card
+      title="Linear algebra"
+      status="Developing"
+      score="61%"
+      icon="lucide:plus"
+      [progress]="61"
+    />
+
+    <app-progress-knowledge-card
+      title="Quantum phenomena"
+      status="Developing"
+      score="67%"
+      icon="lucide:sparkles"
+      [progress]="67"
+    />
+
+    <app-progress-knowledge-card
+      title="Quantum algorithms"
+      status="Needs attention"
+      score="42%"
+      icon="lucide:binary"
+      [progress]="42"
+    />
+
+  </div>
+
+</section>

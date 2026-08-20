@@ -1,0 +1,62 @@
+
+<article class="progress-knowledge-card">
+
+  <!-- ==================================================
+       CARD TOP
+  ================================================== -->
+
+  <div class="progress-knowledge-card__top">
+
+    <div class="progress-knowledge-card__identity">
+
+      <span class="progress-knowledge-card__icon">
+
+        <iconify-icon
+          [icon]="icon()"
+          aria-hidden="true"
+        ></iconify-icon>
+
+      </span>
+
+      <div class="progress-knowledge-card__info">
+
+        <h3 class="progress-knowledge-card__title">
+          {{ title() }}
+        </h3>
+
+        <span class="progress-knowledge-card__status">
+          {{ status() }}
+        </span>
+
+      </div>
+
+    </div>
+
+    <span class="progress-knowledge-card__score">
+      {{ score() }}
+    </span>
+
+  </div>
+
+
+  <!-- ==================================================
+       PROGRESS
+  ================================================== -->
+
+  <div
+    class="progress-knowledge-card__bar"
+    role="progressbar"
+    [attr.aria-valuenow]="progress()"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [attr.aria-label]="title() + ' mastery'"
+  >
+
+    <span
+      class="progress-knowledge-card__bar-fill"
+      [style.width.%]="progress()"
+    ></span>
+
+  </div>
+
+</article>

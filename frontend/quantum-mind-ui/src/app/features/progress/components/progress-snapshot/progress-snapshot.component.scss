@@ -296,19 +296,6 @@
 
     grid-template-columns:
       minmax(0, 1fr);
-
-    gap:
-      var(--component-gap-md);
-
-    margin-bottom:
-      var(--section-gap-lg);
-  }
-
-
-  .progress-snapshot__metric {
-
-    min-height:
-      11rem;
   }
 
 }

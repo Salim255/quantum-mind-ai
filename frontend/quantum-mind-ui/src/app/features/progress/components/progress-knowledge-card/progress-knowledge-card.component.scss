@@ -1,0 +1,301 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+/* ============================================================
+   PROGRESS KNOWLEDGE CARD
+   ------------------------------------------------------------
+   Individual knowledge area.
+
+   Direction:
+   - soft
+   - premium
+   - restrained
+   - spacious
+   - subtle interaction
+============================================================ */
+
+.progress-knowledge-card {
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--motion-fast),
+    background var(--motion-fast);
+}
+
+
+.progress-knowledge-card:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   TOP
+============================================================ */
+
+.progress-knowledge-card__top {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   IDENTITY
+============================================================ */
+
+.progress-knowledge-card__identity {
+
+  display: flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.progress-knowledge-card__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+
+  transition:
+    border-color var(--motion-fast),
+    background var(--motion-fast),
+    color var(--motion-fast);
+}
+
+
+.progress-knowledge-card:hover
+.progress-knowledge-card__icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  color:
+    var(--color-primary);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+/* ============================================================
+   INFORMATION
+============================================================ */
+
+.progress-knowledge-card__info {
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.progress-knowledge-card__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.progress-knowledge-card__status {
+
+  display: block;
+
+  margin-top:
+    var(--space-1);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+}
+
+
+/* ============================================================
+   SCORE
+============================================================ */
+
+.progress-knowledge-card__score {
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-heading-sm-weight);
+
+  line-height:
+    var(--text-body-md-line);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   PROGRESS BAR
+============================================================ */
+
+.progress-knowledge-card__bar {
+
+  position: relative;
+
+  width: 100%;
+
+  height:
+    var(--space-2);
+
+  margin-top:
+    var(--space-6);
+
+  overflow: hidden;
+
+  border-radius:
+    var(--radius-full);
+
+  background:
+    var(--color-gray-3);
+}
+
+
+/* ============================================================
+   PROGRESS BAR FILL
+============================================================ */
+
+.progress-knowledge-card__bar-fill {
+
+  display: block;
+
+  width: 0;
+
+  height: 100%;
+
+  border-radius:
+    inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  transition:
+    width var(--motion-slow);
+}
+
+
+/* ============================================================
+   PHONE
+   ------------------------------------------------------------
+   Preserve the card structure.
+   Only allow tighter geometry when necessary.
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-knowledge-card {
+
+    padding:
+      var(--space-5);
+  }
+
+}
