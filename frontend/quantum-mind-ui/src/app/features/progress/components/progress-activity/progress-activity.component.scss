@@ -1,0 +1,402 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS ACTIVITY
+   ------------------------------------------------------------
+   Learning rhythm and practice activity.
+
+   Direction:
+   - calm
+   - spacious
+   - editorial
+   - data-oriented
+   - restrained
+   - ready for future chart integration
+============================================================ */
+
+.progress-activity {
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.progress-activity__header {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--section-gap-md);
+
+  margin-bottom:
+    var(--component-gap-lg);
+}
+
+
+.progress-activity__heading {
+
+  min-width: 0;
+}
+
+
+.progress-activity__label {
+
+  display: block;
+
+  margin-bottom:
+    var(--component-gap-xs);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+.progress-activity__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--text-heading-md-weight);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+.progress-activity__description {
+
+  max-width:
+    28rem;
+
+  margin: 0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   ACTIVITY CARD
+============================================================ */
+
+.progress-activity__card {
+
+  min-width: 0;
+
+  padding:
+    var(--space-6);
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--motion-fast),
+    background var(--motion-fast);
+}
+
+
+.progress-activity__card:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+
+.progress-activity__summary {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-6);
+
+  margin-bottom:
+    var(--space-6);
+}
+
+
+.progress-activity__total {
+
+  display: flex;
+
+  align-items: baseline;
+
+  gap:
+    var(--space-2);
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   VALUE
+============================================================ */
+
+.progress-activity__value {
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-display-sm-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    1;
+
+  letter-spacing:
+    var(--text-display-sm-tracking);
+
+  font-variant-numeric:
+    tabular-nums;
+  
+}
+
+
+.progress-activity__value-label {
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  align-self: center;
+}
+
+
+/* ============================================================
+   PERIOD
+============================================================ */
+
+.progress-activity__period {
+
+  flex-shrink: 0;
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-sm-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+}
+
+
+/* ============================================================
+   CHART
+============================================================ */
+
+.progress-activity__chart {
+
+  width: 100%;
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   CHART PLACEHOLDER
+   ------------------------------------------------------------
+   Temporary visual surface until the real activity
+   visualization is introduced.
+============================================================ */
+
+.progress-activity__placeholder {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 100%;
+
+  min-height:
+    13rem;
+
+  box-sizing:
+    border-box;
+
+  border:
+    var(--border-thin)
+    dashed
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+}
+
+
+.progress-activity__placeholder-label {
+
+  user-select: none;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .progress-activity__header {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      var(--component-gap-sm);
+  }
+
+
+  .progress-activity__description {
+
+    max-width:
+      none;
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-activity {
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+
+  .progress-activity__card {
+
+    padding:
+      var(--space-5);
+  }
+
+
+  .progress-activity__summary {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      var(--component-gap-sm);
+  }
+
+
+  .progress-activity__placeholder {
+
+    min-height:
+      11rem;
+  }
+
+}

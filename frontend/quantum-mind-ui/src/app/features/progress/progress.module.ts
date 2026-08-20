@@ -6,10 +6,15 @@ import { ProgressHeaderComponent } from "./components/progress-header/progress-h
 import { ProgressSnapshotComponent } from "./components/progress-snapshot/progress-snapshot.component";
 import { ProgressKnowledgeComponent } from "./components/progress-knowledge/progress-knowledge.component";
 import { ProgressKnowledgeCardComponent } from "./components/progress-knowledge-card/progress-knowledge-card.component";
+import { ProgressActivityComponent } from "./components/progress-activity/progress-activity.component";
 
 @NgModule({
-  imports: [CommonModule, ProgressRoutingModule],
+  imports: [
+    CommonModule,
+    ProgressRoutingModule,
+  ],
   declarations: [
+    ProgressActivityComponent,
     ProgressKnowledgeCardComponent,
     ProgressKnowledgeComponent,
     ProgressSnapshotComponent,
