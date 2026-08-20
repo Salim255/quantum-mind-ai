@@ -1,0 +1,278 @@
+/* ============================================================
+   PROGRESS CARD
+============================================================ */
+
+.practice-overview-progress-card {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-6);
+
+  width: 100%;
+
+  min-width: 0;
+
+  padding:
+    var(--space-5)
+    var(--space-6);
+
+  box-sizing: border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+
+
+  &:hover {
+
+    border-color:
+      var(--color-border);
+
+    background:
+      var(--color-surface-subtle);
+
+    transform:
+      translateY(-1px);
+  }
+}
+
+
+/* ============================================================
+   MAIN
+============================================================ */
+
+.practice-overview-progress-card__main {
+
+  display: flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.practice-overview-progress-card__icon {
+
+  display: grid;
+
+  place-items: center;
+
+  width:
+    var(--space-9);
+
+  height:
+    var(--space-9);
+
+  flex-shrink: 0;
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.practice-overview-progress-card__content {
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.practice-overview-progress-card__title {
+
+  overflow: hidden;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-body-md-line);
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+/* ============================================================
+   META
+============================================================ */
+
+.practice-overview-progress-card__meta {
+
+  margin-top:
+    var(--space-1);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+}
+
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+
+.practice-overview-progress-card__progress {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-3);
+
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   PROGRESS VALUE
+============================================================ */
+
+.practice-overview-progress-card__progress-value {
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   ARROW
+============================================================ */
+
+.practice-overview-progress-card__arrow {
+
+  display: grid;
+
+  place-items: center;
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-body-md-size);
+
+  transition:
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+
+.practice-overview-progress-card:hover
+.practice-overview-progress-card__arrow {
+
+  color:
+    var(--color-primary);
+
+  transform:
+    translateX(2px);
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@media (max-width: 40rem) {
+
+  .practice-overview-progress-card {
+
+    padding:
+      var(--space-4)
+      var(--space-5);
+  }
+
+
+  .practice-overview-progress-card__meta {
+
+    font-size:
+      var(--text-body-xs-size);
+
+  }
+
+
+  .practice-overview-progress-card__arrow {
+
+    display: none;
+  }
+}

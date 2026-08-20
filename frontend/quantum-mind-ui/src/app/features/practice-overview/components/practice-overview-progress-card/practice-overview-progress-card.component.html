@@ -1,0 +1,58 @@
+<a
+  class="practice-overview-progress-card"
+  [routerLink]="link()"
+>
+
+  <!-- ==================================================
+       MAIN
+  ================================================== -->
+
+  <div class="practice-overview-progress-card__main">
+
+    <span
+      class="practice-overview-progress-card__icon"
+      aria-hidden="true"
+    >
+      <iconify-icon
+        [icon]="icon()"
+      ></iconify-icon>
+    </span>
+
+
+    <span class="practice-overview-progress-card__content">
+
+      <span class="practice-overview-progress-card__title">
+        {{ title() }}
+      </span>
+
+      <span class="practice-overview-progress-card__meta">
+        {{ meta() }}
+      </span>
+
+    </span>
+
+  </div>
+
+
+  <!-- ==================================================
+       PROGRESS
+  ================================================== -->
+
+  <span class="practice-overview-progress-card__progress">
+
+    <span class="practice-overview-progress-card__progress-value">
+      {{ progress() }}
+    </span>
+
+    <span
+      class="practice-overview-progress-card__arrow"
+      aria-hidden="true"
+    >
+      <iconify-icon
+        icon="lucide:arrow-right"
+      ></iconify-icon>
+    </span>
+
+  </span>
+
+</a>
