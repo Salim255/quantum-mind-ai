@@ -14,8 +14,12 @@ const routes:Routes = [
         component: PracticeHomeComponent
       },
       {
-        path: "quizze",
-        loadChildren: () => import("./pages/quiz-page/quiz.module").then((m) => m.QuizModule)
+        path: "overview",
+        loadChildren: () => import("../overview/overview.module").then((m) => m.OverviewModule)
+      },
+      {
+        path: "explore",
+        loadChildren: () => import("../explore/explore.module").then((m) => m.ExploreModule)
       }
     ]
   }

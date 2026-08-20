@@ -1,74 +1,342 @@
 <div class="practice-home">
 
+  <!-- ==================================================
+       INTRO
+  ================================================== -->
+
   <header class="practice-home__header">
 
+    <span class="practice-home__eyebrow">
+      PRACTICE
+    </span>
+
     <h1 class="practice-home__title">
-      Practice
+      Test what you understand.
     </h1>
 
     <p class="practice-home__description">
-      Reinforce your understanding of quantum computing through interactive quizzes.
-      Choose to review every topic or focus on a specific concept.
+      Use quizzes to turn what you have learned into active
+      understanding. Practice concepts, test your reasoning,
+      and discover where you can go deeper.
     </p>
 
   </header>
 
-  <section class="practice-home__options">
 
-    <button
-      (click)="onNavigate('general')"
-      class="practice-option"
-      type="button">
+  <!-- ==================================================
+       PURPOSE
+  ================================================== -->
 
-      <div class="practice-option__icon">
-        <iconify-icon icon="lucide:brain-circuit"></iconify-icon>
-      </div>
+  <section
+    class="practice-home__purpose"
+    aria-labelledby="practice-purpose-title"
+  >
 
-      <div class="practice-option__content">
+    <div class="practice-home__section-heading">
 
-        <h2 class="practice-option__title">
-          General Quiz
-        </h2>
+      <span class="practice-home__section-label">
+        WHY PRACTICE
+      </span>
 
-        <p class="practice-option__description">
-          Practice with a balanced mix of questions covering every quantum topic.
-        </p>
+      <h2
+        id="practice-purpose-title"
+        class="practice-home__section-title"
+      >
+        Learning becomes stronger when you use it.
+      </h2>
 
-      </div>
+      <p class="practice-home__section-description">
+        Quizzes give you a chance to retrieve ideas, reason through
+        problems, and check whether a concept is truly clear.
+        They are designed to complement the lessons, not replace them.
+      </p>
 
-      <div class="practice-option__arrow">
-        <iconify-icon icon="lucide:arrow-right"></iconify-icon>
-      </div>
+    </div>
 
-    </button>
 
-    <button
-      (click)="onNavigate('topic')"
-      class="practice-option"
-      type="button">
+    <div class="practice-home__principles">
 
-      <div class="practice-option__icon">
-        <iconify-icon icon="lucide:book-open"></iconify-icon>
-      </div>
+      <!-- ==================================================
+           RETRIEVE
+      ================================================== -->
 
-      <div class="practice-option__content">
+      <article class="practice-home__principle">
 
-        <h2 class="practice-option__title">
-          Practice by Topic
-        </h2>
+        <span
+          class="practice-home__principle-icon"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:brain"
+          ></iconify-icon>
+        </span>
 
-        <p class="practice-option__description">
-          Choose a lesson and strengthen your understanding one concept at a time.
-        </p>
+        <div class="practice-home__principle-content">
 
-      </div>
+          <h3 class="practice-home__principle-title">
+            Recall what you learned
+          </h3>
 
-      <div class="practice-option__arrow">
-        <iconify-icon icon="lucide:arrow-right"></iconify-icon>
-      </div>
+          <p class="practice-home__principle-description">
+            Bring concepts back from memory and strengthen
+            your ability to recognize and use them.
+          </p>
 
-    </button>
+        </div>
+
+      </article>
+
+
+      <!-- ==================================================
+           REASON
+      ================================================== -->
+
+      <article class="practice-home__principle">
+
+        <span
+          class="practice-home__principle-icon"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:lightbulb"
+          ></iconify-icon>
+        </span>
+
+        <div class="practice-home__principle-content">
+
+          <h3 class="practice-home__principle-title">
+            Reason through problems
+          </h3>
+
+          <p class="practice-home__principle-description">
+            Go beyond remembering definitions by applying
+            ideas and working through different situations.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <!-- ==================================================
+           IDENTIFY
+      ================================================== -->
+
+      <article class="practice-home__principle">
+
+        <span
+          class="practice-home__principle-icon"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:scan-search"
+          ></iconify-icon>
+        </span>
+
+        <div class="practice-home__principle-content">
+
+          <h3 class="practice-home__principle-title">
+            Find what needs attention
+          </h3>
+
+          <p class="practice-home__principle-description">
+            Use your results to recognize gaps in understanding
+            and return to the lessons when something needs more work.
+          </p>
+
+        </div>
+
+      </article>
+
+    </div>
 
   </section>
+
+
+  <!-- ==================================================
+       WAYS TO PRACTICE
+  ================================================== -->
+
+  <section
+    class="practice-home__paths"
+    aria-labelledby="practice-paths-title"
+  >
+
+    <div class="practice-home__section-heading">
+
+      <span class="practice-home__section-label">
+        WAYS TO PRACTICE
+      </span>
+
+      <h2
+        id="practice-paths-title"
+        class="practice-home__section-title"
+      >
+        Choose the kind of practice you need.
+      </h2>
+
+      <p class="practice-home__section-description">
+        Start with a broad review or focus your attention on
+        a specific topic. Both paths are designed to reinforce
+        what you have learned.
+      </p>
+
+    </div>
+
+
+    <div class="practice-home__paths-list">
+
+      <!-- ==================================================
+           GENERAL
+      ================================================== -->
+
+      <a
+        class="practice-home__path"
+        routerLink="/practice/general"
+      >
+
+        <span
+          class="practice-home__path-icon"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:brain-circuit"
+          ></iconify-icon>
+        </span>
+
+        <span class="practice-home__path-content">
+
+          <span class="practice-home__path-title">
+            General quiz
+          </span>
+
+          <span class="practice-home__path-description">
+            Test your understanding across multiple topics
+            with a balanced mix of questions.
+          </span>
+
+        </span>
+
+        <span
+          class="practice-home__path-arrow"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:arrow-right"
+          ></iconify-icon>
+        </span>
+
+      </a>
+
+
+      <!-- ==================================================
+           TOPIC
+      ================================================== -->
+
+      <a
+        class="practice-home__path"
+        routerLink="/practice/topics"
+      >
+
+        <span
+          class="practice-home__path-icon"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:layers-3"
+          ></iconify-icon>
+        </span>
+
+        <span class="practice-home__path-content">
+
+          <span class="practice-home__path-title">
+            Explore by topic
+          </span>
+
+          <span class="practice-home__path-description">
+            Choose a specific topic and practice the concepts
+            you want to understand more deeply.
+          </span>
+
+        </span>
+
+        <span
+          class="practice-home__path-arrow"
+          aria-hidden="true"
+        >
+          <iconify-icon
+            icon="lucide:arrow-right"
+          ></iconify-icon>
+
+        </span>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       LEARNING LOOP
+  ================================================== -->
+
+  <section
+    class="practice-home__guidance"
+    aria-labelledby="practice-guidance-title"
+  >
+
+    <div class="practice-home__guidance-icon" aria-hidden="true">
+
+      <iconify-icon
+        icon="lucide:refresh-cw"
+      ></iconify-icon>
+
+    </div>
+
+    <div class="practice-home__guidance-content">
+
+      <h2
+        id="practice-guidance-title"
+        class="practice-home__guidance-title"
+      >
+        Practice, review, understand, repeat.
+      </h2>
+
+      <p class="practice-home__guidance-description">
+        A quiz can show you what is clear and what is not.
+        When a question exposes a gap, return to the relevant
+        lesson, strengthen the idea, and try again.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       OVERVIEW LINK
+  ================================================== -->
+
+  <footer class="practice-home__footer">
+
+    <p class="practice-home__footer-text">
+      Looking for your previous attempts or overall progress?
+    </p>
+
+    <a
+      class="practice-home__footer-link"
+      routerLink="/practice/overview"
+    >
+      View your practice overview
+
+      <iconify-icon
+        icon="lucide:arrow-up-right"
+        aria-hidden="true"
+      ></iconify-icon>
+
+    </a>
+
+  </footer>
 
 </div>

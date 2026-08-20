@@ -9,7 +9,7 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        loadChildren: () => import("../features/overview/overview.module").then((m) => m.OverviewModule)
+        loadChildren: () => import("../features/home/home.module").then((m) => m.HomeModule)
       },
       {
         path: "learn",
