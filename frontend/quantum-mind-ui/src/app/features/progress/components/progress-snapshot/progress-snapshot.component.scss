@@ -1,0 +1,314 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   PROGRESS SNAPSHOT
+   ------------------------------------------------------------
+   Primary learning metrics.
+
+   Direction:
+   - clean
+   - premium
+   - calm
+   - spacious
+   - consistent with the Progress design language
+============================================================ */
+
+.progress-snapshot {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap:
+    var(--component-gap-md);
+
+  width: 100%;
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
+
+
+/* ============================================================
+   METRIC
+============================================================ */
+
+.progress-snapshot__metric {
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  min-height:
+    12rem;
+
+  padding: var(--space-4);
+
+  gap: var(--space-4);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-panel);
+
+  background:
+    var(--color-surface);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+
+}
+
+
+.progress-snapshot__metric:hover {
+
+  border-color:
+    var(--color-border);
+
+  background:
+    var(--color-surface-subtle);
+}
+
+
+/* ============================================================
+   PRIMARY METRIC
+============================================================ */
+
+.progress-snapshot__metric--primary {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+.progress-snapshot__metric--primary:hover {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-primary-soft);
+}
+
+
+/* ============================================================
+   METRIC TOP
+============================================================ */
+
+.progress-snapshot__metric-top {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-4);
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   METRIC LABEL
+============================================================ */
+
+.progress-snapshot__metric-label {
+
+  min-width: 0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   METRIC ICON
+============================================================ */
+
+.progress-snapshot__metric-icon {
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width:
+    var(--space-8);
+
+  height:
+    var(--space-8);
+
+  border:
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-surface-subtle);
+
+  color:
+    var(--color-gray-7);
+
+  font-size:
+    var(--text-body-md-size);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+.progress-snapshot__metric--primary
+.progress-snapshot__metric-icon {
+
+  border-color:
+    var(--color-primary-border);
+
+  background:
+    var(--color-surface);
+
+  color:
+    var(--color-primary);
+}
+
+
+/* ============================================================
+   METRIC VALUE
+============================================================ */
+
+.progress-snapshot__metric-value {
+
+  margin: auto;
+
+  color:
+    var(--color-gray-9);
+
+  font-size: var(--text-heading-sm-size);
+
+  font-weight: var(--text-display-sm-weight);
+
+  line-height: 1;
+
+  letter-spacing:
+    var(--text-display-sm-tracking);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+.progress-snapshot__metric--primary
+.progress-snapshot__metric-value {
+
+  color:
+    var(--color-gray-9);
+}
+
+
+/* ============================================================
+   METRIC DESCRIPTION
+============================================================ */
+
+.progress-snapshot__metric-description {
+
+  max-width:
+    24rem;
+
+  margin:
+    var(--component-gap-sm)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--text-body-sm-weight);
+
+  line-height:
+    var(--text-body-sm-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   TABLET
+   ------------------------------------------------------------
+   Four metrics → two-column composition.
+============================================================ */
+
+@include respond(tab-land) {
+
+  .progress-snapshot {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+   ------------------------------------------------------------
+   Metrics become a single vertical rhythm.
+============================================================ */
+
+@include respond(phone) {
+
+  .progress-snapshot {
+
+    grid-template-columns:
+      minmax(0, 1fr);
+
+    gap:
+      var(--component-gap-md);
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+
+  .progress-snapshot__metric {
+
+    min-height:
+      11rem;
+  }
+
+}
