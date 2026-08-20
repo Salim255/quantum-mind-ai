@@ -1,85 +1,81 @@
-@use "../../../../../styles/mixins/queries" as *;
-
 /* ============================================================
-   PRACTICE OVERVIEW TOPIC CARD
-   ------------------------------------------------------------
-   Direction:
-   - Linear-inspired
-   - soft
-   - premium
-   - restrained
-   - spacious
-   - subtle interaction
+   TOPIC CARD
 ============================================================ */
 
 .practice-overview-topic-card {
 
-  position: relative;
-
   display: flex;
-
   flex-direction: column;
 
+  min-width: 0;
+
   min-height:
-    12.5rem;
+    15rem;
 
   padding:
     var(--space-6);
 
-  overflow: hidden;
+  box-sizing:
+    border-box;
 
   border:
-    1px solid var(--color-gray-2);
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
 
   border-radius:
-    var(--radius-lg);
+    var(--radius-panel);
 
   background:
-    var(--color-white);
+    var(--color-surface);
 
   color:
     inherit;
 
-  text-decoration: none;
+  text-decoration:
+    none;
 
   transition:
-    border-color var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard),
-    transform var(--duration-fast) var(--ease-standard);
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+
+
+  &:hover {
+
+    border-color:
+      var(--color-border);
+
+    background:
+      var(--color-surface-subtle);
+
+    transform:
+      translateY(-1px);
+  }
 }
 
 
 /* ============================================================
-   SOFT BACKGROUND GLOW
+   TOPIC CARD — ATTENTION
 ============================================================ */
 
-.practice-overview-topic-card::before {
+.practice-overview-topic-card--attention {
 
-  content: "";
-
-  position: absolute;
-
-  top: -4rem;
-
-  right: -4rem;
-
-  width: 9rem;
-
-  height: 9rem;
-
-  border-radius:
-    var(--radius-circle);
+  border-color:
+    var(--color-warning-border);
 
   background:
-    linear-gradient(
-      135deg,
-      rgb(75 92 255 / 8%),
-      rgb(37 99 235 / 3%)
-    );
+    var(--color-warning-soft);
 
-  pointer-events: none;
 
-  opacity: .8;
+  &:hover {
+
+    border-color:
+      var(--color-warning);
+
+    background:
+      var(--color-warning-soft);
+  }
 }
 
 
@@ -89,10 +85,6 @@
 
 .practice-overview-topic-card__top {
 
-  position: relative;
-
-  z-index: 1;
-
   display: flex;
 
   align-items: center;
@@ -101,9 +93,6 @@
 
   gap:
     var(--space-4);
-
-  margin-bottom:
-    var(--space-6);
 }
 
 
@@ -113,34 +102,34 @@
 
 .practice-overview-topic-card__icon {
 
-  display: inline-flex;
+  display: grid;
 
-  align-items: center;
-
-  justify-content: center;
+  place-items: center;
 
   width:
-    var(--space-10);
+    var(--space-8);
 
   height:
-    var(--space-10);
+    var(--space-8);
 
   flex-shrink: 0;
 
   border:
-    1px solid var(--color-gray-2);
+    var(--border-thin)
+    solid
+    var(--color-border-subtle);
 
   border-radius:
     var(--radius-md);
 
   background:
-    var(--color-gray-1);
+    var(--color-surface-subtle);
 
   color:
-    var(--color-primary);
+    var(--color-gray-7);
 
   font-size:
-    1.125rem;
+    var(--text-body-md-size);
 }
 
 
@@ -154,16 +143,13 @@
     var(--color-gray-8);
 
   font-size:
-    var(--text-heading-md-size);
+    var(--text-label-md-size);
 
   font-weight:
-    var(--font-semibold);
+    var(--text-label-md-weight);
 
-  line-height:
-    var(--text-heading-md-line);
-
-  letter-spacing:
-    var(--text-heading-md-tracking);
+  font-variant-numeric:
+    tabular-nums;
 }
 
 
@@ -173,11 +159,18 @@
 
 .practice-overview-topic-card__content {
 
-  position: relative;
+  display: flex;
 
-  z-index: 1;
+  flex-direction: column;
+
+  justify-content: flex-end;
 
   flex: 1;
+
+  min-width: 0;
+
+  padding-top:
+    var(--space-8);
 }
 
 
@@ -196,7 +189,7 @@
     var(--text-heading-sm-size);
 
   font-weight:
-    var(--font-semibold);
+    var(--text-heading-sm-weight);
 
   line-height:
     var(--text-heading-sm-line);
@@ -215,16 +208,13 @@
 
 .practice-overview-topic-card__description {
 
-  max-width:
-    32rem;
-
   margin:
-    var(--space-2)
+    var(--component-gap-xs)
     0
     0;
 
   color:
-    var(--color-gray-6);
+    var(--color-gray-7);
 
   font-size:
     var(--text-body-sm-size);
@@ -242,23 +232,22 @@
 
 /* ============================================================
    INDICATOR
+   ------------------------------------------------------------
+   Small visual signal at the bottom of the card.
 ============================================================ */
 
 .practice-overview-topic-card__indicator {
 
-  position: absolute;
-
-  right:
-    var(--space-6);
-
-  bottom:
-    var(--space-5);
+  display: block;
 
   width:
     var(--space-8);
 
   height:
     .2rem;
+
+  margin-top:
+    var(--space-5);
 
   border-radius:
     var(--radius-pill);
@@ -271,141 +260,20 @@
     );
 
   opacity:
-    .55;
-
-  transition:
-    width var(--duration-fast) var(--ease-standard),
-    opacity var(--duration-fast) var(--ease-standard);
+    .7;
 }
 
 
 /* ============================================================
-   HOVER
+   ATTENTION — INDICATOR
 ============================================================ */
-
-.practice-overview-topic-card:hover {
-
-  border-color:
-    rgb(75 92 255 / 24%);
-
-  box-shadow:
-    0
-    var(--space-4)
-    var(--space-8)
-    rgb(15 23 42 / 7%);
-
-  transform:
-    translateY(-2px);
-}
-
-
-.practice-overview-topic-card:hover
-.practice-overview-topic-card__indicator {
-
-  width:
-    var(--space-10);
-
-  opacity:
-    .85;
-}
-
-
-/* ============================================================
-   ATTENTION VARIANT
-============================================================ */
-
-.practice-overview-topic-card--attention {
-
-  border-color:
-    var(--color-gray-2);
-}
-
-
-.practice-overview-topic-card--attention
-.practice-overview-topic-card__icon {
-
-  color:
-    var(--color-warning);
-}
-
 
 .practice-overview-topic-card--attention
 .practice-overview-topic-card__indicator {
 
   background:
-    linear-gradient(
-      90deg,
-      var(--color-warning),
-      var(--color-primary)
-    );
+    var(--color-warning);
 
   opacity:
-    .6;
-}
-
-
-.practice-overview-topic-card--attention:hover {
-
-  border-color:
-    rgb(245 158 11 / 24%);
-}
-
-
-/* ============================================================
-   TABLET
-============================================================ */
-
-@include respond(tab-port) {
-
-  .practice-overview-topic-card {
-
-    min-height:
-      11.5rem;
-
-    padding:
-      var(--space-5);
-  }
-
-
-  .practice-overview-topic-card__top {
-
-    margin-bottom:
-      var(--space-5);
-  }
-
-}
-
-
-/* ============================================================
-   PHONE
-============================================================ */
-
-@include respond(phone) {
-
-  .practice-overview-topic-card {
-
-    min-height:
-      auto;
-
-    padding:
-      var(--space-5);
-  }
-
-
-  .practice-overview-topic-card__top {
-
-    margin-bottom:
-      var(--space-4);
-  }
-
-
-  .practice-overview-topic-card__indicator {
-
-    right:
-      var(--space-5);
-
-    bottom:
-      var(--space-4);
-  }
-
+    .75;
 }

@@ -52,338 +52,89 @@
 
 </app-practice-overview-section>
 
-  <section
-    class="practice-overview__section"
-    aria-labelledby="practice-strengths-title"
-  >
-
-    <header class="practice-overview__section-header">
-
-      <div>
-
-        <span class="practice-overview__section-eyebrow">
-          STRENGTHS
-        </span>
-
-        <h2
-          id="practice-strengths-title"
-          class="practice-overview__section-title"
-        >
-          Concepts you understand well.
-        </h2>
-
-        <p class="practice-overview__section-description">
-          Topics where your recent quiz results show consistent
-          understanding.
-        </p>
-
-      </div>
-
-      <a
-        class="practice-overview__section-action"
-        routerLink="/practice/completed"
-      >
-        View completed
-
-        <iconify-icon
-          icon="lucide:arrow-up-right"
-          aria-hidden="true"
-        ></iconify-icon>
-      </a>
-
-    </header>
 
 
-    <div class="practice-overview__topic-grid">
+<!-- ==================================================
+     WEAKNESSES
+================================================== -->
 
-      <!-- ==================================================
-           STRENGTH
-      ================================================== -->
+<app-practice-overview-section
+  eyebrow="NEEDS ATTENTION"
+  title="Concepts worth revisiting."
+  description="Topics where your results suggest that another pass through the lessons could strengthen your understanding."
+  actionLabel="Explore topics"
+  actionLink="/practice/topics"
+  labelledBy="practice-weaknesses-title"
+>
 
-      <a
-        class="practice-overview__topic-card"
-        routerLink="/practice/topics/superposition"
-      >
+  <div class="practice-overview__topic-grid">
 
-        <div class="practice-overview__topic-top">
+    <app-practice-overview-topic-card
+      title="Entanglement"
+      description="Review the fundamentals and try another quiz."
+      score="61%"
+      icon="lucide:network"
+      link="/practice/topics/entanglement"
+      variant="attention"
+    />
 
-          <span class="practice-overview__topic-icon">
-            <iconify-icon
-              icon="lucide:layers-3"
-            ></iconify-icon>
-          </span>
+    <app-practice-overview-topic-card
+      title="Quantum probability"
+      description="Some ideas may benefit from another explanation."
+      score="58%"
+      icon="lucide:chart-no-axes-combined"
+      link="/practice/topics/probability"
+      variant="attention"
+    />
 
-          <span class="practice-overview__topic-score">
-            92%
-          </span>
+    <app-practice-overview-topic-card
+      title="Bloch sphere"
+      description="Revisit the visual model before practicing again."
+      score="64%"
+      icon="lucide:orbit"
+      link="/practice/topics/bloch-sphere"
+      variant="attention"
+    />
 
-        </div>
+  </div>
 
-        <div class="practice-overview__topic-body">
-
-          <h3 class="practice-overview__topic-title">
-            Superposition
-          </h3>
-
-          <p class="practice-overview__topic-description">
-            Strong understanding across recent attempts.
-          </p>
-
-        </div>
-
-      </a>
-
-
-      <!-- ==================================================
-           STRENGTH
-      ================================================== -->
-
-      <a
-        class="practice-overview__topic-card"
-        routerLink="/practice/topics/measurement"
-      >
-
-        <div class="practice-overview__topic-top">
-
-          <span class="practice-overview__topic-icon">
-            <iconify-icon
-              icon="lucide:scan-eye"
-            ></iconify-icon>
-          </span>
-
-          <span class="practice-overview__topic-score">
-            88%
-          </span>
-
-        </div>
-
-        <div class="practice-overview__topic-body">
-
-          <h3 class="practice-overview__topic-title">
-            Measurement
-          </h3>
-
-          <p class="practice-overview__topic-description">
-            Reliable performance across recent quizzes.
-          </p>
-
-        </div>
-
-      </a>
+</app-practice-overview-section>
 
 
-      <!-- ==================================================
-           STRENGTH
-      ================================================== -->
+<app-practice-overview-section
+  eyebrow="IN PROGRESS"
+  title="Continue where you stopped."
+  description="Your unfinished quizzes are ready whenever you are."
+  actionLabel="View all"
+  actionLink="/practice/in-progress"
+  labelledBy="practice-progress-title"
+>
 
-      <a
-        class="practice-overview__topic-card"
-        routerLink="/practice/topics/quantum-gates"
-      >
+  <div class="practice-overview-in-progress">
 
-        <div class="practice-overview__topic-top">
+    <app-practice-overview-progress-card
+      title="Qubits"
+      meta="6 of 10 questions answered"
+      progress="60%"
+      icon="lucide:atom"
+      link="/practice/topics/qubits"
+    />
 
-          <span class="practice-overview__topic-icon">
-            <iconify-icon
-              icon="lucide:git-branch"
-            ></iconify-icon>
-          </span>
+    <app-practice-overview-progress-card
+      title="Measurement"
+      meta="3 of 8 questions answered"
+      progress="38%"
+      icon="lucide:scan-eye"
+      link="/practice/topics/measurement"
+    />
 
-          <span class="practice-overview__topic-score">
-            84%
-          </span>
+  </div>
 
-        </div>
-
-        <div class="practice-overview__topic-body">
-
-          <h3 class="practice-overview__topic-title">
-            Quantum gates
-          </h3>
-
-          <p class="practice-overview__topic-description">
-            Good command of the core operations and their behavior.
-          </p>
-
-        </div>
-
-      </a>
-
-    </div>
-
-  </section>
-
+</app-practice-overview-section>
 
   <!-- ==================================================
-       WEAKNESSES
+  IN PROGRESS
   ================================================== -->
-
-  <section
-    class="practice-overview__section"
-    aria-labelledby="practice-weaknesses-title"
-  >
-
-    <header class="practice-overview__section-header">
-
-      <div>
-
-        <span class="practice-overview__section-eyebrow">
-          NEEDS ATTENTION
-        </span>
-
-        <h2
-          id="practice-weaknesses-title"
-          class="practice-overview__section-title"
-        >
-          Concepts worth revisiting.
-        </h2>
-
-        <p class="practice-overview__section-description">
-          Topics where your results suggest that another pass
-          through the lessons could strengthen your understanding.
-        </p>
-
-      </div>
-
-      <a
-        class="practice-overview__section-action"
-        routerLink="/practice/topics"
-      >
-        Explore topics
-
-        <iconify-icon
-          icon="lucide:arrow-up-right"
-          aria-hidden="true"
-        ></iconify-icon>
-      </a>
-
-    </header>
-
-
-    <div class="practice-overview__topic-grid">
-
-      <!-- ==================================================
-           WEAKNESS
-      ================================================== -->
-
-      <a
-        class="practice-overview__topic-card practice-overview__topic-card--attention"
-        routerLink="/practice/topics/entanglement"
-      >
-
-        <div class="practice-overview__topic-top">
-
-          <span class="practice-overview__topic-icon">
-            <iconify-icon
-              icon="lucide:network"
-            ></iconify-icon>
-          </span>
-
-          <span class="practice-overview__topic-score">
-            61%
-          </span>
-
-        </div>
-
-        <div class="practice-overview__topic-body">
-
-          <h3 class="practice-overview__topic-title">
-            Entanglement
-          </h3>
-
-          <p class="practice-overview__topic-description">
-            Review the fundamentals and try another quiz.
-          </p>
-
-        </div>
-
-      </a>
-
-
-      <!-- ==================================================
-           WEAKNESS
-      ================================================== -->
-
-      <a
-        class="practice-overview__topic-card practice-overview__topic-card--attention"
-        routerLink="/practice/topics/probability"
-      >
-
-        <div class="practice-overview__topic-top">
-
-          <span class="practice-overview__topic-icon">
-            <iconify-icon
-              icon="lucide:chart-no-axes-combined"
-            ></iconify-icon>
-          </span>
-
-          <span class="practice-overview__topic-score">
-            58%
-          </span>
-
-        </div>
-
-        <div class="practice-overview__topic-body">
-
-          <h3 class="practice-overview__topic-title">
-            Quantum probability
-          </h3>
-
-          <p class="practice-overview__topic-description">
-            Some ideas may benefit from another explanation.
-          </p>
-
-        </div>
-
-      </a>
-
-
-      <!-- ==================================================
-           WEAKNESS
-      ================================================== -->
-
-      <a
-        class="practice-overview__topic-card practice-overview__topic-card--attention"
-        routerLink="/practice/topics/bloch-sphere"
-      >
-
-        <div class="practice-overview__topic-top">
-
-          <span class="practice-overview__topic-icon">
-            <iconify-icon
-              icon="lucide:orbit"
-            ></iconify-icon>
-          </span>
-
-          <span class="practice-overview__topic-score">
-            64%
-          </span>
-
-        </div>
-
-        <div class="practice-overview__topic-body">
-
-          <h3 class="practice-overview__topic-title">
-            Bloch sphere
-          </h3>
-
-          <p class="practice-overview__topic-description">
-            Revisit the visual model before practicing again.
-          </p>
-
-        </div>
-
-      </a>
-
-    </div>
-
-  </section>
-
-
-  <!-- ==================================================
-       IN PROGRESS
-  ================================================== -->
-
   <section
     class="practice-overview__section"
     aria-labelledby="practice-progress-title"

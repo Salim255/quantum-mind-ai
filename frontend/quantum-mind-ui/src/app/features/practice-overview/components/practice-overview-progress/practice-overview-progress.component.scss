@@ -1,0 +1,15 @@
+/* ============================================================
+   PROGRESS
+============================================================ */
+
+.practice-overview-progress {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap:
+    var(--component-gap-sm);
+
+  width: 100%;
+}
