@@ -1,0 +1,34 @@
+<section
+  class="practice-overview-snapshot"
+  aria-label="Practice snapshot"
+>
+
+  <app-practice-overview-metric-card
+    icon="lucide:play-circle"
+    label="IN PROGRESS"
+    value="3"
+    description="Quizzes waiting to be completed."
+    actionLabel="Continue practicing"
+    actionRoute="/practice/in-progress"
+  ></app-practice-overview-metric-card>
+
+
+  <app-practice-overview-metric-card
+    icon="lucide:circle-check"
+    label="COMPLETED"
+    value="12"
+    description="Quizzes completed so far."
+    actionLabel="View completed"
+    actionRoute="/practice/completed"
+  ></app-practice-overview-metric-card>
+
+
+  <app-practice-overview-metric-card
+    icon="lucide:target"
+    label="AVERAGE SCORE"
+    value="78%"
+    description="Across your completed quizzes."
+    context="Based on recent attempts"
+  ></app-practice-overview-metric-card>
+
+</section>
