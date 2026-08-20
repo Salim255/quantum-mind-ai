@@ -57,6 +57,7 @@ export class ConversationService {
       assistantMessage,
     ]);
 
+    
     this.conversationHttpService
     .sendStreamMessage({
       conversation_id: this.getCurrentConversation()?.getConversationId() ?? "",
@@ -64,9 +65,11 @@ export class ConversationService {
     })
     .subscribe({
       next: (chunk: string) => {
+        console.log(chunk, "hello from chunk")
         this.appendMessageContent(assistantMessage.id, chunk);
       },
       error: (err) => {
+   
         this.updateMessageStatus(assistantMessage.id, 'error')
       },
       complete: () => {

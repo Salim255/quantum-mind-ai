@@ -104,8 +104,10 @@ class RAGServiceImpl(RAGService):
 
         except Exception as e:
             logger.exception("Streaming failed")
-            message = "Streaming failed"
-            yield f"data: {json.dumps(message, ensure_ascii=False )}\n\n"
+            error = {"error": "Streaming failed"}
+            yield f"data: {json.dumps(error, ensure_ascii=False )}\n\n"
+
+            return  # stop streaming cleanly
 
         finally:
             if final_answer:

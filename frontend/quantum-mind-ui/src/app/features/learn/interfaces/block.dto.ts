@@ -1,4 +1,5 @@
 export type BlockType =
+  | "list"
   | 'paragraph'
   | 'heading'
   | 'image'

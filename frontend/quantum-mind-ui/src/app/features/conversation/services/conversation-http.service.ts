@@ -62,9 +62,10 @@ export class ConversationHttpService {
         signal: controller.signal
       })
       .then(async response => {
-
+    
+        // If no streaming body → cannot stream
         if (!response.body) {
-          //observer.error(new Error('No response body'));
+          observer.error(new Error('No response body'));
           return;
         }
 
@@ -78,6 +79,7 @@ export class ConversationHttpService {
 
             const { done, value } = await reader.read();
 
+            // Stream ended normally
             if (done) {
               observer.complete();
               break;
@@ -87,15 +89,33 @@ export class ConversationHttpService {
               stream: true
             });
 
+            // SSE events come line-by-line
             for (const line of chunk.split('\n')) {
 
               if (!line.startsWith('data:')) continue;
 
-              const content = line.replace('data:', '').trim();
+              const raw = line.replace('data:', '').trim();
 
-              const cleaned = content
-                .replace(/^"|"$/g, '')
-                .replace(/\\n/g, '\n');
+              // Try to parse JSON SSE events
+              let parsed: any;
+              try {
+                parsed = JSON.parse(raw);
+              } catch {
+                parsed = raw; // fallback for plain text
+              }
+
+              // If backend sent an error event → propagate to Angular error()
+              if (parsed && parsed.error) {
+                observer.error(parsed.error);
+                return; // stop reading further chunks
+              }
+
+              // Normal chunk → accumulate and emit
+              const cleaned =
+                typeof parsed === 'string'
+                ?
+                parsed.replace(/^"|"$/g, '').replace(/\\n/g, '\n')
+                : parsed;
 
               fullText += cleaned;
 
@@ -105,6 +125,7 @@ export class ConversationHttpService {
           }
 
         } catch (err) {
+          console.log("error", err)
           observer.error(err);
         }
 

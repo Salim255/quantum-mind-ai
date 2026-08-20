@@ -25,7 +25,9 @@
         @for(block of section.blocks; track block.id){
           @if(block.type === 'equation') {
             <app-equation [latex]="block.content"></app-equation>
-          } @else {
+          }<!-- @else if(block.type === 'list'){
+            {{ block.content }} its list ✅
+          } -->@else {
             <p [id]="block.id" class="lesson__paragraph">
               {{ block.content }}
             </p>
