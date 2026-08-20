@@ -10,7 +10,6 @@
   ================================================== -->
   <app-progress-snapshot></app-progress-snapshot>
 
-
   <!-- ==================================================
   KNOWLEDGE
   ================================================== -->
@@ -38,107 +37,11 @@
   <!-- ==================================================
   COMMUNITY
   ================================================== -->
-  <section
-    class="progress__ranking"
-    aria-labelledby="progress-ranking-title"
-  >
-
-    <div class="progress__ranking-main">
-
-      <span class="progress__section-label">
-        COMMUNITY
-      </span>
-
-      <h2
-        id="progress-ranking-title"
-        class="progress__section-title"
-      >
-        See how your progress compares.
-      </h2>
-
-      <p class="progress__section-description">
-        Compare your learning activity with other learners
-        and see how consistently you are progressing.
-      </p>
-
-    </div>
-
-
-    <div class="progress__ranking-position">
-
-      <span class="progress__ranking-label">
-        Your position
-      </span>
-
-      <strong class="progress__ranking-value">
-        #128
-      </strong>
-
-      <span class="progress__ranking-context">
-        Top 18% of learners
-      </span>
-
-    </div>
-
-
-    <a
-      class="progress__ranking-action"
-      routerLink="/progress/ranking"
-    >
-      View ranking
-
-      <iconify-icon
-        icon="lucide:arrow-up-right"
-      ></iconify-icon>
-
-    </a>
-
-  </section>
-
+  <app-progress-ranking></app-progress-ranking>
 
   <!-- ==================================================
-       NEXT STEP
+  NEXT STEP
   ================================================== -->
-
-  <section class="progress__next">
-
-    <div class="progress__next-icon">
-
-      <iconify-icon
-        icon="lucide:compass"
-      ></iconify-icon>
-
-    </div>
-
-    <div class="progress__next-content">
-
-      <span class="progress__section-label">
-        NEXT STEP
-      </span>
-
-      <h2 class="progress__next-title">
-        Strengthen quantum algorithms.
-      </h2>
-
-      <p class="progress__next-description">
-        Your current results suggest this is the area where
-        another focused session could make the biggest difference.
-      </p>
-
-    </div>
-
-    <a
-      class="progress__next-action"
-      routerLink="/practice/topics"
-    >
-      Continue learning
-
-      <iconify-icon
-        icon="lucide:arrow-right"
-      ></iconify-icon>
-
-    </a>
-
-  </section>
+  <app-progress-next></app-progress-next>
 
 </div>
