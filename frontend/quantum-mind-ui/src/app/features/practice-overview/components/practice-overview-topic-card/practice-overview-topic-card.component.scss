@@ -8,15 +8,13 @@
   flex-direction: column;
 
   min-width: 0;
-
+  width: 100%;
   min-height:
     15rem;
 
   padding:
     var(--space-6);
 
-  box-sizing:
-    border-box;
 
   border:
     var(--border-thin)

@@ -1,5 +1,6 @@
 @use "../../../../../styles/mixins/queries" as *;
 
+
 /* ============================================================
    PRACTICE OVERVIEW SECTION
    ------------------------------------------------------------
@@ -18,9 +19,8 @@
 .practice-overview-section {
 
   width: 100%;
+  min-width: 0;
 
-  max-width:
-    var(--content-lg);
 
   margin: 0;
 }
@@ -41,8 +41,7 @@
   gap:
     var(--space-8);
 
-  margin-bottom:
-    var(--component-gap-xl);
+  margin-bottom: var(--section-gap-sm);
 }
 
 
@@ -263,7 +262,8 @@
 ============================================================ */
 
 .practice-overview-section__content {
-
+  min-height: 0;
+  height: 100%;
   width: 100%;
 }
 

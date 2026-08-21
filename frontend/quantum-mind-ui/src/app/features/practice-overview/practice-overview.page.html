@@ -1,120 +1,144 @@
 <div class="practice-overview">
 
   <!-- ==================================================
-  HEADER
+       HEADER
   ================================================== -->
-  <app-practice-overview-header></app-practice-overview-header>
+
+  <app-practice-overview-header
+    class="practice-overview__header"
+  ></app-practice-overview-header>
+
 
   <!-- ==================================================
-  PRACTICE SNAPSHOT
+       PRACTICE SNAPSHOT
   ================================================== -->
-  <app-practice-overview-snapshot></app-practice-overview-snapshot>
+
+  <app-practice-overview-snapshot
+    class="practice-overview__snapshot"
+  ></app-practice-overview-snapshot>
+
 
   <!-- ==================================================
-  STRENGTHS
+       STRENGTHS
   ================================================== -->
+
   <app-practice-overview-section
-  eyebrow="STRENGTHS"
-  title="Concepts you understand well."
-  description="Topics where your recent quiz results show consistent understanding."
-  actionLabel="View completed"
-  actionLink="/practice/completed"
-  labelledBy="practice-strengths-title"
->
+    class="practice-overview__strengths"
+    eyebrow="STRENGTHS"
+    title="Concepts you understand well."
+    description="Topics where your recent quiz results show consistent understanding."
+    actionLabel="View completed"
+    actionLink="/practice/completed"
+    labelledBy="practice-strengths-title"
+  >
 
-  <div class="practice-overview__topic-grid">
+    <div class="practice-overview__topic-grid">
 
-    <app-practice-overview-topic-card
-      title="Superposition"
-      description="Strong understanding across recent attempts."
-      score="92%"
-      icon="lucide:layers-3"
-      link="/practice/topics/superposition"
-    />
-
-    <app-practice-overview-topic-card
-      title="Measurement"
-      description="Reliable performance across recent quizzes."
-      score="88%"
-      icon="lucide:scan-eye"
-      link="/practice/topics/measurement"
-    />
-
-    <app-practice-overview-topic-card
-      title="Quantum gates"
-      description="Good command of the core operations and their behavior."
-      score="84%"
-      icon="lucide:git-branch"
-      link="/practice/topics/quantum-gates"
-    />
-
-  </div>
-
-</app-practice-overview-section>
+      <app-practice-overview-topic-card
+        title="Superposition"
+        description="Strong understanding across recent attempts."
+        score="92%"
+        icon="lucide:layers-3"
+        link="/practice/topics/superposition"
+      ></app-practice-overview-topic-card>
 
 
+      <app-practice-overview-topic-card
+        title="Measurement"
+        description="Reliable performance across recent quizzes."
+        score="88%"
+        icon="lucide:scan-eye"
+        link="/practice/topics/measurement"
+      ></app-practice-overview-topic-card>
 
-<!-- ==================================================
-     WEAKNESSES
-================================================== -->
 
-<app-practice-overview-section
-  eyebrow="NEEDS ATTENTION"
-  title="Concepts worth revisiting."
-  description="Topics where your results suggest that another pass through the lessons could strengthen your understanding."
-  actionLabel="Explore topics"
-  actionLink="/practice/topics"
-  labelledBy="practice-weaknesses-title"
->
+      <app-practice-overview-topic-card
+        title="Quantum gates"
+        description="Good command of the core operations and their behavior."
+        score="84%"
+        icon="lucide:git-branch"
+        link="/practice/topics/quantum-gates"
+      ></app-practice-overview-topic-card>
 
-  <div class="practice-overview__topic-grid">
+    </div>
 
-    <app-practice-overview-topic-card
-      title="Entanglement"
-      description="Review the fundamentals and try another quiz."
-      score="61%"
-      icon="lucide:network"
-      link="/practice/topics/entanglement"
-      variant="attention"
-    />
-
-    <app-practice-overview-topic-card
-      title="Quantum probability"
-      description="Some ideas may benefit from another explanation."
-      score="58%"
-      icon="lucide:chart-no-axes-combined"
-      link="/practice/topics/probability"
-      variant="attention"
-    />
-
-    <app-practice-overview-topic-card
-      title="Bloch sphere"
-      description="Revisit the visual model before practicing again."
-      score="64%"
-      icon="lucide:orbit"
-      link="/practice/topics/bloch-sphere"
-      variant="attention"
-    />
-
-  </div>
-
-</app-practice-overview-section>
+  </app-practice-overview-section>
 
 
   <!-- ==================================================
-  IN PROGRESS
+       WEAKNESSES
   ================================================== -->
-  <app-practice-overview-progress></app-practice-overview-progress>
+
+  <app-practice-overview-section
+    class="practice-overview__weaknesses"
+    eyebrow="NEEDS ATTENTION"
+    title="Concepts worth revisiting."
+    description="Topics where your results suggest that another pass through the lessons could strengthen your understanding."
+    actionLabel="Explore topics"
+    actionLink="/practice/topics"
+    labelledBy="practice-weaknesses-title"
+  >
+
+    <div class="practice-overview__topic-grid">
+
+      <app-practice-overview-topic-card
+        title="Entanglement"
+        description="Review the fundamentals and try another quiz."
+        score="61%"
+        icon="lucide:network"
+        link="/practice/topics/entanglement"
+        variant="attention"
+      ></app-practice-overview-topic-card>
+
+
+      <app-practice-overview-topic-card
+        title="Quantum probability"
+        description="Some ideas may benefit from another explanation."
+        score="58%"
+        icon="lucide:chart-no-axes-combined"
+        link="/practice/topics/probability"
+        variant="attention"
+      ></app-practice-overview-topic-card>
+
+
+      <app-practice-overview-topic-card
+        title="Bloch sphere"
+        description="Revisit the visual model before practicing again."
+        score="64%"
+        icon="lucide:orbit"
+        link="/practice/topics/bloch-sphere"
+        variant="attention"
+      ></app-practice-overview-topic-card>
+
+    </div>
+
+  </app-practice-overview-section>
 
 
   <!-- ==================================================
-  RECENT ACTIVITY
+       IN PROGRESS
   ================================================== -->
-  <app-practice-overview-activity></app-practice-overview-activity>
+
+  <app-practice-overview-progress
+    class="practice-overview__progress"
+  ></app-practice-overview-progress>
 
 
   <!-- ==================================================
-  EXPLORE
+       RECENT ACTIVITY
   ================================================== -->
-  <app-practice-overview-footer></app-practice-overview-footer>
+
+  <app-practice-overview-activity
+    class="practice-overview__activity"
+  ></app-practice-overview-activity>
+
+
+  <!-- ==================================================
+       FOOTER
+  ================================================== -->
+
+  <app-practice-overview-footer
+    class="practice-overview__footer"
+  ></app-practice-overview-footer>
+
 </div>
