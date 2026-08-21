@@ -1,8 +1,8 @@
 from app.repositories.base_repository import BaseRepository
-from app.models.quiz_attempt import QuizAttempt
+from app.models.attempt import Attempt
 from sqlmodel import Session
 
-class QuizAttemptRepository(BaseRepository[QuizAttempt]):
+class AttemptRepository(BaseRepository[Attempt]):
     """
     Repository for quiz_attempts database queries.
 
@@ -10,4 +10,4 @@ class QuizAttemptRepository(BaseRepository[QuizAttempt]):
     """
      
     def __init__(self, session: Session):
-        super().__init__(session, QuizAttempt)
+        super().__init__(session, Attempt)
