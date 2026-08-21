@@ -62,6 +62,6 @@ class QuestionImplService(QuestionService):
 
         except Exception:
             logger.exception(
-                "Error creating question"
+                "Error creating question",
             )
             raise

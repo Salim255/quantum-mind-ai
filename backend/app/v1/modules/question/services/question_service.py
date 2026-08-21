@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from app.v1.modules.question.dto.question_create_dto import QuestionCreateDTO
-from app.v1.modules.question.dto.question_dto import QuestionDto
+from app.v1.modules.question.dto.question_dto import QuestionDTO
 
 
 class QuestionService(ABC):
@@ -24,7 +24,7 @@ class QuestionService(ABC):
     async def create_question(
         self,
         question_data: QuestionCreateDTO,
-    ) -> QuestionDto:
+    ) -> QuestionDTO:
         """
         Create a new learning question.
 

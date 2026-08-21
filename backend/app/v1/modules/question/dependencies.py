@@ -16,8 +16,6 @@ from app.v1.modules.question.services.question_service import (
 # ============================================================
 # CONTAINER DEPENDENCY
 # ============================================================
-
-
 def get_container(
     request: Request,
 ) -> Container:
@@ -43,8 +41,6 @@ def get_container(
 # ============================================================
 # DATABASE SESSION DEPENDENCY
 # ============================================================
-
-
 async def get_db_session(
     container: Annotated[
         Container,
@@ -102,8 +98,6 @@ def get_question_repository(
 # ============================================================
 # SERVICE DEPENDENCY
 # ============================================================
-
-
 def get_question_service(
     question_repository: Annotated[
         QuestionRepository,

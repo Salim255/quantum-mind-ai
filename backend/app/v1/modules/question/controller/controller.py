@@ -6,7 +6,7 @@ from app.core.dtos.response_dto import ResponseDTO
 from app.v1.modules.question.dependencies import get_question_service
 from app.v1.modules.question.dto.question_create_dto import QuestionCreateDTO
 from app.v1.modules.question.dto.question_dto import QuestionDTO
-from app.v1.modules.question.service.question_service import QuestionService
+from app.v1.modules.question.services.question_service import QuestionService
 
 from .router import router as question_router
 
