@@ -130,12 +130,7 @@ export const NAVIGATION: NavItem[] = [
     path: '/progress',
     icon: 'lucide:chart-column',
     children: [
-      {
-        id: 'analytics',
-        name: 'Analytics',
-        path: '/progress/analytics',
-        icon: 'lucide:chart-line'
-      }
+ 
     ]
   },
 

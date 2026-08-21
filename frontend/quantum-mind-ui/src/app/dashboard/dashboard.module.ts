@@ -14,6 +14,7 @@ import { AsidePrimaryNavComponent } from "./components/aside-primary-nav/aside-p
 import { AsideSecondaryNavComponent } from "./components/aside-secondary-nav/aside-secondary-nav.component";
 import { PrimaryAsideNavLinkComponent } from "./components/primary-aide-nav-link/primary-aside-nav-link.component";
 import { MobileMenuComponent } from "./components/mobile-menu/mobile-menu.component";
+import { SidebarToggleComponent } from "./components/sidebar-toggle/sidebar-toggle.component";
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { MobileMenuComponent } from "./components/mobile-menu/mobile-menu.compon
     DashboardRoutingModule
   ],
   declarations: [
+    SidebarToggleComponent,
     MobileMenuComponent,
     SecondaryAsideNavLinkComponent,
     PrimaryAsideNavLinkComponent,
