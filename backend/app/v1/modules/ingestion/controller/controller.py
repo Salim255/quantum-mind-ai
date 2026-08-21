@@ -1,6 +1,5 @@
 from fastapi import(APIRouter, Depends, File, UploadFile)
 from typing import Annotated
-from app.v1.modules.ingestion.dto.ingestion_dto import IngestionResponseDto
 from app.v1.modules.ingestion.dependencies import DocIngestionService, get_doc_ingestion_service
 
 router = APIRouter(

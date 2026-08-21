@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from pypdf import PdfReader
-from app.v1.modules.learn.dto.bookmark_dto import BookmarkDTO
-from app.v1.modules.learn.dto.section_dto import SectionDTO
-from app.v1.modules.learn.dto.text_dto import TextDTO
+from app.v1.modules.ingestion.dto.bookmark_dto import BookmarkDTO
+from app.v1.modules.ingestion.dto.section_dto import SectionDTO
+from app.v1.modules.ingestion.dto.text_dto import ContentBlockDTO
 from fastapi import UploadFile
 from app.v1.modules.ingestion.dto.chunker_dto import ChunkDTO
 
@@ -40,7 +40,7 @@ class DocIngestionService(ABC):
         self,
         reader: PdfReader,
         sections: list[SectionDTO],
-    ) -> list[TextDTO]:
+    ) -> list[ContentBlockDTO]:
         """
         Extracts the exact text belonging to each section.
         """

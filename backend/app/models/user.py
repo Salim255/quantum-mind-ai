@@ -75,6 +75,20 @@ class User(SQLModel, table=True):
     during authentication or profile searches.
     """
 
+    avatar_url: str | None = Field(
+        default=None,
+        max_length=1000,
+    )
+    """
+    URL or storage reference of the user's avatar.
+
+    The actual image is stored outside the database, typically in
+    object storage such as S3. This field stores only its reference.
+
+    NULL means that no custom avatar has been configured, allowing
+    the frontend to fall back to initials or a default avatar.
+    """
+    
     email: str = Field(
         nullable=False,
         unique=True,
