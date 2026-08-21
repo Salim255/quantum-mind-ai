@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from app.v1.modules.answer.dto.answer_create_dto import AnswerCreateDTO
-
+from app.v1.modules.answer.dto.answer_dto import AnswerDTO
 
 class AnswerService(ABC):
     """
@@ -15,7 +15,7 @@ class AnswerService(ABC):
     async def create_answer(
         self,
         answer_data: AnswerCreateDTO,
-    ):
+    )-> AnswerDTO:
         """
         Create a new answer option.
 
