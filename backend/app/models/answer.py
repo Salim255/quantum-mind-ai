@@ -7,10 +7,11 @@ from sqlmodel import Field, Relationship, SQLModel
 
 class Answer(SQLModel, table=True):
     """
-    Represents a selectable answer belonging to a question.
+    Represents a possible answer to a learning question.
 
-    An answer defines the text displayed to the user and whether
-    selecting it is considered correct for its question.
+    An answer belongs to a question and its associated learning topic.
+    It contains the information required to present and evaluate
+    the answer during an assessment.
     """
 
     __tablename__ = "answers"
@@ -26,7 +27,21 @@ class Answer(SQLModel, table=True):
     )
 
     # ============================================================
-    # QUESTION RELATIONSHIP
+    # LEARNING CONTEXT
+    # ============================================================
+
+    topic_id: UUID = Field(
+        foreign_key="topics.id",
+        nullable=False,
+        index=True,
+    )
+
+    topic: "Topic" = Relationship(
+        back_populates="answers",
+    )
+
+    # ============================================================
+    # QUESTION
     # ============================================================
 
     question_id: UUID = Field(
@@ -40,16 +55,21 @@ class Answer(SQLModel, table=True):
     )
 
     # ============================================================
-    # OPTION CONTENT
+    # CONTENT
     # ============================================================
 
-    option_text: str = Field(
+    text: str = Field(
         nullable=False,
         max_length=1000,
     )
 
+    explanation: str | None = Field(
+        default=None,
+        max_length=2000,
+    )
+
     # ============================================================
-    # CORRECTNESS
+    # ASSESSMENT
     # ============================================================
 
     is_correct: bool = Field(
@@ -58,11 +78,20 @@ class Answer(SQLModel, table=True):
     )
 
     # ============================================================
-    # DISPLAY
+    # PRESENTATION
     # ============================================================
 
     display_order: int = Field(
         default=0,
+        nullable=False,
+    )
+
+    # ============================================================
+    # STATUS
+    # ============================================================
+
+    is_active: bool = Field(
+        default=True,
         nullable=False,
     )
 
