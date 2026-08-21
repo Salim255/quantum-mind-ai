@@ -51,6 +51,4 @@ async def create_answer(
     """
     answer = await answer_service.create_answer(payload)
 
-    return ResponseDTO.success(
-        AnswerDTO.model_validate(answer)
-    )
+    return ResponseDTO.success(answer)

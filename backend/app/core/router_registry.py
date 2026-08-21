@@ -4,6 +4,8 @@ from app.v1.modules.ingestion.controller.controller import router as ingestion_r
 from app.v1.modules.topic.controller.controller import topic_router
 from app.v1.modules.section.controller.controller import section_router
 from app.v1.modules.question.controller.controller import question_router
+from app.v1.modules.answer.controller.controller import answer_router
+from app.v1.modules.attempt.controller.controller import attempt_router
 
 
 class RouterService:
@@ -12,7 +14,8 @@ class RouterService:
         """
         Register all application routers.
         """
-
+        app.include_router(attempt_router)
+        app.include_router(answer_router)
         app.include_router(question_router)
         app.include_router(ingestion_router)
         app.include_router(rag_router)
