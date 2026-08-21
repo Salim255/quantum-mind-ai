@@ -1,0 +1,122 @@
+/* ============================================================
+   SIDEBAR TOGGLE
+   ------------------------------------------------------------
+   Quiet header control.
+
+   Direction:
+   - minimal
+   - precise
+   - soft
+   - consistent with breadcrumb
+   - no visual weight when idle
+============================================================ */
+
+.sidebar-toggle {
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width:
+    var(--control-height-sm);
+
+  height:
+    var(--control-height-sm);
+
+  flex:
+    0 0 var(--control-height-sm);
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  border:
+    var(--border-thin)
+    solid
+    transparent;
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    transparent;
+
+  color:
+    var(--color-gray-6);
+
+  cursor:
+    pointer;
+
+  appearance:
+    none;
+
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+
+
+  /* ==========================================================
+     HOVER
+  ========================================================== */
+
+  &:hover {
+
+    color:
+      var(--color-gray-8);
+
+    background:
+      var(--color-surface-subtle);
+
+    border-color:
+      var(--color-border-subtle);
+  }
+
+
+  /* ==========================================================
+     ACTIVE PRESS
+  ========================================================== */
+
+  &:active {
+
+    background:
+      var(--color-surface-muted);
+
+    transform:
+      scale(.96);
+  }
+
+
+  /* ==========================================================
+     FOCUS
+  ========================================================== */
+
+  &:focus-visible {
+
+    outline:
+      2px solid
+      var(--color-primary-border);
+
+    outline-offset:
+      2px;
+  }
+
+
+  /* ==========================================================
+     ICON
+  ========================================================== */
+
+  iconify-icon {
+
+    display: block;
+
+    font-size: 2rem;
+
+    transition:
+      color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+}

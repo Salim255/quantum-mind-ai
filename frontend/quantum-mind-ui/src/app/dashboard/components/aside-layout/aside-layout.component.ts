@@ -2,6 +2,7 @@ import { Component, signal } from "@angular/core";
 import { AsideNavService, NavItem } from "../../services/aside-nav.service";
 import { EventType, NavigationEnd, Router } from "@angular/router";
 import { filter, Subscription } from "rxjs";
+import { SidebarToggleService } from "../../services/sidebar-toggle.service";
 
 @Component({
   selector: "app-aside-layout",
@@ -13,18 +14,27 @@ import { filter, Subscription } from "rxjs";
 export class AsideLayoutComponent {
   items = signal<NavItem | null>(null)
 
-  currentPageNavSubscription!: Subscription;
-
-  hideSecondaryNav = signal<boolean>(true);
-
+  private currentPageNavSubscription!: Subscription;
+  private sidebarToggleSubscription!: Subscription;
+  showSecondaryNav = signal<boolean>(false);
+  
   constructor(
+    private sidebarToggleService: SidebarToggleService,
     private router: Router,
     private asideNavService: AsideNavService
   ) {}
 
   ngOnInit(): void {
     this.listenToRouter()
-    this.subscribeToCurrentPageNav()
+    this.subscribeToCurrentPageNav();
+    this.subscribeToSidebarToggle();
+  }
+
+  subscribeToSidebarToggle(){
+    this.sidebarToggleSubscription = this.sidebarToggleService
+    .collapsed$.subscribe(stat => {
+      this.showSecondaryNav.set(stat);
+    })
   }
 
   subscribeToCurrentPageNav(): void{
@@ -43,14 +53,25 @@ export class AsideLayoutComponent {
   }
 
   private setHideSecondaryStatus(url: string): void {
-    this.hideSecondaryNav.set(url === '/home');
+    const hasSecond =  [
+      '/learn',
+      '/quizzes',
+      ,
+    ].some(route =>
+      url === route ||
+      url.startsWith(`${route}/`)
+    );
+
+    this.showSecondaryNav.set(hasSecond);
   }
+
+  
 
   listenToRouter(): void {
      this.router.events.pipe(
         filter(event => event.type === EventType.NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
-          const url = event.url === '/' ? '/home' : this.router.url;
+          const url = event.url == '/' ? '/home' : this.router.url;
 
           this.setHideSecondaryStatus(url);
 
@@ -59,6 +80,7 @@ export class AsideLayoutComponent {
   }
 
   ngOnDestroy() {
+     this.sidebarToggleSubscription?.unsubscribe();
     this.currentPageNavSubscription?.unsubscribe()
   }
 }

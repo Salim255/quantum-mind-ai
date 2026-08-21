@@ -1,12 +1,12 @@
 <aside
   class="aside-layout"
-  [class.aside-layout--primary-only]="hideSecondaryNav()"
+  [class.aside-layout--primary-only]="!showSecondaryNav()"
 >
   <app-aside-primary-nav
     class="aside-layout__primary-nav">
   </app-aside-primary-nav>
 
-  @if (!hideSecondaryNav()) {
+  @if (showSecondaryNav()) {
     <app-aside-secondary-nav
       class="aside-layout__secondary-nav"
       [items]="items()">

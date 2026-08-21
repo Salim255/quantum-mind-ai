@@ -15,10 +15,10 @@
 
   /* ==========================================================
    PRIMARY ONLY
-  ========================================================== */
+  ========================================================= */
   &--primary-only {
-    width: 6rem;
-
+    width: 6.8rem;
+  
     .aside-layout__primary-nav {
       grid-column: 1 / -1;
     }
@@ -40,6 +40,7 @@
   background: var(--color-surface);
   border-right: var(--border-thin) solid var(--color-border-subtle);
   transition: width 220ms cubic-bezier(.22, 1, .36, 1);
+  
 }
 
 

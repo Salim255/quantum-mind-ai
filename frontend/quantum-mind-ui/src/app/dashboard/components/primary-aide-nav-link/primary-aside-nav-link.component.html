@@ -4,11 +4,18 @@
   routerLinkActive="primary-aside-nav-link--active"
   (click)="onNavigate(nav)"
 >
+
   @if (nav.icon) {
-    <iconify-icon
+
+    <span
       class="primary-aside-nav-link__icon"
-      [icon]="nav.icon"
-    />
+      aria-hidden="true"
+    >
+      <iconify-icon
+        [icon]="nav.icon"
+      />
+    </span>
+
   }
 
   <span
@@ -17,4 +24,5 @@
   >
     {{ nav.name }}
   </span>
+
 </a>

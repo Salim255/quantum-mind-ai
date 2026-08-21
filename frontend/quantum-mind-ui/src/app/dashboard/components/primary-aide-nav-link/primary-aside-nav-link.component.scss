@@ -1,7 +1,9 @@
 @use "../../../../styles/mixins/queries" as *;
 
 
-
+/* ==========================================================
+   PRIMARY ASIDE NAV LINK
+========================================================== */
 
 .primary-aside-nav-link {
 
@@ -16,28 +18,39 @@
 
   width: 100%;
   min-width: 0;
-  
-  min-height: var(--space-6);
 
-  padding: var(--space-1);
+  min-height:
+    var(--space-6);
 
-  gap: var(--component-gap-sm);
+  padding:
+    var(--space-1);
 
-  color: var(--color-text-secondary);
+  gap:
+    var(--component-gap-sm);
 
-  background: transparent;
+
+
+  color:
+    var(--color-text-secondary);
+
+  background:
+    transparent;
 
   border:
     var(--border-default)
     transparent;
 
-  border-radius: var(--space-3);
+  border-radius:
+    var(--space-3);
 
-  text-decoration: none;
+  text-decoration:
+    none;
 
-  cursor: pointer;
+  cursor:
+    pointer;
 
-  overflow: hidden;
+  overflow:
+    hidden;
 
   transition:
     color 140ms ease,
@@ -47,29 +60,41 @@
 
   /* ==========================================================
      HOVER
+     ----------------------------------------------------------
+     The row receives the hover surface.
+     The icon loses its individual active surface.
   ========================================================== */
 
   &:hover {
 
-    color: var(--color-text-primary);
+    color:
+      var(--color-text-primary);
 
-    background: var(--color-surface-muted);
+    background:
+      var(--color-surface-muted);
 
-    border-color: var(--color-border-subtle);
+    border-color:
+      var(--color-border-subtle);
   }
 
 
   /* ==========================================================
      ACTIVE
+     ----------------------------------------------------------
+     The row itself stays transparent.
+     Only the icon receives the active surface.
   ========================================================== */
 
   &--active {
 
-    color: var(--color-text-primary);
+    color:
+      var(--color-text-primary);
 
-    background: var(--color-primary-soft);
+    background:
+      transparent;
 
-    border-color: var(--color-primary-border);
+    border-color:
+      transparent;
 
 
     &::before {
@@ -79,12 +104,17 @@
       top: 50%;
       left: 0;
 
-      width: var(--border-medium);
-      height: var(--space-5);
+      width:
+        var(--border-medium);
 
-      content: "";
+      height:
+        var(--space-5);
 
-      background: var(--color-primary);
+      content:
+        "";
+
+      background:
+        var(--color-primary);
 
       border-radius:
         0
@@ -92,13 +122,51 @@
         var(--space-1)
         0;
 
-      transform: translateY(-50%);
+      transform:
+        translateY(-50%);
     }
 
 
     .primary-aside-nav-link__icon {
 
-      color: var(--color-primary);
+      color:
+        var(--color-primary);
+
+      background:
+        var(--color-primary-soft);
+
+      border-color:
+        var(--color-primary-border);
+    }
+  }
+
+
+  /* ==========================================================
+     ACTIVE + HOVER
+     ----------------------------------------------------------
+     Hover takes control of the visual surface.
+     The icon returns to its neutral state.
+  ========================================================== */
+
+  &--active:hover {
+
+    background:
+      var(--color-surface-muted);
+
+    border-color:
+      var(--color-border-subtle);
+
+
+    .primary-aside-nav-link__icon {
+
+      color:
+        var(--color-text-primary);
+
+      background:
+        transparent;
+
+      border-color:
+        transparent;
     }
   }
 
@@ -114,7 +182,8 @@
       solid
       var(--color-primary-border);
 
-    outline-offset: var(--space-1);
+    outline-offset:
+      var(--space-1);
   }
 
 
@@ -124,40 +193,71 @@
 
   &:active {
 
-    background: var(--color-primary-soft);
-
-    border-color: var(--color-primary-border);
-
-    transform: scale(.99);
+    transform:
+      scale(.99);
   }
 
 
   /* ==========================================================
      ICON
+     ----------------------------------------------------------
+     Fixed geometry.
+     Background belongs to the icon only when active.
   ========================================================== */
 
   &__icon {
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display:
+      inline-flex;
 
-    width: var(--space-7);
-    height: var(--space-7);
+    align-items:
+      center;
 
-    flex: 0 0 var(--space-7);
+    justify-content:
+      center;
 
-    color: var(--color-text-muted);
+    width:
+      var(--space-7);
+
+    height:
+      var(--space-7);
+
+    flex:
+      0 0 var(--space-7);
+
+    box-sizing:
+      border-box;
+
+    padding:
+      var(--space-1);
+
+    color:
+      var(--color-text-muted);
+
+    background:
+      transparent;
+
+    border:
+      var(--border-default)
+      transparent;
+
+    border-radius:
+      var(--radius-md);
 
     transition:
       color 140ms ease,
+      background-color 140ms ease,
+      border-color 140ms ease,
       transform 140ms ease;
 
 
     iconify-icon {
 
-      width: var(--text-md);
-      height: var(--text-md);
+      font-size:
+        2rem;
+
+      line-height:
+        1;
     }
   }
 
@@ -168,26 +268,41 @@
 
   &__label {
 
-    min-width: 0;
+    min-width:
+      0;
 
-    overflow: hidden;
+    overflow:
+      hidden;
 
-    color: inherit;
+    color:
+      inherit;
 
-    font-family: var(--font-family-base);
+    font-family:
+      var(--font-family-base);
 
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-    line-height: var(--leading-normal);
+    font-size:
+      var(--text-sm);
 
-    letter-spacing: var(--tracking-tight);
+    font-weight:
+      var(--font-medium);
 
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    line-height:
+      var(--leading-normal);
 
-    opacity: 1;
+    letter-spacing:
+      var(--tracking-tight);
 
-    transform: translateX(0);
+    white-space:
+      nowrap;
+
+    text-overflow:
+      ellipsis;
+
+    opacity:
+      1;
+
+    transform:
+      translateX(0);
 
     transition:
       opacity 140ms ease,
@@ -200,13 +315,17 @@
 
     &--hidden {
 
-      width: 0;
+      width:
+        0;
 
-      opacity: 0;
+      opacity:
+        0;
 
-      transform: translateX(-4px);
+      transform:
+        translateX(-4px);
 
-      pointer-events: none;
+      pointer-events:
+        none;
     }
   }
 
@@ -217,7 +336,14 @@
 
   &:hover &__icon {
 
-    color: var(--color-text-primary);
+    color:
+      var(--color-text-primary);
+
+    background:
+      transparent;
+
+    border-color:
+      transparent;
   }
 
 
@@ -227,7 +353,8 @@
 
   @include respond(tab-port) {
 
-    min-height: var(--space-9);
+    min-height:
+      var(--space-9);
   }
 
 
@@ -237,8 +364,10 @@
 
   @include respond(phone-lg) {
 
-    min-height: var(--space-10);
+    min-height:
+      var(--space-10);
 
-    border-radius: var(--space-3);
+    border-radius:
+      var(--space-3);
   }
 }

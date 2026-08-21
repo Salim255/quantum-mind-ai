@@ -1,18 +1,17 @@
 <button
   type="button"
   class="sidebar-toggle"
-  [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+  [attr.aria-label]="
+    collapsed()
+      ? 'Expand sidebar'
+      : 'Collapse sidebar'
+  "
   [attr.aria-expanded]="!collapsed()"
   (click)="toggle()"
 >
-
-  <iconify-icon
-    [icon]="
-      collapsed()
-        ? 'lucide:panel-left-open'
-        : 'lucide:panel-left-close'
-    "
-    aria-hidden="true"
-  ></iconify-icon>
-
+<iconify-icon
+  icon="lucide:sidebar"
+  aria-hidden="true"
+></iconify-icon>
 </button>
+
