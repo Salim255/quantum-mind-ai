@@ -18,8 +18,13 @@ class AttemptCreateDTO(BaseModel):
     # OWNERSHIP
     # ============================================================
 
-    user_id: UUID = Field(
-        description="Identifier of the user starting the attempt.",
+    user_id: UUID | None = Field(
+        default=None,
+        description=(
+            "Optional identifier of the authenticated user starting "
+            "the attempt. Guest attempts do not have a user account "
+            "and their progress is not persisted."
+        ),
     )
 
     # ============================================================

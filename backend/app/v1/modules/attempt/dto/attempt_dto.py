@@ -32,7 +32,7 @@ class AttemptDTO(BaseModel):
     # OWNERSHIP
     # ============================================================
 
-    user_id: UUID
+    user_id: UUID | None = None
 
     # ============================================================
     # TOPIC

@@ -30,9 +30,9 @@ class Attempt(SQLModel, table=True):
     # ============================================================
     # OWNERSHIP
     # ============================================================
-
-    user_id: UUID = Field(
-        nullable=False,
+    user_id: UUID | None = Field(
+        default=None,
+        nullable=True,
         index=True,
     )
 
