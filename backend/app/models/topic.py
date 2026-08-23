@@ -1,3 +1,4 @@
+
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
 from sqlalchemy import Column, DateTime
@@ -164,6 +165,19 @@ class Topic(SQLModel, table=True):
     its parent topic.
     """
 
+    questions: list["Question"] = Relationship(
+        back_populates="topic",
+        sa_relationship_kwargs={
+            "cascade": "all, delete-orphan",
+        },
+    ) 
+
+    attempts: list["Attempt"] = Relationship(
+            back_populates="topic",
+            sa_relationship_kwargs={
+                "cascade": "all, delete-orphan",
+            },
+    ) 
     # ==========================================================
     # AUDIT
     # ==========================================================

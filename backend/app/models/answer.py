@@ -27,20 +27,6 @@ class Answer(SQLModel, table=True):
     )
 
     # ============================================================
-    # LEARNING CONTEXT
-    # ============================================================
-
-    topic_id: UUID = Field(
-        foreign_key="topics.id",
-        nullable=False,
-        index=True,
-    )
-
-    topic: "Topic" = Relationship(
-        back_populates="answers",
-    )
-
-    # ============================================================
     # QUESTION
     # ============================================================
 

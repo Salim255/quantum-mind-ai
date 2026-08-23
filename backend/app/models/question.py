@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import Enum
@@ -121,7 +120,11 @@ class Question(SQLModel, table=True):
 
     answers: list["Answer"] = Relationship(
         back_populates="question",
+        sa_relationship_kwargs={
+           "cascade": "all, delete-orphan",
+        },
     )
+
 
     # ============================================================
     # AUDIT

@@ -18,9 +18,6 @@ class AnswerCreateDTO(BaseModel):
     # LEARNING CONTEXT
     # ============================================================
 
-    topic_id: UUID = Field(
-        description="Identifier of the Topic this answer belongs to."
-    )
 
     question_id: UUID = Field(
         description="Identifier of the Question this answer belongs to."

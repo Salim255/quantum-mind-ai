@@ -1,8 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from uuid import UUID
-
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.v1.modules.answer.dto.answer_dto import AnswerDTO
 
@@ -101,7 +100,7 @@ class QuestionDTO(BaseModel):
     # ANSWERS
     # ============================================================
 
-    answers: list[AnswerDTO] | None = None
+    # answers: list[AnswerDTO] = Field(default_factory=list)
 
     # ============================================================
     # AUDIT
