@@ -40,12 +40,11 @@ class QuestionDTO(BaseModel):
     """
     Represents a learning question.
 
-    A question belongs to exactly one Topic and may optionally
-    include its answer options.
+    A question belongs to exactly one Topic.
 
-    Answers are included when the question is loaded together
-    with its relationships, for example when building a quiz
-    or practice session.
+    Answer options are optional and are included when the
+    question is loaded together with its answers, such as
+    when building a quiz or practice session.
     """
 
     model_config = ConfigDict(
@@ -100,7 +99,13 @@ class QuestionDTO(BaseModel):
     # ANSWERS
     # ============================================================
 
-    # answers: list[AnswerDTO] = Field(default_factory=list)
+    answers: list[AnswerDTO] | None = Field(
+        default=None,
+        description=(
+            "Answer options belonging to the question. "
+            "Included only when answers are explicitly loaded."
+        ),
+    )
 
     # ============================================================
     # AUDIT

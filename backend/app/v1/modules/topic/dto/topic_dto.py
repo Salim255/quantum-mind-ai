@@ -3,26 +3,30 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
+from app.v1.modules.question.dto.question_dto import QuestionDTO
+
 
 class TopicDTO(BaseModel):
     """
     DTO returned when reading a QuantumMind learning topic.
 
-    Represents the public topic information exposed by the API.
+    A topic is the owner of its learning questions.
 
-    This DTO is used for:
-    - Created topic responses
-    - Topic details pages
-    - Topic listings
+    Questions are exposed through the topic rather than duplicated
+    on other resources such as AttemptDTO.
 
-    Database-only fields are intentionally excluded.
+    This allows consumers to access:
+
+        topic.questions
+            └── question.answers
+
+    The questions relationship is populated only when the underlying
+    query loads the Topic.questions relationship.
     """
-
 
     model_config = ConfigDict(
         from_attributes=True,
     )
-
 
     # ==========================================================
     # IDENTITY
@@ -31,23 +35,17 @@ class TopicDTO(BaseModel):
     id: UUID
     """
     Unique identifier of the topic.
-    Used internally for database relations.
     """
-
 
     title: str
     """
     Human-readable topic title displayed to learners.
     """
 
-
     slug: str
     """
     Public URL-friendly identifier of the topic.
-    Example:
-        quantum-entanglement
     """
-
 
     # ==========================================================
     # CLASSIFICATION
@@ -56,25 +54,35 @@ class TopicDTO(BaseModel):
     category: str
     """
     Learning category used to organize topics.
-    Example:
-        Quantum Physics
     """
 
     display_order: int | None
     """
-    Controls the order of topics within a category.
-    Lower numbers appear first in listings.
+    Controls the order of topics within their category.
     """
 
     # ==========================================================
     # PRESENTATION
     # ==========================================================
 
-    description: str
+    description: str | None = None
     """
     Short introduction displayed before opening the topic.
     """
 
+    # ==========================================================
+    # QUESTIONS
+    # ==========================================================
+
+    questions: list[QuestionDTO] = []
+    """
+    Questions belonging to this topic.
+
+    Questions are obtained through the Topic.questions relationship.
+
+    Each QuestionDTO may contain its answer options when those
+    answers have been loaded by the repository query.
+    """
 
     # ==========================================================
     # METADATA
@@ -84,7 +92,6 @@ class TopicDTO(BaseModel):
     """
     Timestamp when the topic was created.
     """
-
 
     updated_at: datetime
     """

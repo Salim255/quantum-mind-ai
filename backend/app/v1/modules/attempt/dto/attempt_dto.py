@@ -42,14 +42,6 @@ class AttemptDTO(BaseModel):
 
     topic: TopicDTO | None = None
 
-    # ============================================================
-    # QUESTIONS
-    # ============================================================
-
-    questions: list[QuestionDTO] = Field(
-        default_factory=list,
-        description="Questions included in this learning attempt.",
-    )
 
     # ============================================================
     # RESULT
