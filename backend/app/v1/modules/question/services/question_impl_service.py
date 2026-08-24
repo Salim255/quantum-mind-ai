@@ -1,5 +1,5 @@
 import logging
-
+from uuid import UUID
 from app.repositories.question_repository import QuestionRepository
 from app.v1.modules.question.dto.question_create_dto import QuestionCreateDTO
 from app.v1.modules.question.dto.question_dto import QuestionDTO
@@ -25,10 +25,38 @@ class QuestionImplService(QuestionService):
     ):
         self.question_repository = question_repository
 
+
+    async def get_questions_count_by_topic(
+        self,
+        topic_id: UUID,
+    ) -> int:
+        """
+        Return the number of active questions belonging
+        to a specific learning topic.
+
+        The actual database query remains inside the
+        QuestionRepository. This service exposes the
+        question-related operation to other services
+        without allowing them to directly access the
+        question data layer.
+
+        Args:
+            topic_id:
+                Identifier of the learning topic.
+
+        Returns:
+            Number of active questions available for
+            the specified topic.
+        """
+
+        return (
+            await self.question_repository
+            .count_by_topic_id(topic_id)
+        )
+
     # ============================================================
     # CREATE
     # ============================================================
-
     async def create_question(
         self,
         question_data: QuestionCreateDTO,
