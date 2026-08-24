@@ -51,6 +51,6 @@ class QuestionRepository(BaseRepository[Question]):
             )
         )
 
-        result = await self.session.exec(statement)
+        result = await self.session.execute(statement)
 
-        return result.one()
+        return result.scalar_one()

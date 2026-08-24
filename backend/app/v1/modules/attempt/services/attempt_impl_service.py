@@ -1,11 +1,12 @@
-from fastapi import logger
-
+import logging
 from app.models.attempt import Attempt
 from app.repositories.attempt_repository import AttemptRepository
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
 from app.v1.modules.question.services.question_service import QuestionService
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
+
+logger = logging.getLogger(__name__)
 
 class AttemptImplService(AttemptService):
     """
@@ -50,12 +51,15 @@ class AttemptImplService(AttemptService):
         """
 
         try:
-            print("hello from count")
+          
             attempt = Attempt(
                 user_id=attempt_data.user_id,
                 topic_id=attempt_data.topic_id,
                 score=0.0,
-                total_questions=0,
+                total_questions=(
+                    await self.question_service
+                    .get_questions_count_by_topic(attempt_data.topic_id)
+                ),
                 correct_answers=0,
                 is_completed=False,
             )
