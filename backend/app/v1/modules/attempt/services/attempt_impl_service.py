@@ -66,6 +66,10 @@ class AttemptImplService(AttemptService):
 
             await self.attempt_repository.add(attempt)
 
+            attempt = await self.attempt_repository.get_by_id_with_topic(
+                attempt.id
+            )
+            
             return AttemptDTO.model_validate(attempt)
 
         except Exception:
