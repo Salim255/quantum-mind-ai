@@ -2,9 +2,9 @@ from fastapi import logger
 
 from app.models.attempt import Attempt
 from app.repositories.attempt_repository import AttemptRepository
-from app.repositories.question_repository import QuestionRepository
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
+from app.v1.modules.question.services.question_service import QuestionService
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 
 class AttemptImplService(AttemptService):
@@ -21,10 +21,10 @@ class AttemptImplService(AttemptService):
     def __init__(
         self,
         attempt_repository: AttemptRepository,
-        question_repository: QuestionRepository,
+        question_service: QuestionService,
     ):
         self.attempt_repository = attempt_repository
-        self.question_repository = question_repository
+        self.question_service = question_service
 
     # ============================================================
     # CREATE
@@ -50,7 +50,7 @@ class AttemptImplService(AttemptService):
         """
 
         try:
-          
+            print("hello from count")
             attempt = Attempt(
                 user_id=attempt_data.user_id,
                 topic_id=attempt_data.topic_id,
