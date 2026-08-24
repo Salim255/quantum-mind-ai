@@ -16,7 +16,6 @@ class TopicRepository(BaseRepository[Topic]):
         # Pass Topic model to BaseRepository
         super().__init__(session, Topic)
 
-
     async def get_topics_with_sections_with_blocks(self):
         """
         Get a topic along with its sections and blocks.
