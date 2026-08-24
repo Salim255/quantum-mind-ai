@@ -5,7 +5,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.container import Container
 from app.repositories.attempt_repository import AttemptRepository
-from app.repositories.question_repository import QuestionRepository
+from app.v1.modules.question.dependencies import get_question_service
+from app.v1.modules.question.services.question_service import QuestionService
 from app.v1.modules.attempt.services.attempt_impl_service import (
     AttemptImplService,
 )
@@ -98,32 +99,6 @@ def get_attempt_repository(
 
 
 # ============================================================
-# QUESTION REPOSITORY DEPENDENCY
-# ============================================================
-
-def get_question_repository(
-    session: Annotated[
-        AsyncSession,
-        Depends(get_db_session),
-    ],
-) -> QuestionRepository:
-    """
-    Create the QuestionRepository for the current request.
-
-    The AttemptService uses this repository to resolve the
-    questions belonging to the topic when creating an attempt.
-
-    Args:
-        session:
-            Active asynchronous database session.
-
-    Returns:
-        A QuestionRepository bound to the current database session.
-    """
-    return QuestionRepository(session)
-
-
-# ============================================================
 # SERVICE DEPENDENCY
 # ============================================================
 
@@ -132,30 +107,34 @@ def get_attempt_service(
         AttemptRepository,
         Depends(get_attempt_repository),
     ],
-    question_repository: Annotated[
-        QuestionRepository,
-        Depends(get_question_repository),
+    question_service: Annotated[
+        QuestionService,
+        Depends(get_question_service),
     ],
 ) -> AttemptService:
     """
     Create the AttemptService for the current request.
 
-    The service coordinates both repositories because creating
-    an attempt requires resolving the questions associated with
-    the selected topic.
+    The AttemptService coordinates attempt-related business logic.
+
+    It uses:
+    - AttemptRepository for attempt persistence.
+    - QuestionService for question-related operations.
+
+    Keeping question operations behind QuestionService prevents
+    the AttemptService from depending directly on the QuestionRepository.
 
     Args:
         attempt_repository:
             Repository responsible for Attempt persistence.
 
-        question_repository:
-            Repository responsible for retrieving the topic's
-            questions.
+        question_service:
+            Service responsible for question-related business logic.
 
     Returns:
         The concrete AttemptService implementation.
     """
     return AttemptImplService(
         attempt_repository=attempt_repository,
-        question_repository=question_repository,
+        question_service=question_service,
     )
