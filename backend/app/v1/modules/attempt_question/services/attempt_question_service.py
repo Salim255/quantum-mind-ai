@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from uuid import UUID
 
 from app.v1.modules.attempt_question.dto.attempt_question_create_dto import (
     AttemptQuestionCreateDTO,
