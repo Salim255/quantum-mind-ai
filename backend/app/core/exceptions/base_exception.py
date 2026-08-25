@@ -1,5 +1,5 @@
 class AppException(Exception):
-    def __int__(
+    def __init__(
             self,
             message: str,
             status_code: int,
