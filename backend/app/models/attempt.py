@@ -78,6 +78,18 @@ class Attempt(SQLModel, table=True):
         index=True,
     )
 
+
+    # ============================================================
+    # ATTEMPT QUESTIONS
+    # ============================================================
+
+    attempt_questions: list["AttemptQuestion"] = Relationship(
+        back_populates="attempt",
+        sa_relationship_kwargs={
+            "cascade": "all, delete-orphan",
+        },
+    )
+
     # ============================================================
     # LIFECYCLE
     # ============================================================

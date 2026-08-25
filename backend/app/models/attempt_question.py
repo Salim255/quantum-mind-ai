@@ -59,7 +59,7 @@ class AttemptQuestion(SQLModel, table=True):
     # ATTEMPT
     # ============================================================
 
-    quiz_attempt_id: UUID = Field(
+    attempt_id: UUID = Field(
         foreign_key="attempts.id",
         nullable=False,
         index=True,
