@@ -1,11 +1,36 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
+
 
 class LoginDTO(BaseModel):
-    email: EmailStr
-    password: str = Field(min_length=8)
+    """
+    Data required to authenticate an existing user.
 
+    Only authentication credentials are accepted.
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+    Account security state, password hashes, session identifiers,
+    and token information are handled internally by the
+    authentication service.
+    """
+
+    model_config = ConfigDict(
+        str_strip_whitespace=True,
+    )
+
+    # ============================================================
+    # CREDENTIALS
+    # ============================================================
+
+    email: EmailStr = Field(
+        max_length=255,
+        description="Email address associated with the account.",
+        examples=["salim@example.com"],
+    )
+
+    password: str = Field(
+        min_length=1,
+        max_length=128,
+        description="Account password.",
+    )
 
 
 class RegisterDTO(BaseModel):
