@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
@@ -7,18 +5,30 @@ from sqlalchemy import Column, DateTime
 from sqlmodel import Field, Relationship, SQLModel
 
 
-class UserSecurity(SQLModel, table=True):
+class User(SQLModel, table=True):
     """
-    Security state associated with a user.
+    Represents the core platform account.
 
-    Keeps authentication protection concerns separate
-    from the core User entity.
+    This table is intentionally kept small.
 
-    Refresh tokens are intentionally NOT stored here.
-    They belong to UserSession.
+    User is responsible only for stable account identity,
+    authentication credentials, account lifecycle, and
+    relationships to the user's profile and security state.
+
+    Personal information belongs to Profile.
+
+    Authentication security state belongs to UserSecurity.
+
+    Refresh-token/session state belongs to UserSession.
+
+    Learning activity belongs to the corresponding learning
+    domain tables.
+
+    This separation keeps the account model maintainable,
+    secure, and easy to evolve as the application grows.
     """
 
-    __tablename__ = "user_security"
+    __tablename__ = "users"
 
     # ============================================================
     # IDENTITY
@@ -30,35 +40,99 @@ class UserSecurity(SQLModel, table=True):
         index=True,
     )
     """
-    Unique identifier of the security record.
+    Stable unique identifier of the account.
+
+    UUIDs prevent exposing predictable sequential identifiers
+    and provide a stable reference for relationships throughout
+    the application.
+
+    Examples of entities referencing this ID:
+
+    - Profile
+    - UserSecurity
+    - UserSession
+    - QuizAttempt
+    - UserQuestionProgress
     """
 
-    user_id: UUID = Field(
+    email: str = Field(
         nullable=False,
         unique=True,
-        foreign_key="users.id",
+        index=True,
+        max_length=255,
+    )
+    """
+    Unique email address associated with the account.
+
+    Used as the primary login identifier and for account-related
+    communication such as:
+
+    - email verification
+    - password reset
+    - security notifications
+    - account recovery
+
+    The database UNIQUE constraint guarantees that an email
+    address belongs to at most one account.
+
+    Email verification state itself belongs to UserSecurity.
+    """
+
+    # ============================================================
+    # AUTHENTICATION CREDENTIAL
+    # ============================================================
+
+    password_hash: str = Field(
+        nullable=False,
+        max_length=255,
+    )
+    """
+    Secure password hash.
+
+    The application must NEVER store the user's plaintext password.
+
+    Passwords should be hashed using a modern password hashing
+    algorithm such as Argon2id before being persisted.
+
+    The authentication service is responsible for:
+
+        plaintext password
+                ↓
+            password hash
+                ↓
+            database
+
+    Password-change metadata belongs to UserSecurity.
+    """
+
+    # ============================================================
+    # ACCOUNT STATUS
+    # ============================================================
+
+    is_active: bool = Field(
+        default=True,
+        nullable=False,
         index=True,
     )
     """
-    User owning this security record.
+    Indicates whether the account is currently active.
 
-    UNIQUE guarantees a one-to-one relationship.
+    False means the account is administratively disabled and
+    should normally not be allowed to authenticate.
+
+    This is intentionally different from a temporary security
+    lockout.
+
+    Example:
+
+        is_active = False
+            → administrator disabled the account
+
+        locked_until = future timestamp
+            → temporary authentication protection
     """
 
-    # ============================================================
-    # EMAIL SECURITY
-    # ============================================================
-
-    email_verified: bool = Field(
-        default=False,
-        nullable=False,
-        index=True,
-    )
-    """
-    Whether the user has verified ownership of the email address.
-    """
-
-    email_verified_at: datetime | None = Field(
+    deleted_at: datetime | None = Field(
         default=None,
         sa_column=Column(
             DateTime(timezone=True),
@@ -66,132 +140,101 @@ class UserSecurity(SQLModel, table=True):
         ),
     )
     """
-    Timestamp when email verification succeeded.
+    UTC timestamp when the account was soft-deleted.
+
+    NULL means the account has not been deleted.
+
+    Soft deletion allows historical domain data such as:
+
+    - attempts
+    - progress
+    - scores
+    - learning activity
+
+    to remain associated with the account.
+
+    Application queries should normally exclude users where
+    deleted_at IS NOT NULL.
+
+    If the application does not require soft deletion, this
+    field can be removed entirely.
     """
 
     # ============================================================
-    # LOGIN PROTECTION
+    # RELATIONSHIPS
     # ============================================================
 
-    failed_login_attempts: int = Field(
-        default=0,
-        nullable=False,
+    profile: "Profile | None" = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={
+            "uselist": False,
+            "cascade": "all, delete-orphan",
+        },
     )
     """
-    Number of consecutive failed login attempts.
+    One-to-one relationship with the user's Profile.
 
-    Used for brute-force protection and account lockout.
+    Profile contains information such as:
+
+    - first name
+    - last name
+    - display name
+    - avatar
+    - biography
+    - learning level
+    - language
+    - timezone
+
+    Keeping these fields outside User prevents the authentication
+    model from becoming a large user-profile aggregate.
     """
 
-    locked_until: datetime | None = Field(
-        default=None,
-        sa_column=Column(
-            DateTime(timezone=True),
-            nullable=True,
-        ),
+    security: "UserSecurity | None" = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={
+            "uselist": False,
+            "cascade": "all, delete-orphan",
+        },
     )
     """
-    Timestamp until which authentication is temporarily blocked.
+    One-to-one relationship with UserSecurity.
 
-    NULL means the account is not currently locked.
+    UserSecurity contains security state such as:
+
+    - email verification
+    - failed login attempts
+    - temporary lockout
+    - last login
+    - password change timestamp
+    - security version
+    - MFA state
+
+    Security state is separated because it changes independently
+    from the user's core identity.
     """
 
-    last_failed_login_at: datetime | None = Field(
-        default=None,
-        sa_column=Column(
-            DateTime(timezone=True),
-            nullable=True,
-        ),
+    sessions: list["UserSession"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={
+            "cascade": "all, delete-orphan",
+        },
     )
     """
-    Timestamp of the most recent failed login attempt.
-    """
+    One-to-many relationship with authentication sessions.
 
-    last_login_at: datetime | None = Field(
-        default=None,
-        sa_column=Column(
-            DateTime(timezone=True),
-            nullable=True,
-        ),
-    )
-    """
-    Timestamp of the most recent successful login.
-    """
+    A single account can have multiple active sessions:
 
-    # ============================================================
-    # PASSWORD SECURITY
-    # ============================================================
+        User
+          ├── Mac session
+          ├── Mobile session
+          └── Browser session
 
-    password_changed_at: datetime | None = Field(
-        default=None,
-        sa_column=Column(
-            DateTime(timezone=True),
-            nullable=True,
-        ),
-    )
-    """
-    Timestamp of the most recent password change.
-
-    Can be used to invalidate sessions created before
-    the password was changed.
+    Refresh tokens should be represented by UserSession records
+    rather than being stored directly on the User table.
     """
 
     # ============================================================
-    # SESSION INVALIDATION
-    # ============================================================
-
-    security_version: int = Field(
-        default=0,
-        nullable=False,
-    )
-    """
-    Global security version for the account.
-
-    Incrementing this value can invalidate all existing
-    authentication sessions.
-
-    Examples:
-
-    - Password reset
-    - Password compromise
-    - Logout from all devices
-    - Suspicious activity
-    """
-
-    # ============================================================
-    # MULTI-FACTOR AUTHENTICATION
-    # ============================================================
-
-    mfa_enabled: bool = Field(
-        default=False,
-        nullable=False,
-    )
-    """
-    Indicates whether MFA is enabled.
-
-    MFA secrets should be stored separately in a dedicated
-    credential table when MFA is implemented.
-    """
-
-    # ============================================================
-    # ACCOUNT RISK
-    # ============================================================
-
-    compromised_at: datetime | None = Field(
-        default=None,
-        sa_column=Column(
-            DateTime(timezone=True),
-            nullable=True,
-        ),
-    )
-    """
-    Timestamp when the account was identified as compromised.
-
-    NULL means no compromise has been recorded.
-    """
-
-    # ============================================================
-    # AUDIT
+    # AUDIT / LIFECYCLE
     # ============================================================
 
     created_at: datetime = Field(
@@ -202,7 +245,14 @@ class UserSecurity(SQLModel, table=True):
         ),
     )
     """
-    Timestamp when the security record was created.
+    UTC timestamp when the account was created.
+
+    Useful for:
+
+    - auditing
+    - analytics
+    - account lifecycle management
+    - retention analysis
     """
 
     updated_at: datetime = Field(
@@ -213,16 +263,10 @@ class UserSecurity(SQLModel, table=True):
         ),
     )
     """
-    Timestamp of the last security-state modification.
-    """
+    UTC timestamp of the last modification to the account.
 
-    # ============================================================
-    # RELATIONSHIP
-    # ============================================================
+    This should be updated whenever mutable User fields change.
 
-    user: User = Relationship(
-        back_populates="security",
-    )
-    """
-    User associated with this security record.
+    Security-specific modifications should update UserSecurity's
+    own updated_at timestamp instead.
     """
