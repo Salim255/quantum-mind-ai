@@ -1,6 +1,6 @@
 import logging
 from fastapi import FastAPI
-from app.core.cors import setup_cors
+from app.core.config.cors import setup_cors
 from app.core.exceptions.global_exception_handler import ExceptionsHandler
 from app.core.lifespan import LifespanService
 from app.core.router_registry import RouterService

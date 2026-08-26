@@ -7,7 +7,7 @@ from app.repositories.user_session_repository import UserSessionRepository
 
 from app.v1.modules.auth.dto.auth_dto import (LoginDTO, RegisterDTO, AuthResponseDTO)
 from app.v1.modules.auth.services.auth_service import AuthService
-from app.core.constants import (ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS)
+from app.common.constants import (ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS)
 
 class AuthImplService(AuthService):
     """

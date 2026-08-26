@@ -1,7 +1,7 @@
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
 from enum import Enum
-from app.core.constants import(HIGH_CONFIDENCE, MEDIUM_CONFIDENCE, LOW_CONFIDENCE)
+from app.common.constants import(HIGH_CONFIDENCE, MEDIUM_CONFIDENCE, LOW_CONFIDENCE)
 # ------------------------------------------------------------
 # CONFIDENCE THRESHOLDS (DECISION LAYER)
 # ------------------------------------------------------------

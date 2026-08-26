@@ -1,6 +1,6 @@
 from typing import List
 from app.v1.modules.rag.dto.retrieval_dto import RetrievalChunkDTO
-from app.core.constants import BATCH_SIZE
+from app.common.constants import BATCH_SIZE
 
 class RerankingService:
     def __init__(self, container):
