@@ -5,9 +5,8 @@ from fastapi import Depends, status
 from app.core.dtos.response_dto import ResponseDTO
 
 from app.v1.modules.auth.dependencies import dependencies
-from app.v1.modules.auth.dto.auth_login_dto import AuthLoginDTO
-from app.v1.modules.auth.dto.auth_register_dto import AuthRegisterDTO
-from app.v1.modules.auth.dto.auth_response_dto import AuthResponseDTO
+from app.v1.modules.auth.dto.auth_dto import (LoginDTO, RegisterDTO, AuthResponseDTO)
+
 from app.v1.modules.auth.service.auth_service import AuthService
 
 from .router import router as auth_router
