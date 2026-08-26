@@ -250,8 +250,9 @@ class UserQuestionProgress(SQLModel, table=True):
         sa_column=Column(
             DateTime(timezone=True),
             nullable=True,
+            index=True,
         ),
-        index=True,
+   
     )
 
     review_count: int = Field(
@@ -261,12 +262,11 @@ class UserQuestionProgress(SQLModel, table=True):
 
     overdue: bool = Field(
         default=False,
-        nullable=False,
         sa_column=Column(
             Boolean,
             nullable=False,
+            index=True
         ),
-        index=True,
     )
 
     # ============================================================

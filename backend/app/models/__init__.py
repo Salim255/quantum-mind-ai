@@ -5,3 +5,8 @@ from app.models.answer import Answer
 from app.models.attempt import Attempt
 from app.models.question import Question
 from app.models.user import User
+from app.models.attempt_question import AttemptQuestion
+from app.models.user_security import UserSecurity
+from app.models.user_session import UserSession
+from app.models.user_question_progress import UserQuestionProgress
+from app.models.profile import Profile

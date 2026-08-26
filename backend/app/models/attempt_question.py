@@ -34,12 +34,12 @@ class AttemptQuestion(SQLModel, table=True):
 
     __table_args__ = (
         UniqueConstraint(
-            "quiz_attempt_id",
+            "attempt_id",
             "question_id",
             name="uq_attempt_question",
         ),
         UniqueConstraint(
-            "quiz_attempt_id",
+            "attempt_id",
             "position",
             name="uq_attempt_question_position",
         ),
