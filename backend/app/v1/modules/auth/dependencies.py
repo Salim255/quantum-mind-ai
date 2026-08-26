@@ -4,14 +4,16 @@ from fastapi import Depends, Request
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.container import Container
+from app.v1.modules.auth.services.cookie_impl_service import CookieImplService
+from app.v1.modules.auth.services.cookie_service import CookieService
 
+from app.repositories.profile_repository import ProfileRepository
 from app.repositories.user_repository import UserRepository
 from app.repositories.user_security_repository import UserSecurityRepository
 from app.repositories.user_session_repository import UserSessionRepository
-from app.repositories.profile_repository import ProfileRepository
 
-from app.v1.modules.auth.services.auth_service import AuthService
 from app.v1.modules.auth.services.auth_impl_service import AuthImplService
+from app.v1.modules.auth.services.auth_service import AuthService
 
 
 # ============================================================
@@ -24,12 +26,12 @@ def get_container(
     """
     Retrieves the application dependency container.
 
-    The container owns application-wide infrastructure such as:
+    The container owns application-wide dependencies such as:
 
+    - application settings
     - database session management
+    - shared security services
     - external clients
-    - shared services
-    - application configuration
     """
 
     return request.app.state.container
@@ -48,16 +50,35 @@ async def get_db_session(
     """
     Provides an asynchronous database session.
 
-    The same session is injected into all repositories used during
-    a single authentication operation.
-
-    This is important because registration and authentication may
-    involve multiple database operations that should participate
-    in the same transaction.
+    All repositories participating in the same authentication
+    operation receive the same AsyncSession.
     """
 
     async for session in container.db_session.get_session():
         yield session
+
+
+# ============================================================
+# COOKIE SERVICE DEPENDENCY
+# ============================================================
+
+def get_cookie_service(
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ],
+) -> CookieService:
+    """
+    Provides the shared CookieService.
+
+    CookieService is initialized by the application container
+    with the application's Settings instance.
+
+    The authentication layer therefore does not need direct
+    access to Settings for cookie management.
+    """
+
+    return CookieImplService(settings=container.settings)
 
 
 # ============================================================
@@ -73,14 +94,7 @@ def get_user_repository(
     """
     Creates the UserRepository.
 
-    Authentication uses the repository directly because user
-    persistence is part of the authentication workflow.
-
-    Typical operations include:
-
-    - find user by email
-    - create user
-    - update authentication-related user state
+    Responsible for user account persistence.
     """
 
     return UserRepository(session)
@@ -106,7 +120,7 @@ def get_user_security_repository(
     - account lock state
     - password security metadata
     - security version
-    - authentication-related timestamps
+    - security timestamps
     """
 
     return UserSecurityRepository(session)
@@ -125,14 +139,8 @@ def get_user_session_repository(
     """
     Creates the UserSessionRepository.
 
-    Responsible for persistence of authenticated sessions.
-
-    Authentication uses this repository to:
-
-    - create sessions
-    - retrieve sessions
-    - revoke sessions
-    - track session lifecycle
+    Responsible for authenticated session persistence and
+    session lifecycle management.
     """
 
     return UserSessionRepository(session)
@@ -151,12 +159,7 @@ def get_profile_repository(
     """
     Creates the ProfileRepository.
 
-    Registration may use this repository to create the user's
-    initial profile as part of the account-creation transaction.
-
-    Profile-specific operations remain outside UserService and
-    AuthService unless they are explicitly part of the
-    authentication workflow.
+    Used during registration to create the initial user profile.
     """
 
     return ProfileRepository(session)
@@ -179,47 +182,44 @@ def get_auth_service(
         UserSessionRepository,
         Depends(get_user_session_repository),
     ],
-    refresh_token_repository: Annotated[
-        RefreshTokenRepository,
-        Depends(get_refresh_token_repository),
-    ],
     profile_repository: Annotated[
         ProfileRepository,
         Depends(get_profile_repository),
+    ],
+    cookie_service: Annotated[
+        CookieService,
+        Depends(get_cookie_service),
     ],
 ) -> AuthService:
     """
     Creates the authentication service.
 
-    AuthService orchestrates the complete authentication workflow.
+    AuthService coordinates the authentication workflow while
+    delegating persistence and infrastructure responsibilities
+    to specialized components.
 
     Dependencies:
 
-        UserRepository
-            Account identity and credentials.
+    UserRepository
+        User account persistence.
 
-        UserSecurityRepository
-            Authentication security state.
+    UserSecurityRepository
+        Authentication security state.
 
-        UserSessionRepository
-            Authenticated session lifecycle.
+    UserSessionRepository
+        Authenticated session lifecycle.
 
-        RefreshTokenRepository
-            Refresh-token lifecycle and rotation.
+    ProfileRepository
+        User profile creation during registration.
 
-        ProfileRepository
-            Initial profile creation during registration.
-
-    All repositories receive the same AsyncSession, allowing the
-    authentication workflow to operate within the same database
-    transaction.
+    CookieService
+        Authentication cookie management.
     """
 
     return AuthImplService(
         user_repository=user_repository,
         user_security_repository=user_security_repository,
         user_session_repository=user_session_repository,
-        refresh_token_repository=refresh_token_repository,
         profile_repository=profile_repository,
+        cookie_service=cookie_service,
     )
-

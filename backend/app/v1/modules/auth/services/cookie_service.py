@@ -1,40 +1,22 @@
+from abc import ABC, abstractmethod
+
 from fastapi import Response
 
-from app.core.config.cookies_options import get_cookie_options
-from app.core.settings import SettingsService
 
-
-class CookieService:
+class CookieService(ABC):
     """
-    Manages authentication cookies.
+    Defines the contract for authentication cookie management.
 
-    Responsible only for writing and removing authentication
-    cookies from HTTP responses.
-
-    Cookie security configuration is delegated to
-    `get_cookie_options()`.
+    The service is responsible for setting and clearing authentication
+    cookies without exposing the underlying HTTP implementation to
+    the authentication business logic.
     """
 
     # ============================================================
-    # INITIALIZATION
+    # SET AUTHENTICATION COOKIES
     # ============================================================
 
-    def __init__(
-        self,
-        settings: SettingsService,
-    ) -> None:
-        """
-        Initializes the cookie service.
-
-        Settings are injected by the application container.
-        """
-
-        self.settings = settings
-
-    # ============================================================
-    # SET AUTH COOKIES
-    # ============================================================
-
+    @abstractmethod
     def set_auth_cookies(
         self,
         response: Response,
@@ -42,62 +24,35 @@ class CookieService:
         refresh_token: str,
     ) -> None:
         """
-        Stores the access and refresh tokens in HTTP-only cookies.
+        Sets the authentication cookies.
 
-        Access token:
-            Short-lived cookie used for authenticated API requests.
+        Args:
+            response:
+                HTTP response receiving the cookies.
 
-        Refresh token:
-            Long-lived cookie used to obtain a new access token.
+            access_token:
+                Short-lived access token.
 
-        Tokens are never exposed to JavaScript because the cookies
-        are configured with HttpOnly.
+            refresh_token:
+                Long-lived refresh token.
         """
 
-        access_options = get_cookie_options(
-            minutes=self.settings.jwt_access_cookie_expire_in,
-            settings=self.settings,
-        )
-
-        refresh_options = get_cookie_options(
-            minutes=self.settings.jwt_refresh_cookie_expire_in,
-            settings=self.settings,
-        )
-
-        response.set_cookie(
-            key="access_token",
-            value=access_token,
-            **access_options,
-        )
-
-        response.set_cookie(
-            key="refresh_token",
-            value=refresh_token,
-            **refresh_options,
-        )
+        raise NotImplementedError
 
     # ============================================================
-    # CLEAR AUTH COOKIES
+    # CLEAR AUTHENTICATION COOKIES
     # ============================================================
 
+    @abstractmethod
     def clear_auth_cookies(
         self,
         response: Response,
     ) -> None:
         """
-        Removes all authentication cookies.
+        Clears all authentication cookies.
 
-        Used during logout or when the authentication state
-        must be terminated.
+        Typically called during logout or when the authentication
+        session must be terminated.
         """
 
-        response.delete_cookie(
-            key="access_token",
-            path="/",
-        )
-
-        response.delete_cookie(
-            key="refresh_token",
-            path="/",
-        )
-
+        raise NotImplementedError

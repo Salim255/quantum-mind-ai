@@ -4,22 +4,18 @@ from uuid import UUID
 
 class JWTManagerService(ABC):
     """
-    Defines authentication-token operations.
+    Defines the contract for JWT management.
 
-    This service owns JWT/token mechanics.
+    This abstraction keeps the authentication layer independent
+    from the JWT implementation library.
 
-    It is intentionally independent from FastAPI and database
-    persistence.
+    The concrete implementation is responsible for:
 
-    Responsibilities:
-
-    - create access tokens
-    - decode access tokens
-    - validate token claims
-    - generate cryptographically secure refresh-token values
-
-    Refresh-token persistence remains the responsibility of
-    RefreshTokenRepository.
+    - creating access tokens
+    - creating refresh tokens
+    - decoding and validating tokens
+    - validating JWT signatures
+    - validating token expiration
     """
 
     # ============================================================
@@ -30,39 +26,18 @@ class JWTManagerService(ABC):
     def create_access_token(
         self,
         user_id: UUID,
-        security_version: int,
+        session_id: UUID,
     ) -> str:
         """
         Creates a short-lived access token.
 
-        The token should contain only the claims required by the API.
+        The token identifies:
 
-        Typical claims:
+        - the authenticated user
+        - the authenticated session
 
-        - sub: user identifier
-        - type: access
-        - iat: issued-at timestamp
-        - exp: expiration timestamp
-        - jti: unique token identifier
-        - sv: security version
-        """
-
-        raise NotImplementedError
-
-    # ============================================================
-    # ACCESS TOKEN VALIDATION
-    # ============================================================
-
-    @abstractmethod
-    def decode_access_token(
-        self,
-        token: str,
-    ) -> dict:
-        """
-        Decodes and validates an access token.
-
-        Invalid, expired, malformed, or incorrectly typed tokens
-        must be rejected.
+        Returns:
+            Encoded and signed JWT.
         """
 
         raise NotImplementedError
@@ -72,32 +47,44 @@ class JWTManagerService(ABC):
     # ============================================================
 
     @abstractmethod
-    def generate_refresh_token(self) -> str:
+    def create_refresh_token(
+        self,
+        user_id: UUID,
+        session_id: UUID,
+    ) -> str:
         """
-        Generates a cryptographically secure refresh-token value.
+        Creates a long-lived refresh token.
 
-        The plaintext token is sent to the client through a secure
-        HttpOnly cookie.
+        The refresh token is associated with a specific
+        authenticated session.
 
-        Only a hash of the token should be persisted.
+        Returns:
+            Encoded and signed JWT.
         """
 
         raise NotImplementedError
 
     # ============================================================
-    # TOKEN HASHING
+    # DECODE TOKEN
     # ============================================================
 
     @abstractmethod
-    def hash_refresh_token(
+    def decode_token(
         self,
         token: str,
-    ) -> str:
+    ) -> dict:
         """
-        Produces the persistent hash of a refresh token.
+        Decodes and validates a JWT.
 
-        The raw refresh token must never be stored in the database.
+        Validation includes:
+
+        - token signature
+        - token expiration
+        - JWT structure
+
+        Raises:
+            InvalidTokenError:
+                When the token cannot be trusted.
         """
 
         raise NotImplementedError
-

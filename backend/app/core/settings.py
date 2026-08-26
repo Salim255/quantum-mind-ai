@@ -28,6 +28,21 @@ class SettingsService(BaseSettings):
 
     DB_PASSWORD: str
 
+    JWT_ACCESS_COOKIE_EXPIRE_IN: int
+
+    JWT_REFRESH_COOKIE_EXPIRE_IN: int
+
+    JWT_SECRET_KEY: str
+
+    # JWT signing algorithm.
+    JWT_ALGORITHM: str
+
+    # Access token lifetime in minutes.
+    JWT_ACCESS_EXPIRE_IN: int
+
+    # Refresh token lifetime in minutes.
+    JWT_REFRESH_EXPIRE_IN: int 
+    
     model_config = SettingsConfigDict(env_file=".env")
 
     @property
