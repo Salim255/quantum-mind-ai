@@ -180,7 +180,7 @@ class Profile(SQLModel, table=True):
     # RELATIONSHIP
     # ============================================================
 
-    user: User = Relationship(
+    user: "User" = Relationship(
         back_populates="profile",
     )
     """

@@ -164,7 +164,7 @@ class User(SQLModel, table=True):
     # RELATIONSHIPS
     # ============================================================
 
-    profile: "Profile | None" = Relationship(
+    profile: "Profile" | None = Relationship(
         back_populates="user",
         sa_relationship_kwargs={
             "uselist": False,
@@ -189,7 +189,7 @@ class User(SQLModel, table=True):
     model from becoming a large user-profile aggregate.
     """
 
-    security: "UserSecurity | None" = Relationship(
+    security: "UserSecurity" | None = Relationship(
         back_populates="user",
         sa_relationship_kwargs={
             "uselist": False,
