@@ -1,11 +1,11 @@
 from typing import Any
 
-from app.core.settings import Settings
+from app.core.settings import SettingsService
 
 
 def get_cookie_options(
     minutes: int,
-    settings: Settings,
+    settings: SettingsService,
 ) -> dict[str, Any]:
     """
     Creates secure HTTP cookie options.

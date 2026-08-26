@@ -10,8 +10,8 @@ from app.repositories.user_security_repository import UserSecurityRepository
 from app.repositories.user_session_repository import UserSessionRepository
 from app.repositories.profile_repository import ProfileRepository
 
-from app.v1.modules.auth.service.auth_service import AuthService
-from app.v1.modules.auth.service.auth_impl_service import AuthImplService
+from app.v1.modules.auth.services.auth_service import AuthService
+from app.v1.modules.auth.services.auth_impl_service import AuthImplService
 
 
 # ============================================================
