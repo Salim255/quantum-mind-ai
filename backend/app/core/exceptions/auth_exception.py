@@ -132,3 +132,31 @@ class AccountLockedException(AuthException):
             status_code=423,
             error_code=error_code,
         )
+
+
+# AUTHENTICATION PROCESSING ERROR
+# ============================================================
+
+class AuthenticationProcessingException(AuthException):
+    """
+    Raised when an unexpected error occurs during an
+    authentication workflow.
+
+    The original exception should be logged internally but
+    must not be exposed to the client.
+    """
+
+    def __init__(
+        self,
+        message: str = (
+            "An unexpected authentication error occurred."
+        ),
+        error_code: ErrorCode = (
+            ErrorCode.AUTHENTICATION_PROCESSING_ERROR
+        ),
+    ) -> None:
+        super().__init__(
+            message=message,
+            status_code=500,
+            error_code=error_code,
+        )

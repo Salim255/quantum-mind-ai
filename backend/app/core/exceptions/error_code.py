@@ -6,7 +6,7 @@ class ErrorCode(str, Enum):
     INVALID_TOKEN = "INVALID_TOKEN"
 
     USER_NOT_FOUND = "USER_NOT_FOUND"
-    
+
     CONVERSATION_NOT_FOUND = "CONVERSATION_NOT_FOUND"
 
     # ============================================================
@@ -20,3 +20,5 @@ class ErrorCode(str, Enum):
     ACCOUNT_INACTIVE = "ACCOUNT_INACTIVE"
 
     ACCOUNT_LOCKED = "ACCOUNT_LOCKED"
+
+    AUTHENTICATION_PROCESSING_ERROR = "AUTHENTICATION_PROCESSING_ERROR"

@@ -1,19 +1,36 @@
+import logging 
+from app.core.exceptions.auth_exception import (
+    AccountInactiveException,
+    AccountLockedException,
+    AuthenticationProcessingException,
+    EmailAlreadyExistsException,
+    InvalidCredentialsException,
+)
+from app.core.exceptions.base_exception import AppException
 
-from app.v1.modules.auth.dto.auth_dto import (LoginDTO, RegisterDTO, AuthResponseDTO)
+from app.v1.modules.auth.dto.auth_dto import (
+    AuthResponseDTO,
+    LoginDTO,
+    RegisterDTO,
+)
 
 from app.v1.modules.auth.services.auth_service import AuthService
 from app.v1.modules.auth.services.cookie_service import CookieService
+
 from app.v1.modules.auth.services.jwt_manager_service import (
     JWTManagerService,
 )
+
 from app.v1.modules.auth.services.password_service import (
     PasswordService,
 )
 
-from app.v1.modules.user.services.user_service import UserService
-
 from app.v1.modules.profile.services.profile_service import (
     ProfileService,
+)
+
+from app.v1.modules.user.services.user_service import (
+    UserService,
 )
 
 from app.v1.modules.user_security.services.user_security_service import (
@@ -24,6 +41,8 @@ from app.v1.modules.user_session.services.user_session_service import (
     UserSessionService,
 )
 
+
+logger = logging.getLogger(__name__)
 
 class AuthImplService(AuthService):
     """
@@ -105,7 +124,9 @@ class AuthImplService(AuthService):
 
         self.password_service = password_service
 
-        self.jwt_manager_service = jwt_manager_service
+        self.jwt_manager_service = (
+            jwt_manager_service
+        )
 
         self.cookie_service = cookie_service
 
@@ -130,103 +151,125 @@ class AuthImplService(AuthService):
         6. Create an authenticated session.
         7. Generate authentication tokens.
 
-        Domain operations are delegated to their dedicated services.
+        Known application exceptions are propagated unchanged.
+
+        Unexpected exceptions are converted into an application
+        authentication exception so internal implementation details
+        are not exposed to the API client.
         """
 
-        # --------------------------------------------------------
-        # CHECK EXISTING USER
-        # --------------------------------------------------------
+        try:
 
-        existing_user = await (
-            self.user_service.get_user_by_email(
-                payload.email
-            )
-        )
+            # ----------------------------------------------------
+            # CHECK EXISTING USER
+            # ----------------------------------------------------
 
-        if existing_user is not None:
-            raise ValueError(
-                "A user with this email already exists."
+            existing_user = await (
+                self.user_service.get_user_by_email(
+                    payload.email
+                )
             )
 
-        # --------------------------------------------------------
-        # HASH PASSWORD
-        # --------------------------------------------------------
+            if existing_user is not None:
+                raise EmailAlreadyExistsException()
 
-        password_hash = (
-            self.password_service.hash_password(
-                payload.password
+            # ----------------------------------------------------
+            # HASH PASSWORD
+            # ----------------------------------------------------
+
+            password_hash = (
+                self.password_service.hash_password(
+                    payload.password
+                )
             )
-        )
 
-        # --------------------------------------------------------
-        # CREATE USER
-        # --------------------------------------------------------
+            # ----------------------------------------------------
+            # CREATE USER
+            # ----------------------------------------------------
 
-        user = await self.user_service.create_user(
-            email=payload.email,
-            password_hash=password_hash,
-        )
+            user = await self.user_service.create_user(
+                email=payload.email,
+                password_hash=password_hash,
+            )
 
-        # --------------------------------------------------------
-        # CREATE PROFILE
-        # --------------------------------------------------------
+            # ----------------------------------------------------
+            # CREATE PROFILE
+            # ----------------------------------------------------
 
-        await self.profile_service.create_profile(
-            user_id=user.id,
-            first_name=payload.first_name,
-            last_name=payload.last_name,
-        )
-
-        # --------------------------------------------------------
-        # INITIALIZE SECURITY STATE
-        # --------------------------------------------------------
-
-        await self.user_security_service.create_security(
-            user_id=user.id,
-        )
-
-        # --------------------------------------------------------
-        # CREATE AUTHENTICATED SESSION
-        # --------------------------------------------------------
-
-        session = await (
-            self.user_session_service.create_session(
+            await self.profile_service.create_profile(
                 user_id=user.id,
+                first_name=payload.first_name,
+                last_name=payload.last_name,
             )
-        )
 
-        # --------------------------------------------------------
-        # GENERATE ACCESS TOKEN
-        # --------------------------------------------------------
+            # ----------------------------------------------------
+            # INITIALIZE SECURITY STATE
+            # ----------------------------------------------------
 
-        access_token = (
-            self.jwt_manager.create_access_token(
+            await (
+                self.user_security_service.create_security(
+                    user_id=user.id,
+                )
+            )
+
+            # ----------------------------------------------------
+            # CREATE AUTHENTICATED SESSION
+            # ----------------------------------------------------
+
+            session = await (
+                self.user_session_service.create_session(
+                    user_id=user.id,
+                )
+            )
+
+            # ----------------------------------------------------
+            # GENERATE ACCESS TOKEN
+            # ----------------------------------------------------
+
+            access_token = (
+                self.jwt_manager_service.create_access_token(
+                    user_id=user.id,
+                    session_id=session.id,
+                )
+            )
+
+            # ----------------------------------------------------
+            # GENERATE REFRESH TOKEN
+            # ----------------------------------------------------
+
+            refresh_token = (
+                self.jwt_manager_service.create_refresh_token(
+                    user_id=user.id,
+                    session_id=session.id,
+                )
+            )
+
+            # ----------------------------------------------------
+            # RETURN AUTH RESPONSE
+            # ----------------------------------------------------
+
+            return AuthResponseDTO(
                 user_id=user.id,
-                session_id=session.id,
+                email=user.email,
+                access_token=access_token,
+                refresh_token=refresh_token,
             )
-        )
 
         # --------------------------------------------------------
-        # GENERATE REFRESH TOKEN
+        # PROPAGATE KNOWN APPLICATION ERRORS
         # --------------------------------------------------------
 
-        refresh_token = (
-            self.jwt_manager.create_refresh_token(
-                user_id=user.id,
-                session_id=session.id,
-            )
-        )
+        except AppException:
+            logger.exception("Error in register account")
+            raise
 
         # --------------------------------------------------------
-        # RETURN AUTH RESPONSE
+        # HANDLE UNEXPECTED ERRORS
         # --------------------------------------------------------
 
-        return AuthResponseDTO(
-            user_id=user.id,
-            email=user.email,
-            access_token=access_token,
-            refresh_token=refresh_token,
-        )
+        except Exception as exception:
+            logger.exception("Error in register user")
+            raise AuthenticationProcessingException() from exception
 
     # ============================================================
     # LOGIN
@@ -243,157 +286,172 @@ class AuthImplService(AuthService):
 
         1. Retrieve the user by email.
         2. Verify that the account is active.
-        3. Retrieve the user's security state.
-        4. Verify that the account is not locked.
-        5. Verify the password.
-        6. Register a failed attempt when authentication fails.
-        7. Reset security counters when authentication succeeds.
-        8. Create a new authenticated session.
-        9. Generate authentication tokens.
+        3. Verify that the account is not deleted.
+        4. Retrieve the user's security state.
+        5. Verify that the account is not locked.
+        6. Verify the password.
+        7. Register a failed attempt when authentication fails.
+        8. Reset security state when authentication succeeds.
+        9. Create an authenticated session.
+        10. Generate authentication tokens.
+
+        Known application exceptions are propagated unchanged.
+
+        Unexpected exceptions are converted into an application
+        authentication exception.
         """
 
-        # --------------------------------------------------------
-        # RETRIEVE USER
-        # --------------------------------------------------------
+        try:
 
-        user = await (
-            self.user_service.get_user_by_email(
-                payload.email
-            )
-        )
+            # ----------------------------------------------------
+            # RETRIEVE USER
+            # ----------------------------------------------------
 
-        # --------------------------------------------------------
-        # PREVENT USER ENUMERATION
-        # --------------------------------------------------------
-
-        if user is None:
-
-            # Perform a password verification even when the user
-            # does not exist to reduce timing differences between
-            # valid and invalid accounts.
-
-            self.password_service.verify_password(
-                payload.password,
-                self.user_security_service.dummy_password_hash,
+            user = await (
+                self.user_service.get_user_by_email(
+                    payload.email
+                )
             )
 
-            raise ValueError(
-                "Invalid email or password."
+            # ----------------------------------------------------
+            # PREVENT USER ENUMERATION
+            # ----------------------------------------------------
+
+            if user is None:
+
+                # A dummy verification should still be performed
+                # when the user does not exist. This helps reduce
+                # observable timing differences between an unknown
+                # email address and an incorrect password.
+
+                self.password_service.verify_password(
+                    payload.password,
+                    self.user_security_service.dummy_password_hash,
+                )
+
+                raise InvalidCredentialsException()
+
+            # ----------------------------------------------------
+            # CHECK ACCOUNT STATUS
+            # ----------------------------------------------------
+
+            if not user.is_active:
+                raise AccountInactiveException()
+
+            # ----------------------------------------------------
+            # CHECK SOFT DELETION
+            # ----------------------------------------------------
+
+            if user.deleted_at is not None:
+                raise InvalidCredentialsException()
+
+            # ----------------------------------------------------
+            # RETRIEVE SECURITY STATE
+            # ----------------------------------------------------
+
+            security = await (
+                self.user_security_service.get_security_by_user_id(
+                    user.id
+                )
             )
 
-        # --------------------------------------------------------
-        # CHECK ACCOUNT STATUS
-        # --------------------------------------------------------
+            # ----------------------------------------------------
+            # CHECK ACCOUNT LOCK
+            # ----------------------------------------------------
 
-        if not user.is_active:
-            raise ValueError(
-                "This account is inactive."
+            if await (
+                self.user_security_service.is_account_locked(
+                    security
+                )
+            ):
+                raise AccountLockedException()
+
+            # ----------------------------------------------------
+            # VERIFY PASSWORD
+            # ----------------------------------------------------
+
+            password_valid = (
+                self.password_service.verify_password(
+                    payload.password,
+                    user.password_hash,
+                )
             )
 
-        # --------------------------------------------------------
-        # CHECK ACCOUNT DELETION
-        # --------------------------------------------------------
+            if not password_valid:
 
-        if user.deleted_at is not None:
-            raise ValueError(
-                "Invalid email or password."
-            )
+                await (
+                    self.user_security_service.handle_failed_login(
+                        security
+                    )
+                )
 
-        # --------------------------------------------------------
-        # RETRIEVE SECURITY STATE
-        # --------------------------------------------------------
+                raise InvalidCredentialsException()
 
-        security = await (
-            self.user_security_service.get_security_by_user_id(
-                user.id
-            )
-        )
-
-        # --------------------------------------------------------
-        # CHECK ACCOUNT LOCK
-        # --------------------------------------------------------
-
-        if await (
-            self.user_security_service.is_account_locked(
-                security
-            )
-        ):
-            raise ValueError(
-                "This account is temporarily locked."
-            )
-
-        # --------------------------------------------------------
-        # VERIFY PASSWORD
-        # --------------------------------------------------------
-
-        password_valid = (
-            self.password_service.verify_password(
-                payload.password,
-                user.password_hash,
-            )
-        )
-
-        if not password_valid:
+            # ----------------------------------------------------
+            # HANDLE SUCCESSFUL LOGIN
+            # ----------------------------------------------------
 
             await (
-                self.user_security_service.handle_failed_login(
+                self.user_security_service.handle_successful_login(
                     security
                 )
             )
 
-            raise ValueError(
-                "Invalid email or password."
+            # ----------------------------------------------------
+            # CREATE AUTHENTICATED SESSION
+            # ----------------------------------------------------
+
+            session = await (
+                self.user_session_service.create_session(
+                    user_id=user.id,
+                )
             )
 
-        # --------------------------------------------------------
-        # SUCCESSFUL AUTHENTICATION
-        # --------------------------------------------------------
+            # ----------------------------------------------------
+            # GENERATE ACCESS TOKEN
+            # ----------------------------------------------------
 
-        await (
-            self.user_security_service.handle_successful_login(
-                security
+            access_token = (
+                self.jwt_manager_service.create_access_token(
+                    user_id=user.id,
+                    session_id=session.id,
+                )
             )
-        )
 
-        # --------------------------------------------------------
-        # CREATE AUTHENTICATED SESSION
-        # --------------------------------------------------------
+            # ----------------------------------------------------
+            # GENERATE REFRESH TOKEN
+            # ----------------------------------------------------
 
-        session = await (
-            self.user_session_service.create_session(
+            refresh_token = (
+                self.jwt_manager_service.create_refresh_token(
+                    user_id=user.id,
+                    session_id=session.id,
+                )
+            )
+
+            # ----------------------------------------------------
+            # RETURN AUTHENTICATION RESPONSE
+            # ----------------------------------------------------
+
+            return AuthResponseDTO(
                 user_id=user.id,
+                email=user.email,
+                access_token=access_token,
+                refresh_token=refresh_token,
             )
-        )
 
         # --------------------------------------------------------
-        # GENERATE ACCESS TOKEN
+        # PROPAGATE KNOWN APPLICATION ERRORS
         # --------------------------------------------------------
 
-        access_token = (
-            self.jwt_manager.create_access_token(
-                user_id=user.id,
-                session_id=session.id,
-            )
-        )
+        except AppException:
+            logger.exception("Error in login user")
+            raise
 
         # --------------------------------------------------------
-        # GENERATE REFRESH TOKEN
+        # HANDLE UNEXPECTED ERRORS
         # --------------------------------------------------------
 
-        refresh_token = (
-            self.jwt_manager.create_refresh_token(
-                user_id=user.id,
-                session_id=session.id,
-            )
-        )
-
-        # --------------------------------------------------------
-        # RETURN AUTHENTICATION RESPONSE
-        # --------------------------------------------------------
-
-        return AuthResponseDTO(
-            user_id=user.id,
-            email=user.email,
-            access_token=access_token,
-            refresh_token=refresh_token,
-        )
+        except Exception as exception:
+            logger.exception("Error in login user")
+            raise AuthenticationProcessingException() from exception
