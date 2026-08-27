@@ -15,7 +15,10 @@ from app.repositories.user_session_repository import UserSessionRepository
 from app.v1.modules.auth.services.auth_impl_service import AuthImplService
 from app.v1.modules.auth.services.auth_service import AuthService
 
-
+from app.v1.modules.auth.services.password_impl_service import PasswordImplService
+from app.v1.modules.auth.services.password_service import PasswordService
+from app.v1.modules.auth.services.jwt_manager_service import JWTManagerService
+from app.v1.modules.auth.services.jwt_manager_impl_service import JWTManagerImplService
 # ============================================================
 # CONTAINER DEPENDENCY
 # ============================================================
@@ -56,6 +59,51 @@ async def get_db_session(
 
     async for session in container.db_session.get_session():
         yield session
+
+# ============================================================
+# PASSWORD SERVICE DEPENDENCY
+# ============================================================
+
+def get_password_service() -> PasswordService:
+    """
+    Provides the shared PasswordService.
+
+    PasswordService is created and owned by the application
+    container.
+
+    Authentication depends only on the PasswordService
+    abstraction and does not know about the concrete hashing
+    implementation.
+    """
+
+    return PasswordImplService()
+
+
+# ============================================================
+# JWT MANAGER DEPENDENCY
+# ============================================================
+
+def get_jwt_manager_service(
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ],
+) -> JWTManagerService:
+    """
+    Provides the shared JWTManagerService.
+
+    JWTManagerService is created by the application container
+    using the application's Settings.
+
+    Authentication therefore does not need direct access to:
+
+    - Settings
+    - JWT secret
+    - JWT algorithm
+    - PyJWT
+    """
+
+    return JWTManagerImplService(settings=container.settings)
 
 
 # ============================================================
@@ -190,6 +238,12 @@ def get_auth_service(
         CookieService,
         Depends(get_cookie_service),
     ],
+    jwt_service: Annotated[
+        JWTManagerService, Depends(get_jwt_manager_service)
+    ],
+    password_service: Annotated [
+        PasswordService, Depends(get_password_service)
+    ]
 ) -> AuthService:
     """
     Creates the authentication service.
@@ -222,4 +276,6 @@ def get_auth_service(
         user_session_repository=user_session_repository,
         profile_repository=profile_repository,
         cookie_service=cookie_service,
+        jwt_service=jwt_service,
+        password_service=password_service
     )
