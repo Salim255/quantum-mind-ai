@@ -1,8 +1,6 @@
-from datetime import UTC, datetime, timedelta
-from uuid import UUID
-
 import jwt
-
+from uuid import UUID
+from datetime import UTC, datetime, timedelta
 from app.core.settings import SettingsService
 from app.v1.modules.auth.services.jwt_manager_service import JWTManagerService
 
@@ -29,15 +27,15 @@ class JWTManagerImplService(JWTManagerService):
         Initializes the JWT manager from application settings.
         """
 
-        self.secret_key = settings.jwt_secret_key
-        self.algorithm = settings.jwt_algorithm
+        self.secret_key = settings.JWT_SECRET_KEY
+        self.algorithm = settings.JWT_ALGORITHM
 
         self.access_expire_in = (
-            settings.jwt_access_expire_in
+            settings.JWT_ACCESS_EXPIRE_IN
         )
 
         self.refresh_expire_in = (
-            settings.jwt_refresh_expire_in
+            settings.JWT_REFRESH_EXPIRE_IN
         )
 
     # ============================================================
