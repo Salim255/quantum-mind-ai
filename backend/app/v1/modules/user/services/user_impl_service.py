@@ -39,7 +39,7 @@ class UserImplService(UserService):
     async def get_user(
         self,
         user_id: UUID,
-    ) -> UserDTO:
+    ) -> UserDTO | None:
         """
         Retrieves a user by their unique identifier.
 

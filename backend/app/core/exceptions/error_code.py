@@ -9,6 +9,9 @@ class ErrorCode(str, Enum):
 
     CONVERSATION_NOT_FOUND = "CONVERSATION_NOT_FOUND"
 
+    PROCESSING_ERROR = "PROCESSING_ERROR"
+
+    CONFLICT = "CONFLICT"
     # ============================================================
     # AUTHENTICATION
     # ============================================================

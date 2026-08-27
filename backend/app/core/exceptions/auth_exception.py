@@ -1,4 +1,5 @@
 from app.core.exceptions.base_exception import AppException
+from app.core.exceptions.custom_exceptions import ConflictException
 from app.core.exceptions.error_code import ErrorCode
 
 
@@ -10,7 +11,8 @@ class AuthException(AppException):
     """
     Base exception for authentication-related errors.
 
-    All authentication exceptions inherit from this class.
+    All authentication-specific exceptions inherit from this
+    class.
 
     This provides a common abstraction for errors related to:
 
@@ -39,16 +41,11 @@ class AuthException(AppException):
 
 class InvalidCredentialsException(AuthException):
     """
-    Raised when the provided authentication credentials are invalid.
+    Raised when the provided authentication credentials are
+    invalid.
 
-    This exception intentionally uses a generic message.
-
-    The API must not reveal whether:
-
-    - the email does not exist
-    - the password is incorrect
-
-    Returning the same error prevents user enumeration attacks.
+    A generic message is intentionally used so the API does not
+    reveal whether the email exists or the password is incorrect.
     """
 
     def __init__(
@@ -67,7 +64,7 @@ class InvalidCredentialsException(AuthException):
 # EMAIL ALREADY EXISTS
 # ============================================================
 
-class EmailAlreadyExistsException(AuthException):
+class EmailAlreadyExistsException(ConflictException):
     """
     Raised when registration is attempted using an email address
     that already belongs to an existing account.
@@ -80,7 +77,6 @@ class EmailAlreadyExistsException(AuthException):
     ) -> None:
         super().__init__(
             message=message,
-            status_code=409,
             error_code=error_code,
         )
 
@@ -91,10 +87,11 @@ class EmailAlreadyExistsException(AuthException):
 
 class AccountInactiveException(AuthException):
     """
-    Raised when authentication is attempted using an inactive account.
+    Raised when authentication is attempted using an inactive
+    account.
 
     An inactive account remains in the system but is not allowed
-    to access protected platform resources.
+    to authenticate.
     """
 
     def __init__(
@@ -130,33 +127,5 @@ class AccountLockedException(AuthException):
         super().__init__(
             message=message,
             status_code=423,
-            error_code=error_code,
-        )
-
-
-# AUTHENTICATION PROCESSING ERROR
-# ============================================================
-
-class AuthenticationProcessingException(AuthException):
-    """
-    Raised when an unexpected error occurs during an
-    authentication workflow.
-
-    The original exception should be logged internally but
-    must not be exposed to the client.
-    """
-
-    def __init__(
-        self,
-        message: str = (
-            "An unexpected authentication error occurred."
-        ),
-        error_code: ErrorCode = (
-            ErrorCode.AUTHENTICATION_PROCESSING_ERROR
-        ),
-    ) -> None:
-        super().__init__(
-            message=message,
-            status_code=500,
             error_code=error_code,
         )

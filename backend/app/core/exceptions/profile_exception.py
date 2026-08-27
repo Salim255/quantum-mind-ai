@@ -1,43 +1,15 @@
-from app.core.exceptions.base_exception import AppException
 from app.core.exceptions.error_code import ErrorCode
-
-
-# ============================================================
-# PROFILE BASE EXCEPTION
-# ============================================================
-
-class ProfileException(AppException):
-    """
-    Base exception for profile-related errors.
-
-    All profile exceptions inherit from this class.
-
-    This provides a common abstraction for errors related to:
-
-    - profile creation
-    - profile retrieval
-    - profile data
-    - profile processing
-    """
-
-    def __init__(
-        self,
-        message: str,
-        status_code: int,
-        error_code: ErrorCode,
-    ) -> None:
-        super().__init__(
-            message=message,
-            status_code=status_code,
-            error_code=error_code,
-        )
+from app.core.exceptions.custom_exceptions import (
+    ConflictException,
+    NotFoundException,
+)
 
 
 # ============================================================
 # PROFILE ALREADY EXISTS
 # ============================================================
 
-class ProfileAlreadyExistsException(ProfileException):
+class ProfileAlreadyExistsException(ConflictException):
     """
     Raised when an attempt is made to create a profile for a user
     who already has an associated profile.
@@ -52,7 +24,6 @@ class ProfileAlreadyExistsException(ProfileException):
     ) -> None:
         super().__init__(
             message=message,
-            status_code=409,
             error_code=error_code,
         )
 
@@ -61,12 +32,9 @@ class ProfileAlreadyExistsException(ProfileException):
 # PROFILE NOT FOUND
 # ============================================================
 
-class ProfileNotFoundException(ProfileException):
+class ProfileNotFoundException(NotFoundException):
     """
-    Raised when a profile cannot be found for the requested user.
-
-    This typically occurs when a profile is requested for a user
-    who does not yet have an associated profile.
+    Raised when a requested profile cannot be found.
     """
 
     def __init__(
@@ -76,35 +44,25 @@ class ProfileNotFoundException(ProfileException):
     ) -> None:
         super().__init__(
             message=message,
-            status_code=404,
             error_code=error_code,
         )
 
 
 # ============================================================
-# PROFILE PROCESSING ERROR
+# PROFILE NOT FOUND
 # ============================================================
 
-class ProfileProcessingException(ProfileException):
+class ProfileNotFoundException(NotFoundException):
     """
-    Raised when an unexpected error occurs during a profile
-    workflow.
-
-    The original exception should be logged internally but
-    must not be exposed to the client.
+    Raised when a requested profile cannot be found.
     """
 
     def __init__(
         self,
-        message: str = (
-            "An unexpected profile error occurred."
-        ),
-        error_code: ErrorCode = (
-            ErrorCode.PROFILE_PROCESSING_ERROR
-        ),
+        message: str = "Profile not found.",
+        error_code: ErrorCode = ErrorCode.PROFILE_NOT_FOUND,
     ) -> None:
         super().__init__(
             message=message,
-            status_code=500,
             error_code=error_code,
         )
