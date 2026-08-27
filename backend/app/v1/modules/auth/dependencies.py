@@ -19,6 +19,7 @@ from app.v1.modules.auth.services.password_impl_service import PasswordImplServi
 from app.v1.modules.auth.services.password_service import PasswordService
 from app.v1.modules.auth.services.jwt_manager_service import JWTManagerService
 from app.v1.modules.auth.services.jwt_manager_impl_service import JWTManagerImplService
+
 # ============================================================
 # CONTAINER DEPENDENCY
 # ============================================================
