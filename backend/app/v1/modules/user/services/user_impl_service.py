@@ -1,9 +1,12 @@
 from uuid import UUID
-
+import logging
 from app.v1.modules.user.dto.user_dto import UserDTO
 from app.repositories.user_repository import UserRepository
 from app.v1.modules.user.services.user_service import UserService
+from app.core.exceptions.custom_exceptions import ProcessingException
+from app.core.exceptions.error_code import ErrorCode
 
+logger = logging.getLogger(__name__)
 
 class UserImplService(UserService):
     """
@@ -57,5 +60,10 @@ class UserImplService(UserService):
 
             return UserDTO.model_validate(user)
 
-        except Exception:
-            raise
+        except Exception as e:
+            logger.exception("Error in getting use by id")
+            
+            raise ProcessingException(
+                message="Unable to retrieve the user.",
+                error_code=ErrorCode.USER_PROCESSING_ERROR,
+            ) from e

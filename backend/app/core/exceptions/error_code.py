@@ -11,7 +11,10 @@ class ErrorCode(str, Enum):
 
     PROCESSING_ERROR = "PROCESSING_ERROR"
 
+    USER_PROCESSING_ERROR = "USER_PROCESSING_ERROR"
+
     CONFLICT = "CONFLICT"
+    
     # ============================================================
     # AUTHENTICATION
     # ============================================================

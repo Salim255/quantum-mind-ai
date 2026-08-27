@@ -1,8 +1,10 @@
 from uuid import UUID
-from app.core.exceptions.profile_exception import (ProfileException)
+from app.core.exceptions.custom_exceptions import ProcessingException
+from app.core.exceptions.error_code import ErrorCode
 from app.v1.modules.profile.dto.profile_dto import (ProfileDTO, CreateProfileDTO)
 from app.v1.modules.profile.services.profile_service import ProfileService
 from app.repositories.profile_repository import ProfileRepository
+
 
 import logging
 
@@ -66,7 +68,10 @@ class ProfileImplService(ProfileService):
 
         except Exception as e:
             logger.exception("Error in create profile")
-            raise ProfileException() from e
+            raise ProcessingException(
+                message="Unable to create a profile.",
+                error_code=ErrorCode.PROFILE_PROCESSING_ERROR,
+            ) from e
 
     # ============================================================
     # GET PROFILE
@@ -95,4 +100,7 @@ class ProfileImplService(ProfileService):
 
         except Exception as e:
             logger.exception("Error in get profile")
-            raise ProfileException() from e
+            raise ProcessingException(
+                message="Unable to retrieve the profile.",
+                error_code=ErrorCode.PROFILE_PROCESSING_ERROR,
+            ) from e

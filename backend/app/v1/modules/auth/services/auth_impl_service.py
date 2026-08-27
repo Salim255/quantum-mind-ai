@@ -1,12 +1,15 @@
-import logging 
+import logging
+
 from app.core.exceptions.auth_exception import (
     AccountInactiveException,
     AccountLockedException,
-    AuthenticationProcessingException,
     EmailAlreadyExistsException,
     InvalidCredentialsException,
 )
+
 from app.core.exceptions.base_exception import AppException
+from app.core.exceptions.custom_exceptions import ProcessingException
+from app.core.exceptions.error_code import ErrorCode
 
 from app.v1.modules.auth.dto.auth_dto import (
     AuthResponseDTO,
@@ -43,6 +46,7 @@ from app.v1.modules.user_session.services.user_session_service import (
 
 
 logger = logging.getLogger(__name__)
+
 
 class AuthImplService(AuthService):
     """
@@ -153,9 +157,8 @@ class AuthImplService(AuthService):
 
         Known application exceptions are propagated unchanged.
 
-        Unexpected exceptions are converted into an application
-        authentication exception so internal implementation details
-        are not exposed to the API client.
+        Unexpected exceptions are converted into a generic processing
+        exception with an authentication-specific error code.
         """
 
         try:
@@ -269,7 +272,11 @@ class AuthImplService(AuthService):
 
         except Exception as exception:
             logger.exception("Error in register user")
-            raise AuthenticationProcessingException() from exception
+
+            raise ProcessingException(
+                message="Unable to complete account registration.",
+                error_code=ErrorCode.AUTHENTICATION_PROCESSING_ERROR,
+            ) from exception
 
     # ============================================================
     # LOGIN
@@ -297,8 +304,8 @@ class AuthImplService(AuthService):
 
         Known application exceptions are propagated unchanged.
 
-        Unexpected exceptions are converted into an application
-        authentication exception.
+        Unexpected exceptions are converted into a generic processing
+        exception with an authentication-specific error code.
         """
 
         try:
@@ -454,4 +461,8 @@ class AuthImplService(AuthService):
 
         except Exception as exception:
             logger.exception("Error in login user")
-            raise AuthenticationProcessingException() from exception
+
+            raise ProcessingException(
+                message="Unable to complete user authentication.",
+                error_code=ErrorCode.AUTHENTICATION_PROCESSING_ERROR,
+            ) from exception
