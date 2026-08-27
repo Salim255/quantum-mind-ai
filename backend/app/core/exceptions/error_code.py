@@ -22,3 +22,11 @@ class ErrorCode(str, Enum):
     ACCOUNT_LOCKED = "ACCOUNT_LOCKED"
 
     AUTHENTICATION_PROCESSING_ERROR = "AUTHENTICATION_PROCESSING_ERROR"
+
+
+    # ============================================================
+    # PROFILE
+    # ============================================================
+    PROFILE_ALREADY_EXISTS = 'PROFILE_ALREADY_EXISTS'
+    PROFILE_NOT_FOUND = "PROFILE_NOT_FOUND"
+    PROFILE_PROCESSING_ERROR = "PROFILE_PROCESSING_ERROR"
