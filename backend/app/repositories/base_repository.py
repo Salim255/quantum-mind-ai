@@ -25,6 +25,25 @@ class BaseRepository(Generic[T]):
 
 
     # --------------------------------------------------
+    # GET BY USER ID
+    # --------------------------------------------------
+    async def get_by_user_id(
+        self,
+        user_id
+    ) -> Optional[T]:
+        """
+        Fetch one entity by user id.
+        """
+
+        statement = select(self.model).where(
+            self.model.user_id == user_id
+        )
+
+        result = await self.session.execute(statement)
+
+        return result.scalar_one_or_none()
+
+    # --------------------------------------------------
     # GET BY ID
     # --------------------------------------------------
 

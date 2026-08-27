@@ -1,8 +1,12 @@
 from uuid import UUID
+from app.core.exceptions.profile_exception import (ProfileException)
 from app.v1.modules.profile.dto.profile_dto import (ProfileDTO, CreateProfileDTO)
 from app.v1.modules.profile.services.profile_service import ProfileService
 from app.repositories.profile_repository import ProfileRepository
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ProfileImplService(ProfileService):
     """
@@ -54,14 +58,15 @@ class ProfileImplService(ProfileService):
         """
 
         try:
-            profile = await self._profile_repository.create(
+            profile = await self._profile_repository.add(
                 payload=payload,
             )
 
             return ProfileDTO.model_validate(profile)
 
-        except Exception:
-            raise
+        except Exception as e:
+            logger.exception("Error in create profile")
+            raise ProfileException() from e
 
     # ============================================================
     # GET PROFILE
@@ -88,5 +93,6 @@ class ProfileImplService(ProfileService):
 
             return ProfileDTO.model_validate(profile)
 
-        except Exception:
-            raise
+        except Exception as e:
+            logger.exception("Error in get profile")
+            raise ProfileException() from e
