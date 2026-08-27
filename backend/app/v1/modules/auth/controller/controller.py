@@ -4,10 +4,10 @@ from fastapi import Depends, status
 
 from app.core.dtos.response_dto import ResponseDTO
 
-from app.v1.modules.auth.dependencies import dependencies
+from app.v1.modules.auth.dependencies import get_auth_service
 from app.v1.modules.auth.dto.auth_dto import (LoginDTO, RegisterDTO, AuthResponseDTO)
 
-from app.v1.modules.auth.service.auth_service import AuthService
+from app.v1.modules.auth.services.auth_service import AuthService
 
 from .router import router as auth_router
 
@@ -50,7 +50,7 @@ The service is responsible for:
     },
 )
 async def register(
-    payload: AuthRegisterDTO,
+    payload: RegisterDTO,
     auth_service: Annotated[
         AuthService,
         Depends(get_auth_service),
@@ -91,7 +91,7 @@ session, and issues the required authentication tokens.
     },
 )
 async def login(
-    payload: AuthLoginDTO,
+    payload: LoginDTO,
     auth_service: Annotated[
         AuthService,
         Depends(get_auth_service),

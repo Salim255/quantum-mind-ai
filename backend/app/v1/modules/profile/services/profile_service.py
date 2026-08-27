@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.v1.modules.profile.dto.profile_dto import ProfileDTO
+from app.v1.modules.profile.dto.profile_dto import (ProfileDTO, CreateProfileDTO)
 
 
 class ProfileService(ABC):
@@ -30,7 +30,7 @@ class ProfileService(ABC):
     async def create_profile(
         self,
         user_id: str,
-        payload: ProfileDTO,
+        payload: CreateProfileDTO,
     ) -> ProfileDTO:
         """
         Creates a profile for an existing user.
