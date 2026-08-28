@@ -16,3 +16,11 @@ LOW_CONFIDENCE = 1.0
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
 REFRESH_TOKEN_EXPIRE_DAYS = 30
+
+ # ============================================================
+# SECURITY POLICY
+# ============================================================
+
+MAX_FAILED_LOGIN_ATTEMPTS = 5
+
+LOCK_DURATION_MINUTES = 15
