@@ -139,26 +139,6 @@ def get_cookie_service(
     return CookieImplService(settings=container.settings)
 
 
-
-# ============================================================
-# PROFILE REPOSITORY
-# ============================================================
-
-def get_profile_repository(
-    session: Annotated[
-        AsyncSession,
-        Depends(get_db_session),
-    ],
-) -> ProfileRepository:
-    """
-    Creates the ProfileRepository.
-
-    Used during registration to create the initial user profile.
-    """
-
-    return ProfileRepository(session)
-
-
 # ============================================================
 # AUTH SERVICE
 # ============================================================
@@ -183,7 +163,7 @@ def get_auth_service(
         CookieService,
         Depends(get_cookie_service),
     ],
-    jwt_service: Annotated[
+    jwt_manager_service: Annotated[
         JWTManagerService, Depends(get_jwt_manager_service)
     ],
     password_service: Annotated [
@@ -221,6 +201,6 @@ def get_auth_service(
         user_session_service=user_session_service,
         profile_service=profile_service,
         cookie_service=cookie_service,
-        jwt_service=jwt_service,
+        jwt_manager_service=jwt_manager_service,
         password_service=password_service
     )
