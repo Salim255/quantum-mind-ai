@@ -4,18 +4,11 @@ from uuid import UUID
 from app.common.constants import (MAX_FAILED_LOGIN_ATTEMPTS, LOCK_DURATION_MINUTES)
 from app.core.exceptions.base_exception import AppException
 from app.core.exceptions.custom_exceptions import ProcessingException
-from app.v1.modules.user_security.dto.user_security_dto import (
-    UserSecurityDTO,
-)
-from app.v1.modules.user_security.models.user_security import (
-    UserSecurity,
-)
-from app.v1.modules.user_security.repositories.user_security_repository import (
-    UserSecurityRepository,
-)
-from app.v1.modules.user_security.services.user_security_service import (
-    UserSecurityService,
-)
+from app.v1.modules.user_security.dto.user_security_dto import UserSecurityDTO
+from app.models.user_security import UserSecurity
+
+from app.repositories.user_security_repository import UserSecurityRepository
+from app.v1.modules.user_security.services.user_security_service import UserSecurityService
 
 
 logger = logging.getLogger(__name__)
@@ -78,7 +71,7 @@ class UserSecurityImplService(UserSecurityService):
         self.user_security_repository = (
             user_security_repository
         )
-        
+
         self.MAX_FAILED_LOGIN_ATTEMPTS = MAX_FAILED_LOGIN_ATTEMPTS
         
         self.LOCK_DURATION_MINUTES = LOCK_DURATION_MINUTES

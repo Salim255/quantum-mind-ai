@@ -1,12 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from app.v1.modules.user_security.dto.user_security_dto import (
-    UserSecurityDTO,
-)
-from app.v1.modules.user_security.models.user_security import (
-    UserSecurity,
-)
+from app.v1.modules.user_security.dto.user_security_dto import UserSecurityDTO
 
 
 class UserSecurityService(ABC):
