@@ -8,7 +8,6 @@ from app.v1.modules.auth.services.cookie_impl_service import CookieImplService
 from app.v1.modules.auth.services.cookie_service import CookieService
 
 from app.repositories.profile_repository import ProfileRepository
-from app.repositories.user_security_repository import UserSecurityRepository
 from app.repositories.user_session_repository import UserSessionRepository
 
 from app.v1.modules.auth.services.auth_impl_service import AuthImplService
@@ -20,7 +19,11 @@ from app.v1.modules.auth.services.jwt_manager_service import JWTManagerService
 from app.v1.modules.auth.services.jwt_manager_impl_service import JWTManagerImplService
 from app.v1.modules.user.services.user_service import UserService
 from app.v1.modules.user.dependencies import get_user_service
+from app.v1.modules.user_security.dependencies import get_user_security_service
+from app.v1.modules.user_security.services.user_security_service import UserSecurityService
 
+from app.v1.modules.user_session.services.user_session_service import UserSessionService
+from app.v1.modules.user_session.dependencies import get_user_session_service
 # ============================================================
 # CONTAINER DEPENDENCY
 # ============================================================
@@ -132,32 +135,6 @@ def get_cookie_service(
 
 
 # ============================================================
-# USER SECURITY REPOSITORY
-# ============================================================
-
-def get_user_security_repository(
-    session: Annotated[
-        AsyncSession,
-        Depends(get_db_session),
-    ],
-) -> UserSecurityRepository:
-    """
-    Creates the UserSecurityRepository.
-
-    Responsible for persistent authentication security state,
-    such as:
-
-    - failed login attempts
-    - account lock state
-    - password security metadata
-    - security version
-    - security timestamps
-    """
-
-    return UserSecurityRepository(session)
-
-
-# ============================================================
 # USER SESSION REPOSITORY
 # ============================================================
 
@@ -204,13 +181,13 @@ def get_auth_service(
     user_service: Annotated [
         UserService, Depends(get_user_service)
     ],
-    user_security_repository: Annotated[
-        UserSecurityRepository,
-        Depends(get_user_security_repository),
+    user_security_service: Annotated[
+        UserSecurityService,
+        Depends(get_user_security_service),
     ],
-    user_session_repository: Annotated[
-        UserSessionRepository,
-        Depends(get_user_session_repository),
+    user_session_service: Annotated[
+        UserSessionService,
+        Depends(get_user_session_service),
     ],
     profile_repository: Annotated[
         ProfileRepository,
@@ -254,8 +231,8 @@ def get_auth_service(
 
     return AuthImplService(
         user_service=user_service,
-        user_security_repository=user_security_repository,
-        user_session_repository=user_session_repository,
+        user_security_service=user_security_service,
+        user_session_service=user_session_service,
         profile_repository=profile_repository,
         cookie_service=cookie_service,
         jwt_service=jwt_service,
