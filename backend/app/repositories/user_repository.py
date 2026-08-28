@@ -15,7 +15,7 @@ class UserRepository(BaseRepository[User]):
         # --------------------------------------------------
     # GET BY USER ID
     # --------------------------------------------------
-    async def get_by_user_email(
+    async def get_by_email(
         self,
         email: str
     ) -> Optional[T]:

@@ -164,12 +164,8 @@ class User(SQLModel, table=True):
     # RELATIONSHIPS
     # ============================================================
 
-    profile: "Profile | None" = Relationship(
-        back_populates="user",
-        sa_relationship_kwargs={
-            "uselist": False,
-            "cascade": "all, delete-orphan",
-        },
+    profile: "Profile" = Relationship(
+        back_populates="user"
     )
     """
     One-to-one relationship with the user's Profile.
@@ -189,12 +185,8 @@ class User(SQLModel, table=True):
     model from becoming a large user-profile aggregate.
     """
 
-    security: "UserSecurity | None" = Relationship(
-        back_populates="user",
-        sa_relationship_kwargs={
-            "uselist": False,
-            "cascade": "all, delete-orphan",
-        },
+    security: "UserSecurity" = Relationship(
+        back_populates="user"
     )
     """
     One-to-one relationship with UserSecurity.

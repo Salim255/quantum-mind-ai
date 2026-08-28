@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
@@ -60,7 +58,9 @@ class UserQuestionProgress(SQLModel, table=True):
         index=True,
     )
 
-    question: "Question" = Relationship()
+    question: "Question" = Relationship(
+        back_populates="user_questions_progress",
+    )
 
     # ============================================================
     # EXPOSURE

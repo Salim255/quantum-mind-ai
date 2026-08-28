@@ -26,6 +26,34 @@ class UserService(ABC):
     UserImplService directly.
     """
 
+
+    # ============================================================
+    # CREATE USER
+    # ============================================================
+
+    @abstractmethod
+    async def create_user(
+        self,
+        email: str,
+        first_name: str,
+        last_name: str,
+    ) -> UserDTO:
+        """
+        Creates a new user.
+
+        The implementation is responsible for:
+
+        - creating the user entity
+        - applying user-related business rules
+        - persisting the user through the repository
+        - returning the created user representation
+
+        Authentication credentials and security-related information
+        must not be exposed through the returned DTO.
+        """
+
+        raise NotImplementedError
+    
     # ============================================================
     # GET USER BY ID
     # ============================================================

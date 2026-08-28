@@ -134,6 +134,11 @@ class Question(SQLModel, table=True):
         back_populates="question",
     )
     
+
+    user_questions_progress:  "UserQuestionProgress" = Relationship(
+        back_populates="question",
+    )
+    
     # ============================================================
     # AUDIT
     # ============================================================
