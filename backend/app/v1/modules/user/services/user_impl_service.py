@@ -11,7 +11,12 @@ from app.repositories.user_repository import UserRepository
 
 from app.v1.modules.user.dto.user_dto import UserDTO
 from app.v1.modules.user.services.user_service import UserService
-
+from app.v1.modules.auth.dto.auth_dto import (
+    AuthResponseDTO,
+    LoginDTO,
+    RegisterDTO,
+)
+from app.models.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -50,8 +55,7 @@ class UserImplService(UserService):
     async def create_user(
         self,
         email: str,
-        first_name: str,
-        last_name: str,
+        password_hash: str
     ) -> UserDTO:
         """
         Creates a new user.
@@ -67,11 +71,12 @@ class UserImplService(UserService):
         """
 
         try:
-            user = await self._user_repository.add(
+            user = User(
                 email=email,
-                first_name=first_name,
-                last_name=last_name,
+                password_hash=password_hash
             )
+
+            await self._user_repository.add(user)
 
             return UserDTO.model_validate(user)
 

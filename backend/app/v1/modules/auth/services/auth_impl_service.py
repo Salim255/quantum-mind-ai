@@ -44,6 +44,7 @@ from app.v1.modules.user_session.services.user_session_service import (
     UserSessionService,
 )
 
+from app.v1.modules.profile.dto.profile_dto import CreateProfileDTO
 
 logger = logging.getLogger(__name__)
 
@@ -198,11 +199,13 @@ class AuthImplService(AuthService):
             # ----------------------------------------------------
             # CREATE PROFILE
             # ----------------------------------------------------
-
+            
             await self.profile_service.create_profile(
-                user_id=user.id,
-                first_name=payload.first_name,
-                last_name=payload.last_name,
+                CreateProfileDTO(
+                    user_id=user.id,
+                    first_name=payload.first_name,
+                    last_name=payload.last_name,
+                )
             )
 
             # ----------------------------------------------------

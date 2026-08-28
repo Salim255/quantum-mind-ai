@@ -4,7 +4,7 @@ from app.core.exceptions.error_code import ErrorCode
 from app.v1.modules.profile.dto.profile_dto import (ProfileDTO, CreateProfileDTO)
 from app.v1.modules.profile.services.profile_service import ProfileService
 from app.repositories.profile_repository import ProfileRepository
-
+from app.models.profile import Profile
 
 import logging
 
@@ -60,9 +60,9 @@ class ProfileImplService(ProfileService):
         """
 
         try:
-            profile = await self._profile_repository.add(
-                payload=payload,
-            )
+            profile =  Profile(**payload.model_dump())
+
+            await self._profile_repository.add(profile)
 
             return ProfileDTO.model_validate(profile)
 

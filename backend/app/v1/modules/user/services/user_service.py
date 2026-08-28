@@ -35,8 +35,7 @@ class UserService(ABC):
     async def create_user(
         self,
         email: str,
-        first_name: str,
-        last_name: str,
+        password_hash: str
     ) -> UserDTO:
         """
         Creates a new user.
