@@ -1,12 +1,20 @@
 from uuid import UUID
+
 import logging
-from app.v1.modules.user.dto.user_dto import UserDTO
-from app.repositories.user_repository import UserRepository
-from app.v1.modules.user.services.user_service import UserService
-from app.core.exceptions.custom_exceptions import ProcessingException
+
+from app.core.exceptions.custom_exceptions import (
+    ProcessingException,
+)
 from app.core.exceptions.error_code import ErrorCode
 
+from app.repositories.user_repository import UserRepository
+
+from app.v1.modules.user.dto.user_dto import UserDTO
+from app.v1.modules.user.services.user_service import UserService
+
+
 logger = logging.getLogger(__name__)
+
 
 class UserImplService(UserService):
     """
@@ -36,10 +44,10 @@ class UserImplService(UserService):
         self._user_repository = user_repository
 
     # ============================================================
-    # GET USER
+    # GET USER BY ID
     # ============================================================
 
-    async def get_user(
+    async def get_user_by_id(
         self,
         user_id: UUID,
     ) -> UserDTO | None:
@@ -51,6 +59,9 @@ class UserImplService(UserService):
 
         The retrieved persistence model is converted into a UserDTO
         before being returned to the application layer.
+
+        Returns None when no user exists with the provided
+        identifier.
         """
 
         try:
@@ -58,12 +69,54 @@ class UserImplService(UserService):
                 id=user_id,
             )
 
+            if user is None:
+                return None
+
             return UserDTO.model_validate(user)
 
-        except Exception as e:
-            logger.exception("Error in getting use by id")
-            
+        except Exception as exception:
+            logger.exception("Error getting user by ID")
+
             raise ProcessingException(
                 message="Unable to retrieve the user.",
                 error_code=ErrorCode.USER_PROCESSING_ERROR,
-            ) from e
+            ) from exception
+
+    # ============================================================
+    # GET USER BY EMAIL
+    # ============================================================
+
+    async def get_user_by_email(
+        self,
+        email: str,
+    ) -> UserDTO | None:
+        """
+        Retrieves a user by their email address.
+
+        The repository is responsible for locating the user in the
+        persistence layer.
+
+        The retrieved persistence model is converted into a UserDTO
+        before being returned to the application layer.
+
+        Returns None when no user exists with the provided
+        email address.
+        """
+
+        try:
+            user = await self._user_repository.get_by_email(
+                email=email,
+            )
+
+            if user is None:
+                return None
+
+            return UserDTO.model_validate(user)
+
+        except Exception as exception:
+            logger.exception("Error getting user by email")
+
+            raise ProcessingException(
+                message="Unable to retrieve the user.",
+                error_code=ErrorCode.USER_PROCESSING_ERROR,
+            ) from exception

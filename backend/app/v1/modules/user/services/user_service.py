@@ -14,7 +14,7 @@ class UserService(ABC):
 
     The implementation coordinates:
 
-    - UserRepository
+    - user creation
     - user retrieval
     - user existence checks
     - user-related business rules
@@ -27,11 +27,11 @@ class UserService(ABC):
     """
 
     # ============================================================
-    # GET USER
+    # GET USER BY ID
     # ============================================================
 
     @abstractmethod
-    async def get_user(
+    async def get_user_by_id(
         self,
         user_id: UUID,
     ) -> UserDTO:
@@ -46,6 +46,34 @@ class UserService(ABC):
 
         Authentication credentials and security-related information
         must not be exposed through the returned DTO.
+        """
+
+        raise NotImplementedError
+
+    # ============================================================
+    # GET USER BY EMAIL
+    # ============================================================
+
+    @abstractmethod
+    async def get_user_by_email(
+        self,
+        email: str,
+    ) -> UserDTO | None:
+        """
+        Retrieves a user by their email address.
+
+        This method is primarily used internally by application
+        workflows that need to determine whether an account exists.
+
+        The implementation is responsible for:
+
+        - locating the user associated with the email address
+        - returning None when no matching user exists
+        - returning the user representation when a match is found
+
+        The absence of a user is not treated as an exception because
+        callers may legitimately use this method for existence checks,
+        registration workflows and authentication workflows.
         """
 
         raise NotImplementedError
