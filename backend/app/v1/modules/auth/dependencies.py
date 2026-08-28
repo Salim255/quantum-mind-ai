@@ -24,6 +24,11 @@ from app.v1.modules.user_security.services.user_security_service import UserSecu
 
 from app.v1.modules.user_session.services.user_session_service import UserSessionService
 from app.v1.modules.user_session.dependencies import get_user_session_service
+
+from app.v1.modules.profile.services.profile_service import ProfileService
+from app.v1.modules.profile.dependencies import get_profile_service
+
+
 # ============================================================
 # CONTAINER DEPENDENCY
 # ============================================================
@@ -134,25 +139,6 @@ def get_cookie_service(
     return CookieImplService(settings=container.settings)
 
 
-# ============================================================
-# USER SESSION REPOSITORY
-# ============================================================
-
-def get_user_session_repository(
-    session: Annotated[
-        AsyncSession,
-        Depends(get_db_session),
-    ],
-) -> UserSessionRepository:
-    """
-    Creates the UserSessionRepository.
-
-    Responsible for authenticated session persistence and
-    session lifecycle management.
-    """
-
-    return UserSessionRepository(session)
-
 
 # ============================================================
 # PROFILE REPOSITORY
@@ -189,9 +175,9 @@ def get_auth_service(
         UserSessionService,
         Depends(get_user_session_service),
     ],
-    profile_repository: Annotated[
-        ProfileRepository,
-        Depends(get_profile_repository),
+    profile_service: Annotated[
+        ProfileService,
+        Depends(get_profile_service),
     ],
     cookie_service: Annotated[
         CookieService,
@@ -233,7 +219,7 @@ def get_auth_service(
         user_service=user_service,
         user_security_service=user_security_service,
         user_session_service=user_session_service,
-        profile_repository=profile_repository,
+        profile_service=profile_service,
         cookie_service=cookie_service,
         jwt_service=jwt_service,
         password_service=password_service
