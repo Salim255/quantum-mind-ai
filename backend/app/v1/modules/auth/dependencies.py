@@ -8,7 +8,6 @@ from app.v1.modules.auth.services.cookie_impl_service import CookieImplService
 from app.v1.modules.auth.services.cookie_service import CookieService
 
 from app.repositories.profile_repository import ProfileRepository
-from app.repositories.user_repository import UserRepository
 from app.repositories.user_security_repository import UserSecurityRepository
 from app.repositories.user_session_repository import UserSessionRepository
 
@@ -19,6 +18,8 @@ from app.v1.modules.auth.services.password_impl_service import PasswordImplServi
 from app.v1.modules.auth.services.password_service import PasswordService
 from app.v1.modules.auth.services.jwt_manager_service import JWTManagerService
 from app.v1.modules.auth.services.jwt_manager_impl_service import JWTManagerImplService
+from app.v1.modules.user.services.user_service import UserService
+from app.v1.modules.user.dependencies import get_user_service
 
 # ============================================================
 # CONTAINER DEPENDENCY
@@ -131,25 +132,6 @@ def get_cookie_service(
 
 
 # ============================================================
-# USER REPOSITORY
-# ============================================================
-
-def get_user_repository(
-    session: Annotated[
-        AsyncSession,
-        Depends(get_db_session),
-    ],
-) -> UserRepository:
-    """
-    Creates the UserRepository.
-
-    Responsible for user account persistence.
-    """
-
-    return UserRepository(session)
-
-
-# ============================================================
 # USER SECURITY REPOSITORY
 # ============================================================
 
@@ -219,9 +201,8 @@ def get_profile_repository(
 # ============================================================
 
 def get_auth_service(
-    user_repository: Annotated[
-        UserRepository,
-        Depends(get_user_repository),
+    user_service: Annotated [
+        UserService, Depends(get_user_service)
     ],
     user_security_repository: Annotated[
         UserSecurityRepository,
@@ -272,7 +253,7 @@ def get_auth_service(
     """
 
     return AuthImplService(
-        user_repository=user_repository,
+        user_service=user_service,
         user_security_repository=user_security_repository,
         user_session_repository=user_session_repository,
         profile_repository=profile_repository,

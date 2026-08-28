@@ -5,6 +5,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.container import Container
 
 from app.repositories.user_repository import UserRepository
+from app.v1.modules.user.services.user_service import UserService
+from app.v1.modules.user.services.user_impl_service import UserImplService
 
 # ============================================================
 # CONTAINER DEPENDENCY
@@ -60,3 +62,29 @@ def get_user_repository(
     """
 
     return UserRepository(session)
+
+# ============================================================
+# USER SERVICE
+# ============================================================
+
+def get_user_service(
+    user_repository: Annotated[
+        UserRepository,
+        Depends(get_user_repository),
+    ],
+) -> UserService:
+    """
+    Creates the user service.
+
+    UserService coordinates user account operations while
+    delegating persistence responsibilities to UserRepository.
+
+    Dependencies:
+
+    UserRepository
+        Provides persistence operations for user accounts.
+    """
+
+    return UserImplService(
+        user_repository=user_repository,
+    )

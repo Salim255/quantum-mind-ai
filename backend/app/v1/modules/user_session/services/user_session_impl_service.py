@@ -5,9 +5,7 @@ from uuid import UUID
 from app.core.exceptions.base_exception import AppException
 from app.core.exceptions.custom_exceptions import ProcessingException
 
-from app.v1.modules.user_session.dto.user_session_dto import (
-    UserSessionDTO,
-)
+from app.v1.modules.user_session.dto.user_session_dto import UserSessionDTO
 
 from app.models.user_session import UserSession
 
