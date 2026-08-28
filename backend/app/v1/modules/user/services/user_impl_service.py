@@ -44,6 +44,46 @@ class UserImplService(UserService):
         self._user_repository = user_repository
 
     # ============================================================
+    # CREATE USER
+    # ============================================================
+
+    async def create_user(
+        self,
+        email: str,
+        first_name: str,
+        last_name: str,
+    ) -> UserDTO:
+        """
+        Creates a new user.
+
+        The repository is responsible for persisting the user in the
+        database.
+
+        The created persistence model is converted into a UserDTO
+        before being returned to the application layer.
+
+        Authentication credentials and security-related information
+        must not be handled by this service.
+        """
+
+        try:
+            user = await self._user_repository.add(
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+            )
+
+            return UserDTO.model_validate(user)
+
+        except Exception as exception:
+            logger.exception("Error creating user")
+
+            raise ProcessingException(
+                message="Unable to create the user.",
+                error_code=ErrorCode.USER_PROCESSING_ERROR,
+            ) from exception
+        
+    # ============================================================
     # GET USER BY ID
     # ============================================================
 
