@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from fastapi import Response
 from app.v1.modules.auth.dto.auth_dto import (LoginDTO, RegisterDTO, AuthResponseDTO)
 
 
@@ -33,6 +33,7 @@ class AuthService(ABC):
     async def register(
         self,
         payload: RegisterDTO,
+        response: Response,
     ) -> AuthResponseDTO:
         """
         Creates a new user account.

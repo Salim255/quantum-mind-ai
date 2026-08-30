@@ -1,7 +1,7 @@
 from typing import Annotated
 from collections.abc import AsyncGenerator
 
-from fastapi import Depends, Request, status
+from fastapi import Depends, Request, status, Response
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.container import Container
@@ -116,6 +116,7 @@ The service is responsible for:
 )
 async def register(
     payload: RegisterDTO,
+    response: Response,
     session: Annotated[
         AsyncSession,
         Depends(get_db_session),
@@ -163,16 +164,14 @@ async def register(
 
     auth_service: AuthService = get_auth_service(
         session=session,
-        container=container,
+        container=container
     )
 
     # --------------------------------------------------------
     # EXECUTE REGISTRATION
     # --------------------------------------------------------
 
-    return ResponseDTO.success(
-        await auth_service.register(payload)
-    )
+    return ResponseDTO.success(await auth_service.register(payload, response))
 
 
 # ============================================================

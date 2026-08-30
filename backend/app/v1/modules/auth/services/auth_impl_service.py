@@ -1,5 +1,5 @@
 import logging
-
+from fastapi import Response
 from app.core.exceptions.auth_exception import (
     AccountInactiveException,
     AccountLockedException,
@@ -147,6 +147,7 @@ class AuthImplService(AuthService):
     async def register(
         self,
         payload: RegisterDTO,
+        response: Response,
     ) -> AuthResponseDTO:
         """
         Registers a new platform account.
@@ -349,15 +350,29 @@ class AuthImplService(AuthService):
                 # UnitOfWork.__aexit__() rolls everything back.
 
 
+                # ------------------------------------------------------------
+                # ATTACH AUTHENTICATION COOKIES
+                # ------------------------------------------------------------
+
+                # AuthService owns the authentication workflow, therefore it
+                # decides when the authentication cookies should be attached.
+                #
+                # CookieService owns the actual cookie configuration and
+                # HTTP cookie handling.
+                self.cookie_service.set_auth_cookies(
+                    response=response,
+                    access_token=access_token,
+                    refresh_token=refresh_token,
+                )
+
                 # ----------------------------------------------------
                 # RETURN AUTH RESPONSE
                 # ----------------------------------------------------
 
+
                 return AuthResponseDTO(
                     user_id=user.id,
-                    email=user.email,
-                    access_token=access_token,
-                    refresh_token=refresh_token,
+                    email=user.email
                 )
 
         # --------------------------------------------------------

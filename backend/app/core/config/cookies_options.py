@@ -34,14 +34,14 @@ def get_cookie_options(
 
         # Secure cookies require HTTPS.
         # Enabled only in production.
-        "secure": settings.is_production,
+        "secure":  not settings.is_dev ,
 
         # Production uses Lax for normal browser navigation.
         # Development uses Strict for stronger local protection.
         "samesite": (
-            "lax"
-            if settings.is_production
-            else "strict"
+            "strict"
+            if settings.is_dev
+            else "lax"
         ),
 
         # FastAPI expects seconds.
