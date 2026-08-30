@@ -212,7 +212,7 @@ class AuthImplService(AuthService):
             # INITIALIZE SECURITY STATE
             # ----------------------------------------------------
 
-            await (
+            security = await (
                 self.user_security_service.create_security(
                     user_id=user.id,
                 )
@@ -225,6 +225,7 @@ class AuthImplService(AuthService):
             session = await (
                 self.user_session_service.create_session(
                     user_id=user.id,
+                    security_version=security.security_version,
                 )
             )
 
@@ -243,7 +244,7 @@ class AuthImplService(AuthService):
             # GENERATE REFRESH TOKEN
             # ----------------------------------------------------
 
-            refresh_token = (
+            refresh_token, refresh_token_expires_at = (
                 self.jwt_manager_service.create_refresh_token(
                     user_id=user.id,
                     session_id=session.id,
@@ -267,6 +268,7 @@ class AuthImplService(AuthService):
             await self.user_session_service.update_refresh_token(
                 session_id=session.id,
                 refresh_token_hash=refresh_token_hash,
+                expires_at=refresh_token_expires_at
             )
 
             # ----------------------------------------------------

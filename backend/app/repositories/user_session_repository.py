@@ -32,8 +32,5 @@ class UserSessionRepository(
         self,
         session: Session,
     ):
-        super().__init__(
-            session,
-            UserSession,
-        )
+        super().__init__(session, UserSession)
 

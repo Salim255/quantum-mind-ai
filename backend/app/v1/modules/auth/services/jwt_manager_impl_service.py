@@ -46,7 +46,7 @@ class JWTManagerImplService(JWTManagerService):
         self,
         user_id: UUID,
         session_id: UUID,
-    ) -> str:
+    ) -> tuple[str, datetime]:
         """
         Creates a short-lived access token.
 
@@ -83,7 +83,7 @@ class JWTManagerImplService(JWTManagerService):
         self,
         user_id: UUID,
         session_id: UUID,
-    ) -> str:
+    ) -> tuple[str, datetime]:
         """
         Creates a long-lived refresh token.
 
@@ -108,7 +108,7 @@ class JWTManagerImplService(JWTManagerService):
         session_id: UUID,
         token_type: str,
         expires_in: int,
-    ) -> str:
+    ) -> tuple[str, datetime]:
         """
         Creates and signs a JWT.
 
@@ -132,12 +132,14 @@ class JWTManagerImplService(JWTManagerService):
             "exp": expires_at,
         }
 
-        return jwt.encode(
+        token =  jwt.encode(
             payload,
             self.secret_key,
             algorithm=self.algorithm,
         )
 
+        return token, expires_at
+    
     # ============================================================
     # TOKEN DECODING
     # ============================================================

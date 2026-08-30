@@ -1,5 +1,5 @@
 from typing import Generic, TypeVar, Type, Optional, List
-
+from uuid import UUID
 from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -29,7 +29,7 @@ class BaseRepository(Generic[T]):
     # --------------------------------------------------
     async def get_by_user_id(
         self,
-        user_id
+        user_id: UUID
     ) -> Optional[T]:
         """
         Fetch one entity by user id.
@@ -49,7 +49,7 @@ class BaseRepository(Generic[T]):
 
     async def get_by_id(
         self,
-        id
+        id: UUID
     ) -> Optional[T]:
         """
         Fetch one entity by primary key.

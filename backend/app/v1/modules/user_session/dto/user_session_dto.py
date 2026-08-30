@@ -41,7 +41,7 @@ class UserSessionDTO(BaseModel):
     # REFRESH TOKEN
     # ============================================================
 
-    refresh_token_hash: str = Field(
+    refresh_token_hash: str | None = Field(
         description="Cryptographic hash of the current refresh token.",
     )
 
@@ -61,7 +61,7 @@ class UserSessionDTO(BaseModel):
     # SESSION LIFECYCLE
     # ============================================================
 
-    expires_at: datetime = Field(
+    expires_at: datetime | None = Field(
         description="UTC timestamp when the session expires.",
     )
 

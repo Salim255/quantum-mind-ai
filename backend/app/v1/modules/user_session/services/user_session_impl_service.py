@@ -80,9 +80,7 @@ class UserSessionImplService(UserSessionService):
     async def create_session(
         self,
         user_id: UUID,
-        refresh_token_hash: str | None,
         security_version: int,
-        expires_at: datetime | None,
         device_name: str | None = None,
         user_agent: str | None = None,
         ip_address: str | None = None,
@@ -103,9 +101,7 @@ class UserSessionImplService(UserSessionService):
 
             session = UserSession(
                 user_id=user_id,
-                refresh_token_hash=refresh_token_hash,
-                security_version=security_version,
-                expires_at=expires_at,
+                security_version=security_version,       
                 device_name=device_name,
                 user_agent=user_agent,
                 ip_address=ip_address,
@@ -450,18 +446,6 @@ class UserSessionImplService(UserSessionService):
         refresh_token_hash: str,
         expires_at: datetime,
     ) -> UserSessionDTO:
-        """
-        Updates the refresh-token information of an existing session.
-
-        Only the cryptographic hash of the refresh token is persisted.
-
-        The raw refresh token must never reach the persistence layer.
-
-        The method is responsible for updating:
-
-        - the refresh-token hash
-        - the refresh-token expiration date
-        """
 
         try:
 
@@ -469,7 +453,7 @@ class UserSessionImplService(UserSessionService):
             # RETRIEVE SESSION
             # ----------------------------------------------------
 
-            session = await (
+            session: UserSession | None = await (
                 self._user_session_repository.get_by_id(
                     id=session_id,
                 )
@@ -482,7 +466,7 @@ class UserSessionImplService(UserSessionService):
                 )
 
             # ----------------------------------------------------
-            # UPDATE REFRESH TOKEN
+            # UPDATE SESSION
             # ----------------------------------------------------
 
             session.refresh_token_hash = refresh_token_hash
@@ -490,7 +474,7 @@ class UserSessionImplService(UserSessionService):
             session.expires_at = expires_at
 
             # ----------------------------------------------------
-            # PERSIST CHANGES
+            # PERSIST SESSION
             # ----------------------------------------------------
 
             updated_session = await (

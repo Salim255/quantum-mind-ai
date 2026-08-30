@@ -47,9 +47,7 @@ class UserSessionService(ABC):
     async def create_session(
         self,
         user_id: UUID,
-        refresh_token_hash: str,
         security_version: int,
-        expires_at: datetime | None,
         device_name: str | None = None,
         user_agent: str | None = None,
         ip_address: str | None = None,
