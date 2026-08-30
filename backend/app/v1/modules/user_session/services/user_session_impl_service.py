@@ -11,9 +11,7 @@ from app.models.user_session import UserSession
 
 from app.repositories.user_session_repository import UserSessionRepository
 
-from app.v1.modules.user_session.services.user_session_service import (
-    UserSessionService,
-)
+from app.v1.modules.user_session.services.user_session_service import (UserSessionService)
 
 
 logger = logging.getLogger(__name__)
@@ -81,9 +79,9 @@ class UserSessionImplService(UserSessionService):
     async def create_session(
         self,
         user_id: UUID,
-        refresh_token_hash: str,
+        refresh_token_hash: str | None,
         security_version: int,
-        expires_at: datetime,
+        expires_at: datetime | None,
         device_name: str | None = None,
         user_agent: str | None = None,
         ip_address: str | None = None,
@@ -117,11 +115,7 @@ class UserSessionImplService(UserSessionService):
             # PERSIST SESSION
             # ----------------------------------------------------
 
-            session = await (
-                self.user_session_repository.create(
-                    session
-                )
-            )
+            session = await self.user_session_repository.add(session)
 
             # ----------------------------------------------------
             # RETURN SESSION DTO

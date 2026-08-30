@@ -251,6 +251,25 @@ class AuthImplService(AuthService):
             )
 
             # ----------------------------------------------------
+            # HASH REFRESH TOKEN
+            # ----------------------------------------------------
+
+            refresh_token_hash = (
+                self.password_service.hash_password(
+                    refresh_token
+                )
+            )
+
+            # ----------------------------------------------------
+            # STORE REFRESH TOKEN HASH
+            # ----------------------------------------------------
+
+            await self.user_session_service.update_refresh_token(
+                session_id=session.id,
+                refresh_token_hash=refresh_token_hash,
+            )
+
+            # ----------------------------------------------------
             # RETURN AUTH RESPONSE
             # ----------------------------------------------------
 

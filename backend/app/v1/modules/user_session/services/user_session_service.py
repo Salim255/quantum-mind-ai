@@ -183,3 +183,39 @@ class UserSessionService(ABC):
         """
 
         raise NotImplementedError
+
+
+    # ============================================================
+    # UPDATE REFRESH TOKEN
+    # ============================================================
+
+    @abstractmethod
+    async def update_refresh_token(
+        self,
+        session_id: UUID,
+        refresh_token_hash: str,
+        expires_at: datetime,
+    ) -> UserSessionDTO:
+        """
+        Updates the refresh-token information of an existing session.
+
+        This method is responsible for completing or rotating the
+        refresh-token state associated with a session.
+
+        The raw refresh token must never be persisted.
+
+        Only its cryptographic hash is stored.
+
+        The implementation is responsible for updating:
+
+        - the refresh-token hash
+        - the refresh-token expiration date
+
+        The session identifier is used to locate the session that
+        should be updated.
+
+        Raises an application-specific exception when the session
+        cannot be located or updated.
+        """
+
+        raise NotImplementedError

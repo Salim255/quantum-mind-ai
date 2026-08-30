@@ -108,11 +108,8 @@ class UserSecurityImplService(UserSecurityService):
             # PERSIST SECURITY STATE
             # ----------------------------------------------------
 
-            security = await (
-                self.user_security_repository.create(
-                    security
-                )
-            )
+            security = await self.user_security_repository.add(security)
+        
 
             # ----------------------------------------------------
             # RETURN SECURITY DTO

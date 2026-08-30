@@ -74,8 +74,8 @@ class UserSession(SQLModel, table=True):
     # REFRESH TOKEN
     # ============================================================
 
-    refresh_token_hash: str = Field(
-        nullable=False,
+    refresh_token_hash: str | None = Field(
+        nullable=True,
         unique=True,
         index=True,
         max_length=255,
@@ -153,10 +153,10 @@ class UserSession(SQLModel, table=True):
     # SESSION LIFECYCLE
     # ============================================================
 
-    expires_at: datetime = Field(
+    expires_at: datetime | None = Field(
         sa_column=Column(
             DateTime(timezone=True),
-            nullable=False,
+            nullable=True,
         ),
     )
     """
