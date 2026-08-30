@@ -454,7 +454,7 @@ class UserSessionImplService(UserSessionService):
             # ----------------------------------------------------
 
             session: UserSession | None = await (
-                self._user_session_repository.get_by_id(
+                self.user_session_repository.get_by_id(
                     id=session_id,
                 )
             )
@@ -478,7 +478,7 @@ class UserSessionImplService(UserSessionService):
             # ----------------------------------------------------
 
             updated_session = await (
-                self._user_session_repository.update(
+                self.user_session_repository.update(
                     session
                 )
             )
