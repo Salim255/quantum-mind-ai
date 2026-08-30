@@ -121,7 +121,14 @@ class SQLAlchemyUnitOfWork(UnitOfWork):
             # ----------------------------------------------------
 
             if exception_type is not None:
-
+                
+                # ----------------------------------------------------
+                # FAILURE
+                # ----------------------------------------------------
+                # Something failed during the operation.
+                #
+                # Undo every database change made during this
+                # transaction.
                 await self.session.rollback()
 
                 # Returning False tells Python that the original
@@ -131,7 +138,10 @@ class SQLAlchemyUnitOfWork(UnitOfWork):
             # ----------------------------------------------------
             # COMMIT ON SUCCESS
             # ----------------------------------------------------
-
+            # ----------------------------------------------------
+            # All operations completed successfully.
+            #
+            # Persist everything permanently.
             await self.session.commit()
 
             return False

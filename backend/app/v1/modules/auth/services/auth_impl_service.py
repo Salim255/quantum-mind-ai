@@ -46,6 +46,8 @@ from app.v1.modules.user_session.services.user_session_service import (
 
 from app.v1.modules.profile.dto.profile_dto import CreateProfileDTO
 
+from app.db.transactions.unit_of_work import UnitOfWork
+
 logger = logging.getLogger(__name__)
 
 
@@ -87,6 +89,7 @@ class AuthImplService(AuthService):
         password_service: PasswordService,
         jwt_manager_service: JWTManagerService,
         cookie_service: CookieService,
+        unit_of_work_service: UnitOfWork,
     ) -> None:
         """
         Initializes the authentication service.
@@ -135,6 +138,8 @@ class AuthImplService(AuthService):
 
         self.cookie_service = cookie_service
 
+        self.unit_of_work_service = unit_of_work_service
+
     # ============================================================
     # REGISTER
     # ============================================================
@@ -164,123 +169,196 @@ class AuthImplService(AuthService):
 
         try:
 
-            # ----------------------------------------------------
-            # CHECK EXISTING USER
-            # ----------------------------------------------------
+            # ========================================================
+            # REGISTRATION TRANSACTION
+            # ========================================================
 
-            existing_user = await (
-                self.user_service.get_user_by_email(
-                    payload.email
+            # UnitOfWork defines the transaction boundary for the complete
+            # registration workflow.
+            #
+            # `async with` automatically calls:
+            #
+            #     1. __aenter__()
+            #        → executed when entering this block.
+            #
+            #     2. __aexit__()
+            #        → executed automatically when leaving this block.
+            #
+            # Every repository participating in registration uses the same
+            # AsyncSession, which means all database operations below belong
+            # to the same transaction.
+            #
+            # The transaction lifecycle is therefore:
+            #
+            #     async with
+            #          │
+            #          ├── __aenter__()
+            #          │      → enter transaction
+            #          │
+            #          ├── create user
+            #          ├── create profile
+            #          ├── create security state
+            #          ├── create session
+            #          ├── store refresh-token hash
+            #          │
+            #          └── __aexit__()
+            #                 │
+            #                 ├── no exception
+            #                 │      → COMMIT
+            #                 │
+            #                 └── exception
+            #                        → ROLLBACK
+            #
+            # We intentionally do not call `commit()` here.
+            #
+            # The UnitOfWork owns the transaction lifecycle. When the block
+            # finishes successfully, `__aexit__()` commits all changes at once.
+            # If any operation raises an exception, `__aexit__()` rolls back
+            # the entire transaction.
+            #
+            # This guarantees that account registration is atomic:
+            #
+            #     Either the complete registration succeeds,
+            #     or none of its database changes are persisted.
+            #
+            # For example, if the user is created successfully but profile
+            # creation fails, the previously created user is also rolled back.
+            #
+            # This keeps transaction management out of individual services
+            # and repositories while allowing AuthImplService to define the
+            # complete business operation that must be atomic.
+            async with self.unit_of_work_service:
+                # ----------------------------------------------------
+                # CHECK EXISTING USER
+                # ----------------------------------------------------
+
+                existing_user = await (
+                    self.user_service.get_user_by_email(
+                        payload.email
+                    )
                 )
-            )
 
-            if existing_user is not None:
-                raise EmailAlreadyExistsException()
+                if existing_user is not None:
+                    raise EmailAlreadyExistsException()
 
-            # ----------------------------------------------------
-            # HASH PASSWORD
-            # ----------------------------------------------------
+                # ----------------------------------------------------
+                # HASH PASSWORD
+                # ----------------------------------------------------
 
-            password_hash = (
-                self.password_service.hash_password(
-                    payload.password
+                password_hash = (
+                    self.password_service.hash_password(
+                        payload.password
+                    )
                 )
-            )
 
-            # ----------------------------------------------------
-            # CREATE USER
-            # ----------------------------------------------------
+                # ----------------------------------------------------
+                # CREATE USER
+                # ----------------------------------------------------
 
-            user = await self.user_service.create_user(
-                email=payload.email,
-                password_hash=password_hash,
-            )
-
-            # ----------------------------------------------------
-            # CREATE PROFILE
-            # ----------------------------------------------------
-            
-            await self.profile_service.create_profile(
-                CreateProfileDTO(
-                    user_id=user.id,
-                    first_name=payload.first_name,
-                    last_name=payload.last_name,
+                user = await self.user_service.create_user(
+                    email=payload.email,
+                    password_hash=password_hash,
                 )
-            )
 
-            # ----------------------------------------------------
-            # INITIALIZE SECURITY STATE
-            # ----------------------------------------------------
-
-            security = await (
-                self.user_security_service.create_security(
-                    user_id=user.id,
+                # ----------------------------------------------------
+                # CREATE PROFILE
+                # ----------------------------------------------------
+                
+                await self.profile_service.create_profile(
+                    CreateProfileDTO(
+                        user_id=user.id,
+                        first_name=payload.first_name,
+                        last_name=payload.last_name,
+                    )
                 )
-            )
 
-            # ----------------------------------------------------
-            # CREATE AUTHENTICATED SESSION
-            # ----------------------------------------------------
+                # ----------------------------------------------------
+                # INITIALIZE SECURITY STATE
+                # ----------------------------------------------------
 
-            session = await (
-                self.user_session_service.create_session(
-                    user_id=user.id,
-                    security_version=security.security_version,
+                security = await (
+                    self.user_security_service.create_security(
+                        user_id=user.id,
+                    )
                 )
-            )
 
-            # ----------------------------------------------------
-            # GENERATE ACCESS TOKEN
-            # ----------------------------------------------------
+                # ----------------------------------------------------
+                # CREATE AUTHENTICATED SESSION
+                # ----------------------------------------------------
 
-            access_token = (
-                self.jwt_manager_service.create_access_token(
-                    user_id=user.id,
+                session = await (
+                    self.user_session_service.create_session(
+                        user_id=user.id,
+                        security_version=security.security_version,
+                    )
+                )
+
+                # ----------------------------------------------------
+                # GENERATE ACCESS TOKEN
+                # ----------------------------------------------------
+
+                access_token = (
+                    self.jwt_manager_service.create_access_token(
+                        user_id=user.id,
+                        session_id=session.id,
+                    )
+                )
+
+                # ----------------------------------------------------
+                # GENERATE REFRESH TOKEN
+                # ----------------------------------------------------
+
+                refresh_token, refresh_token_expires_at = (
+                    self.jwt_manager_service.create_refresh_token(
+                        user_id=user.id,
+                        session_id=session.id,
+                    )
+                )
+
+                # ----------------------------------------------------
+                # HASH REFRESH TOKEN
+                # ----------------------------------------------------
+
+                refresh_token_hash = (
+                    self.password_service.hash_password(
+                        refresh_token
+                    )
+                )
+
+                # ----------------------------------------------------
+                # STORE REFRESH TOKEN HASH
+                # ----------------------------------------------------
+
+                await self.user_session_service.update_refresh_token(
                     session_id=session.id,
+                    refresh_token_hash=refresh_token_hash,
+                    expires_at=refresh_token_expires_at
                 )
-            )
 
-            # ----------------------------------------------------
-            # GENERATE REFRESH TOKEN
-            # ----------------------------------------------------
 
-            refresh_token, refresh_token_expires_at = (
-                self.jwt_manager_service.create_refresh_token(
+                # ----------------------------------------------------
+                # TRANSACTION COMMIT
+                # ----------------------------------------------------
+
+                # No explicit commit is required here.
+                #
+                # When this async-with block finishes successfully,
+                # UnitOfWork.__aexit__() commits the transaction.
+                #
+                # If anything above raises an exception,
+                # UnitOfWork.__aexit__() rolls everything back.
+
+
+                # ----------------------------------------------------
+                # RETURN AUTH RESPONSE
+                # ----------------------------------------------------
+
+                return AuthResponseDTO(
                     user_id=user.id,
-                    session_id=session.id,
+                    email=user.email,
+                    access_token=access_token,
+                    refresh_token=refresh_token,
                 )
-            )
-
-            # ----------------------------------------------------
-            # HASH REFRESH TOKEN
-            # ----------------------------------------------------
-
-            refresh_token_hash = (
-                self.password_service.hash_password(
-                    refresh_token
-                )
-            )
-
-            # ----------------------------------------------------
-            # STORE REFRESH TOKEN HASH
-            # ----------------------------------------------------
-
-            await self.user_session_service.update_refresh_token(
-                session_id=session.id,
-                refresh_token_hash=refresh_token_hash,
-                expires_at=refresh_token_expires_at
-            )
-
-            # ----------------------------------------------------
-            # RETURN AUTH RESPONSE
-            # ----------------------------------------------------
-
-            return AuthResponseDTO(
-                user_id=user.id,
-                email=user.email,
-                access_token=access_token,
-                refresh_token=refresh_token,
-            )
 
         # --------------------------------------------------------
         # PROPAGATE KNOWN APPLICATION ERRORS

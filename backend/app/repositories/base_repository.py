@@ -86,18 +86,84 @@ class BaseRepository(Generic[T]):
 
     async def add(
         self,
-        entity: T
+        entity: T,
     ) -> T:
         """
-        Add a new entity and persist it.
+        Adds an entity to the current database transaction.
+
+        This method does not commit the transaction.
+
+        The repository is responsible only for adding the entity
+        to the current SQLAlchemy session and synchronizing it with
+        the database.
+
+        Transaction ownership belongs to the application layer,
+        typically through UnitOfWork.
+
+        The operation works as follows:
+
+        1. session.add(entity)
+        Registers the entity with the current SQLAlchemy session.
+
+        2. session.flush()
+        Sends the INSERT statement to the database without committing
+        the transaction.
+
+        This allows the database to generate values such as:
+
+            - primary keys
+            - server-generated fields
+
+        while keeping the transaction open.
+
+        3. session.refresh(entity)
+        Reloads the entity from the database so the returned object
+        contains the latest persisted values.
+
+        4. return entity
+        Returns the entity to the calling service.
+
+        The transaction remains open after this method returns.
+
+        The UnitOfWork is responsible for ultimately deciding whether
+        the transaction should be committed or rolled back.
         """
 
+        # ------------------------------------------------------------
+        # ADD ENTITY TO SESSION
+        # ------------------------------------------------------------
+
+        # Register the entity with the current SQLAlchemy session.
+        #
+        # At this point, no SQL INSERT is necessarily sent to the
+        # database yet.
         self.session.add(entity)
 
-        await self.session.commit()
+        # ------------------------------------------------------------
+        # FLUSH CHANGES
+        # ------------------------------------------------------------
 
+        # Send the pending INSERT to the database without committing
+        # the current transaction.
+        #
+        # This is important because database-generated values, such
+        # as the entity's primary key, may now become available.
+        await self.session.flush()
+
+        # ------------------------------------------------------------
+        # REFRESH ENTITY
+        # ------------------------------------------------------------
+
+        # Reload the entity from the database so the Python object
+        # contains the latest database state and any generated values.
         await self.session.refresh(entity)
 
+        # ------------------------------------------------------------
+        # RETURN ENTITY
+        # ------------------------------------------------------------
+
+        # Return the entity while leaving transaction ownership to
+        # the caller / UnitOfWork.
         return entity
 
 
