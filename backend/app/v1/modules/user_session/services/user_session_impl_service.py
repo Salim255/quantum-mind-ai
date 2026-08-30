@@ -4,7 +4,8 @@ from uuid import UUID
 
 from app.core.exceptions.base_exception import AppException
 from app.core.exceptions.custom_exceptions import ProcessingException
-
+from app.core.exceptions.custom_exceptions import NotFoundException
+from app.core.exceptions.error_code import ErrorCode
 from app.v1.modules.user_session.dto.user_session_dto import UserSessionDTO
 
 from app.models.user_session import UserSession
@@ -436,4 +437,81 @@ class UserSessionImplService(UserSessionService):
 
             raise ProcessingException(
                 message="Unable to revoke user session.",
+            ) from exception
+
+
+    # ============================================================
+    # UPDATE REFRESH TOKEN
+    # ============================================================
+
+    async def update_refresh_token(
+        self,
+        session_id: UUID,
+        refresh_token_hash: str,
+        expires_at: datetime,
+    ) -> UserSessionDTO:
+        """
+        Updates the refresh-token information of an existing session.
+
+        Only the cryptographic hash of the refresh token is persisted.
+
+        The raw refresh token must never reach the persistence layer.
+
+        The method is responsible for updating:
+
+        - the refresh-token hash
+        - the refresh-token expiration date
+        """
+
+        try:
+
+            # ----------------------------------------------------
+            # RETRIEVE SESSION
+            # ----------------------------------------------------
+
+            session = await (
+                self._user_session_repository.get_by_id(
+                    id=session_id,
+                )
+            )
+
+            if session is None:
+                raise NotFoundException(
+                    message="Session not found.",
+                    error_code=ErrorCode.USER_SESSION_NOT_FOUND,
+                )
+
+            # ----------------------------------------------------
+            # UPDATE REFRESH TOKEN
+            # ----------------------------------------------------
+
+            session.refresh_token_hash = refresh_token_hash
+
+            session.expires_at = expires_at
+
+            # ----------------------------------------------------
+            # PERSIST CHANGES
+            # ----------------------------------------------------
+
+            updated_session = await (
+                self._user_session_repository.update(
+                    session
+                )
+            )
+
+            return UserSessionDTO.model_validate(
+                updated_session
+            )
+
+        except AppException:
+            raise
+
+        except Exception as exception:
+            logger.exception(
+                "Error updating session refresh token"
+            )
+
+            raise ProcessingException(
+                message="Unable to update the session refresh token.",
+                error_code=ErrorCode.USER_SESSION_PROCESSING_ERROR,
             ) from exception

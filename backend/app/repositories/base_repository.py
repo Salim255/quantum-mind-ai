@@ -102,6 +102,26 @@ class BaseRepository(Generic[T]):
 
 
     # --------------------------------------------------
+    # UPDATE
+    # --------------------------------------------------
+
+    async def update(
+        self,
+        entity: T,
+    ) -> T:
+        """
+        Persist changes made to an existing entity.
+        """
+
+        self.session.add(entity)
+
+        await self.session.commit()
+
+        await self.session.refresh(entity)
+
+        return entity
+
+    # --------------------------------------------------
     # DELETE
     # --------------------------------------------------
 

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
+from datetime import datetime
 
 from app.v1.modules.user_session.dto.user_session_dto import (
     UserSessionDTO,
@@ -48,7 +49,7 @@ class UserSessionService(ABC):
         user_id: UUID,
         refresh_token_hash: str,
         security_version: int,
-        expires_at,
+        expires_at: datetime | None,
         device_name: str | None = None,
         user_agent: str | None = None,
         ip_address: str | None = None,
