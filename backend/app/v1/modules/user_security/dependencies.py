@@ -1,11 +1,9 @@
-from typing import Annotated
-from fastapi import Depends, Request
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.repositories.user_security_repository import (
     UserSecurityRepository,
 )
-from app.core.container import Container
+
 from app.v1.modules.user_security.services.user_security_service import (
     UserSecurityService,
 )
@@ -15,96 +13,55 @@ from app.v1.modules.user_security.services.user_security_impl_service import (
 )
 
 
-
-# ============================================================
-# CONTAINER DEPENDENCY
-# ============================================================
-
-def get_container(
-    request: Request,
-) -> Container:
-    """
-    Retrieves the application dependency container.
-
-    The container owns application-wide dependencies such as:
-
-    - application settings
-    - database session management
-    - shared security services
-    - external clients
-    """
-
-    return request.app.state.container
-
-# ============================================================
-# DATABASE SESSION DEPENDENCY
-# ============================================================
-
-async def get_db_session(
-    container: Annotated[
-        Container,
-        Depends(get_container),
-    ],
-):
-    """
-    Provides an asynchronous database session.
-
-    All repositories participating in the same authentication
-    operation receive the same AsyncSession.
-    """
-
-    async for session in container.db_session.get_session():
-        yield session
-
-# ============================================================
-# USER SECURITY REPOSITORY
-# ============================================================
-
-def get_user_security_repository(
-    session: Annotated[
-        AsyncSession,
-        Depends(get_db_session),
-    ],
-) -> UserSecurityRepository:
-    """
-    Creates the UserSecurityRepository.
-
-    Responsible for persistent authentication security state,
-    such as:
-
-    - failed login attempts
-    - account lock state
-    - password security metadata
-    - security version
-    - security timestamps
-    """
-
-    return UserSecurityRepository(session)
-
 # ============================================================
 # USER SECURITY SERVICE
 # ============================================================
 
 def get_user_security_service(
-    user_security_repository: Annotated[
-        UserSecurityRepository,
-        Depends(get_user_security_repository),
-    ],
+    session: AsyncSession,
 ) -> UserSecurityService:
     """
-    Creates the user security service.
+    Creates the UserSecurityService for the current database session.
 
-    UserSecurityService coordinates authentication security
-    state while delegating persistence responsibilities to
-    UserSecurityRepository.
+    The database session is supplied by the application layer,
+    normally through the controller.
 
-    Dependencies:
+    This dependency does NOT create or retrieve a database session.
 
-    UserSecurityRepository
-        Provides persistence operations for authentication
-        security state.
+    Its responsibility is only to assemble the user-security module:
+
+        AsyncSession
+             │
+             ▼
+        UserSecurityRepository
+             │
+             ▼
+        UserSecurityImplService
+             │
+             ▼
+        UserSecurityService
+
+
+    The same AsyncSession can be shared with other services
+    participating in the same application operation.
     """
 
+    # --------------------------------------------------------
+    # CREATE USER SECURITY REPOSITORY
+    # --------------------------------------------------------
+
+    # The repository receives the session supplied by the
+    # application layer.
+    user_security_repository = UserSecurityRepository(
+        session=session,
+    )
+
+    # --------------------------------------------------------
+    # CREATE USER SECURITY SERVICE
+    # --------------------------------------------------------
+
+    # The service receives the repository and remains unaware
+    # of FastAPI, Request, Container, or Depends().
     return UserSecurityImplService(
         user_security_repository=user_security_repository,
     )
