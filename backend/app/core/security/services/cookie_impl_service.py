@@ -1,7 +1,8 @@
-from fastapi import Response
+from fastapi import Response, Request
 
 from app.core.config.cookies_options import get_cookie_options
 from app.core.settings import SettingsService
+from app.common.constants import ( ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE )
 from app.core.security.services.cookie_service import CookieService
 
 class CookieImplService(CookieService):
@@ -28,9 +29,39 @@ class CookieImplService(CookieService):
 
         Settings are injected by the application container.
         """
+        self.ACCESS_TOKEN_COOKIE =   ACCESS_TOKEN_COOKIE
+
+        self.REFRESH_TOKEN_COOKIE = REFRESH_TOKEN_COOKIE
 
         self.settings = settings
 
+
+   # ============================================================
+    # GET ACCESS TOKEN
+    # ============================================================
+
+    def get_access_token(
+        self,
+        request: Request,
+    ) -> str | None:
+        """
+        Retrieves the access token from the incoming request.
+
+        The access token is stored in an HttpOnly cookie.
+
+        Args:
+            request:
+                Incoming HTTP request containing the authentication
+                cookies.
+
+        Returns:
+            The access token when the cookie exists.
+            None when the access-token cookie is not present.
+        """
+
+        return request.cookies.get(
+            self.ACCESS_TOKEN_COOKIE,
+        )
     # ============================================================
     # SET AUTH COOKIES
     # ============================================================
@@ -65,13 +96,13 @@ class CookieImplService(CookieService):
         )
 
         response.set_cookie(
-            key="access_token",
+            key=self.ACCESS_TOKEN_COOKIE,
             value=access_token,
             **access_options,
         )
 
         response.set_cookie(
-            key="refresh_token",
+            key=self.REFRESH_TOKEN_COOKIE,
             value=refresh_token,
             **refresh_options,
         )
@@ -92,12 +123,12 @@ class CookieImplService(CookieService):
         """
 
         response.delete_cookie(
-            key="access_token",
+            key=self.ACCESS_TOKEN_COOKIE,
             path="/",
         )
 
         response.delete_cookie(
-            key="refresh_token",
+            key=self.REFRESH_TOKEN_COOKIE,
             path="/",
         )
 
