@@ -88,3 +88,39 @@ class JWTManagerService(ABC):
         """
 
         raise NotImplementedError
+
+
+    # ============================================================
+    # VERIFY ACCESS TOKEN
+    # ============================================================
+
+    @abstractmethod
+    def verify_access_token(
+        self,
+        token: str,
+    ) -> dict:
+        """
+        Verifies an access token.
+
+        This method is specifically intended for authentication
+        middleware and other components that need to establish
+        whether an incoming request is authenticated.
+
+        The implementation must verify:
+
+        - JWT signature
+        - token expiration
+        - token structure
+        - token type
+        - required access-token claims
+
+        Returns:
+            Decoded access-token claims when the token is valid.
+
+        Raises:
+            UnauthorizedException:
+                When the access token is missing required claims,
+                invalid, expired, or otherwise cannot be trusted.
+        """
+
+        raise NotImplementedError
