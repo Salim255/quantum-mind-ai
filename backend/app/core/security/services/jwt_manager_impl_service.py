@@ -2,7 +2,9 @@ import jwt
 from uuid import UUID
 from datetime import UTC, datetime, timedelta
 from app.core.settings import SettingsService
+from app.core.exceptions.custom_exceptions import UnauthorizedException
 from app.core.security.services.jwt_manager_service import JWTManagerService
+
 
 
 class JWTManagerImplService(JWTManagerService):
@@ -166,3 +168,82 @@ class JWTManagerImplService(JWTManagerService):
             self.secret_key,
             algorithms=[self.algorithm],
         )
+
+    
+    # ============================================================
+    # VERIFY ACCESS TOKEN
+    # ============================================================
+
+    def verify_access_token(
+        self,
+        token: str,
+    ) -> dict:
+        """
+        Verifies that the provided JWT is a valid access token.
+
+        This method is used by the authentication middleware.
+
+        The verification process consists of:
+
+        1. Decoding the JWT.
+        2. Validating its signature.
+        3. Validating its expiration.
+        4. Validating the JWT structure.
+        5. Ensuring the token type is `access`.
+        6. Ensuring required authentication claims exist.
+
+        Returns:
+            Decoded access-token claims.
+
+        Raises:
+            UnauthorizedException:
+                When the token is invalid, expired, malformed,
+                or is not an access token.
+        """
+
+        try:
+            # ----------------------------------------------------
+            # DECODE AND CRYPTOGRAPHICALLY VERIFY TOKEN
+            # ----------------------------------------------------
+
+            payload = self.decode_token(token)
+
+            # ----------------------------------------------------
+            # VERIFY TOKEN TYPE
+            # ----------------------------------------------------
+
+            if payload.get("type") != "access":
+                raise UnauthorizedException(
+                    message="Invalid access token.",
+                )
+
+            # ----------------------------------------------------
+            # VERIFY REQUIRED CLAIMS
+            # ----------------------------------------------------
+
+            user_id = payload.get("sub")
+            session_id = payload.get("sid")
+
+            if not user_id or not session_id:
+                raise UnauthorizedException(
+                    message="Invalid access token.",
+                )
+
+            # ----------------------------------------------------
+            # AUTHENTICATION SUCCESSFUL
+            # ----------------------------------------------------
+
+            return payload
+
+        except UnauthorizedException:
+            raise
+
+        except jwt.InvalidTokenError as exc:
+            raise UnauthorizedException(
+                message="Invalid or expired access token.",
+            ) from exc
+
+        except Exception as exc:
+            raise UnauthorizedException(
+                message="Unable to verify access token.",
+            ) from exc
