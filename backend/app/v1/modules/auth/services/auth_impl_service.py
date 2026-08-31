@@ -18,13 +18,13 @@ from app.v1.modules.auth.dto.auth_dto import (
 )
 
 from app.v1.modules.auth.services.auth_service import AuthService
-from app.v1.modules.auth.services.cookie_service import CookieService
+from app.core.security.services.cookie_service import CookieService
 
-from app.v1.modules.auth.services.jwt_manager_service import (
+from app.core.security.services.jwt_manager_service import (
     JWTManagerService,
 )
 
-from app.v1.modules.auth.services.password_service import (
+from app.core.security.services.password_service import (
     PasswordService,
 )
 

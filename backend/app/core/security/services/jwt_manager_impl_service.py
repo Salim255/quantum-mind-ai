@@ -2,7 +2,7 @@ import jwt
 from uuid import UUID
 from datetime import UTC, datetime, timedelta
 from app.core.settings import SettingsService
-from app.v1.modules.auth.services.jwt_manager_service import JWTManagerService
+from app.core.security.services.jwt_manager_service import JWTManagerService
 
 
 class JWTManagerImplService(JWTManagerService):

@@ -7,11 +7,11 @@ from app.core.exceptions.custom_exceptions import (
     UnauthorizedException,
 )
 
-from app.v1.modules.auth.services.cookie_service import (
+from app.core.security.services.cookie_service import (
     CookieService,
 )
 
-from app.v1.modules.auth.services.jwt_manager_service import (
+from app.core.security.services.jwt_manager_service import (
     JWTManagerService,
 )
 

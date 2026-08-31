@@ -110,41 +110,41 @@ class ConflictException(AppException):
         )
 
 
-    # ============================================================
-    # UNAUTHORIZED
-    # ============================================================
+# ============================================================
+# UNAUTHORIZED
+# ============================================================
 
-    class UnauthorizedException(AppException):
-        """
-        Raised when authentication is required but the request
-        does not contain valid authentication credentials.
+class UnauthorizedException(AppException):
+    """
+    Raised when authentication is required but the request
+    does not contain valid authentication credentials.
 
-        Typical examples include:
+    Typical examples include:
 
-        - missing access token
-        - invalid access token
-        - expired access token
-        - malformed access token
-        - invalid authentication credentials
+    - missing access token
+    - invalid access token
+    - expired access token
+    - malformed access token
+    - invalid authentication credentials
 
-        This exception represents an authentication failure.
+    This exception represents an authentication failure.
 
-        It does NOT represent an authorization failure.
+    It does NOT represent an authorization failure.
 
-        Authentication:
-            "Who are you?"
+    Authentication:
+        "Who are you?"
 
-        Authorization:
-            "Are you allowed to do this?"
-        """
+    Authorization:
+        "Are you allowed to do this?"
+    """
 
-        def __init__(
-            self,
-            message: str = "Authentication required.",
-            error_code: ErrorCode = ErrorCode.UNAUTHORIZED,
-        ) -> None:
-            super().__init__(
-                message=message,
-                status_code=401,
-                error_code=error_code,
-            )
+    def __init__(
+        self,
+        message: str = "Authentication required.",
+        error_code: ErrorCode = ErrorCode.UNAUTHORIZED,
+    ) -> None:
+        super().__init__(
+            message=message,
+            status_code=401,
+            error_code=error_code,
+        )

@@ -1,6 +1,6 @@
 from pwdlib import PasswordHash
 
-from app.v1.modules.auth.services.password_service import PasswordService
+from app.core.security.services.password_service import PasswordService
 
 
 class PasswordImplService(PasswordService):

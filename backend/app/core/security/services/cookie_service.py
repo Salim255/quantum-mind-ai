@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from fastapi import Response
+from fastapi import Response, Request
 
 
 class CookieService(ABC):
@@ -11,6 +11,33 @@ class CookieService(ABC):
     cookies without exposing the underlying HTTP implementation to
     the authentication business logic.
     """
+
+
+    # ============================================================
+    # GET ACCESS TOKEN
+    # ============================================================
+
+    @abstractmethod
+    def get_access_token(
+        self,
+        request: Request,
+    ) -> str | None:
+        """
+        Retrieves the access token from the incoming HTTP request.
+
+        The access token is stored inside the authentication cookie.
+
+        Args:
+            request:
+                Incoming HTTP request containing the cookies.
+
+        Returns:
+            The access token when the authentication cookie exists.
+            None when the cookie is not present.
+        """
+
+        raise NotImplementedError
+    
 
     # ============================================================
     # SET AUTHENTICATION COOKIES

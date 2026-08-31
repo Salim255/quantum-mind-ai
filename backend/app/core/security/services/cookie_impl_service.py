@@ -2,7 +2,7 @@ from fastapi import Response
 
 from app.core.config.cookies_options import get_cookie_options
 from app.core.settings import SettingsService
-from app.v1.modules.auth.services.cookie_service import CookieService
+from app.core.security.services.cookie_service import CookieService
 
 class CookieImplService(CookieService):
     """
