@@ -2,9 +2,18 @@ from collections.abc import Awaitable, Callable
 
 from fastapi import Request, Response
 
-from app.core.exceptions.custom_exceptions import UnauthorizedException
-from app.v1.modules.auth.services.cookie_service import CookieService
-from app.v1.modules.auth.services.jwt_manager_service import JWTManagerService
+from app.core.exceptions.custom_exceptions import (
+    ProcessingException,
+    UnauthorizedException,
+)
+
+from app.v1.modules.auth.services.cookie_service import (
+    CookieService,
+)
+
+from app.v1.modules.auth.services.jwt_manager_service import (
+    JWTManagerService,
+)
 
 
 class AuthenticationMiddleware:
@@ -58,80 +67,116 @@ class AuthenticationMiddleware:
     async def __call__(
         self,
         request: Request,
-        call_next: Callable[[Request], Awaitable[Response]],
+        call_next: Callable[
+            [Request],
+            Awaitable[Response],
+        ],
     ) -> Response:
         """
         Processes an incoming HTTP request.
 
-        `call_next` represents the next step in the FastAPI
-        request pipeline.
+        The middleware first determines whether the requested
+        endpoint is public.
 
-        Calling:
+        Protected endpoints must provide a valid access token
+        through the authentication cookie.
 
-            await call_next(request)
-
-        allows the request to continue toward the endpoint.
-
-        Not calling it means the request is stopped here.
+        Only successfully authenticated requests are passed
+        to the next stage of the request pipeline.
         """
 
-        # ----------------------------------------------------
-        # PUBLIC ROUTE CHECK
-        # ----------------------------------------------------
+        # ====================================================
+        # PUBLIC ROUTE
+        # ====================================================
 
-        # Public endpoints do not require authentication.
-        #
-        # We therefore immediately allow the request to continue.
-        if self._is_public_route(request):
-            return await call_next(request)
+        try:
+            # Public endpoints do not require authentication.
 
-        # ----------------------------------------------------
-        # ACCESS TOKEN EXTRACTION
-        # ----------------------------------------------------
+            if self._is_public_route(request):
+                return await call_next(request)
 
-        # Authentication credentials are stored in the
-        # HttpOnly access-token cookie.
-        access_token = self.cookie_service.get_access_token(
-            request=request,
-        )
+        except Exception as exc:
+            raise ProcessingException(
+                message="Unable to determine route authentication status.",
+            ) from exc
 
-        # ----------------------------------------------------
-        # TOKEN EXISTENCE CHECK
-        # ----------------------------------------------------
+        # ====================================================
+        # AUTHENTICATION
+        # ====================================================
 
-        # A protected endpoint cannot be accessed without
-        # an access token.
-        if access_token is None:
-            raise UnauthorizedException(
-                message="Authentication required.",
+        try:
+            # ------------------------------------------------
+            # ACCESS TOKEN EXTRACTION
+            # ------------------------------------------------
+
+            # Authentication credentials are stored inside
+            # the HttpOnly access-token cookie.
+            access_token = self.cookie_service.get_access_token(
+                request=request,
             )
 
-        # ----------------------------------------------------
-        # TOKEN VERIFICATION
-        # ----------------------------------------------------
+            # ------------------------------------------------
+            # TOKEN EXISTENCE CHECK
+            # ------------------------------------------------
 
-        # JWTManagerService owns the JWT verification logic.
-        #
-        # It verifies things such as:
-        #
-        # - JWT signature
-        # - expiration
-        # - token structure
-        # - required claims
-        #
-        # If verification fails, the request is rejected.
-        self.jwt_manager_service.verify_access_token(
-            access_token,
-        )
+            # A protected endpoint cannot be accessed without
+            # an access token.
+            if access_token is None:
+                raise UnauthorizedException(
+                    message="Authentication required.",
+                )
 
-        # ----------------------------------------------------
-        # AUTHENTICATION SUCCESSFUL
-        # ----------------------------------------------------
+            # ------------------------------------------------
+            # TOKEN VERIFICATION
+            # ------------------------------------------------
 
-        # The token is valid.
+            # JWTManagerService owns the JWT verification logic.
+            #
+            # It verifies:
+            #
+            # - JWT signature
+            # - token expiration
+            # - token structure
+            # - required claims
+            #
+            # If the token is invalid, the JWT manager raises
+            # the appropriate authentication exception.
+            self.jwt_manager_service.verify_access_token(
+                access_token,
+            )
+
+        except UnauthorizedException:
+            # Authentication failures are expected application
+            # errors.
+            #
+            # Re-raise them unchanged so the application's
+            # exception handler can convert them into the
+            # appropriate HTTP response.
+            raise
+
+        except Exception as exc:
+            # Any unexpected error occurring during authentication
+            # is converted into the application's standard
+            # processing exception.
+            raise ProcessingException(
+                message="Unable to process authentication request.",
+            ) from exc
+
+        # ====================================================
+        # CONTINUE REQUEST PIPELINE
+        # ====================================================
+
+        # Authentication succeeded.
         #
-        # The request is therefore allowed to continue through
-        # the remaining FastAPI request pipeline.
+        # IMPORTANT:
+        # `call_next()` is intentionally outside the authentication
+        # try/except block.
+        #
+        # Therefore, if the controller or another downstream
+        # service raises an exception, that exception is handled
+        # by the application's normal exception handling system
+        # instead of being incorrectly treated as an authentication
+        # error.
         return await call_next(request)
 
     def _is_public_route(
@@ -141,9 +186,10 @@ class AuthenticationMiddleware:
         """
         Determines whether the current endpoint is public.
 
-        This method will later use the application's public-route
-        metadata/decorator instead of maintaining a hard-coded
-        list of URLs.
+        This method will later use endpoint metadata created by
+        the application's public-route mechanism.
+
+        It should NOT contain a hard-coded list of URLs.
         """
 
         return False
