@@ -1,7 +1,8 @@
+# app/core/security/guards/authentication_guard.py
+
 from fastapi import Request
 
 from app.core.exceptions.custom_exceptions import (
-    ProcessingException,
     UnauthorizedException,
 )
 
@@ -16,82 +17,31 @@ from app.core.security.services.jwt_manager_service import (
 
 class AuthenticationGuard:
     """
-    Authentication guard responsible for protecting HTTP requests.
+    Authentication guard responsible for protecting HTTP endpoints.
 
-    Unlike ASGI middleware, this guard executes inside FastAPI's
-    dependency lifecycle.
+    The guard receives the security services it requires during
+    construction.
 
-    This is important because FastAPI has already resolved the
-    request route when the dependency executes. The guard can
-    therefore be attached explicitly to protected endpoints or
-    routers without having to resolve route metadata at the
-    middleware level.
+    Dependency composition is handled outside the guard by the
+    authentication dependency.
 
-    Request flow:
+    The guard itself is responsible only for authenticating the
+    current HTTP request.
 
-        Client
-          │
-          ▼
-        FastAPI
-          │
-          ▼
-        AuthenticationGuard
-          │
-          ├── No access token ─────► UnauthorizedException
-          │
-          ├── Invalid token ───────► UnauthorizedException
-          │
-          ├── Authentication error ► ProcessingException
-          │
-          └── Valid token
-                    │
-                    ▼
-               Controller
+    It does not:
 
-
-    Responsibilities
-    ----------------
-
-    The guard is responsible for:
-
-    - retrieving the access token from the request
-    - verifying the access token
-    - stopping unauthenticated requests
-    - allowing authenticated requests to continue
-
-
-    The guard does NOT:
-
+    - create or resolve dependencies
+    - access the application container
     - register users
-    - authenticate login credentials
+    - log users in
     - create users
     - create sessions
     - issue tokens
     - refresh tokens
     - manage passwords
     - perform authorization
-    - implement JWT cryptography
-    - access the dependency container
-
-
-    Those responsibilities belong to the appropriate services.
-
-    Dependency architecture:
-
-        Application Container
-                 │
-                 ├── CookieService
-                 │
-                 └── JWTManagerService
-                         │
-                         ▼
-                AuthenticationGuard
-                         │
-                         ▼
-                  FastAPI Dependency
-                         │
-                         ▼
-                     Controller
+    - implement cookie handling
+    - implement JWT validation
     """
 
     # ============================================================
@@ -106,19 +56,16 @@ class AuthenticationGuard:
         """
         Initializes the authentication guard.
 
-        Dependencies are injected during application assembly.
-
-        The guard intentionally does not receive the application
-        container. This keeps the guard independent from the
-        dependency-injection implementation.
+        The required security services are injected by the
+        composition layer.
 
         Args:
             cookie_service:
-                Responsible for retrieving the authentication
-                token from the incoming request.
+                Service responsible for reading the authentication
+                access-token cookie.
 
             jwt_manager_service:
-                Responsible for validating the JWT access token.
+                Service responsible for validating the access token.
         """
 
         self.cookie_service = cookie_service
@@ -135,145 +82,74 @@ class AuthenticationGuard:
         """
         Authenticates the current HTTP request.
 
-        This method is intended to be used as a FastAPI dependency
-        for protected endpoints.
-
         Authentication flow:
 
             Request
                 │
                 ▼
-            CookieService
+            Access-token cookie
                 │
-                ├── No token ──────► UnauthorizedException
+                ├── Missing ──────► UnauthorizedException
                 │
                 ▼
-            JWTManagerService
+            Verify access token
                 │
-                ├── Invalid ───────► UnauthorizedException
+                ├── Invalid ──────► UnauthorizedException
                 │
                 └── Valid
                      │
                      ▼
-                  Controller
+                  Endpoint
 
+        The guard does not return the authenticated user.
 
-        Returns:
-            None when authentication succeeds.
-
-        Raises:
-            UnauthorizedException:
-                When the request does not contain a valid
-                authentication token.
-
-            ProcessingException:
-                When an unexpected infrastructure error occurs
-                while processing authentication.
+        Successful authentication is represented by the absence
+        of an authentication exception. FastAPI can therefore
+        continue with the remaining dependencies and endpoint.
         """
 
-        try:
+        # ========================================================
+        # GET ACCESS TOKEN
+        # ========================================================
 
-            # ====================================================
-            # GET ACCESS TOKEN
-            # ====================================================
+        # CookieService owns all cookie-related implementation
+        # details.
+        #
+        # The guard only asks the service for the access token.
+        access_token = self.cookie_service.get_access_token(
+            request=request,
+        )
 
-            # The authentication token is stored in the
-            # HttpOnly authentication cookie.
-            #
-            # CookieService owns all cookie-related details.
-            #
-            # The guard therefore does not need to know:
-            #
-            # - the cookie name
-            # - cookie attributes
-            # - SameSite configuration
-            # - Secure configuration
-            # - HttpOnly configuration
-            #
-            # It only asks the service for the access token.
-            access_token = self.cookie_service.get_access_token(
-                request=request,
+        # ========================================================
+        # TOKEN REQUIRED
+        # ========================================================
+
+
+        print("Hello from contolre auth✅✅✅", access_token)
+        # A protected endpoint requires a valid access token.
+        if access_token is None:
+            raise UnauthorizedException(
+                message="Authentication required.",
             )
 
-            # ====================================================
-            # ACCESS TOKEN REQUIRED
-            # ====================================================
+        # ========================================================
+        # VERIFY ACCESS TOKEN
+        # ========================================================
 
-            # A protected endpoint requires authentication.
-            #
-            # No token means the request cannot be authenticated.
-            #
-            # UnauthorizedException is intentionally allowed to
-            # propagate to FastAPI's global exception handler.
-            if access_token is None:
-                raise UnauthorizedException(
-                    message="Authentication required.",
-                )
-
-            # ====================================================
-            # VERIFY ACCESS TOKEN
-            # ====================================================
-
-            # Retrieving the token is NOT authentication.
-            #
-            # The token must be cryptographically and semantically
-            # validated before the request can be considered
-            # authenticated.
-            #
-            # JWTManagerService owns all JWT implementation details.
-            #
-            # It is responsible for validating things such as:
-            #
-            # - JWT structure
-            # - signature
-            # - expiration
-            # - algorithm
-            # - required claims
-            #
-            # If the token is invalid or expired, the JWT manager
-            # should raise UnauthorizedException.
-            self.jwt_manager_service.verify_access_token(
-                access_token,
-            )
-
-        except UnauthorizedException:
-            # ====================================================
-            # EXPECTED AUTHENTICATION FAILURE
-            # ====================================================
-
-            # This is an expected application-level exception.
-            #
-            # DO NOT convert it into ProcessingException.
-            #
-            # Let the global application exception handler process
-            # it and return the appropriate HTTP 401 response.
-            raise
-
-        except Exception as exc:
-            # ====================================================
-            # UNEXPECTED AUTHENTICATION FAILURE
-            # ====================================================
-
-            # Something unexpected happened inside the
-            # authentication infrastructure.
-            #
-            # Do not expose the internal exception to the client.
-            #
-            # Convert it into the application's generic processing
-            # exception while preserving the original exception
-            # through exception chaining for internal debugging
-            # and logging.
-            raise ProcessingException(
-                message="Unable to process authentication request.",
-            ) from exc
+        # JWTManagerService owns all JWT validation logic.
+        #
+        # The guard does not know how the JWT is decoded,
+        # verified, or validated.
+        self.jwt_manager_service.verify_access_token(
+            access_token,
+        )
 
         # ========================================================
         # AUTHENTICATION SUCCESSFUL
         # ========================================================
 
-        # No value needs to be returned.
+        # No exception means authentication succeeded.
         #
-        # The absence of an exception means authentication
-        # succeeded, so FastAPI continues with the remaining
-        # dependencies and eventually executes the controller.
+        # FastAPI will continue with the request lifecycle and
+        # eventually execute the endpoint.
         return

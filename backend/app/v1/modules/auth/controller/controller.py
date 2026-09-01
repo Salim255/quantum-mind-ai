@@ -1,6 +1,5 @@
 from typing import Annotated
 from collections.abc import AsyncGenerator
-from app.core.security.decorators import is_public
 from fastapi import Depends, Request, status, Response
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -14,6 +13,8 @@ from app.v1.modules.auth.dto.auth_dto import (
     RegisterDTO,
 )
 from app.v1.modules.auth.services.auth_service import AuthService
+from app.core.security.guards.dependencies import get_authentication_guard
+
 
 from .router import router as auth_router
 
@@ -113,7 +114,6 @@ The service is responsible for:
         },
     },
 )
-@is_public
 async def register(
     payload: RegisterDTO,
     response: Response,
@@ -125,6 +125,10 @@ async def register(
         Container,
         Depends(get_container),
     ],
+    _: Annotated[
+    None,
+    Depends(get_authentication_guard),
+]
 ) -> ResponseDTO[AuthResponseDTO]:
     """
     Registers a new user.

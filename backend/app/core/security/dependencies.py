@@ -1,12 +1,17 @@
-# app/core/security/dependencies.py
+from fastapi import Request
 
 from app.core.container import Container
 
-from app.core.security.services.cookie_service import CookieService
-from app.core.security.services.jwt_manager_service import JWTManagerService
+from app.core.security.services.cookie_service import (
+    CookieService,
+)
 
 from app.core.security.services.cookie_impl_service import (
     CookieImplService,
+)
+
+from app.core.security.services.jwt_manager_service import (
+    JWTManagerService,
 )
 
 from app.core.security.services.jwt_manager_impl_service import (
@@ -25,14 +30,9 @@ def get_jwt_manager_service(
     Creates the JWT manager service.
 
     JWTManagerService requires only application configuration.
-    It does not require:
 
-    - a database session
-    - a request
-    - an endpoint dependency
-
-    The container provides the application settings used by
-    the concrete JWT implementation.
+    The container provides the application settings required
+    by the concrete JWT implementation.
     """
 
     return JWTManagerImplService(
@@ -51,14 +51,9 @@ def get_cookie_service(
     Creates the cookie service.
 
     CookieService requires only application configuration.
-    It does not require:
 
-    - a database session
-    - a request
-    - an endpoint dependency
-
-    The container provides the application settings used by
-    the concrete cookie implementation.
+    The container provides the application settings required
+    by the concrete cookie implementation.
     """
 
     return CookieImplService(
