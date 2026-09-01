@@ -13,7 +13,7 @@ from app.v1.modules.auth.dto.auth_dto import (
     RegisterDTO,
 )
 from app.v1.modules.auth.services.auth_service import AuthService
-from app.core.security.guards.dependencies import get_authentication_guard
+
 
 
 from .router import router as auth_router
@@ -117,6 +117,7 @@ The service is responsible for:
 async def register(
     payload: RegisterDTO,
     response: Response,
+    request: Request,
     session: Annotated[
         AsyncSession,
         Depends(get_db_session),
@@ -124,11 +125,7 @@ async def register(
     container: Annotated[
         Container,
         Depends(get_container),
-    ],
-    _: Annotated[
-    None,
-    Depends(get_authentication_guard),
-]
+    ]
 ) -> ResponseDTO[AuthResponseDTO]:
     """
     Registers a new user.

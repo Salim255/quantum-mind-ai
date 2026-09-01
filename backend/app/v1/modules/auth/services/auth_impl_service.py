@@ -298,7 +298,7 @@ class AuthImplService(AuthService):
                 # GENERATE ACCESS TOKEN
                 # ----------------------------------------------------
 
-                access_token = (
+                access_token, _ = (
                     self.jwt_manager_service.create_access_token(
                         user_id=user.id,
                         session_id=session.id,

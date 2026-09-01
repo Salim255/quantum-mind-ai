@@ -8,6 +8,7 @@ from app.v1.modules.attempt.dependencies import get_attempt_service
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
+from app.core.security.guards.dependencies import get_authentication_guard
 
 from .router import router as attempt_router
 
@@ -47,6 +48,10 @@ async def create_attempt(
         AttemptService,
         Depends(get_attempt_service),
     ],
+    _: Annotated[
+        None,
+        Depends(get_authentication_guard),
+    ]
 ) -> ResponseDTO[AttemptDTO]:
     """
     Create a new learning attempt.

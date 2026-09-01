@@ -58,7 +58,7 @@ class CookieImplService(CookieService):
             The access token when the cookie exists.
             None when the access-token cookie is not present.
         """
-
+    
         return request.cookies.get(
             self.ACCESS_TOKEN_COOKIE,
         )

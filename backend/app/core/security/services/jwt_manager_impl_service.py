@@ -4,7 +4,7 @@ from datetime import UTC, datetime, timedelta
 from app.core.settings import SettingsService
 from app.core.exceptions.custom_exceptions import UnauthorizedException
 from app.core.security.services.jwt_manager_service import JWTManagerService
-
+from app.common.constants import ( ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE )
 
 
 class JWTManagerImplService(JWTManagerService):
@@ -40,6 +40,11 @@ class JWTManagerImplService(JWTManagerService):
             settings.JWT_REFRESH_EXPIRE_IN
         )
 
+
+        self.ACCESS_TOKEN_COOKIE =   ACCESS_TOKEN_COOKIE
+        
+        self.REFRESH_TOKEN_COOKIE = REFRESH_TOKEN_COOKIE
+
     # ============================================================
     # ACCESS TOKEN
     # ============================================================
@@ -73,7 +78,7 @@ class JWTManagerImplService(JWTManagerService):
         return self._create_token(
             user_id=user_id,
             session_id=session_id,
-            token_type="access",
+            token_type=self.ACCESS_TOKEN_COOKIE,
             expires_in=self.access_expire_in,
         )
 
@@ -96,7 +101,7 @@ class JWTManagerImplService(JWTManagerService):
         return self._create_token(
             user_id=user_id,
             session_id=session_id,
-            token_type="refresh",
+            token_type=self.REFRESH_TOKEN_COOKIE,
             expires_in=self.refresh_expire_in,
         )
 
@@ -162,7 +167,7 @@ class JWTManagerImplService(JWTManagerService):
         An InvalidTokenError is raised when the token cannot
         be trusted.
         """
-
+    
         return jwt.decode(
             token,
             self.secret_key,
@@ -205,14 +210,15 @@ class JWTManagerImplService(JWTManagerService):
             # ----------------------------------------------------
             # DECODE AND CRYPTOGRAPHICALLY VERIFY TOKEN
             # ----------------------------------------------------
-
+      
             payload = self.decode_token(token)
 
             # ----------------------------------------------------
             # VERIFY TOKEN TYPE
             # ----------------------------------------------------
 
-            if payload.get("type") != "access":
+
+            if payload.get("type") != self.ACCESS_TOKEN_COOKIE:
                 raise UnauthorizedException(
                     message="Invalid access token.",
                 )

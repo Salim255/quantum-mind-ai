@@ -25,8 +25,21 @@ class AuthenticationGuard:
     Dependency composition is handled outside the guard by the
     authentication dependency.
 
-    The guard itself is responsible only for authenticating the
-    current HTTP request.
+    The guard is responsible only for:
+
+    - retrieving the access token
+    - authenticating the token
+    - establishing the authenticated user's identity
+      for the current request
+
+    Once authentication succeeds, the authenticated user's ID
+    is stored in:
+
+        request.state.user_id
+
+    This allows downstream controllers and dependencies to
+    access the authenticated identity without decoding the JWT
+    again.
 
     It does not:
 
@@ -65,7 +78,8 @@ class AuthenticationGuard:
                 access-token cookie.
 
             jwt_manager_service:
-                Service responsible for validating the access token.
+                Service responsible for validating the access token
+                and returning its trusted claims.
         """
 
         self.cookie_service = cookie_service
@@ -96,16 +110,20 @@ class AuthenticationGuard:
                 │
                 ├── Invalid ──────► UnauthorizedException
                 │
-                └── Valid
-                     │
-                     ▼
-                  Endpoint
+                ▼
+            Extract authenticated user ID
+                │
+                ▼
+            request.state.user_id
+                │
+                ▼
+            Controller
 
         The guard does not return the authenticated user.
 
-        Successful authentication is represented by the absence
-        of an authentication exception. FastAPI can therefore
-        continue with the remaining dependencies and endpoint.
+        Instead, once the token has been successfully verified,
+        the authenticated user's ID is attached to the current
+        request through request.state.
         """
 
         # ========================================================
@@ -120,12 +138,11 @@ class AuthenticationGuard:
             request=request,
         )
 
+     
         # ========================================================
         # TOKEN REQUIRED
         # ========================================================
 
-
-        print("Hello from contolre auth✅✅✅", access_token)
         # A protected endpoint requires a valid access token.
         if access_token is None:
             raise UnauthorizedException(
@@ -138,11 +155,29 @@ class AuthenticationGuard:
 
         # JWTManagerService owns all JWT validation logic.
         #
-        # The guard does not know how the JWT is decoded,
-        # verified, or validated.
-        self.jwt_manager_service.verify_access_token(
+        # The service verifies the token and returns the trusted
+        # claims extracted from it.
+        claims = self.jwt_manager_service.verify_access_token(
             access_token,
         )
+
+        # ========================================================
+        # ESTABLISH REQUEST IDENTITY
+        # ========================================================
+
+        # The user ID comes exclusively from the verified JWT.
+        #
+        # request.state is request-scoped storage provided by
+        # Starlette/FastAPI.
+        #
+        # Downstream code can access the authenticated identity
+        # through:
+        #
+        #     request.state.user_id
+        #
+        # No JWT decoding is required again.
+      
+        request.state.user_id = claims.get("sub")
 
         # ========================================================
         # AUTHENTICATION SUCCESSFUL
@@ -150,6 +185,6 @@ class AuthenticationGuard:
 
         # No exception means authentication succeeded.
         #
-        # FastAPI will continue with the request lifecycle and
-        # eventually execute the endpoint.
+        # FastAPI continues with the remaining dependencies and
+        # eventually executes the protected endpoint.
         return
