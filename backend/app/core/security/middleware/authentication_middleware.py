@@ -1,7 +1,5 @@
-from collections.abc import Awaitable, Callable
-
-from fastapi import Request, Response
-from starlette.responses import JSONResponse
+import json
+from fastapi import Request
 
 from app.core.exceptions.custom_exceptions import (
     ProcessingException,
@@ -419,9 +417,6 @@ class AuthenticationMiddleware:
         # --------------------------------------------------------
         # SEND HTTP RESPONSE BODY
         # --------------------------------------------------------
-
-        import json
-
         await send(
             {
                 "type": "http.response.body",

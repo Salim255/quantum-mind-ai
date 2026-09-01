@@ -1,94 +1,52 @@
-from functools import wraps
+from collections.abc import Callable
 
 
-def public_route(func):
+def is_public(
+    func: Callable,
+) -> Callable:
     """
-    Marks an endpoint as publicly accessible.
+    Marks a FastAPI endpoint as publicly accessible.
 
-    This decorator does not perform authentication and does not
-    modify the endpoint's business behavior.
+    This decorator does not perform authentication.
 
-    Its only responsibility is to attach metadata to the endpoint
-    indicating that authentication is not required.
+    Its only responsibility is to attach metadata to the
+    endpoint function indicating that authentication should
+    be skipped for that endpoint.
 
-    The global AuthenticationMiddleware is responsible for reading
-    this metadata and deciding whether the request must pass
-    authentication.
+    The AuthenticationMiddleware is responsible for reading
+    this metadata through the application's public-route
+    registry.
 
-    Therefore:
+    Example:
 
-        @public_route
+        @auth_router.post("/register")
+        @is_public
         async def register(...):
             ...
 
-    means:
+    The decorator adds:
 
-        Request
-            │
-            ▼
-        AuthenticationMiddleware
-            │
-            ├── Public endpoint
-            │       │
-            │       ▼
-            │    Allow request
-            │
-            └── Protected endpoint
-                    │
-                    ▼
-                Verify access token
-                    │
-                    ├── Invalid → Reject request
-                    │
-                    └── Valid → Allow request
+        __public_route__ = True
 
-    The decorator itself does NOT:
+    to the original endpoint function.
 
-    - read authentication cookies
-    - decode JWT tokens
-    - validate JWT signatures
-    - authenticate users
-    - perform authorization
-    - raise authentication exceptions
-    - communicate with the database
-
-    Authentication responsibilities remain inside the
-    AuthenticationMiddleware and its security services.
-
-    Args:
-        func:
-            The FastAPI endpoint function being marked as public.
-
-    Returns:
-        The original endpoint function with public-route metadata
-        attached.
-
-    The `@wraps` decorator preserves the original endpoint's
-    metadata, including its name, documentation, and annotations,
-    which is important for FastAPI's route inspection and
-    OpenAPI generation.
+    This is intentionally implemented without wrapping the
+    endpoint because FastAPI needs to keep the original
+    endpoint function and its metadata intact.
     """
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        """
-        Preserves the original endpoint behavior.
-
-        The wrapper does not introduce any authentication logic.
-        It simply forwards the call to the original endpoint.
-        """
-
-        return func(*args, **kwargs)
-
-    # ------------------------------------------------------------
+    # ========================================================
     # PUBLIC ROUTE METADATA
-    # ------------------------------------------------------------
+    # ========================================================
 
-    # This flag is consumed by the authentication mechanism to
-    # identify endpoints that do not require authentication.
+    # Mark the original FastAPI endpoint as public.
     #
-    # Keeping the value as metadata makes the decorator itself
-    # independent from the authentication implementation.
-    wrapper.__public_route__ = True
+    # True:
+    #     AuthenticationMiddleware must allow the request
+    #     without requiring an access token.
+    #
+    # Missing / False:
+    #     The endpoint is considered protected.
+    func.__public_route__ = True
 
-    return wrapper
+    return func

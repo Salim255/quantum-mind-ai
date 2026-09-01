@@ -1,6 +1,6 @@
 from typing import Annotated
 from collections.abc import AsyncGenerator
-
+from app.core.security.decorators import is_public
 from fastapi import Depends, Request, status, Response
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -80,7 +80,6 @@ async def get_db_session(
 # ============================================================
 # REGISTER
 # ============================================================
-
 @auth_router.post(
     "/register",
     response_model=ResponseDTO[AuthResponseDTO],
@@ -114,6 +113,7 @@ The service is responsible for:
         },
     },
 )
+@is_public
 async def register(
     payload: RegisterDTO,
     response: Response,

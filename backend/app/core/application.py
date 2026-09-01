@@ -8,6 +8,9 @@ from app.core.exceptions.global_exception_handler import ExceptionsHandler
 from app.core.health import register_health_check
 from app.core.lifespan import LifespanService
 from app.core.router_registry import RouterService
+from app.core.security.guards.authentication_guard import (
+    AuthenticationGuard,
+)
 
 from app.core.security.dependencies import (
     get_cookie_service,
@@ -145,6 +148,55 @@ class ApplicationService:
         jwt_manager_service = get_jwt_manager_service(
             container=self.container,
         )
+
+ # ========================================================
+        # AUTHENTICATION GUARD
+        # ========================================================
+
+        # The AuthenticationGuard coordinates the authentication
+        # process.
+        #
+        # It receives its concrete dependencies through constructor
+        # injection.
+        #
+        # The guard itself does NOT access the container.
+        #
+        # Its responsibilities are therefore limited to:
+        #
+        #     Request
+        #        ↓
+        #     CookieService
+        #        ↓
+        #     Access token
+        #        ↓
+        #     JWTManagerService
+        #        ↓
+        #     Authentication result
+        #
+        authentication_guard = AuthenticationGuard(
+            cookie_service=cookie_service,
+            jwt_manager_service=jwt_manager_service,
+        )
+
+        # ========================================================
+        # STORE AUTHENTICATION GUARD
+        # ========================================================
+
+        # Store the already-created guard in application state.
+        #
+        # FastAPI dependencies can later retrieve this exact
+        # application-wide instance through:
+        #
+        #     request.app.state.authentication_guard
+        #
+        # This avoids:
+        #
+        # - creating a guard for every request
+        # - recreating CookieService for every request
+        # - recreating JWTManagerService for every request
+        # - giving the guard direct access to the container
+        #
+        app.state.authentication_guard = authentication_guard
 
         # ========================================================
         # AUTHENTICATION MIDDLEWARE
