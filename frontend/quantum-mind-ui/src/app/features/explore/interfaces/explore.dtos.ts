@@ -5,3 +5,7 @@ export interface ExploreCategory {
     description: string;
     topics: Topic[];
 }
+
+export interface ExploreState {
+  topics: Topic[];
+}

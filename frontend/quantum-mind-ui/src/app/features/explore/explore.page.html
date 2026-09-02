@@ -1,3 +1,26 @@
+<div class="explore">
+
+  <app-explore-header />
+
+  <main class="explore__catalogue">
+
+    @for (
+      category of categories();
+      track category.name;
+      let index = $index
+    ) {
+
+      <app-explore-category
+        [category]="category"
+        [index]="index + 1"
+      />
+
+    }
+
+  </main>
+
+</div>
+
 <div class="practice-explore">
 
   <!-- ==================================================
