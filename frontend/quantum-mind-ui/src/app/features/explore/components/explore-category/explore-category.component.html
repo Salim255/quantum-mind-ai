@@ -1,0 +1,53 @@
+<section class="explore-category">
+
+  <header class="explore-category__header">
+
+    <div class="explore-category__identity">
+
+      <span
+        class="explore-category__index"
+        aria-hidden="true"
+      >
+        01
+      </span>
+
+      <div class="explore-category__heading">
+
+        <h2 class="explore-category__title">
+          {{ category().name }}
+        </h2>
+
+        <p class="explore-category__description">
+          {{ category().description }}
+        </p>
+
+      </div>
+
+    </div>
+
+    <span class="explore-category__count">
+      {{ category().topics.length }}
+      {{ category().topics.length === 1 ? 'topic' : 'topics' }}
+    </span>
+
+  </header>
+
+
+  <div class="explore-category__topic-list">
+
+    @for (
+      topic of category().topics;
+      track topic.id;
+      let index = $index
+    ) {
+
+      <app-explore-topic
+        [topic]="topic"
+        [index]="index + 1"
+      />
+
+    }
+
+  </div>
+
+</section>

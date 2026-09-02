@@ -18,6 +18,4 @@ export class ExploreCategoryComponent {
 
   readonly category = input.required<ExploreCategory>();
 
-  protected readonly topics = () => this.category().topics;
-
 }
