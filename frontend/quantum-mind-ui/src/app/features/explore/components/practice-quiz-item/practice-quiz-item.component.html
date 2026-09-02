@@ -1,0 +1,38 @@
+<a
+  class="practice-quiz-item"
+  [routerLink]="quiz.route"
+>
+
+  <span
+    class="practice-quiz-item__index"
+    aria-hidden="true"
+  >
+    {{ index | number:'2.0-0' }}
+  </span>
+
+  <span class="practice-quiz-item__content">
+
+    <span class="practice-quiz-item__title">
+      {{ quiz.title }}
+    </span>
+
+    <span class="practice-quiz-item__description">
+      {{ quiz.description }}
+    </span>
+
+  </span>
+
+  <span class="practice-quiz-item__meta">
+
+    <span>
+      {{ quiz.questionCount }} questions
+    </span>
+
+    <iconify-icon
+      icon="lucide:arrow-up-right"
+      aria-hidden="true"
+    />
+
+  </span>
+
+</a>
