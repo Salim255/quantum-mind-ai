@@ -1,0 +1,34 @@
+<a
+  class="explore-topic"
+  [routerLink]="['/learn', topic().slug]"
+>
+
+  <span
+    class="explore-topic__index"
+    aria-hidden="true"
+  >
+    01
+  </span>
+
+  <span class="explore-topic__content">
+
+    <span class="explore-topic__title">
+      {{ topic().title }}
+    </span>
+
+    <span class="explore-topic__description">
+      {{ topic().description }}
+    </span>
+
+  </span>
+
+  <span
+    class="explore-topic__meta"
+    aria-hidden="true"
+  >
+    <iconify-icon
+      icon="lucide:arrow-up-right"
+    ></iconify-icon>
+  </span>
+
+</a>
