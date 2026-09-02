@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.v1.modules.topic.dto.topics_with_sections_response_dto import TopicsWithSectionsResponseDTO
+from app.v1.modules.topic.dto.topics_response_dto import TopicsResponseDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from sqlmodel import UUID
 
@@ -83,7 +84,7 @@ class TopicService(ABC):
 
 
     @abstractmethod
-    async def get_topics_with_sections_and_blocks(self) -> TopicsWithSectionsResponseDTO:
+    async def get_topics(self) -> TopicsWithSectionsResponseDTO | TopicsResponseDTO:
         """
         Retrieves all available learning topics.
 

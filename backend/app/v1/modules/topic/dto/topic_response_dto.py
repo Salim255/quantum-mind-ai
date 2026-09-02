@@ -1,7 +1,6 @@
 
 from pydantic import BaseModel
-from app.v1.modules.topic.dto.topic_dto import TopicDTO
-from backend.app.v1.modules.topic.dto.topic_with_sections_dto import TopicWithSectionsDTO
+from app.v1.modules.topic.dto.topic_dto import TopicDTO, TopicOnlyDTO
 
 
 class TopicResponseDTO(BaseModel):
@@ -17,4 +16,4 @@ class TopicResponseDTO(BaseModel):
 
     Database-only fields are intentionally excluded.
     """
-    topic: TopicDTO
+    topic: TopicDTO | TopicOnlyDTO

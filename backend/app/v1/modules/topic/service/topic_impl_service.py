@@ -3,7 +3,7 @@ from uuid import UUID
 from app.repositories.topic_repository import TopicRepository
 from app.v1.modules.topic.service.topic_service import TopicService
 from app.v1.modules.topic.dto.topic_create_dto import TopicCreateDTO
-from app.v1.modules.topic.dto.topic_dto import TopicDTO
+from app.v1.modules.topic.dto.topic_dto import TopicDTO, TopicOnlyDTO
 from app.v1.modules.topic.dto.topic_update_dto import TopicUpdateDTO
 from app.models.topic import Topic
 from app.v1.modules.topic.dto.topics_response_dto import TopicsResponseDTO
@@ -45,41 +45,106 @@ class TopicImplService(TopicService):
     
     
     #### 
-    async def get_topics(self) -> TopicsResponseDTO:
+    # ==========================================================
+    # GET TOPICS
+    # ==========================================================
+
+    async def get_topics(
+        self,
+        include_sections: bool = True,
+        include_blocks: bool = True,
+    ) -> TopicsResponseDTO | TopicsWithSectionsResponseDTO:
+        """
+        Retrieve learning topics with an optional level of nested content.
+
+        The method acts as the main entry point for topic retrieval and
+        delegates the actual retrieval/transformation to the appropriate
+        helper based on the requested includes.
+
+        Supported combinations:
+
+        - topics only
+        - topics + sections
+        - topics + blocks
+        - topics + sections + blocks
+        """
+
         try:
-            topics = self.topic_repository.list()
-            
-            return TopicsResponseDTO(
-                topics=[TopicDTO.model_validate(topic) for topic in topics]
-            )
-        
+            # ------------------------------------------------------
+            # Topics + sections + blocks
+            # ------------------------------------------------------
+            if include_sections and include_blocks:
+                return await self.get_topics_with_sections_and_blocks()
+
+
+            # ------------------------------------------------------
+            # Topics only
+            # ------------------------------------------------------
+            return await self._get_topics_only()
+
         except Exception as e:
-            logger.exception(f"Error in get only  topics: {e}")
-            raise
-
-    ####
-    async def get_topics_with_sections_and_blocks(self)-> TopicsWithSectionsResponseDTO:
-       try:
-            topics = await self.topic_repository.get_topics_with_sections_with_blocks()
-
-            if topics is None:
-                return TopicsWithSectionsResponseDTO(
-                    topics=[]
-                )
-    
-
-            return TopicsWithSectionsResponseDTO(
-                topics=  [ 
-                    TopicWithSectionsDTO.model_validate(topic).model_dump()
-                    for topic in topics
-                ]
+            logger.exception(
+                f"Error retrieving topics: {e}"
             )
-               
-       except Exception as e:
-            # Log the exception for debugging purposes
-            logger.exception(f"Error retrieving topics with sections and blocks: {e}")
-
             raise
+
+
+    # ==========================================================
+    # GET TOPICS ONLY
+    # ==========================================================
+
+    async def _get_topics_only(
+        self,
+    ) -> TopicsResponseDTO:
+        """
+        Retrieve topics without any nested sections or blocks.
+        """
+
+        topics = await self.topic_repository.get_all()
+     
+        return TopicsResponseDTO(
+            topics=[
+                TopicOnlyDTO.model_validate(topic)
+                for topic in topics
+            ]
+        )
+
+
+
+    # ==========================================================
+    # GET TOPICS WITH SECTIONS AND BLOCKS
+    # ==========================================================
+
+    async def get_topics_with_sections_and_blocks(
+        self,
+    ) -> TopicsWithSectionsResponseDTO:
+        """
+        Retrieve topics with their complete learning hierarchy.
+
+        Structure:
+
+        Topic
+        ├── Topic Blocks
+        └── Sections
+            └── Section Blocks
+        """
+
+        topics = (
+            await self.topic_repository
+            .get_topics_with_sections_with_blocks()
+        )
+
+        if topics is None:
+            return TopicsWithSectionsResponseDTO(
+                topics=[]
+            )
+
+        return TopicsWithSectionsResponseDTO(
+            topics=[
+                TopicWithSectionsDTO.model_validate(topic).model_dump()
+                for topic in topics
+            ]
+        )
 
 
     async def get_topic_with_sections(self, topic_id: UUID):

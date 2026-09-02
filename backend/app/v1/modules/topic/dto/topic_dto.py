@@ -6,6 +6,20 @@ from pydantic import BaseModel, ConfigDict
 from app.v1.modules.question.dto.question_dto import QuestionDTO
 
 
+class TopicOnlyDTO(BaseModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
+
+    id: UUID
+    title: str
+    slug: str
+    category: str
+    display_order: int | None
+    description: str | None = None
+    created_at: datetime
+    updated_at: datetime
+    
 class TopicDTO(BaseModel):
     """
     DTO returned when reading a QuantumMind learning topic.

@@ -8,6 +8,7 @@ from app.v1.modules.block.dependencies import get_block_service
 from app.v1.modules.section.dependencies import get_section_service
 from app.v1.modules.section.service.section_service import SectionService
 from app.v1.modules.topic.dto.topics_with_sections_response_dto import TopicsWithSectionsResponseDTO
+from app.v1.modules.topic.dto.topics_response_dto import TopicsResponseDTO
 
 from app.v1.modules.topic.service.topic_service import TopicService
 from app.v1.modules.block.dto.block_create_dto import BlockCreateDTO
@@ -153,11 +154,30 @@ async def create_topic(
 
 @topic_router.get(
     "/",
-    response_model=ResponseDTO[TopicsWithSectionsResponseDTO],
+    response_model=ResponseDTO[TopicsResponseDTO | TopicsWithSectionsResponseDTO],
     status_code=status.HTTP_200_OK,
     summary="List learning topics",
     description="""
 Returns all available QuantumMind learning topics.
+
+By default, sections and blocks are included.
+
+Query parameters can be used to control which nested resources
+are included.
+
+Examples:
+
+- `/topics/`
+  Returns topics, sections, and blocks.
+
+- `/topics/?include_sections=false`
+  Returns topics only.
+
+- `/topics/?include_sections=true&include_blocks=false`
+  Returns topics and sections.
+
+- `/topics/?include_sections=true&include_blocks=true`
+  Returns topics, sections, and blocks.
 
 Used for:
 
@@ -166,15 +186,20 @@ Used for:
 - Search results
 """,
 )
-async def get_topics_with_sections_and_blocks(
+async def get_topics(
     get_topic_service: Annotated[
         TopicService,
         Depends(get_topic_service)
-    ]
+    ],
+    include_sections: bool = True,
+    include_blocks: bool = True
 ):
 
     return  ResponseDTO.success(
-        await get_topic_service.get_topics_with_sections_and_blocks()
+        await get_topic_service.get_topics(
+            include_sections=include_sections,
+            include_blocks=include_blocks,
+        )
     )
     
 
