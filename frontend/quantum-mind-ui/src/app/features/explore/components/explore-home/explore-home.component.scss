@@ -1,0 +1,99 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+
+/* ============================================================
+   EXPLORE HOME
+   ------------------------------------------------------------
+   Topic discovery / catalogue surface.
+
+   Direction:
+   - centered
+   - editorial
+   - spacious
+   - calm
+   - catalogue-first
+   - restrained interaction
+   - consistent with the Explore design system
+============================================================ */
+
+.explore-home {
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  max-width: var(--content-xl);
+
+  margin: 0 auto;
+
+  padding: var(--page-padding-lg);
+
+  box-sizing: border-box;
+
+  color: var(--color-gray-9);
+
+
+  /* ==========================================================
+     TOPICS
+  ========================================================== */
+
+  &__topics {
+
+    display: grid;
+
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+    gap: var(--component-gap-md);
+
+    width: 100%;
+
+  }
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@include respond(tab-port) {
+
+  .explore-home {
+
+    padding: var(--page-padding-md);
+
+
+    &__topics {
+
+      grid-template-columns: 1fr;
+
+      gap: var(--component-gap-md);
+
+    }
+
+  }
+
+}
+
+
+@include respond(phone) {
+
+  .explore-home {
+
+    padding: var(--page-padding-sm);
+
+
+    &__topics {
+
+      gap: var(--component-gap-sm);
+
+    }
+
+  }
+
+}
