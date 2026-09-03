@@ -3,11 +3,13 @@ import {
   BehaviorSubject,
   Observable,
   map,
+  tap,
 } from 'rxjs';
 
-import { Attempt } from '../interfaces/attempt.interface';
+import { Attempt, AttemptResponseDTO } from '../interfaces/attempt.interface';
 
 import { AttemptHttpService } from './attempt-http.service';
+import { ApiResponseDTO } from '../../../shared/interfaces/api-response.dto';
 
 
 interface AttemptState {
@@ -70,19 +72,17 @@ export class AttemptService {
    */
   createAttempt(
     topicId: string,
-  ): void {
+  ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
 
-    this.attemptHttpService
+   return  this.attemptHttpService
       .createAttempt(topicId)
-      .subscribe({
-        next: response => {
-
-          this.setAttempt(
+      .pipe(
+        tap((response) => {
+           this.setAttempt(
             response.data.attempt,
           );
-
-        },
-      });
+        })
+      );
   }
 
 
@@ -96,19 +96,15 @@ export class AttemptService {
    */
   getAttempt(
     attemptId: string,
-  ): void {
+  ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
 
-    this.attemptHttpService
-      .getAttempt(attemptId)
-      .subscribe({
-        next: response => {
-
-          this.setAttempt(
-            response.data.attempt,
-          );
-
-        },
-      });
+    return this.attemptHttpService
+      .getAttempt(attemptId).pipe(
+        tap(response => {
+          this.setAttempt(response.data.attempt);
+        })
+      )
+      ;
   }
 
 

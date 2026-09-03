@@ -7,7 +7,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { ExploreService } from './services/explore.service';
-import { Topic } from './models/topic.model';
+import { ExploreTopicDTO } from './interfaces/explore.dtos';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class ExplorePage implements OnInit, OnDestroy {
 
   private topicsSubscription?: Subscription;
 
-  readonly topics = signal<Topic[]>([]);
+  readonly topics = signal<ExploreTopicDTO[]>([]);
 
   constructor(
     private readonly exploreService: ExploreService,

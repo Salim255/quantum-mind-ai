@@ -3,7 +3,6 @@ import {
   Component,
   input,
 } from '@angular/core';
-import { ExploreCategory } from '../../interfaces/explore.dtos';
 import { Topic } from '../../models/topic.model';
 
 

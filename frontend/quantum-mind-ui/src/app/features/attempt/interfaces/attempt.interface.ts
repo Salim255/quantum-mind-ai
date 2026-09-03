@@ -54,6 +54,10 @@ export interface AttemptQuestion {
 }
 
 
+// ============================================================
+// ATTEMPT
+// ============================================================
+
 export interface Attempt {
 
   id: string;
@@ -62,9 +66,19 @@ export interface Attempt {
 
   topic_id: string;
 
-  topic: Topic & {
+  topic: Topic;
 
-    questions: AttemptQuestion[];
+  score: number;
 
-  };
+  total_questions: number;
+
+  correct_answers: number;
+
+  is_completed: boolean;
+
+  started_at: string;
+
+  completed_at: string | null;
+
+  attempt_questions: AttemptQuestion[];
 }

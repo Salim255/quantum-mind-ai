@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import { ExploreService } from '../../services/explore.service';
 import { Subscription } from 'rxjs';
-import { Topic } from '../../models/topic.model';
 import { ExploreTopicDTO } from '../../interfaces/explore.dtos';
 
 

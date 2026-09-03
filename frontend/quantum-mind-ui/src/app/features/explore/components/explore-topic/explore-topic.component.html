@@ -55,7 +55,7 @@
       </span>
 
     } @else if (
-      exploreTopic().latestAttempt?.status === 'in_progress'
+      !exploreTopic().latestAttempt?.is_completed
     ) {
 
       <span class="explore-topic__action-label">
