@@ -1,6 +1,5 @@
 from typing import Annotated
-
-from fastapi import Depends, status
+from app.core.container import Container
 
 from collections.abc import AsyncGenerator
 from fastapi import Depends, Request, status
@@ -108,12 +107,18 @@ Used for:
     response_description="The quizzes available for exploration.",
 )
 async def get_explore_quizzes(
-    explore_service: Annotated[
-        ExploreService,
-        Depends(get_explore_service),
+    session: Annotated[
+        AsyncSession,
+        Depends(get_db_session),
     ],
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ]
 ) -> ResponseDTO[ExploreQuizzesResponseDTO]:
 
+    explore_service: ExploreService = get_explore_service(session=session, container=container),
+        
     return ResponseDTO.success(
         await explore_service.get_quizzes()
     )
