@@ -1,5 +1,6 @@
+import { Topic } from "../../explore/models/topic.model";
 
-interface AttemptAnswer {
+export interface AttemptAnswer {
 
   id: string;
 
@@ -21,7 +22,7 @@ interface AttemptAnswer {
 }
 
 
-interface AttemptQuestion {
+export interface AttemptQuestion {
 
   id: string;
 
@@ -47,7 +48,7 @@ interface AttemptQuestion {
 }
 
 
-interface Attempt {
+export interface Attempt {
 
   id: string;
 

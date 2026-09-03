@@ -1,5 +1,9 @@
 <div class="attempt">
 
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+
   <header class="attempt__header">
 
     <div class="attempt__context">
@@ -12,18 +16,25 @@
         {{ topic().title }}
       </h1>
 
+      <span class="attempt__category">
+        {{ topic().category }}
+      </span>
+
     </div>
+
+
+    <!-- Progress -->
 
     <div class="attempt__progress">
 
       <div class="attempt__progress-meta">
 
         <span>
-          Question {{ currentQuestionIndex() + 1 }}
+          Question {{ questionNumber() }}
         </span>
 
         <span>
-          {{ questions().length }}
+          {{ totalQuestions() }}
         </span>
 
       </div>
@@ -31,14 +42,19 @@
       <div
         class="attempt__progress-track"
         role="progressbar"
-        [attr.aria-valuenow]="currentQuestionIndex() + 1"
+        [attr.aria-valuenow]="questionNumber()"
         [attr.aria-valuemin]="1"
-        [attr.aria-valuemax]="questions().length"
+        [attr.aria-valuemax]="totalQuestions()"
+        [attr.aria-label]="
+          'Question ' + questionNumber() + ' of ' + totalQuestions()
+        "
       >
+
         <span
           class="attempt__progress-value"
           [style.width.%]="progressPercentage()"
         ></span>
+
       </div>
 
     </div>
@@ -46,20 +62,37 @@
   </header>
 
 
+  <!-- ============================================================
+       CONTENT
+  ============================================================ -->
+
   <main class="attempt__content">
 
-    <section class="attempt__question">
+    <!-- Question -->
 
-      <span class="attempt__question-number">
-        {{ currentQuestionIndex() + 1 | number:'2.0' }}
+    <section
+      class="attempt__question"
+      aria-labelledby="attempt-question"
+    >
+
+      <span
+        class="attempt__question-number"
+        aria-hidden="true"
+      >
+        {{ questionNumber() | number:'2.0' }}
       </span>
 
-      <h2 class="attempt__question-title">
-        {{ currentQuestion().question }}
+      <h2
+        id="attempt-question"
+        class="attempt__question-title"
+      >
+        {{ currentQuestion().text }}
       </h2>
 
     </section>
 
+
+    <!-- Answers -->
 
     <section
       class="attempt__answers"
@@ -78,11 +111,15 @@
           [class.attempt__answer--selected]="
             selectedAnswerId() === answer.id
           "
+          [attr.aria-pressed]="selectedAnswerId() === answer.id"
           (click)="selectAnswer(answer.id)"
         >
 
-          <span class="attempt__answer-index">
-            {{ index | number:'2.0' }}
+          <span
+            class="attempt__answer-index"
+            aria-hidden="true"
+          >
+            {{ index + 1 | number:'2.0' }}
           </span>
 
           <span class="attempt__answer-text">
@@ -93,9 +130,15 @@
             class="attempt__answer-indicator"
             aria-hidden="true"
           >
-            <iconify-icon
-              icon="lucide:check"
-            ></iconify-icon>
+
+            @if (selectedAnswerId() === answer.id) {
+
+              <iconify-icon
+                icon="lucide:check"
+              ></iconify-icon>
+
+            }
+
           </span>
 
         </button>
@@ -107,7 +150,35 @@
   </main>
 
 
+  <!-- ============================================================
+       FOOTER / PAGINATION
+  ============================================================ -->
+
   <footer class="attempt__footer">
+
+    <button
+      type="button"
+      class="attempt__previous"
+      [disabled]="!hasPrevious()"
+      (click)="previousQuestion()"
+    >
+
+      <iconify-icon
+        icon="lucide:arrow-left"
+        aria-hidden="true"
+      ></iconify-icon>
+
+      <span>
+        Previous
+      </span>
+
+    </button>
+
+
+    <span class="attempt__footer-progress">
+      {{ questionNumber() }} / {{ totalQuestions() }}
+    </span>
+
 
     <button
       type="button"
@@ -117,11 +188,16 @@
     >
 
       <span>
-        Continue
+        {{ hasNext() ? 'Continue' : 'Finish' }}
       </span>
 
       <iconify-icon
-        icon="lucide:arrow-right"
+        [icon]="
+          hasNext()
+            ? 'lucide:arrow-right'
+            : 'lucide:check'
+        "
+        aria-hidden="true"
       ></iconify-icon>
 
     </button>
