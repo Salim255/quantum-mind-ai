@@ -85,25 +85,25 @@ async def get_db_session(
     status_code=status.HTTP_200_OK,
     summary="List quizzes for exploration",
     description="""
-Returns all available quizzes for the Explore page.
+    Returns all available quizzes for the Explore page.
 
-Each quiz is represented by:
+    Each quiz is represented by:
 
-- The topic associated with the quiz.
-- The authenticated user's latest attempt for that topic, if one exists.
+    - The topic associated with the quiz.
+    - The authenticated user's latest attempt for that topic, if one exists.
 
-If the user has never attempted a topic, `latest_attempt` is `null`.
+    If the user has never attempted a topic, `latest_attempt` is `null`.
 
-The endpoint is read-only and does not create or modify attempts.
+    The endpoint is read-only and does not create or modify attempts.
 
-Used for:
+    Used for:
 
-- Explore page
-- Quiz catalogue
-- Starting a new quiz
-- Resuming an unfinished quiz
-- Retaking a completed quiz
-""",
+    - Explore page
+    - Quiz catalogue
+    - Starting a new quiz
+    - Resuming an unfinished quiz
+    - Retaking a completed quiz
+    """,
     response_description="The quizzes available for exploration.",
 )
 async def get_explore_quizzes(

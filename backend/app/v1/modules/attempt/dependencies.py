@@ -46,6 +46,7 @@ def get_attempt_service(
     """
 
     attempt_repository = AttemptRepository(session=session)
+    
     question_service: QuestionService = get_question_service(
         session=session,
         container=container

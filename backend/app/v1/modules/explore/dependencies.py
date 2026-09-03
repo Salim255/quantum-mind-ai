@@ -13,7 +13,7 @@ def get_explore_service(
     container: Container,
 )->ExploreService:
 
-    topic_service: TopicService = get_topic_service()
+    topic_service: TopicService = get_topic_service(session=session, container=container)
     attempt_service: AttemptService = get_attempt_service(session=session, container=container)
 
     return ExploreImplService(
