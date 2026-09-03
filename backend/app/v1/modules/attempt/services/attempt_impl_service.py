@@ -1,4 +1,5 @@
 import logging
+from uuid import UUID
 from app.models.attempt import Attempt
 from app.repositories.attempt_repository import AttemptRepository
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
@@ -74,4 +75,44 @@ class AttemptImplService(AttemptService):
 
         except Exception:
             logger.exception("Error creating attempt")
+            raise
+
+
+    # ============================================================
+    # GET LATEST ATTEMPTS BY TOPIC
+    # ============================================================
+
+    async def get_latest_attempts_by_topic(
+        self,
+        user_id: UUID | None,
+    ) -> list[AttemptDTO]:
+        """
+        Retrieves the latest attempt for each topic belonging
+        to the specified user.
+
+        The repository is responsible for retrieving the
+        appropriate attempts from the database.
+
+        The service converts the resulting entities into
+        AttemptDTO objects.
+        """
+
+        try:
+
+            attempts = (
+                await self.attempt_repository
+                .get_latest_attempts_by_topic(
+                    user_id=user_id,
+                )
+            )
+
+            return [
+                AttemptDTO.model_validate(attempt)
+                for attempt in attempts
+            ]
+
+        except Exception:
+            logger.exception(
+                "Error retrieving latest attempts by topic"
+            )
             raise

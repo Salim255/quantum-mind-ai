@@ -104,3 +104,68 @@ class AttemptRepository(BaseRepository[Attempt]):
         result = await self.session.execute(statement)
 
         return result.scalar_one_or_none()
+
+
+    # ============================================================
+    # LATEST ATTEMPT BY USER / TOPIC
+    # ============================================================
+
+    async def get_latest_attempts_by_topic(
+        self,
+        user_id: UUID,
+        topic_id: UUID,
+    ) -> list[Attempt]:
+        """
+        Retrieve the latest attempt for each topic belonging
+        to the specified user.
+
+        When topic_id is provided, only attempts for that
+        specific topic are returned.
+
+        When topic_id is None, the latest attempt for every
+        topic attempted by the user is returned.
+
+        Args:
+            user_id:
+                Identifier of the user.
+
+            topic_id:
+                Optional identifier of the topic.
+
+        Returns:
+            A list containing the latest attempt for each
+            requested topic.
+        """
+
+        statement = (
+            select(Attempt)
+            .where(
+                Attempt.user_id == user_id,
+            )
+        )
+
+        if topic_id is not None:
+
+            statement = statement.where(
+                Attempt.topic_id == topic_id,
+            )
+
+        statement = statement.order_by(
+            Attempt.topic_id,
+            Attempt.started_at.desc(),
+        )
+
+        result = await self.session.execute(statement)
+
+        attempts = result.scalars().all()
+
+        # Keep only the most recent attempt for each topic.
+        latest_attempts: dict[UUID, Attempt] = {}
+
+        for attempt in attempts:
+
+            if attempt.topic_id not in latest_attempts:
+
+                latest_attempts[attempt.topic_id] = attempt
+
+        return list(latest_attempts.values())
