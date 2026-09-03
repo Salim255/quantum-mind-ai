@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   OnDestroy,
   OnInit,
   signal,
@@ -9,65 +10,155 @@ import { Subscription } from 'rxjs';
 
 import { ExploreService } from '../explore/services/explore.service';
 import { Topic } from '../explore/models/topic.model';
-import { Attempt } from './interfaces/attempt.interface';
+import { Attempt, AttemptQuestion } from './interfaces/attempt.interface';
 
-
-interface AttemptAnswer {
-  id: string;
-  text: string;
-}
-
-interface AttemptQuestion {
-  id: string;
-  question: string;
-  answers: AttemptAnswer[];
-}
 
 @Component({
   selector: 'app-attempt-page',
   templateUrl: './attempt.page.html',
   styleUrls: ['./attempt.page.scss'],
-  standalone: true,
+  standalone: false,
 })
 export class AttemptPage implements OnInit, OnDestroy {
 
   private routeSubscription?: Subscription;
 
 
-  /*
-   * The current quiz attempt.
-   */
+  /* ============================================================
+     ATTEMPT
+     ------------------------------------------------------------
+     The complete attempt returned by the API.
+  ============================================================ */
+
   readonly attempt = signal<Attempt | null>(null);
 
 
-  /*
-   * Questions belonging to the current attempt.
-   *
-   * We keep them as the backing collection,
-   * but expose only one question through
-   * currentQuestion().
-   */
+  /* ============================================================
+     TOPIC
+     ------------------------------------------------------------
+     The topic belonging to the current attempt.
+  ============================================================ */
+
+  readonly topic = signal<Topic>({} as Topic);
+
+
+  /* ============================================================
+     QUESTIONS
+     ------------------------------------------------------------
+     The questions belonging to the current attempt.
+     Only one question is exposed through currentQuestion().
+  ============================================================ */
+
   readonly questions = signal<AttemptQuestion[]>([]);
 
 
-  /*
-   * Index of the question currently displayed.
-   */
+  /* ============================================================
+     CURRENT QUESTION
+  ============================================================ */
+
   readonly currentQuestionIndex = signal(0);
 
+  readonly currentQuestion = computed(() => {
 
-  /*
-   * Currently selected answer.
-   */
-  readonly selectedAnswerId = signal<string | null>(null);
+    return (
+      this.questions()[this.currentQuestionIndex()]
+      ?? ({} as AttemptQuestion)
+    );
 
+  });
+
+
+  /* ============================================================
+     PAGINATION
+  ============================================================ */
+
+  readonly questionNumber = computed(() => {
+
+    return this.questions().length === 0
+      ? 0
+      : this.currentQuestionIndex() + 1;
+
+  });
+
+
+  readonly totalQuestions = computed(() => {
+
+    return this.questions().length;
+
+  });
+
+
+  readonly hasPrevious = computed(() => {
+
+    return this.currentQuestionIndex() > 0;
+
+  });
+
+
+  readonly hasNext = computed(() => {
+
+    return (
+      this.currentQuestionIndex() <
+      this.questions().length - 1
+    );
+
+  });
+
+
+  /* ============================================================
+     PROGRESS
+  ============================================================ */
+
+  readonly progressPercentage = computed(() => {
+
+    const total = this.totalQuestions();
+
+    if (total === 0) {
+
+      return 0;
+
+    }
+
+    return (
+      (this.questionNumber() / total) * 100
+    );
+
+  });
+
+
+  /* ============================================================
+     ANSWERS
+     ------------------------------------------------------------
+     Keep the selected answer for each question.
+     This allows the user to go back without losing their choice.
+  ============================================================ */
+
+  private readonly selectedAnswers =
+    signal<Record<string, string>>({});
+
+
+  readonly selectedAnswerId = computed(() => {
+
+    const question = this.currentQuestion();
+
+    return this.selectedAnswers()[question.id] ?? null;
+
+  });
+
+
+  /* ============================================================
+     CONSTRUCTOR
+  ============================================================ */
 
   constructor(
-
     private readonly route: ActivatedRoute,
-
+    private readonly exploreService: ExploreService,
   ) {}
 
+
+  /* ============================================================
+     LIFECYCLE
+  ============================================================ */
 
   ngOnInit(): void {
 
@@ -82,19 +173,20 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   private subscribeToRoute(): void {
 
-    this.routeSubscription = this.route.paramMap.subscribe(params => {
+    this.routeSubscription =
+      this.route.paramMap.subscribe(params => {
 
-      const topicSlug = params.get('slug');
+        const topicSlug = params.get('slug');
 
-      if (!topicSlug) {
+        if (!topicSlug) {
 
-        return;
+          return;
 
-      }
+        }
 
-      this.loadAttempt(topicSlug);
+        this.loadAttempt(topicSlug);
 
-    });
+      });
 
   }
 
@@ -103,6 +195,9 @@ export class AttemptPage implements OnInit, OnDestroy {
      ATTEMPT
      ------------------------------------------------------------
      This will later call AttemptService.
+
+     The API returns the attempt together with its topic
+     and the topic questions.
   ============================================================ */
 
   private loadAttempt(slug: string): void {
@@ -112,55 +207,47 @@ export class AttemptPage implements OnInit, OnDestroy {
      *
      * this.attemptService
      *   .createAttempt(slug)
-     *   .subscribe(attempt => {
+     *   .subscribe({
      *
-     *     this.attempt.set(attempt);
+     *     next: attempt => {
      *
-     *     this.questions.set(
-     *       attempt.topic.questions
-     *     );
+     *       this.attempt.set(attempt);
+     *
+     *       this.topic.set(attempt.topic);
+     *
+     *       this.questions.set(
+     *         attempt.topic.questions
+     *       );
+     *
+     *       this.currentQuestionIndex.set(0);
+     *
+     *       this.selectedAnswers.set({});
+     *
+     *     }
      *
      *   });
+     */
+
+
+    /*
+     * The service will replace this section.
      *
+     * The important mapping is:
      *
-     * For now the page structure is ready
-     * for the real AttemptService.
+     * attempt
+     *   └── topic
+     *        ├── title
+     *        ├── category
+     *        └── questions[]
+     *
+     * The page then exposes only:
+     *
+     * currentQuestion()
+     *
+     * rather than rendering the complete question list.
      */
 
   }
-
-
-  /* ============================================================
-     CURRENT QUESTION
-  ============================================================ */
-
-  readonly currentQuestion = (): AttemptQuestion | null => {
-
-    return this.questions()[this.currentQuestionIndex()]
-      ?? null;
-
-  };
-
-
-  /* ============================================================
-     PROGRESS
-  ============================================================ */
-
-  readonly progressPercentage = (): number => {
-
-    const total = this.questions().length;
-
-    if (total === 0) {
-
-      return 0;
-
-    }
-
-    return (
-      ((this.currentQuestionIndex() + 1) / total) * 100
-    );
-
-  };
 
 
   /* ============================================================
@@ -169,7 +256,40 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   selectAnswer(answerId: string): void {
 
-    this.selectedAnswerId.set(answerId);
+    const questionId = this.currentQuestion().id;
+
+    if (!questionId) {
+
+      return;
+
+    }
+
+    this.selectedAnswers.update(answers => ({
+
+      ...answers,
+
+      [questionId]: answerId,
+
+    }));
+
+  }
+
+
+  /* ============================================================
+     PREVIOUS QUESTION
+  ============================================================ */
+
+  previousQuestion(): void {
+
+    if (!this.hasPrevious()) {
+
+      return;
+
+    }
+
+    this.currentQuestionIndex.update(
+      index => index - 1
+    );
 
   }
 
@@ -177,19 +297,22 @@ export class AttemptPage implements OnInit, OnDestroy {
   /* ============================================================
      SUBMIT ANSWER
      ------------------------------------------------------------
-     The actual answer submission will be connected
-     to AttemptService once the endpoint is defined.
+     The actual answer submission will later be connected
+     to AttemptService.
   ============================================================ */
 
   submitAnswer(): void {
 
+    const question = this.currentQuestion();
+
     const answerId = this.selectedAnswerId();
 
-    if (!answerId) {
+    if (!question.id || !answerId) {
 
       return;
 
     }
+
 
     /*
      * TODO:
@@ -197,11 +320,25 @@ export class AttemptPage implements OnInit, OnDestroy {
      * Send the selected answer to the backend.
      *
      * this.attemptService
-     *   .submitAnswer(...)
+     *   .submitAnswer({
+     *     attemptId: this.attempt()?.id,
+     *     questionId: question.id,
+     *     answerId,
+     *   })
      *   .subscribe(...)
      */
 
-    this.goToNextQuestion();
+
+    if (this.hasNext()) {
+
+      this.goToNextQuestion();
+
+      return;
+
+    }
+
+
+    this.finishAttempt();
 
   }
 
@@ -212,25 +349,15 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   private goToNextQuestion(): void {
 
-    const nextIndex =
-      this.currentQuestionIndex() + 1;
-
-
-    /*
-     * Last question.
-     */
-    if (nextIndex >= this.questions().length) {
-
-      this.finishAttempt();
+    if (!this.hasNext()) {
 
       return;
 
     }
 
-
-    this.currentQuestionIndex.set(nextIndex);
-
-    this.selectedAnswerId.set(null);
+    this.currentQuestionIndex.update(
+      index => index + 1
+    );
 
   }
 
@@ -246,8 +373,11 @@ export class AttemptPage implements OnInit, OnDestroy {
      *
      * Finish the attempt through AttemptService.
      *
-     * We will decide whether to navigate to
-     * a result page or display the result here.
+     * this.attemptService
+     *   .finishAttempt(this.attempt()!.id)
+     *   .subscribe(...)
+     *
+     * Then navigate to the result page.
      */
 
   }

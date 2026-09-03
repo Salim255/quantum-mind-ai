@@ -1,8 +1,8 @@
-<!-- <div class="explore">
+<div class="explore-home">
 
   <app-explore-header />
 
-  <section class="explore__topics">
+  <section class="explore-home__topics">
 
     @for (
       topic of topics();
@@ -10,19 +10,13 @@
       let index = $index
     ) {
 
-    <app-explore-topic
+      <app-explore-topic
         [topic]="topic"
         [index]="index + 1"
       />
+
     }
 
   </section>
-
-</div>
- -->
-
- <div class="explore">
-
-  <router-outlet />
 
 </div>
