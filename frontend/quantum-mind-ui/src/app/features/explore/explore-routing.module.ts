@@ -12,7 +12,10 @@ const routes: Routes = [
         path: "",
         component: ExploreHomeComponent
       },
-    
+      {
+        path: "explore/attempt",
+        loadChildren: () => import("../attempt/attempt.module").then((m) => m.AttemptModule),
+      }
     ]
   }
 ]
