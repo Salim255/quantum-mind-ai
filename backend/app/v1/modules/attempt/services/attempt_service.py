@@ -46,10 +46,11 @@ class AttemptService(ABC):
     # ============================================================
 
     @abstractmethod
-    async def get_latest_attempts_by_topic(
+    async def get_latest_attempt_by_user_and_topic(
         self,
-        user_id: UUID | None,
-    ) -> list[AttemptDTO]:
+        user_id: UUID,
+        topic_id: UUID
+    ) -> list[AttemptDTO] | None:
         """
         Retrieves the latest attempt made by the user for each topic.
 

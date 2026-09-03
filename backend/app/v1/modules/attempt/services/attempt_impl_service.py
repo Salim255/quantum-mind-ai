@@ -82,10 +82,11 @@ class AttemptImplService(AttemptService):
     # GET LATEST ATTEMPTS BY TOPIC
     # ============================================================
 
-    async def get_latest_attempts_by_topic(
+    async def get_latest_attempt_by_user_and_topic(
         self,
-        user_id: UUID | None,
-    ) -> list[AttemptDTO]:
+        user_id: UUID,
+        topic_id: UUID
+    ) -> list[AttemptDTO] | None:
         """
         Retrieves the latest attempt for each topic belonging
         to the specified user.
@@ -101,8 +102,9 @@ class AttemptImplService(AttemptService):
 
             attempts = (
                 await self.attempt_repository
-                .get_latest_attempts_by_topic(
+                .get_latest_attempt_by_user_and_topic(
                     user_id=user_id,
+                    topic_id=topic_id
                 )
             )
 

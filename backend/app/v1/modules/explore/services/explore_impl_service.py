@@ -87,7 +87,7 @@ class ExploreImplService(ExploreService):
 
             latest_attempts = (
                 await self.attempt_service
-                .get_latest_attempts_by_topic(
+                .get_latest_attempt_by_user_and_topic(
                     user_id=user_id,
                 )
             )
@@ -135,8 +135,6 @@ class ExploreImplService(ExploreService):
 
         except Exception as e:
 
-            logger.exception(
-                f"Error retrieving Explore quizzes: {e}"
-            )
+            logger.exception(f"Error retrieving Explore quizzes: {e}")
 
             raise

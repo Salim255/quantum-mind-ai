@@ -1,5 +1,7 @@
 from typing import Annotated
-
+from fastapi import Depends, Request
+from sqlmodel.ext.asyncio.session import AsyncSession
+from app.core.container import Container
 from fastapi import Depends, status
 
 from app.core.dtos.response_dto import ResponseDTO
@@ -10,6 +12,65 @@ from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
 
 from .router import router as attempt_router
+
+
+
+
+# ============================================================
+# CONTAINER DEPENDENCY
+# ============================================================
+
+def get_container(
+    request: Request,
+) -> Container:
+    """
+    Retrieve the application dependency container.
+
+    The container owns application-wide dependencies such as:
+    - database session management
+    - repositories
+    - external service clients
+    - shared infrastructure services
+
+    Args:
+        request:
+            Current FastAPI request.
+
+    Returns:
+        The application's dependency container.
+    """
+    return request.app.state.container
+
+
+# ============================================================
+# DATABASE SESSION DEPENDENCY
+# ============================================================
+
+async def get_db_session(
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ],
+):
+    """
+    Provide an asynchronous database session.
+
+    The session is created by the application's database session
+    manager and injected into repositories.
+
+    Important:
+        This dependency yields the actual AsyncSession.
+        It does not expose the DB session manager itself.
+
+    Args:
+        container:
+            Application dependency container.
+
+    Yields:
+        An active asynchronous database session.
+    """
+    async for session in container.db_session.get_session():
+        yield session
 
 
 # ============================================================
@@ -43,10 +104,14 @@ persisted.
 )
 async def create_attempt(
     payload: AttemptCreateDTO,
-    attempt_service: Annotated[
-        AttemptService,
-        Depends(get_attempt_service),
+    session: Annotated[
+        AsyncSession,
+        Depends(get_db_session),
     ],
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ]
 ) -> ResponseDTO[AttemptDTO]:
     """
     Create a new learning attempt.
@@ -65,6 +130,9 @@ async def create_attempt(
     Returns:
         The newly created learning attempt.
     """
+
+    attempt_service: AttemptService = get_attempt_service(),
+        
     attempt = await attempt_service.create_attempt(
         payload,
     )
