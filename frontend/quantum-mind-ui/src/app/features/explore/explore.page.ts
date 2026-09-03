@@ -33,7 +33,7 @@ export class ExplorePage implements OnInit, OnDestroy {
 
   private subscribeToTopics(): void {
     this.topicsSubscription = this.exploreService
-      .getTopics$()
+      .getTopics$
       .subscribe(topics => {
         this.topics.set(topics);
       });

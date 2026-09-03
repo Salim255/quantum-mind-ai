@@ -13,7 +13,7 @@ const routes: Routes = [
         component: ExploreHomeComponent
       },
       {
-        path: "explore/attempt",
+        path: "attempt",
         loadChildren: () => import("../attempt/attempt.module").then((m) => m.AttemptModule),
       }
     ]

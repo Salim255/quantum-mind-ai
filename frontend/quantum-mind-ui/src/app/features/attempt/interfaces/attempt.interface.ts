@@ -1,6 +1,11 @@
 import { Topic } from "../../explore/models/topic.model";
 
 
+export interface AttemptResponseDTO {
+  topics: Attempt[];
+}
+
+
 export interface AttemptAnswer {
 
   id: string;

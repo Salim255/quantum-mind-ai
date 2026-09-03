@@ -98,7 +98,7 @@ export class ExploreService {
    *
    * Nothing is reformatted or duplicated here.
    */
-  getTopics$(): Observable<Topic[]> {
+  get getTopics$(): Observable<Topic[]> {
 
     return this.state$.pipe(
       map(state => state.topics),

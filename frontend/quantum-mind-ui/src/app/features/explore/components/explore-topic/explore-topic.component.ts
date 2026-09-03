@@ -14,4 +14,9 @@ export class ExploreTopicComponent {
   readonly topic = input.required<Topic>();
   readonly index = input.required<number>();
 
+  constructor(private attemptService: AttemptService ){}
+  fetchAttempt(){
+  
+  }
+
 }
