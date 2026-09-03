@@ -7,7 +7,7 @@ from app.v1.modules.explore.dto.explore_quizzes_response_dto import (
     ExploreQuizzesResponseDTO,
 )
 from app.v1.modules.explore.dependencies import get_explore_service
-from app.v1.modules.explore.service.explore_service import ExploreService
+from app.v1.modules.explore.services.explore_service import ExploreService
 
 from .router import router as explore_router
 
