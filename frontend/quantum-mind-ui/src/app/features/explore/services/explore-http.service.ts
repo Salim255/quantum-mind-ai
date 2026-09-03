@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Topic } from "../models/topic.model";
 import { ApiResponseDTO } from "../../../shared/interfaces/api-response.dto";
 import { ExploreState } from "../interfaces/explore.dtos";
 

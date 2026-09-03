@@ -5,13 +5,13 @@
   <section class="explore-home__topics">
 
     @for (
-      topic of topics();
-      track topic.title;
+      data of topics();
+      track data.topic.title;
       let index = $index
     ) {
 
       <app-explore-topic
-        [topic]="topic"
+        [topic]="data.topic"
         [index]="index + 1"
       />
 

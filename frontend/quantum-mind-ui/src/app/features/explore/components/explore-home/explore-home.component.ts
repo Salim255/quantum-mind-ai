@@ -7,6 +7,7 @@ import {
 import { ExploreService } from '../../services/explore.service';
 import { Subscription } from 'rxjs';
 import { Topic } from '../../models/topic.model';
+import { ExploreTopicDTO } from '../../interfaces/explore.dtos';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class ExploreHomeComponent implements OnInit, OnDestroy {
 
    private topicsSubscription?: Subscription;
 
-  readonly topics = signal<Topic[]>([]);
+  readonly topics = signal<ExploreTopicDTO[]>([]);
 
   constructor(
     private readonly exploreService: ExploreService,
@@ -32,7 +33,7 @@ export class ExploreHomeComponent implements OnInit, OnDestroy {
 
   private subscribeToTopics(): void {
     this.topicsSubscription = this.exploreService
-      .getTopics$()
+      .getTopics$
       .subscribe(topics => {
         this.topics.set(topics);
       });

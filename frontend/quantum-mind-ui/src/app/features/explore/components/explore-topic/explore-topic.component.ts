@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Topic } from '../../models/topic.model';
+import { AttemptService } from '../../../attempt/services/attempt.service';
 
 
 @Component({
@@ -15,8 +16,9 @@ export class ExploreTopicComponent {
   readonly index = input.required<number>();
 
   constructor(private attemptService: AttemptService ){}
-  fetchAttempt(){
   
+  fetchAttempt(){
+    this.attemptService.
   }
 
 }

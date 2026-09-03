@@ -1,34 +1,87 @@
-<a
+<button
+  type="button"
   class="explore-topic"
-  [routerLink]="['attempt']"
+  (click)="openAttempt()"
 >
+
+  <!-- ==========================================================
+       INDEX
+  =========================================================== -->
 
   <span
     class="explore-topic__index"
     aria-hidden="true"
   >
-    {{index()}}
+    {{ index() }}
   </span>
+
+
+  <!-- ==========================================================
+       CONTENT
+  =========================================================== -->
 
   <span class="explore-topic__content">
 
     <span class="explore-topic__title">
-      {{ topic().title }}
+      {{ exploreTopic().topic.title }}
     </span>
 
     <span class="explore-topic__description">
-      {{ topic().description }}
+      {{ exploreTopic().topic.description }}
     </span>
 
   </span>
 
+
+  <!-- ==========================================================
+       ACTION
+  =========================================================== -->
+
   <span
-    class="explore-topic__meta"
+    class="explore-topic__action"
     aria-hidden="true"
   >
-    <iconify-icon
-      icon="lucide:arrow-up-right"
-    ></iconify-icon>
+
+    @if (!exploreTopic().latestAttempt) {
+
+      <span class="explore-topic__action-label">
+        Take the quiz
+      </span>
+
+      <span class="explore-topic__action-icon">
+        <iconify-icon
+          icon="lucide:arrow-right"
+        ></iconify-icon>
+      </span>
+
+    } @else if (
+      exploreTopic().latestAttempt?.status === 'in_progress'
+    ) {
+
+      <span class="explore-topic__action-label">
+        Resume quiz
+      </span>
+
+      <span class="explore-topic__action-icon">
+        <iconify-icon
+          icon="lucide:play"
+        ></iconify-icon>
+      </span>
+
+    } @else {
+
+      <span class="explore-topic__action-label">
+        Retake quiz
+      </span>
+
+      <span class="explore-topic__action-icon">
+        <iconify-icon
+          icon="lucide:rotate-ccw"
+        ></iconify-icon>
+      </span>
+
+    }
+
   </span>
 
-</a>
+</button>

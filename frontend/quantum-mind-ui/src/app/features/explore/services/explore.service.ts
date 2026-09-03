@@ -7,11 +7,8 @@ import {
 
 import { Topic } from '../models/topic.model';
 import { ExploreHttpService } from './explore-http.service';
+import { ExploreState, ExploreTopicDTO } from '../interfaces/explore.dtos';
 
-
-interface ExploreState {
-  topics: Topic[];
-}
 
 
 @Injectable({
@@ -98,7 +95,7 @@ export class ExploreService {
    *
    * Nothing is reformatted or duplicated here.
    */
-  get getTopics$(): Observable<Topic[]> {
+  get getTopics$(): Observable<ExploreTopicDTO[]> {
 
     return this.state$.pipe(
       map(state => state.topics),
@@ -117,7 +114,7 @@ export class ExploreService {
    * state mutation.
    */
   private setTopics(
-    topics: Topic[],
+    topics: ExploreTopicDTO[],
   ): void {
 
     this.stateSubject.next({
