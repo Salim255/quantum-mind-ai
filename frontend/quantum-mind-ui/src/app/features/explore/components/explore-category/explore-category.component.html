@@ -8,13 +8,13 @@
         class="explore-category__index"
         aria-hidden="true"
       >
-        01
+        {{ index() }}
       </span>
 
       <div class="explore-category__heading">
 
         <h2 class="explore-category__title">
-          {{ category().name }}
+          {{ category().title }}
         </h2>
 
         <p class="explore-category__description">
@@ -26,14 +26,13 @@
     </div>
 
     <span class="explore-category__count">
-      {{ category().topics.length }}
-      {{ category().topics.length === 1 ? 'topic' : 'topics' }}
+      {{ 15 }} topic
     </span>
 
   </header>
 
 
-  <div class="explore-category__topic-list">
+<!--   <div class="explore-category__topic-list">
 
     @for (
       topic of category().topics;
@@ -48,6 +47,6 @@
 
     }
 
-  </div>
+  </div> -->
 
 </section>

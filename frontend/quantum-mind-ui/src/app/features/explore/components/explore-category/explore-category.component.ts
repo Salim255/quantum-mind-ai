@@ -4,6 +4,7 @@ import {
   input,
 } from '@angular/core';
 import { ExploreCategory } from '../../interfaces/explore.dtos';
+import { Topic } from '../../models/topic.model';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { ExploreCategory } from '../../interfaces/explore.dtos';
 })
 export class ExploreCategoryComponent {
 
-  readonly category = input.required<ExploreCategory>();
+  readonly category = input.required<Topic>();
+  readonly index = input.required<number>();
 
 }

@@ -1,56 +1,247 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+/* ============================================================
+   EXPLORE HEADER
+   ------------------------------------------------------------
+   Editorial page introduction.
+
+   Direction:
+   - Linear-inspired
+   - soft
+   - premium
+   - restrained
+   - spacious
+   - subtle primary gradient
+   - no heavy visual decoration
+============================================================ */
+
 .explore-header {
 
-  max-width: var(--content-md);
+  position: relative;
 
-  margin-bottom: var(--section-gap-lg);
+  width: 100%;
+
+  max-width:
+    var(--content-lg);
+
+  margin-bottom:
+    var(--section-gap-xl);
+}
 
 
-  &__content {
-    width: 100%;
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.explore-header__content {
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   EYEBROW
+============================================================ */
+
+.explore-header__eyebrow {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  margin-bottom:
+    var(--component-gap-md);
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   EYEBROW ACCENT
+   ------------------------------------------------------------
+   Small visual signal instead of a heavy decorative element.
+============================================================ */
+
+.explore-header__eyebrow::before {
+
+  content: "";
+
+  display: block;
+
+  width:
+    var(--space-2);
+
+  height:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  border-radius:
+    var(--radius-circle);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  box-shadow:
+    0 0
+    var(--space-2)
+    rgb(37 99 235 / 18%);
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.explore-header__title {
+
+  max-width:
+    var(--content-md);
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-display-sm-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-display-sm-line);
+
+  letter-spacing:
+    var(--text-display-sm-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   TITLE ACCENT
+   ------------------------------------------------------------
+   Small gradient rule beneath the heading.
+============================================================ */
+
+.explore-header__title::after {
+
+  content: "";
+
+  display: block;
+
+  width:
+    var(--space-10);
+
+  height:
+    .3rem;
+
+  margin-top:
+    var(--component-gap-md);
+
+  border-radius:
+    var(--radius-pill);
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  opacity:
+    .75;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.explore-header__description {
+
+  max-width:
+    var(--content-md);
+
+  margin:
+    var(--component-gap-md)
+    0
+    0;
+
+  color:
+    var(--color-gray-6);
+
+  font-size:
+    var(--text-body-lg-size);
+
+  font-weight:
+    var(--text-body-lg-weight);
+
+  line-height:
+    var(--text-body-lg-line);
+
+  text-wrap:
+    pretty;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .explore-header {
+
+    margin-bottom:
+      var(--section-gap-lg);
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .explore-header {
+
+    margin-bottom:
+      var(--section-gap-lg);
   }
 
 
-  &__eyebrow {
+  .explore-header__description {
 
-    color: var(--gray-6);
-
-    font-size: var(--label-sm);
-    font-weight: var(--weight-label-md);
-
-    line-height: 1.3;
-    letter-spacing: 0.08em;
-
-  }
-
-
-  &__title {
-
-    margin: 0;
-
-    color: var(--gray-10);
-
-    font-size: var(--display-sm);
-    font-weight: var(--weight-heading-sm);
-
-    line-height: var(--display-sm-line);
-    letter-spacing: var(--display-sm-tracking);
-
-    text-wrap: balance;
-
-  }
-
-
-  &__description {
-
-    max-width: var(--content-md);
-
-    margin: var(--component-gap-md) 0 0;
-
-    color: var(--gray-7);
-
-    font-size: var(--body-lg);
-    line-height: 1.6;
-
+    max-width:
+      none;
   }
 
 }

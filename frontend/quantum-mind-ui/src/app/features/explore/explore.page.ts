@@ -1,27 +1,45 @@
-import { Component } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { ExploreService } from './services/explore.service';
+import { Topic } from './models/topic.model';
+
 
 @Component({
-  selector: "app-explore-page",
-  templateUrl: "./explore.page.html",
-  styleUrls: ["./explore.page.scss"],
-  standalone: false
+  selector: 'app-explore-page',
+  templateUrl: './explore.page.html',
+  styleUrls: ['./explore.page.scss'],
+  standalone: false,
 })
-export class ExplorePage {
-  /* Explore
+export class ExplorePage implements OnInit, OnDestroy {
 
-  For discovering content.
+  private topicsSubscription?: Subscription;
 
-  Quantum Algorithms
-  Quantum Hardware
-  Quantum Gates
-  Quantum Physics Fundamentals
-  Quantum Machine Learning
-  Industry Applications
-  Explore
-  ├── Algorithms
-  ├── Gates
-  ├── Circuits
-  ├── Hardware
-  ├── Physics
-  └── Applications */
+  readonly topics = signal<Topic[]>([]);
+
+  constructor(
+    private readonly exploreService: ExploreService,
+  ) {}
+
+  ngOnInit(): void {
+    this.subscribeToTopics();
+    this.exploreService.fetchTopics();
+  }
+
+  private subscribeToTopics(): void {
+    this.topicsSubscription = this.exploreService
+      .getTopics$()
+      .subscribe(topics => {
+        this.topics.set(topics);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.topicsSubscription?.unsubscribe();
+  }
 }
