@@ -1,0 +1,899 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+/* ============================================================
+   ATTEMPT PAGE
+   ------------------------------------------------------------
+   Focused quiz experience.
+
+   Direction:
+   - clean
+   - calm
+   - premium
+   - highly readable
+   - spacious
+   - minimal decoration
+============================================================ */
+
+.attempt {
+
+  display: flex;
+
+  flex-direction: column;
+
+  width: 100%;
+
+  min-height: 100%;
+
+  max-width:
+    var(--content-lg);
+
+  margin:
+    0 auto;
+
+  padding:
+    var(--space-8)
+    0
+    var(--space-10);
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.attempt__header {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap:
+    var(--space-8);
+
+  padding-bottom:
+    var(--space-6);
+
+  border-bottom:
+    1px solid
+    var(--color-gray-2);
+}
+
+
+/* ============================================================
+   CONTEXT
+============================================================ */
+
+.attempt__context {
+
+  min-width: 0;
+}
+
+
+/* ============================================================
+   EYEBROW
+============================================================ */
+
+.attempt__eyebrow {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap:
+    var(--space-2);
+
+  margin-bottom:
+    var(--space-2);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* ============================================================
+   EYEBROW ACCENT
+============================================================ */
+
+.attempt__eyebrow::before {
+
+  content: "";
+
+  width:
+    var(--space-2);
+
+  height:
+    var(--space-2);
+
+  flex-shrink: 0;
+
+  border-radius:
+    var(--radius-circle);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+}
+
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.attempt__title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-heading-md-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-heading-md-line);
+
+  letter-spacing:
+    var(--text-heading-md-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+
+.attempt__progress {
+
+  width:
+    min(20rem, 30%);
+
+  flex-shrink: 0;
+}
+
+
+.attempt__progress-meta {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom:
+    var(--space-2);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--text-label-md-weight);
+
+  line-height:
+    var(--text-label-sm-line);
+}
+
+
+/* ============================================================
+   PROGRESS TRACK
+============================================================ */
+
+.attempt__progress-track {
+
+  position: relative;
+
+  width: 100%;
+
+  height:
+    .4rem;
+
+  overflow: hidden;
+
+  border-radius:
+    var(--radius-pill);
+
+  background:
+    var(--color-gray-2);
+}
+
+
+/* ============================================================
+   PROGRESS VALUE
+============================================================ */
+
+.attempt__progress-value {
+
+  display: block;
+
+  height: 100%;
+
+  border-radius:
+    inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-primary),
+      var(--color-info)
+    );
+
+  transition:
+    width
+    var(--transition-normal);
+}
+
+
+/* ============================================================
+   MAIN CONTENT
+============================================================ */
+
+.attempt__content {
+
+  width: 100%;
+
+  max-width:
+    var(--content-md);
+
+  margin:
+    var(--space-16)
+    auto
+    0;
+}
+
+
+/* ============================================================
+   QUESTION
+============================================================ */
+
+.attempt__question {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap:
+    var(--space-5);
+}
+
+
+/* ============================================================
+   QUESTION NUMBER
+============================================================ */
+
+.attempt__question-number {
+
+  color:
+    var(--color-primary);
+
+  font-size:
+    var(--text-label-md-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-label-md-line);
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* ============================================================
+   QUESTION TITLE
+============================================================ */
+
+.attempt__question-title {
+
+  margin: 0;
+
+  color:
+    var(--color-gray-9);
+
+  font-size:
+    var(--text-display-sm-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  line-height:
+    var(--text-display-sm-line);
+
+  letter-spacing:
+    var(--text-display-sm-tracking);
+
+  text-wrap:
+    balance;
+}
+
+
+/* ============================================================
+   ANSWERS
+============================================================ */
+
+.attempt__answers {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap:
+    var(--space-3);
+
+  margin-top:
+    var(--space-10);
+}
+
+
+/* ============================================================
+   ANSWER
+============================================================ */
+
+.attempt__answer {
+
+  display: flex;
+
+  align-items: center;
+
+  width: 100%;
+
+  min-height:
+    5.6rem;
+
+  padding:
+    var(--space-4)
+    var(--space-5);
+
+  border:
+    1px solid
+    var(--color-gray-2);
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    var(--color-white);
+
+  color:
+    var(--color-gray-8);
+
+  font: inherit;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+
+  transition:
+    border-color
+    var(--transition-fast),
+
+    background-color
+    var(--transition-fast),
+
+    transform
+    var(--transition-fast);
+}
+
+
+/* ============================================================
+   ANSWER HOVER
+============================================================ */
+
+.attempt__answer:hover {
+
+  border-color:
+    var(--color-gray-3);
+
+  background:
+    var(--color-gray-1);
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* ============================================================
+   ANSWER INDEX
+============================================================ */
+
+.attempt__answer-index {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width:
+    var(--space-10);
+
+  height:
+    var(--space-10);
+
+  flex-shrink: 0;
+
+  border:
+    1px solid
+    var(--color-gray-2);
+
+  border-radius:
+    var(--radius-md);
+
+  color:
+    var(--color-gray-5);
+
+  font-size:
+    var(--text-label-sm-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  font-variant-numeric:
+    tabular-nums;
+
+  transition:
+    border-color
+    var(--transition-fast),
+
+    background-color
+    var(--transition-fast),
+
+    color
+    var(--transition-fast);
+}
+
+
+/* ============================================================
+   ANSWER TEXT
+============================================================ */
+
+.attempt__answer-text {
+
+  min-width: 0;
+
+  margin-left:
+    var(--space-4);
+
+  color:
+    var(--color-gray-8);
+
+  font-size:
+    var(--text-body-md-size);
+
+  font-weight:
+    var(--text-body-md-weight);
+
+  line-height:
+    var(--text-body-md-line);
+}
+
+
+/* ============================================================
+   ANSWER INDICATOR
+============================================================ */
+
+.attempt__answer-indicator {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width:
+    var(--space-8);
+
+  height:
+    var(--space-8);
+
+  margin-left:
+    auto;
+
+  flex-shrink: 0;
+
+  border:
+    1px solid
+    var(--color-gray-2);
+
+  border-radius:
+    var(--radius-circle);
+
+  color:
+    transparent;
+
+  transition:
+    border-color
+    var(--transition-fast),
+
+    background-color
+    var(--transition-fast),
+
+    color
+    var(--transition-fast);
+}
+
+
+.attempt__answer-indicator iconify-icon {
+
+  font-size:
+    1.4rem;
+}
+
+
+/* ============================================================
+   SELECTED ANSWER
+============================================================ */
+
+.attempt__answer--selected {
+
+  border-color:
+    var(--color-primary);
+
+  background:
+    rgb(75 92 255 / 5%);
+}
+
+
+.attempt__answer--selected
+.attempt__answer-index {
+
+  border-color:
+    var(--color-primary);
+
+  background:
+    var(--color-primary);
+
+  color:
+    var(--color-white);
+}
+
+
+.attempt__answer--selected
+.attempt__answer-text {
+
+  color:
+    var(--color-gray-9);
+
+  font-weight:
+    var(--font-medium);
+}
+
+
+.attempt__answer--selected
+.attempt__answer-indicator {
+
+  border-color:
+    var(--color-primary);
+
+  color:
+    var(--color-primary);
+
+  background:
+    rgb(75 92 255 / 8%);
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.attempt__footer {
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  width: 100%;
+
+  max-width:
+    var(--content-md);
+
+  margin:
+    var(--space-10)
+    auto
+    0;
+}
+
+
+/* ============================================================
+   CONTINUE BUTTON
+============================================================ */
+
+.attempt__continue {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap:
+    var(--space-3);
+
+  min-width:
+    11rem;
+
+  min-height:
+    3.2rem;
+
+  padding:
+    0
+    var(--space-5);
+
+  border:
+    1px solid
+    var(--color-primary);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--color-primary);
+
+  color:
+    var(--color-white);
+
+  font: inherit;
+
+  font-size:
+    var(--text-body-sm-size);
+
+  font-weight:
+    var(--font-semibold);
+
+  cursor:
+    pointer;
+
+  transition:
+    background-color
+    var(--transition-fast),
+
+    border-color
+    var(--transition-fast),
+
+    transform
+    var(--transition-fast),
+
+    opacity
+    var(--transition-fast);
+}
+
+
+.attempt__continue iconify-icon {
+
+  font-size:
+    1.6rem;
+
+  transition:
+    transform
+    var(--transition-fast);
+}
+
+
+.attempt__continue:hover:not(:disabled) {
+
+  transform:
+    translateY(-1px);
+}
+
+
+.attempt__continue:hover:not(:disabled)
+iconify-icon {
+
+  transform:
+    translateX(2px);
+}
+
+
+/* ============================================================
+   DISABLED
+============================================================ */
+
+.attempt__continue:disabled {
+
+  opacity:
+    .45;
+
+  cursor:
+    not-allowed;
+}
+
+
+/* ============================================================
+   FOCUS
+============================================================ */
+
+.attempt__answer:focus-visible,
+.attempt__continue:focus-visible {
+
+  outline:
+    2px solid
+    var(--color-primary);
+
+  outline-offset:
+    3px;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@include respond(tab-port) {
+
+  .attempt {
+
+    padding:
+      var(--space-6)
+      0
+      var(--space-8);
+  }
+
+
+  .attempt__header {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+
+  .attempt__progress {
+
+    width: 100%;
+  }
+
+
+  .attempt__content {
+
+    margin-top:
+      var(--space-12);
+  }
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+@include respond(phone) {
+
+  .attempt {
+
+    padding:
+      var(--space-4)
+      0
+      var(--space-6);
+  }
+
+
+  .attempt__header {
+
+    gap:
+      var(--space-5);
+
+    padding-bottom:
+      var(--space-5);
+  }
+
+
+  .attempt__title {
+
+    font-size:
+      var(--text-heading-sm-size);
+
+    line-height:
+      var(--text-heading-sm-line);
+  }
+
+
+  .attempt__content {
+
+    margin-top:
+      var(--space-10);
+  }
+
+
+  .attempt__question {
+
+    gap:
+      var(--space-4);
+  }
+
+
+  .attempt__question-title {
+
+    font-size:
+      var(--text-heading-lg-size);
+
+    line-height:
+      var(--text-heading-lg-line);
+  }
+
+
+  .attempt__answers {
+
+    margin-top:
+      var(--space-8);
+  }
+
+
+  .attempt__answer {
+
+    min-height:
+      5rem;
+
+    padding:
+      var(--space-3)
+      var(--space-4);
+  }
+
+
+  .attempt__answer-index {
+
+    width:
+      var(--space-8);
+
+    height:
+      var(--space-8);
+  }
+
+
+  .attempt__answer-text {
+
+    margin-left:
+      var(--space-3);
+
+    font-size:
+      var(--text-body-sm-size);
+
+    line-height:
+      var(--text-body-sm-line);
+  }
+
+
+  .attempt__footer {
+
+    margin-top:
+      var(--space-8);
+  }
+
+
+  .attempt__continue {
+
+    width: 100%;
+  }
+
+}

@@ -1,0 +1,131 @@
+<div class="attempt">
+
+  <header class="attempt__header">
+
+    <div class="attempt__context">
+
+      <span class="attempt__eyebrow">
+        QUIZ
+      </span>
+
+      <h1 class="attempt__title">
+        {{ topic().title }}
+      </h1>
+
+    </div>
+
+    <div class="attempt__progress">
+
+      <div class="attempt__progress-meta">
+
+        <span>
+          Question {{ currentQuestionIndex() + 1 }}
+        </span>
+
+        <span>
+          {{ questions().length }}
+        </span>
+
+      </div>
+
+      <div
+        class="attempt__progress-track"
+        role="progressbar"
+        [attr.aria-valuenow]="currentQuestionIndex() + 1"
+        [attr.aria-valuemin]="1"
+        [attr.aria-valuemax]="questions().length"
+      >
+        <span
+          class="attempt__progress-value"
+          [style.width.%]="progressPercentage()"
+        ></span>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <main class="attempt__content">
+
+    <section class="attempt__question">
+
+      <span class="attempt__question-number">
+        {{ currentQuestionIndex() + 1 | number:'2.0' }}
+      </span>
+
+      <h2 class="attempt__question-title">
+        {{ currentQuestion().question }}
+      </h2>
+
+    </section>
+
+
+    <section
+      class="attempt__answers"
+      aria-label="Answer choices"
+    >
+
+      @for (
+        answer of currentQuestion().answers;
+        track answer.id;
+        let index = $index
+      ) {
+
+        <button
+          type="button"
+          class="attempt__answer"
+          [class.attempt__answer--selected]="
+            selectedAnswerId() === answer.id
+          "
+          (click)="selectAnswer(answer.id)"
+        >
+
+          <span class="attempt__answer-index">
+            {{ index | number:'2.0' }}
+          </span>
+
+          <span class="attempt__answer-text">
+            {{ answer.text }}
+          </span>
+
+          <span
+            class="attempt__answer-indicator"
+            aria-hidden="true"
+          >
+            <iconify-icon
+              icon="lucide:check"
+            ></iconify-icon>
+          </span>
+
+        </button>
+
+      }
+
+    </section>
+
+  </main>
+
+
+  <footer class="attempt__footer">
+
+    <button
+      type="button"
+      class="attempt__continue"
+      [disabled]="!selectedAnswerId()"
+      (click)="submitAnswer()"
+    >
+
+      <span>
+        Continue
+      </span>
+
+      <iconify-icon
+        icon="lucide:arrow-right"
+      ></iconify-icon>
+
+    </button>
+
+  </footer>
+
+</div>
