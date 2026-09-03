@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { ExploreService } from '../../services/explore.service';
 import { Subscription } from 'rxjs';
-import { ExploreTopicDTO } from '../../interfaces/explore.dtos';
+import { ExploreQuizDTO } from '../../interfaces/explore.dtos';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class ExploreHomeComponent implements OnInit, OnDestroy {
 
    private topicsSubscription?: Subscription;
 
-  readonly topics = signal<ExploreTopicDTO[]>([]);
+  readonly topics = signal<ExploreQuizDTO[]>([]);
 
   constructor(
     private readonly exploreService: ExploreService,

@@ -6,7 +6,7 @@
 
     @for (
       data of topics();
-      track data.topic.title;
+      track data?.topic?.title;
       let index = $index
     ) {
 

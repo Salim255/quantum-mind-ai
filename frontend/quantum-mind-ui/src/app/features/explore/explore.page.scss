@@ -34,7 +34,19 @@
 
   padding: var(--page-padding-lg);
 
+  box-sizing: border-box;
+
   color: var(--gray-10);
+
+
+  &__topics {
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: var(--component-gap-md);
+
+  }
 
 }
 

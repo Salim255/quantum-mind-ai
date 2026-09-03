@@ -2,7 +2,7 @@ import { Attempt } from "../../attempt/interfaces/attempt.interface";
 import { Topic } from "../models/topic.model";
 
 
-export interface ExploreTopicDTO {
+export interface ExploreQuizDTO {
 
   /*
    * ==========================================================
@@ -31,5 +31,5 @@ export interface ExploreTopicDTO {
 }
 
 export interface ExploreState {
-  topics:  ExploreTopicDTO[];
+  topics:  ExploreQuizDTO[];
 }
