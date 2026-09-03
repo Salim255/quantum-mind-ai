@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
-import { Attempt } from '../interfaces/attempt.interface';
+import { Attempt, AttemptResponseDTO } from '../interfaces/attempt.interface';
+import { ApiResponseDTO } from '../../../shared/interfaces/api-response.dto';
 
 
 @Injectable({
@@ -17,7 +18,7 @@ export class AttemptHttpService {
   private  baseUrl = `${this.ENV.apiBaseUrl}/attempts`;
 
 
-  constructor( private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
 
   /*
@@ -38,10 +39,10 @@ export class AttemptHttpService {
    * }
    */
   createAttempt(
-    topicId: string,
-  ): Observable<Attempt> {
+    topicId: string
+  ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
 
-    return this.http.post<Attempt>(
+    return this.http.post<ApiResponseDTO<AttemptResponseDTO>>(
       this.baseUrl,
       {
         topic_id: topicId,
@@ -60,11 +61,12 @@ export class AttemptHttpService {
    * GET /attempts/:id
    */
   getAttempt(
-    attemptId: string,
-  ): Observable<Attempt> {
+    attemptId: string
+  ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
 
-    return this.http.get<Attempt>(
-      `${this.baseUrl}/${attemptId}`,
+    return this.http
+    .get<ApiResponseDTO<AttemptResponseDTO>>(
+      `${this.baseUrl}/${attemptId}`
     );
   }
 

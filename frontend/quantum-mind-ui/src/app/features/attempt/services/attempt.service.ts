@@ -78,7 +78,7 @@ export class AttemptService {
         next: response => {
 
           this.setAttempt(
-            response.data,
+            response.data.attempt,
           );
 
         },
@@ -104,7 +104,7 @@ export class AttemptService {
         next: response => {
 
           this.setAttempt(
-            response.data,
+            response.data.attempt,
           );
 
         },

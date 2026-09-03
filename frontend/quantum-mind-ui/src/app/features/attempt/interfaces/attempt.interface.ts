@@ -2,7 +2,7 @@ import { Topic } from "../../explore/models/topic.model";
 
 
 export interface AttemptResponseDTO {
-  topics: Attempt[];
+  attempt: Attempt;
 }
 
 
