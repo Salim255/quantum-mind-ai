@@ -5,7 +5,6 @@ import {
   Observable,
 } from 'rxjs';
 
-import { Topic } from '../models/topic.model';
 import { ExploreHttpService } from './explore-http.service';
 import { ExploreState, ExploreQuizDTO } from '../interfaces/explore.dtos';
 
@@ -16,32 +15,11 @@ import { ExploreState, ExploreQuizDTO } from '../interfaces/explore.dtos';
 })
 export class ExploreService {
 
-  /*
-   * ==========================================================
-   * STATE
-   * ==========================================================
-   *
-   * The Explore page only needs one piece of state:
-   *
-   *   topics
-   *
-   * The API remains the source of truth.
-   *
-   * We initialize the state with an empty array because
-   * topics have not been fetched yet.
-   */
   private readonly stateSubject =
     new BehaviorSubject<ExploreState>({
-      topics: [],
+      quizzes: [],
     });
 
-
-  /*
-   * Expose the state as a read-only observable.
-   *
-   * Components can observe the state but cannot modify it
-   * directly.
-   */
   private readonly state$ =
     this.stateSubject.asObservable();
 
@@ -51,74 +29,36 @@ export class ExploreService {
   ) {}
 
 
-  /*
-   * ==========================================================
-   * FETCH TOPICS
-   * ==========================================================
-   *
-   * Retrieves the topics from the API through the HTTP service
-   * and stores them in the Explore state.
-   */
   fetchTopics(): void {
 
     this.exploreHttpService
       .getTopics()
       .subscribe({
         next: response => {
-
+          console.log(response);
           this.setTopics(
-            response.data.topics,
+            response.data.quizzes
+
           );
 
         },
       });
   }
 
-
-  /*
-   * ==========================================================
-   * GET TOPICS
-   * ==========================================================
-   *
-   * Returns the topics currently stored in the Explore state.
-   *
-   * The component receives the actual Topic objects returned
-   * by the API, including their:
-   *
-   * - id
-   * - title
-   * - slug
-   * - category
-   * - description
-   * - display_order
-   * - questions
-   *
-   * Nothing is reformatted or duplicated here.
-   */
   get getTopics$(): Observable<ExploreQuizDTO[]> {
 
     return this.state$.pipe(
-      map(state => state.topics),
+      map(state => state.quizzes),
     );
   }
 
 
-  /*
-   * ==========================================================
-   * SET TOPICS
-   * ==========================================================
-   *
-   * Updates the Explore state.
-   *
-   * Kept private so that only this service controls
-   * state mutation.
-   */
   private setTopics(
-    topics: ExploreQuizDTO[],
+    quizzes: ExploreQuizDTO[],
   ): void {
 
     this.stateSubject.next({
-      topics,
+      quizzes,
     });
   }
 

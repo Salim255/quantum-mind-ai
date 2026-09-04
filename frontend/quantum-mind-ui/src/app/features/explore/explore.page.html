@@ -1,28 +1,3 @@
-<!-- <div class="explore">
-
-  <app-explore-header />
-
-  <section class="explore__topics">
-
-    @for (
-      topic of topics();
-      track topic.title;
-      let index = $index
-    ) {
-
-    <app-explore-topic
-        [topic]="topic"
-        [index]="index + 1"
-      />
-    }
-
-  </section>
-
-</div>
- -->
-
- <div class="explore">
-
+<div class="explore">
   <router-outlet />
-
 </div>

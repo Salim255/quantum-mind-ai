@@ -31,5 +31,5 @@ export interface ExploreQuizDTO {
 }
 
 export interface ExploreState {
-  topics:  ExploreQuizDTO[];
+  quizzes:  ExploreQuizDTO[];
 }

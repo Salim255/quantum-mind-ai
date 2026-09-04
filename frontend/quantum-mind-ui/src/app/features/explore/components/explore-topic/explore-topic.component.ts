@@ -19,7 +19,7 @@ import { ExploreQuizDTO } from '../../interfaces/explore.dtos';
 })
 export class ExploreTopicComponent implements OnInit {
 
-  readonly exploreTopic = input.required<ExploreTopicDTO>();
+  readonly exploreTopic = input.required<ExploreQuizDTO>();
 
 
   readonly index =

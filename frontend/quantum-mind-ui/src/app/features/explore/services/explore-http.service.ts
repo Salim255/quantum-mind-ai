@@ -9,13 +9,13 @@ import { ExploreState } from "../interfaces/explore.dtos";
 export class ExploreHttpService {
 
     private ENV = environment
-    private baseUrl = `${this.ENV.apiBaseUrl}/learns`
+    private baseUrl = `${this.ENV.apiBaseUrl}/explore/quizzes`
     constructor(private http: HttpClient){}
   
 
     getTopics(): Observable<ApiResponseDTO<ExploreState>> {
       return this.http.get<ApiResponseDTO<ExploreState>>(
-        `${this.ENV.apiBaseUrl}/topics`,
+        `${this.baseUrl}`,
         {
           params: {
             include_sections: false,
