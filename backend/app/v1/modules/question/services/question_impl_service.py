@@ -26,6 +26,67 @@ class QuestionImplService(QuestionService):
         self.question_repository = question_repository
 
 
+
+    # ============================================================
+    # GET RANDOM QUESTIONS
+    # ============================================================
+    async def get_random_questions_by_topic(
+        self,
+        topic_id: UUID,
+        limit: int = 15,
+    ) -> list[QuestionDTO]:
+        """
+        Return a random selection of active questions
+        belonging to a specific learning topic.
+
+        The database-level randomization is handled by the
+        QuestionRepository. The service is responsible only
+        for requesting the questions and converting the
+        resulting Question entities into QuestionDTO objects.
+
+        For the MVP, the default selection contains 15 questions.
+
+        More advanced selection rules, such as balancing
+        easy, medium, and hard questions, can be introduced
+        later.
+
+        Args:
+            topic_id:
+                Identifier of the learning topic from which
+                questions should be selected.
+
+            limit:
+                Maximum number of random questions to return.
+                Defaults to 15.
+
+        Returns:
+            A list of randomly selected question DTOs.
+
+        Raises:
+            Exception:
+                Propagates repository or conversion errors so they
+                can be handled by the application's exception layer.
+        """
+        try:
+            questions = (
+                await self.question_repository
+                .get_random_questions_by_topic(
+                    topic_id=topic_id,
+                    limit=limit,
+                )
+            )
+
+            return [
+                QuestionDTO.model_validate(question)
+                for question in questions
+            ]
+
+        except Exception:
+            logger.exception(
+                "Error retrieving random questions by topic",
+            )
+            raise
+        
     async def get_questions_count_by_topic(
         self,
         topic_id: UUID,

@@ -99,7 +99,3 @@ class QuestionService(ABC):
         raise NotImplementedError(
             "create_question() must be implemented"
         )
-
-
-
-    async def get_random_questions_by_topic():
