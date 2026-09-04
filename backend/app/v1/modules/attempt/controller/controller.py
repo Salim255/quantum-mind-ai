@@ -131,11 +131,11 @@ async def create_attempt(
         The newly created learning attempt.
     """
 
-    attempt_service: AttemptService = get_attempt_service(session=session, container=container),
+    attempt_service: AttemptService = get_attempt_service(session=session, container=container)
         
     attempt = await attempt_service.create_attempt(
         payload,
     )
 
-    return ResponseDTO.success(attempt)
+    return ResponseDTO.success(attempt=attempt)
 
