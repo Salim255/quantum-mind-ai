@@ -10,6 +10,7 @@ from app.v1.modules.attempt.dependencies import get_attempt_service
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
+from app.v1.modules.attempt.dto.attempt_response_dto import AttemptResponseDTO
 
 from .router import router as attempt_router
 
@@ -79,7 +80,7 @@ async def get_db_session(
 
 @attempt_router.post(
     "/",
-    response_model=ResponseDTO[AttemptDTO],
+    response_model=ResponseDTO[AttemptResponseDTO],
     status_code=status.HTTP_201_CREATED,
     summary="Create a learning attempt",
     description="""
@@ -112,7 +113,7 @@ async def create_attempt(
         Container,
         Depends(get_container),
     ]
-) -> ResponseDTO[AttemptDTO]:
+) -> ResponseDTO[AttemptResponseDTO]:
     """
     Create a new learning attempt.
 
@@ -137,5 +138,5 @@ async def create_attempt(
         payload,
     )
 
-    return ResponseDTO.success(attempt=attempt)
+    return ResponseDTO.success(attempt)
 

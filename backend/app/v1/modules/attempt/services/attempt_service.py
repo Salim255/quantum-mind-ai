@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
+from app.v1.modules.attempt.dto.attempt_response_dto import AttemptResponseDTO
 
 
 class AttemptService(ABC):
@@ -18,7 +19,7 @@ class AttemptService(ABC):
     async def create_attempt(
         self,
         attempt_data: AttemptCreateDTO,
-    ) -> AttemptDTO:
+    ) -> AttemptResponseDTO:
         """
         Create a new learning attempt.
 
@@ -39,6 +40,7 @@ class AttemptService(ABC):
         raise NotImplementedError(
             "create_attempt() must be implemented"
         )
+
 
 
     # ============================================================

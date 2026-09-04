@@ -1,9 +1,8 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
-from app.v1.modules.question.dto.question_dto import QuestionDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 
 

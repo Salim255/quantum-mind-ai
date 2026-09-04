@@ -34,6 +34,45 @@ class QuestionService(ABC):
             "get_questions_count_by_topic() must be implemented"
         )
 
+
+    # ============================================================
+    # GET RANDOM QUESTIONS
+    # ============================================================
+
+    @abstractmethod
+    async def get_random_questions_by_topic(
+        self,
+        topic_id: UUID,
+        limit: int = 15,
+    ) -> list[QuestionDTO]:
+        """
+        Return a random selection of active questions
+        belonging to a specific topic.
+
+        This MVP implementation is responsible only for
+        randomly selecting the requested number of questions.
+
+        More advanced selection rules, such as balancing
+        easy, medium, and hard questions, can be introduced
+        later.
+
+        Args:
+            topic_id:
+                Identifier of the topic from which questions
+                should be selected.
+
+            limit:
+                Maximum number of questions to return.
+
+                Defaults to 15.
+
+        Returns:
+            A list of randomly selected questions.
+        """
+        raise NotImplementedError(
+            "get_random_questions_by_topic() must be implemented"
+        )
+    
     # ============================================================
     # CREATE
     # ============================================================
@@ -60,3 +99,7 @@ class QuestionService(ABC):
         raise NotImplementedError(
             "create_question() must be implemented"
         )
+
+
+
+    async def get_random_questions_by_topic():

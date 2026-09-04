@@ -5,7 +5,9 @@ from app.repositories.attempt_repository import AttemptRepository
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
 from app.v1.modules.question.services.question_service import QuestionService
+from app.v1.modules.attempt_question.services.attempt_question_service import AttemptQuestionService
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
+from app.v1.modules.attempt.dto.attempt_response_dto import AttemptResponseDTO
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +26,7 @@ class AttemptImplService(AttemptService):
         self,
         attempt_repository: AttemptRepository,
         question_service: QuestionService,
+        attempt_question_service: AttemptQuestionService
     ):
         self.attempt_repository = attempt_repository
         self.question_service = question_service
@@ -35,7 +38,7 @@ class AttemptImplService(AttemptService):
     async def create_attempt(
         self,
         attempt_data: AttemptCreateDTO,
-    ) -> AttemptDTO:
+    ) -> AttemptResponseDTO:
         """
         Create and initialize a new learning attempt.
 
@@ -52,26 +55,33 @@ class AttemptImplService(AttemptService):
         """
 
         try:
-          
+            
+            # 1 Create attempt
+
             attempt = Attempt(
                 user_id=attempt_data.user_id,
                 topic_id=attempt_data.topic_id,
                 score=0.0,
-                total_questions=(
-                    await self.question_service
-                    .get_questions_count_by_topic(attempt_data.topic_id)
-                ),
+                total_questions=15,
                 correct_answers=0,
                 is_completed=False,
             )
 
             await self.attempt_repository.add(attempt)
 
+
+            # ============================================================
+            # 2. BUILD ATTEMPT QUESTIONS
+            # ============================================================
+            questions = await self.question_service.get_random_questions_by_topic(
+                topic_id=attempt_data.topic_id,
+                limit=15,
+            )
             attempt = await self.attempt_repository.get_by_id_with_topic_questions(
                 attempt.id
             )
 
-            return AttemptDTO.model_validate(attempt)
+            return AttemptResponseDTO(attempt=AttemptDTO.model_validate(attempt))
 
         except Exception:
             logger.exception("Error creating attempt")

@@ -5,6 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.container import Container
 from app.repositories.attempt_repository import AttemptRepository
 from app.v1.modules.question.dependencies import get_question_service
+from app.v1.modules.attempt_question.dependencies import get_attempt_question_service
 from app.v1.modules.question.services.question_service import QuestionService
 from app.v1.modules.attempt.services.attempt_impl_service import (
     AttemptImplService,
@@ -51,7 +52,10 @@ def get_attempt_service(
         session=session
     )
 
+    attempt_question_service = get_attempt_question_service(session=session)
+
     return AttemptImplService(
         attempt_repository=attempt_repository,
         question_service=question_service,
+        attempt_question_service=attempt_question_service
     )
