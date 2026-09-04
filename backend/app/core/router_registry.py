@@ -7,6 +7,7 @@ from app.v1.modules.question.controller.controller import question_router
 from app.v1.modules.answer.controller.controller import answer_router
 from app.v1.modules.attempt.controller.controller import attempt_router
 from app.v1.modules.auth.controller.controller import auth_router
+from app.v1.modules.explore.controller.controller import  explore_router
 
 class RouterService:
     @staticmethod
@@ -14,6 +15,8 @@ class RouterService:
         """
         Register all application routers.
         """
+
+        app.include_router(explore_router)
         app.include_router(auth_router)
         app.include_router(attempt_router)
         app.include_router(answer_router)

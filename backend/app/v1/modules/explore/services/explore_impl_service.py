@@ -44,88 +44,68 @@ class ExploreImplService(ExploreService):
         self,
         user_id: UUID | None,
     ) -> ExploreQuizzesResponseDTO:
-        """
-        Retrieves the quizzes displayed on the Explore page.
-
-        Each quiz contains:
-
-            topic
-            latest_attempt | None
-
-        The latest attempt belongs to the current user.
-
-        The frontend can use the attempt status to determine
-        the appropriate action:
-
-            No attempt
-                -> Take Quiz
-
-            Incomplete attempt
-                -> Resume
-
-            Completed attempt
-                -> Retake
-        """
 
         try:
 
             # ------------------------------------------------------
-            # Get all available topics.
-            # ------------------------------------------------------
-
-            topics_response = (
-                await self.topic_service.get_topics()
-            )
-
-
-            # ------------------------------------------------------
-            # Get the current user's latest attempt for each topic.
+            # Get ALL topics.
             #
-            # AttemptService owns the logic for retrieving attempts.
-            # Explore only consumes the result.
+            # Topics are always returned, regardless of whether
+            # the user has attempted them.
             # ------------------------------------------------------
 
-            latest_attempts = (
-                await self.attempt_service
-                .get_latest_attempt_by_user_and_topic(
-                    user_id=user_id,
+            topics_response = await self.topic_service.get_topics()
+
+
+            quizzes = []
+
+
+            # ------------------------------------------------------
+            # Go through EVERY topic.
+            # ------------------------------------------------------
+
+            for topic in topics_response.topics:
+
+                latest_attempt = None
+
+
+                # --------------------------------------------------
+                # If there is an authenticated user, try to find
+                # THEIR latest attempt for THIS specific topic.
+                # --------------------------------------------------
+
+                if user_id is not None:
+
+                    latest_attempt = (
+                        await self.attempt_service
+                        .get_latest_attempt_by_user_and_topic(
+                            user_id=user_id,
+                            topic_id=topic.id,
+                        )
+                    )
+
+
+                # --------------------------------------------------
+                # Always add the topic.
+                #
+                # If the user has no attempt:
+                #
+                #     latest_attempt = None
+                #
+                # The topic is still returned.
+                # --------------------------------------------------
+
+                quizzes.append(
+                    ExploreQuizDTO(
+                        topic=topic,
+                        latest_attempt=latest_attempt,
+                    )
                 )
-            )
 
 
             # ------------------------------------------------------
-            # Create a lookup by topic ID.
-            #
-            # This lets us associate an attempt with its topic
-            # without repeatedly searching the attempts list.
-            # ------------------------------------------------------
-
-            attempts_by_topic = {
-                attempt.topic_id: attempt
-                for attempt in latest_attempts
-            }
-
-
-            # ------------------------------------------------------
-            # Compose the Explore quiz list.
-            # ------------------------------------------------------
-
-            quizzes = [
-
-                ExploreQuizDTO(
-                    topic=topic,
-                    latest_attempt=attempts_by_topic.get(
-                        topic.id
-                    ),
-                )
-
-                for topic in topics_response.topics
-
-            ]
-
-
-            # ------------------------------------------------------
-            # Return the complete Explore response.
+            # Return ALL topics with their corresponding latest
+            # user attempt.
             # ------------------------------------------------------
 
             return ExploreQuizzesResponseDTO(
@@ -135,6 +115,9 @@ class ExploreImplService(ExploreService):
 
         except Exception as e:
 
-            logger.exception(f"Error retrieving Explore quizzes: {e}")
+            logger.exception(
+                "Error retrieving Explore quizzes: %s",
+                e,
+            )
 
             raise

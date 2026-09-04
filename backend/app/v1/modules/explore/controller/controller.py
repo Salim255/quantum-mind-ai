@@ -117,8 +117,8 @@ async def get_explore_quizzes(
     ]
 ) -> ResponseDTO[ExploreQuizzesResponseDTO]:
 
-    explore_service: ExploreService = get_explore_service(session=session, container=container),
+    explore_service: ExploreService = get_explore_service(session=session, container=container)
         
     return ResponseDTO.success(
-        await explore_service.get_quizzes()
+        await explore_service.get_explore_quizzes(user_id=None)
     )
