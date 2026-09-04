@@ -15,6 +15,53 @@ class QuestionRepository(BaseRepository[Question]):
         super().__init__(session, Question)
 
 
+
+    # ============================================================
+    # GET RANDOM QUESTIONS
+    # ============================================================
+    async def get_random_questions_by_topic(
+        self,
+        topic_id: UUID,
+        limit: int = 15,
+    ) -> list[Question]:
+        """
+        Return a random selection of active questions
+        belonging to a specific learning topic.
+
+        The randomization is performed directly by the
+        database using PostgreSQL's RANDOM() function.
+
+        Only active questions belonging to the specified
+        topic are considered.
+
+        Args:
+            topic_id:
+                Identifier of the topic whose questions
+                should be selected.
+
+            limit:
+                Maximum number of questions to return.
+                Defaults to 15.
+
+        Returns:
+            A list of randomly selected Question entities.
+        """
+
+        statement = (
+            select(Question)
+            .where(
+                Question.topic_id == topic_id,
+                Question.is_active.is_(True),
+            )
+            .order_by(func.random())
+            .limit(limit)
+        )
+
+        result = await self.session.execute(statement)
+
+        return list(result.scalars().all())
+        
+    
     # ============================================================
     # QUESTION COUNT
     # ============================================================
