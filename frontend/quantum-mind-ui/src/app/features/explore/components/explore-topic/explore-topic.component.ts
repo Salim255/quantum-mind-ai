@@ -100,10 +100,7 @@ export class ExploreTopicComponent implements OnInit {
     attemptId: string,
   ): void {
 
-    this.router.navigate([
-      'attempt',
-      attemptId,
-    ]);
+    this.router.navigate(['/quizzes/explore/attempt']);
   }
 
 }

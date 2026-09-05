@@ -8,9 +8,9 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { ExploreService } from '../explore/services/explore.service';
 import { Topic } from '../explore/models/topic.model';
 import { Attempt, AttemptQuestion } from './interfaces/attempt.interface';
+import { AttemptService } from './services/attempt.service';
 
 
 @Component({
@@ -20,41 +20,19 @@ import { Attempt, AttemptQuestion } from './interfaces/attempt.interface';
   standalone: false,
 })
 export class AttemptPage implements OnInit, OnDestroy {
-
+  private currentAttemptSubscription!: Subscription
   private routeSubscription?: Subscription;
 
-
-  /* ============================================================
-     ATTEMPT
-     ------------------------------------------------------------
-     The complete attempt returned by the API.
-  ============================================================ */
 
   readonly attempt = signal<Attempt | null>(null);
 
 
-  /* ============================================================
-     TOPIC
-     ------------------------------------------------------------
-     The topic belonging to the current attempt.
-  ============================================================ */
-
   readonly topic = signal<Topic>({} as Topic);
 
 
-  /* ============================================================
-     QUESTIONS
-     ------------------------------------------------------------
-     The questions belonging to the current attempt.
-     Only one question is exposed through currentQuestion().
-  ============================================================ */
 
   readonly questions = signal<AttemptQuestion[]>([]);
 
-
-  /* ============================================================
-     CURRENT QUESTION
-  ============================================================ */
 
   readonly currentQuestionIndex = signal(0);
 
@@ -147,106 +125,31 @@ export class AttemptPage implements OnInit, OnDestroy {
 
 
   /* ============================================================
-     CONSTRUCTOR
+  CONSTRUCTOR
   ============================================================ */
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly exploreService: ExploreService,
+    private attemptService: AttemptService,
   ) {}
 
 
   /* ============================================================
-     LIFECYCLE
+  LIFECYCLE
   ============================================================ */
 
   ngOnInit(): void {
-
-    this.subscribeToRoute();
-
+    this.subscribeToCurrentAttempt();
   }
 
 
-  /* ============================================================
-     ROUTE
-  ============================================================ */
+  private subscribeToCurrentAttempt(): void{
+    this.currentAttemptSubscription = this.attemptService.getAttempt$.subscribe(attempt => {
 
-  private subscribeToRoute(): void {
-
-    this.routeSubscription =
-      this.route.paramMap.subscribe(params => {
-
-        const topicSlug = params.get('slug');
-
-        if (!topicSlug) {
-
-          return;
-
-        }
-
-        this.loadAttempt(topicSlug);
-
-      });
-
-  }
-
-
-  /* ============================================================
-     ATTEMPT
-     ------------------------------------------------------------
-     This will later call AttemptService.
-
-     The API returns the attempt together with its topic
-     and the topic questions.
-  ============================================================ */
-
-  private loadAttempt(slug: string): void {
-
-    /*
-     * TODO:
-     *
-     * this.attemptService
-     *   .createAttempt(slug)
-     *   .subscribe({
-     *
-     *     next: attempt => {
-     *
-     *       this.attempt.set(attempt);
-     *
-     *       this.topic.set(attempt.topic);
-     *
-     *       this.questions.set(
-     *         attempt.topic.questions
-     *       );
-     *
-     *       this.currentQuestionIndex.set(0);
-     *
-     *       this.selectedAnswers.set({});
-     *
-     *     }
-     *
-     *   });
-     */
-
-
-    /*
-     * The service will replace this section.
-     *
-     * The important mapping is:
-     *
-     * attempt
-     *   └── topic
-     *        ├── title
-     *        ├── category
-     *        └── questions[]
-     *
-     * The page then exposes only:
-     *
-     * currentQuestion()
-     *
-     * rather than rendering the complete question list.
-     */
-
+      this.attempt.set(attempt);
+      this.questions.set(this.attempt()?.topic?.questions ?? []);
+      this.topic.set(this.attempt()?.topic!);
+    })
   }
 
 
@@ -390,7 +293,7 @@ export class AttemptPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
 
     this.routeSubscription?.unsubscribe();
-
+    this.currentAttemptSubscription.unsubscribe();
   }
 
 }

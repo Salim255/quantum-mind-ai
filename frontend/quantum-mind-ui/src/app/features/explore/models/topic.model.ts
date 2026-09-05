@@ -1,5 +1,7 @@
 // topic.model.ts
 
+import { AttemptQuestion } from "../../attempt/interfaces/attempt.interface";
+
 export interface Topic {
   id: string;
   title: string;
@@ -7,4 +9,6 @@ export interface Topic {
   category: string;
   display_order: number;
   description: string;
+
+  questions: AttemptQuestion [] | null
 }
