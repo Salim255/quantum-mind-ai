@@ -4,62 +4,10 @@
        HEADER
   ============================================================ -->
 
-  <header class="attempt__header">
-
-    <div class="attempt__context">
-
-      <span class="attempt__eyebrow">
-        QUIZ
-      </span>
-
-      <h1 class="attempt__title">
-        {{ topic().title }}
-      </h1>
-
-      <span class="attempt__category">
-        {{ topic().category }}
-      </span>
-
-    </div>
-
-
-    <!-- Progress -->
-
-    <div class="attempt__progress">
-
-      <div class="attempt__progress-meta">
-
-        <span>
-          Question {{ questionNumber() }}
-        </span>
-
-        <span>
-          {{ totalQuestions() }}
-        </span>
-
-      </div>
-
-      <div
-        class="attempt__progress-track"
-        role="progressbar"
-        [attr.aria-valuenow]="questionNumber()"
-        [attr.aria-valuemin]="1"
-        [attr.aria-valuemax]="totalQuestions()"
-        [attr.aria-label]="
-          'Question ' + questionNumber() + ' of ' + totalQuestions()
-        "
-      >
-
-        <span
-          class="attempt__progress-value"
-          [style.width.%]="progressPercentage()"
-        ></span>
-
-      </div>
-
-    </div>
-
-  </header>
+  <app-attempt-header
+    [totalQuestions]="totalQuestions()"
+    [questionNumber]="questionNumber()"
+    [topic]="topic()"></app-attempt-header>
 
 
   <!-- ============================================================
