@@ -7,7 +7,9 @@ from app.v1.modules.attempt.services.attempt_service import AttemptService
 from app.v1.modules.question.services.question_service import QuestionService
 from app.v1.modules.attempt_question.services.attempt_question_service import AttemptQuestionService
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
+from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.attempt.dto.attempt_response_dto import AttemptResponseDTO
+
 
 logger = logging.getLogger(__name__)
 
@@ -73,15 +75,35 @@ class AttemptImplService(AttemptService):
             # ============================================================
             # 2. BUILD ATTEMPT QUESTIONS
             # ============================================================
-            questions = await self.question_service.get_random_questions_by_topic(
+            questions =  await self.question_service.get_random_questions_by_topic(
                 topic_id=attempt_data.topic_id,
                 limit=15,
             )
-            attempt = await self.attempt_repository.get_by_id_with_topic_questions(
+
+   
+            # ============================================================
+            # 3. LOAD ATTEMPT WITH TOPIC
+            # ============================================================
+            attempt = await self.attempt_repository.get_by_id_with_topic(
                 attempt.id
             )
 
-            return AttemptResponseDTO(attempt=AttemptDTO.model_validate(attempt))
+            # 4
+            topic_dto = TopicDTO.model_validate({
+                **attempt.topic.model_dump(),
+                "questions": questions,
+            })
+            
+
+            # 5
+            attempt_dto = AttemptDTO.model_validate({
+                **attempt.model_dump(),
+                "topic": topic_dto,
+            })
+
+
+            # 6
+            return AttemptResponseDTO(attempt=attempt_dto)
 
         except Exception:
             logger.exception("Error creating attempt")

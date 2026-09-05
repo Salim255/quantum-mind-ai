@@ -4,6 +4,7 @@ from sqlmodel import Session
 from uuid import UUID
 from sqlmodel import select
 from sqlalchemy import func
+from sqlalchemy.orm import selectinload
 
 class QuestionRepository(BaseRepository[Question]):
     """
@@ -49,6 +50,9 @@ class QuestionRepository(BaseRepository[Question]):
 
         statement = (
             select(Question)
+            .options(
+                selectinload(Question.answers),
+            )   
             .where(
                 Question.topic_id == topic_id,
                 Question.is_active.is_(True),

@@ -48,7 +48,13 @@ class AttemptRepository(BaseRepository[Attempt]):
 
         result = await self.session.execute(statement)
 
-        return result.scalar_one_or_none()
+        result = result.scalar_one_or_none()
+        
+        if result:
+            print("Attempt ID:✅✅", result.id)
+            print("Topic ID: 💥💥", result.topic_id)
+            print("Loaded topic: 🛑🛑", result.topic)
+        return result
     
     # ============================================================
     # ATTEMPT + TOPIC + QUESTIONS + ANSWERS
