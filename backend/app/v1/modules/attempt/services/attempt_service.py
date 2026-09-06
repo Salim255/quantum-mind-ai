@@ -83,3 +83,41 @@ class AttemptService(ABC):
         raise NotImplementedError(
             "get_latest_attempts_by_topic() must be implemented"
         )
+
+    # ============================================================
+    # UPDATE ATTEMPT SCORE
+    # ============================================================
+
+    @abstractmethod
+    async def update_score(
+        self,
+        attempt_id: UUID,
+        answer_id: UUID,
+    ) -> AttemptResponseDTO:
+        """
+        Evaluate a submitted answer and update the attempt score.
+
+        The implementation is responsible for:
+
+        - retrieving the attempt
+        - retrieving the submitted answer
+        - validating that the answer belongs to the attempt
+        - determining whether the answer is correct
+        - updating the number of correct answers
+        - recalculating the attempt score
+        - persisting the updated attempt
+
+        Args:
+            attempt_id:
+                Identifier of the learning attempt being updated.
+
+            answer_id:
+                Identifier of the answer submitted by the learner.
+
+        Returns:
+            The updated learning attempt.
+        """
+
+        raise NotImplementedError(
+            "update_score() must be implemented"
+        )

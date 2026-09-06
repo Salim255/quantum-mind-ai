@@ -8,10 +8,9 @@ from app.core.dtos.response_dto import ResponseDTO
 
 from app.v1.modules.attempt.dependencies import get_attempt_service
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
-from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
 from app.v1.modules.attempt.dto.attempt_response_dto import AttemptResponseDTO
-
+from app.v1.modules.attempt.dto.attempt_update_score_dto import AttemptUpdateScoreDTO
 from .router import router as attempt_router
 
 
@@ -140,3 +139,68 @@ async def create_attempt(
 
     return ResponseDTO.success(attempt)
 
+
+
+# ============================================================
+# UPDATE ATTEMPT SCORE
+# ============================================================
+
+@attempt_router.patch(
+    "/{attempt_id}/score",
+    response_model=ResponseDTO[AttemptResponseDTO],
+    status_code=status.HTTP_200_OK,
+    summary="Update attempt score",
+    description="""
+Evaluate a submitted answer and update the corresponding
+learning attempt score.
+
+The attempt ID identifies the attempt being evaluated,
+while the answer ID identifies the answer selected by
+the learner.
+
+The business logic is delegated to AttemptService.
+""",
+    response_description="The updated learning attempt.",
+)
+async def update_score(
+    payload: AttemptUpdateScoreDTO,
+    session: Annotated[
+        AsyncSession,
+        Depends(get_db_session),
+    ],
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ],
+) -> ResponseDTO[AttemptResponseDTO]:
+    """
+    Evaluate the submitted answer and update the attempt score.
+
+    The controller is intentionally kept thin.
+    Validation, answer evaluation, score calculation,
+    and persistence are handled by AttemptService.
+
+    Args:
+        payload:
+            Attempt ID and selected answer ID.
+
+        session:
+            Active asynchronous database session.
+
+        container:
+            Application dependency container.
+
+    Returns:
+        The updated learning attempt.
+    """
+
+    attempt_service: AttemptService = get_attempt_service(
+        session=session,
+        container=container,
+    )
+
+    attempt = await attempt_service.update_score(
+        payload,
+    )
+
+    return ResponseDTO.success(attempt)

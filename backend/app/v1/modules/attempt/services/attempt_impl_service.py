@@ -5,6 +5,7 @@ from app.repositories.attempt_repository import AttemptRepository
 from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
 from app.v1.modules.question.services.question_service import QuestionService
+from app.v1.modules.answer.services.answer_service import AnswerService
 from app.v1.modules.attempt_question.services.attempt_question_service import AttemptQuestionService
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
@@ -28,7 +29,8 @@ class AttemptImplService(AttemptService):
         self,
         attempt_repository: AttemptRepository,
         question_service: QuestionService,
-        attempt_question_service: AttemptQuestionService
+        attempt_question_service: AttemptQuestionService,
+        answerService: AnswerService,
     ):
         self.attempt_repository = attempt_repository
         self.question_service = question_service
