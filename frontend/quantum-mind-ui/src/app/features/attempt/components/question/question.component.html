@@ -1,0 +1,35 @@
+<section
+  class="question"
+  aria-labelledby="question-title"
+>
+  <div class="question__header">
+
+    <div class="question__index">
+      <span class="question__index-value">
+        {{ questionNumber() | number:'2.0' }}
+      </span>
+
+      <span class="question__index-label">
+        Question
+      </span>
+    </div>
+
+    <div class="question__rule"></div>
+
+  </div>
+
+  <div class="question__content">
+
+    <h2
+      id="question-title"
+      class="question__title"
+    >
+      {{ question().text }}
+    </h2>
+
+    <p class="question__instruction">
+      Select the best answer
+    </p>
+
+  </div>
+</section>
