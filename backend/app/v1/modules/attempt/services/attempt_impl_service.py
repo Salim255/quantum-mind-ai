@@ -34,7 +34,7 @@ class AttemptImplService(AttemptService):
     ):
         self.attempt_repository = attempt_repository
         self.question_service = question_service
-        self.answerService = answer_service
+        self.answer_service = answer_service
         self.attempt_question_service =  attempt_question_service
 
     # ============================================================

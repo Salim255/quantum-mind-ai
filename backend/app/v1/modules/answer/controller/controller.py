@@ -114,8 +114,7 @@ async def create_answer(
 
 
     answer_service: AnswerService = get_answer_service(
-        session=session,
-        container=container,
+        session=session
     )
     answer = await answer_service.create_answer(payload)
 

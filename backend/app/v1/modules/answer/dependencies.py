@@ -18,8 +18,7 @@ from app.v1.modules.answer.services.answer_service import (
 # ============================================================
 
 def get_answer_service(
-    session: AsyncSession,
-    container: Container,
+    session: AsyncSession
 ) -> AnswerService:
     """
     Create the AnswerService for the current request.

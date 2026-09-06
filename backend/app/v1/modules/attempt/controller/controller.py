@@ -200,7 +200,7 @@ async def update_score(
     )
 
     attempt = await attempt_service.update_score(
-        payload,
+        **payload.model_dump()
     )
 
     return ResponseDTO.success(attempt)

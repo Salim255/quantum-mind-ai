@@ -33,3 +33,28 @@ class AnswerService(ABC):
             "create_answer() must be implemented"
         )
 
+
+    # ============================================================
+    # GET ANSWER BY ID
+    # ============================================================
+
+    @abstractmethod
+    async def get_by_id(
+        self,
+        answer_id: UUID,
+    ) -> Answer | None:
+        """
+        Retrieve an answer by its identifier.
+
+        Args:
+            answer_id:
+                Identifier of the answer to retrieve.
+
+        Returns:
+            The matching Answer entity if it exists,
+            otherwise None.
+        """
+
+        raise NotImplementedError(
+            "get_by_id() must be implemented"
+        )
