@@ -10,7 +10,7 @@ from app.v1.modules.attempt_question.services.attempt_question_service import At
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.attempt.dto.attempt_response_dto import AttemptResponseDTO
-
+from app.models.answer import Answer
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +30,12 @@ class AttemptImplService(AttemptService):
         attempt_repository: AttemptRepository,
         question_service: QuestionService,
         attempt_question_service: AttemptQuestionService,
-        answerService: AnswerService,
+        answer_service: AnswerService,
     ):
         self.attempt_repository = attempt_repository
         self.question_service = question_service
+        self.answerService = answer_service
+        self.attempt_question_service =  attempt_question_service
 
     # ============================================================
     # CREATE
@@ -157,7 +159,7 @@ class AttemptImplService(AttemptService):
             # 2. LOAD ANSWER
             # ========================================================
 
-            answer = await self.answer_service.get_by_id(
+            answer: Answer = await self.answer_service.get_by_id(
                 answer_id
             )
 

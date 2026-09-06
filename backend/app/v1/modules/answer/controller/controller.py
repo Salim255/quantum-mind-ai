@@ -1,6 +1,8 @@
 from typing import Annotated
 
-from fastapi import Depends, status
+from fastapi import Depends, Request, status
+from sqlmodel.ext.asyncio.session import AsyncSession
+from app.core.container import Container
 
 from app.core.dtos.response_dto import ResponseDTO
 
@@ -12,6 +14,62 @@ from app.v1.modules.answer.services.answer_service import AnswerService
 from .router import router as answer_router
 
 
+# ============================================================
+# CONTAINER DEPENDENCY
+# ============================================================
+
+def get_container(
+    request: Request,
+) -> Container:
+    """
+    Retrieve the application dependency container.
+
+    The container owns application-wide dependencies such as:
+    - database session management
+    - repositories
+    - external service clients
+    - shared infrastructure services
+
+    Args:
+        request:
+            Current FastAPI request.
+
+    Returns:
+        The application's dependency container.
+    """
+    return request.app.state.container
+
+
+# ============================================================
+# DATABASE SESSION DEPENDENCY
+# ============================================================
+
+async def get_db_session(
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ],
+):
+    """
+    Provide an asynchronous database session.
+
+    The session is created by the application's database session
+    manager and injected into repositories.
+
+    Important:
+        This dependency yields the actual AsyncSession.
+        It does not expose the DB session manager itself.
+
+    Args:
+        container:
+            Application dependency container.
+
+    Yields:
+        An active asynchronous database session.
+    """
+    async for session in container.db_session.get_session():
+        yield session
+        
 @answer_router.post(
     "/",
     response_model=ResponseDTO[AnswerDTO],
@@ -35,9 +93,13 @@ persisted.
 )
 async def create_answer(
     payload: AnswerCreateDTO,
-    answer_service: Annotated[
-        AnswerService,
-        Depends(get_answer_service),
+    session: Annotated[
+        AsyncSession,
+        Depends(get_db_session),
+    ],
+    container: Annotated[
+        Container,
+        Depends(get_container),
     ],
 ) -> ResponseDTO[AnswerDTO]:
     """
@@ -49,6 +111,12 @@ async def create_answer(
     Returns:
         The newly created answer.
     """
+
+
+    answer_service: AnswerService = get_answer_service(
+        session=session,
+        container=container,
+    )
     answer = await answer_service.create_answer(payload)
 
     return ResponseDTO.success(answer)
