@@ -1,49 +1,80 @@
 <header class="attempt-header">
 
-  <div class="attempt-header__context">
+  <div class="attempt-header__main">
 
-    <span class="attempt-header__eyebrow">
-      QUIZ
-    </span>
+    <div class="attempt-header__identity">
 
-    <h1 class="attempt-header__title">
-      {{ topic().title }}
-    </h1>
-
-    <span class="attempt-header__category">
-      {{ topic().category }}
-    </span>
-
-  </div>
-
-  <div class="attempt-header__progress">
-
-    <div class="attempt-header__progress-meta">
-
-      <span class="attempt-header__progress-label">
-        Question {{ questionNumber() }}
+      <span class="attempt-header__eyebrow">
+        Quiz
       </span>
 
-      <span class="attempt-header__progress-count">
-        {{ totalQuestions() }}
-      </span>
+      <h1 class="attempt-header__title">
+        {{ topic().title }}
+      </h1>
+
+      <div class="attempt-header__meta">
+
+        <span class="attempt-header__category">
+          {{ topic().category }}
+        </span>
+
+        <span class="attempt-header__meta-separator"></span>
+
+        <span class="attempt-header__assessment">
+          Knowledge assessment
+        </span>
+
+      </div>
 
     </div>
 
-    <div
-      class="attempt-header__progress-track"
-      role="progressbar"
-      [attr.aria-valuenow]="questionNumber()"
-      [attr.aria-valuemin]="1"
-      [attr.aria-valuemax]="totalQuestions()"
-      [attr.aria-label]="
-        'Question ' + questionNumber() + ' of ' + totalQuestions()
-      "
-    >
-      <span
-        class="attempt-header__progress-value"
-        [style.width.%]="progressPercentage()"
-      ></span>
+
+    <div class="attempt-header__progress">
+
+      <div class="attempt-header__progress-top">
+
+        <span class="attempt-header__progress-label">
+          Your progress
+        </span>
+
+        <div class="attempt-header__progress-count">
+
+          <span class="attempt-header__progress-current">
+            {{ questionNumber() }}
+          </span>
+
+          <span class="attempt-header__progress-total">
+            / {{ totalQuestions() }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="attempt-header__progress-track"
+        role="progressbar"
+        [attr.aria-valuenow]="questionNumber()"
+        [attr.aria-valuemin]="1"
+        [attr.aria-valuemax]="totalQuestions()"
+        [attr.aria-label]="
+          'Question ' + questionNumber() + ' of ' + totalQuestions()
+        "
+      >
+
+        <span
+          class="attempt-header__progress-fill"
+          [style.width.%]="progressPercentage()"
+        ></span>
+
+      </div>
+
+
+      <span class="attempt-header__progress-caption">
+        Question {{ questionNumber() }} of {{ totalQuestions() }}
+      </span>
+
     </div>
 
   </div>
