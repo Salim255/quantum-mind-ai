@@ -1,0 +1,58 @@
+<footer class="attempt-footer">
+
+  <button
+    type="button"
+    class="attempt-footer__previous"
+    [disabled]="!hasPrevious()"
+    (click)="previousQuestion()"
+  >
+    <iconify-icon
+      icon="lucide:arrow-left"
+      aria-hidden="true"
+    ></iconify-icon>
+
+    <span>
+      Previous
+    </span>
+  </button>
+
+
+  <div
+    class="attempt-footer__progress"
+    aria-label="Assessment progress"
+  >
+    <span class="attempt-footer__progress-current">
+      {{ questionNumber() }}
+    </span>
+
+    <span class="attempt-footer__progress-separator">
+      /
+    </span>
+
+    <span class="attempt-footer__progress-total">
+      {{ totalQuestions() }}
+    </span>
+  </div>
+
+
+  <button
+    type="button"
+    class="attempt-footer__continue"
+    [disabled]="!selectedAnswerId()"
+    (click)="submitAnswer()"
+  >
+    <span>
+      {{ hasNext() ? 'Continue' : 'Finish' }}
+    </span>
+
+    <iconify-icon
+      [icon]="
+        hasNext()
+          ? 'lucide:arrow-right'
+          : 'lucide:check'
+      "
+      aria-hidden="true"
+    ></iconify-icon>
+  </button>
+
+</footer>

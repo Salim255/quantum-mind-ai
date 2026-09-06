@@ -4,14 +4,11 @@ import {
   input,
   output,
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { AttemptAnswer } from '../../interfaces/attempt.interface';
 
 @Component({
   selector: 'app-answer-item',
-  standalone: true,
-  imports: [
-    DecimalPipe,
-  ],
+  standalone: false,
   templateUrl: './answer-item.component.html',
   styleUrl: './answer-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +18,7 @@ export class AnswerItemComponent {
   /**
    * Answer represented by this option.
    */
-  readonly answer = input.required<Answer>();
+  readonly answer = input.required<AttemptAnswer>();
 
   /**
    * Zero-based position of the answer in the question.
@@ -44,7 +41,7 @@ export class AnswerItemComponent {
    * Emits the answer identifier when the user selects
    * this answer.
    */
-  readonly answerSelected = output<Answer['id']>();
+  readonly answerSelected = output<AttemptAnswer['id']>();
 
 
   /**
