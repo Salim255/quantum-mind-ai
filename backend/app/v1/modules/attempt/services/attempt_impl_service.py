@@ -110,7 +110,113 @@ class AttemptImplService(AttemptService):
         except Exception:
             logger.exception("Error creating attempt")
             raise
+    
+    # ============================================================
+    # UPDATE SCORE
+    # ============================================================
 
+    async def update_score(
+        self,
+        attempt_id: UUID,
+        answer_id: UUID,
+    ) -> AttemptResponseDTO:
+        """
+        Evaluate a submitted answer and update the attempt score.
+
+        The attempt identifies the assessment session and the
+        answer identifies the answer selected by the learner.
+
+        The service is responsible for:
+
+        - loading the attempt
+        - loading the submitted answer
+        - determining whether the answer is correct
+        - updating correct_answers
+        - recalculating the score
+        - persisting the updated attempt
+        - returning the updated attempt
+        """
+
+        try:
+
+            # ========================================================
+            # 1. LOAD ATTEMPT
+            # ========================================================
+
+            attempt = await self.attempt_repository.get_by_id(
+                attempt_id
+            )
+
+            if not attempt:
+                raise ValueError(
+                    f"Attempt {attempt_id} not found"
+                )
+
+
+            # ========================================================
+            # 2. LOAD ANSWER
+            # ========================================================
+
+            answer = await self.answer_service.get_by_id(
+                answer_id
+            )
+
+            if not answer:
+                raise ValueError(
+                    f"Answer {answer_id} not found"
+                )
+
+
+            # ========================================================
+            # 3. EVALUATE ANSWER
+            # ========================================================
+
+            if answer.is_correct:
+                attempt.correct_answers += 1
+
+
+            # ========================================================
+            # 4. RECALCULATE SCORE
+            # ========================================================
+
+            if attempt.total_questions > 0:
+
+                attempt.score = (
+                    attempt.correct_answers
+                    / attempt.total_questions
+                ) * 100
+
+            else:
+
+                attempt.score = 0.0
+
+
+            # ========================================================
+            # 5. PERSIST UPDATED ATTEMPT
+            # ========================================================
+
+            await self.attempt_repository.update(
+                attempt
+            )
+
+
+            # ========================================================
+            # 6. RETURN UPDATED ATTEMPT
+            # ========================================================
+
+            attempt_dto = AttemptDTO.model_validate(
+                attempt
+            )
+
+            return AttemptResponseDTO(
+                attempt=attempt_dto
+            )
+
+        except Exception:
+            logger.exception(
+                "Error updating attempt score"
+            )
+            raise
 
     # ============================================================
     # GET LATEST ATTEMPTS BY TOPIC
