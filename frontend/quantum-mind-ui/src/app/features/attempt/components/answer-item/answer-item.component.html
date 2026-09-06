@@ -1,0 +1,33 @@
+<button
+  type="button"
+  class="answer-item"
+  [class.answer-item--selected]="isSelected()"
+  [attr.aria-pressed]="isSelected()"
+  (click)="select()"
+>
+
+  <span
+    class="answer-item__index"
+    aria-hidden="true"
+  >
+    {{ index() + 1 | number:'2.0' }}
+  </span>
+
+
+  <span class="answer-item__text">
+    {{ answer().text }}
+  </span>
+
+
+  <span
+    class="answer-item__indicator"
+    aria-hidden="true"
+  >
+
+    @if (isSelected()) {
+      <iconify-icon icon="lucide:check"></iconify-icon>
+    }
+
+  </span>
+
+</button>
