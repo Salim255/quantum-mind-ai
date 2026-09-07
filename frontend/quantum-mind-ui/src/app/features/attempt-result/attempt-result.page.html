@@ -1,0 +1,103 @@
+<section
+  class="attempt-result"
+  aria-labelledby="attempt-result-title"
+>
+
+  <!-- ============================================================
+  RESULT HEADER
+  ============================================================ -->
+
+  <div class="attempt-result__header">
+
+    <span class="attempt-result__eyebrow">
+      Assessment complete
+    </span>
+
+    <h1
+      id="attempt-result-title"
+      class="attempt-result__title"
+    >
+      Your result
+    </h1>
+
+    <p class="attempt-result__description">
+      You have completed the assessment for
+      <strong>{{ attempt().topic.title }}</strong>.
+    </p>
+
+  </div>
+
+
+  <!-- ============================================================
+  SCORE
+  ============================================================ -->
+
+  <div class="attempt-result__score">
+
+    <span class="attempt-result__score-value">
+      {{ attempt().score | number:'1.0-0' }}%
+    </span>
+
+    <span class="attempt-result__score-label">
+      Overall score
+    </span>
+
+  </div>
+
+
+  <!-- ============================================================
+  PERFORMANCE
+  ============================================================ -->
+
+  <div class="attempt-result__summary">
+
+    <div class="attempt-result__stat">
+      <span class="attempt-result__stat-value">
+        {{ attempt().correct_answers }}
+      </span>
+
+      <span class="attempt-result__stat-label">
+        Correct answers
+      </span>
+    </div>
+
+    <div
+      class="attempt-result__stat-separator"
+      aria-hidden="true"
+    ></div>
+
+    <div class="attempt-result__stat">
+      <span class="attempt-result__stat-value">
+        {{ attempt().total_questions }}
+      </span>
+
+      <span class="attempt-result__stat-label">
+        Total questions
+      </span>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+  ACTION
+  ============================================================ -->
+
+  <div class="attempt-result__actions">
+
+    <button
+      type="button"
+      class="attempt-result__continue"
+      (click)="continue.emit()"
+    >
+      <span>Continue learning</span>
+
+      <iconify-icon
+        icon="lucide:arrow-right"
+        aria-hidden="true"
+      ></iconify-icon>
+    </button>
+
+  </div>
+
+</section>
