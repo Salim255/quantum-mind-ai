@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 from fastapi import Depends, Request, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.container import Container
@@ -206,63 +207,63 @@ async def update_score(
     return ResponseDTO.success(attempt)
 
 
-    # ============================================================
-    # FINISH ATTEMPT
-    # ============================================================
+# ============================================================
+# FINISH ATTEMPT
+# ============================================================
 
-    @attempt_router.patch(
-        "/{attempt_id}/finish",
-        response_model=ResponseDTO[AttemptUpdateScoreResponseDTO],
-        status_code=status.HTTP_200_OK,
-        summary="Finish attempt",
-        description="""
-    Complete a learning attempt.
+@attempt_router.patch(
+    "/{attempt_id}/finish",
+    response_model=ResponseDTO[AttemptResponseDTO],
+    status_code=status.HTTP_200_OK,
+    summary="Finish attempt",
+    description="""
+Complete a learning attempt.
 
-    The attempt ID identifies the learning attempt to complete.
+The attempt ID identifies the learning attempt to complete.
 
-    The business logic is delegated to AttemptService.
-    """,
-        response_description="The completed learning attempt.",
+The business logic is delegated to AttemptService.
+""",
+    response_description="The completed learning attempt.",
+)
+async def finish_attempt(
+    attempt_id: UUID,
+    session: Annotated[
+        AsyncSession,
+        Depends(get_db_session),
+    ],
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ],
+) -> ResponseDTO[AttemptResponseDTO]:
+    """
+    Complete the specified learning attempt.
+
+    The controller is intentionally kept thin.
+    Validation, completion state updates, and persistence
+    are handled by AttemptService.
+
+    Args:
+        attempt_id:
+            Identifier of the attempt to complete.
+
+        session:
+            Active asynchronous database session.
+
+        container:
+            Application dependency container.
+
+    Returns:
+        The completed learning attempt.
+    """
+
+    attempt_service: AttemptService = get_attempt_service(
+        session=session,
+        container=container,
     )
-    async def finish_attempt(
-        attempt_id: UUID,
-        session: Annotated[
-            AsyncSession,
-            Depends(get_db_session),
-        ],
-        container: Annotated[
-            Container,
-            Depends(get_container),
-        ],
-    ) -> ResponseDTO[AttemptUpdateScoreResponseDTO]:
-        """
-        Complete the specified learning attempt.
 
-        The controller is intentionally kept thin.
-        Validation, completion state updates, and persistence
-        are handled by AttemptService.
+    attempt = await attempt_service.finish_attempt(
+        attempt_id=attempt_id,
+    )
 
-        Args:
-            attempt_id:
-                Identifier of the attempt to complete.
-
-            session:
-                Active asynchronous database session.
-
-            container:
-                Application dependency container.
-
-        Returns:
-            The completed learning attempt.
-        """
-
-        attempt_service: AttemptService = get_attempt_service(
-            session=session,
-            container=container,
-        )
-
-        attempt = await attempt_service.finish_attempt(
-            attempt_id=attempt_id,
-        )
-
-        return ResponseDTO.success(attempt)
+    return ResponseDTO.success(attempt)

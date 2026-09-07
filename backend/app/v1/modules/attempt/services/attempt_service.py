@@ -15,6 +15,40 @@ class AttemptService(ABC):
     Database access is delegated to repositories.
     """
 
+
+    # ============================================================
+    # FINISH ATTEMPT
+    # ============================================================
+
+    @abstractmethod
+    async def finish_attempt(
+        self,
+        attempt_id: UUID,
+    ) -> AttemptResponseDTO:
+        """
+        Complete a learning attempt.
+
+        The implementation is responsible for:
+
+        - retrieving the attempt
+        - validating that the attempt exists
+        - marking the attempt as completed
+        - persisting the updated attempt
+        - returning the updated attempt result
+
+        Args:
+            attempt_id:
+                Identifier of the learning attempt to complete.
+
+        Returns:
+            The completed attempt result.
+        """
+
+        raise NotImplementedError(
+            "finish_attempt() must be implemented"
+        )
+
+
     @abstractmethod
     async def create_attempt(
         self,
