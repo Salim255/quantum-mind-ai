@@ -6,11 +6,13 @@ from app.v1.modules.attempt.dto.attempt_create_dto import AttemptCreateDTO
 from app.v1.modules.attempt.services.attempt_service import AttemptService
 from app.v1.modules.question.services.question_service import QuestionService
 from app.v1.modules.answer.services.answer_service import AnswerService
+from app.v1.modules.answer.dto.answer_dto import AnswerDTO
 from app.v1.modules.attempt_question.services.attempt_question_service import AttemptQuestionService
 from app.v1.modules.attempt.dto.attempt_dto import AttemptDTO
 from app.v1.modules.topic.dto.topic_dto import TopicDTO
 from app.v1.modules.attempt.dto.attempt_response_dto import AttemptResponseDTO
-from app.models.answer import Answer
+from app.v1.modules.attempt.dto.attempt_update_score_dto import AttemptUpdateScoreResponseDTO
+
 
 logger = logging.getLogger(__name__)
 
@@ -159,7 +161,7 @@ class AttemptImplService(AttemptService):
             # 2. LOAD ANSWER
             # ========================================================
 
-            answer: Answer = await self.answer_service.get_by_id(
+            answer: AnswerDTO = await self.answer_service.get_by_id(
                 answer_id
             )
 
@@ -204,11 +206,17 @@ class AttemptImplService(AttemptService):
 
             # ========================================================
             # 6. RETURN UPDATED ATTEMPT
-            # ========================================================
+            # =======================================================
 
-            attempt_dto = AttemptDTO.model_validate(
-                attempt
-            )
+            attempt_dto = AttemptUpdateScoreResponseDTO(
+                    id=attempt.id,
+                    user_id=attempt.user_id,
+                    topic_id=attempt.topic_id,
+                    score=attempt.score,
+                    total_questions=attempt.total_questions,
+                    correct_answers=attempt.correct_answers,
+                    is_completed=attempt.is_completed,
+                )
 
             return AttemptResponseDTO(
                 attempt=attempt_dto

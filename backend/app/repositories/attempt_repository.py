@@ -18,7 +18,38 @@ class AttemptRepository(BaseRepository[Attempt]):
         super().__init__(session, Attempt)
 
 
-           
+    
+    # ============================================================
+    # ADD ATTEMPT
+    # ============================================================
+
+    async def add_attempt(
+        self,
+        attempt: Attempt,
+    ) -> Attempt:
+        """
+        Persist a new attempt.
+
+        Unlike the UnitOfWork-based user creation flow,
+        attempts can currently be persisted directly through
+        this repository.
+
+        Args:
+            attempt:
+                Attempt entity to persist.
+
+        Returns:
+            The persisted attempt.
+        """
+
+        self.session.add(attempt)
+
+        await self.session.commit()
+
+        await self.session.refresh(attempt)
+
+        return attempt
+
     async def get_by_id_with_topic(
         self,
         attempt_id: UUID,

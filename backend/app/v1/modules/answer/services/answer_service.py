@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-
+from uuid import UUID
 from app.v1.modules.answer.dto.answer_create_dto import AnswerCreateDTO
 from app.v1.modules.answer.dto.answer_dto import AnswerDTO
+
 
 class AnswerService(ABC):
     """
@@ -42,7 +43,7 @@ class AnswerService(ABC):
     async def get_by_id(
         self,
         answer_id: UUID,
-    ) -> Answer | None:
+    ) -> AnswerDTO | None:
         """
         Retrieve an answer by its identifier.
 

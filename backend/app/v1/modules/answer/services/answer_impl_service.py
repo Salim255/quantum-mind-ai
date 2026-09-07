@@ -1,5 +1,5 @@
 from fastapi import logger
-
+from uuid import UUID
 from app.models.answer import Answer
 from app.repositories.answer_repository import AnswerRepository
 from app.v1.modules.answer.dto.answer_create_dto import AnswerCreateDTO
@@ -57,3 +57,41 @@ class AnswerImplService(AnswerService):
             logger.exception("Error creating answer")
             raise
 
+
+        # ============================================================
+    # GET ANSWER BY ID
+    # ============================================================
+
+    async def get_by_id(
+        self,
+        answer_id: UUID,
+    ) -> AnswerDTO | None:
+        """
+        Retrieve an answer by its identifier.
+
+        The service delegates persistence access to the
+        AnswerRepository.
+
+        Args:
+            answer_id:
+                Identifier of the answer to retrieve.
+
+        Returns:
+            The matching Answer entity if it exists,
+            otherwise None.
+        """
+
+        try:
+
+            answer = await self.answer_repository.get_by_id(
+                answer_id
+            )
+
+            return AnswerDTO.model_validate(answer)
+
+        except Exception:
+            logger.exception(
+                "Error retrieving answer by id: %s",
+                answer_id,
+            )
+            raise
