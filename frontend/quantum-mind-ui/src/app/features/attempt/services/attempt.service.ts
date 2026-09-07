@@ -36,7 +36,7 @@ export class AttemptService {
   ) {}
 
 
-  updateAttemptScore(
+  submitAnswer(
     answerId: string,
   ): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {
 

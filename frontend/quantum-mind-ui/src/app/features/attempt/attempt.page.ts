@@ -210,44 +210,37 @@ export class AttemptPage implements OnInit, OnDestroy {
 
     const answerId = this.selectedAnswerId();
 
-    if (!question.id || !answerId) {
+    if (!question.id || !answerId ) {
 
       return;
 
     }
 
 
-    /*
-     * TODO:
-     *
-     * Send the selected answer to the backend.
-     *
-     * this.attemptService
-     *   .submitAnswer({
-     *     attemptId: this.attempt()?.id,
-     *     questionId: question.id,
-     *     answerId,
-     *   })
-     *   .subscribe(...)
-     */
+   
+    // Send the selected answer to the backend.
+    //questionId: question.id,
+    this.attemptService
+      .submitAnswer(
+        answerId,
+      )
+      .subscribe({
+        next: () => {
+          if (this.hasNext()) {
 
+            this.goToNextQuestion();
 
-    if (this.hasNext()) {
-
-      this.goToNextQuestion();
-
-      return;
-
-    }
-
-
-    this.finishAttempt();
-
+            return;
+          }
+          this.finishAttempt();
+        },
+        error: () => {}
+      })
   }
 
 
   /* ============================================================
-     NEXT QUESTION
+  NEXT QUESTION
   ============================================================ */
 
   private goToNextQuestion(): void {

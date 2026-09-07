@@ -39,6 +39,7 @@ export class AttemptHttpService {
       answer_id: answerId,
     };
 
+
     return this.http.patch<
       ApiResponseDTO<AttemptUpdateScoreResponseDTO>
     >(
