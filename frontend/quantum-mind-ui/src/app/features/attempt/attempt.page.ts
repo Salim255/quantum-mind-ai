@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 import { Topic } from '../explore/models/topic.model';
 import { Attempt, AttemptQuestion } from './interfaces/attempt.interface';
 import { AttemptService } from './services/attempt.service';
+import { AttemptResultComponent } from './components/attempt-result/attempt-result.component';
+import { ModalVariant } from '../../shared/kits/modal/modal-config';
 
 
 @Component({
@@ -123,6 +125,29 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   });
 
+  showResult = signal<boolean>(true);
+
+  protected readonly attemptResultModalConfig = {
+
+    component: AttemptResultComponent,
+
+    variant: 'dialog' as ModalVariant,
+
+    size: 'full' as const,
+
+    title: 'Assessment result',
+
+    showClose: false,
+
+    closeOnBackdrop: false,
+
+    closeOnEscape: false,
+
+    onClose: () => {
+      this.closeResult();
+    },
+
+  };
 
   /* ============================================================
   CONSTRUCTOR
@@ -153,8 +178,11 @@ export class AttemptPage implements OnInit, OnDestroy {
   }
 
 
+  closeResult(){
+
+  }
   /* ============================================================
-     ANSWER SELECTION
+  ANSWER SELECTION
   ============================================================ */
 
   selectAnswer(answerId: string): void {

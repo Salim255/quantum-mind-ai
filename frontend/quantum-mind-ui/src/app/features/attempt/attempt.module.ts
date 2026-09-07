@@ -6,13 +6,17 @@ import { AttemptHeaderComponent } from "./components/attempt-header/attempt-head
 import { QuestionComponent } from "./components/question/question.component";
 import { AnswerItemComponent } from "./components/answer-item/answer-item.component";
 import { AttemptFooterComponent } from "./components/attempt-footer/attempt-footer.component";
+import { AttemptResultComponent } from "./components/attempt-result/attempt-result.component";
+import { SharedModule } from "../../shared/shared.module";
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     AttemptRoutingModule,
   ],
   declarations: [
+    AttemptResultComponent,
     AttemptFooterComponent,
     AnswerItemComponent,
     QuestionComponent,

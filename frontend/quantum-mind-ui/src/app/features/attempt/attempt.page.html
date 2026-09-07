@@ -62,3 +62,11 @@
   />
 
 </div>
+
+
+@if (showResult()) {
+  <app-modal
+    class="attempt-result-modal"
+    [config]="attemptResultModalConfig">
+  </app-modal>
+}

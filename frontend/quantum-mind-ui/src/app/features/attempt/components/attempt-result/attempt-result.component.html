@@ -4,24 +4,33 @@
 >
 
   <!-- ============================================================
-  RESULT HEADER
+  HEADER
   ============================================================ -->
 
   <div class="attempt-result__header">
 
-    <span class="attempt-result__eyebrow">
-      Assessment complete
-    </span>
+    <div class="attempt-result__status">
+      <span class="attempt-result__status-icon">
+        <iconify-icon
+          icon="lucide:check"
+          aria-hidden="true"
+        ></iconify-icon>
+      </span>
+
+      <span class="attempt-result__eyebrow">
+        Assessment complete
+      </span>
+    </div>
 
     <h1
       id="attempt-result-title"
       class="attempt-result__title"
     >
-      Your result
+      Well done!
     </h1>
 
     <p class="attempt-result__description">
-      You have completed the assessment for
+      You completed the assessment for
       <strong>{{ attempt().topic.title }}</strong>.
     </p>
 
@@ -32,7 +41,10 @@
   SCORE
   ============================================================ -->
 
-  <div class="attempt-result__score">
+  <div
+    class="attempt-result__score"
+    aria-label="Overall score"
+  >
 
     <span class="attempt-result__score-value">
       {{ attempt().score | number:'1.0-0' }}%
@@ -49,16 +61,21 @@
   PERFORMANCE
   ============================================================ -->
 
-  <div class="attempt-result__summary">
+  <div
+    class="attempt-result__summary"
+    aria-label="Assessment performance"
+  >
 
     <div class="attempt-result__stat">
+
       <span class="attempt-result__stat-value">
         {{ attempt().correct_answers }}
       </span>
 
       <span class="attempt-result__stat-label">
-        Correct answers
+        Correct
       </span>
+
     </div>
 
     <div
@@ -67,30 +84,62 @@
     ></div>
 
     <div class="attempt-result__stat">
+
       <span class="attempt-result__stat-value">
         {{ attempt().total_questions }}
       </span>
 
       <span class="attempt-result__stat-label">
-        Total questions
+        Questions
       </span>
+
+    </div>
+
+    <div
+      class="attempt-result__stat-separator"
+      aria-hidden="true"
+    ></div>
+
+    <div class="attempt-result__stat">
+
+      <span class="attempt-result__stat-value">
+        {{ attempt().total_questions - attempt().correct_answers }}
+      </span>
+
+      <span class="attempt-result__stat-label">
+        Incorrect
+      </span>
+
     </div>
 
   </div>
 
 
   <!-- ============================================================
-  ACTION
+  ACTIONS
   ============================================================ -->
 
   <div class="attempt-result__actions">
 
     <button
       type="button"
-      class="attempt-result__continue"
-      (click)="continue.emit()"
+      class="attempt-result__retake"
+      (click)="retake.emit()"
     >
-      <span>Continue learning</span>
+      <iconify-icon
+        icon="lucide:rotate-ccw"
+        aria-hidden="true"
+      ></iconify-icon>
+
+      <span>Retake quiz</span>
+    </button>
+
+    <button
+      type="button"
+      class="attempt-result__explore"
+      (click)="backToExplore.emit()"
+    >
+      <span>Back to Explore</span>
 
       <iconify-icon
         icon="lucide:arrow-right"
