@@ -39,6 +39,92 @@ class AttemptImplService(AttemptService):
         self.answer_service = answer_service
         self.attempt_question_service =  attempt_question_service
 
+
+
+
+    # ============================================================
+    # FINISH ATTEMPT
+    # ============================================================
+
+    async def finish_attempt(
+        self,
+        attempt_id: UUID,
+    ) -> AttemptUpdateScoreResponseDTO:
+        """
+        Complete a learning attempt.
+
+        The attempt identifies the assessment session.
+
+        The service is responsible for:
+
+        - loading the attempt
+        - validating that the attempt exists
+        - marking the attempt as completed
+        - persisting the updated attempt
+        - returning the updated attempt result
+
+        Args:
+            attempt_id:
+                Identifier of the learning attempt to complete.
+
+        Returns:
+            The completed attempt result.
+        """
+
+        try:
+
+            # ========================================================
+            # 1. LOAD ATTEMPT
+            # ========================================================
+
+            attempt = await self.attempt_repository.get_by_id(
+                attempt_id
+            )
+
+            if not attempt:
+                raise ValueError(
+                    f"Attempt {attempt_id} not found"
+                )
+
+
+            # ========================================================
+            # 2. MARK ATTEMPT AS COMPLETED
+            # ========================================================
+
+            attempt.is_completed = True
+
+
+            # ========================================================
+            # 3. PERSIST UPDATED ATTEMPT
+            # ========================================================
+
+            await self.attempt_repository.update(
+                attempt
+            )
+
+
+            # ========================================================
+            # 4. RETURN UPDATED ATTEMPT
+            # ========================================================
+
+            attempt_dto = AttemptUpdateScoreResponseDTO(
+                id=attempt.id,
+                user_id=attempt.user_id,
+                topic_id=attempt.topic_id,
+                score=attempt.score,
+                total_questions=attempt.total_questions,
+                correct_answers=attempt.correct_answers,
+                is_completed=attempt.is_completed,
+            )
+
+            return AttemptResponseDTO(attempt=attempt_dto)
+        
+        except Exception:
+            logger.exception(
+                "Error finishing attempt"
+            )
+            raise
+
     # ============================================================
     # CREATE
     # ============================================================
