@@ -37,7 +37,7 @@ export class AttemptService {
 
 
 
-  finishAttempt(): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {
+  finishAttempt(): Observable<ApiResponseDTO<AttemptResponseDTO>> {
     const attempt = this.attemptValue;
 
     if (!attempt) {
@@ -48,7 +48,7 @@ export class AttemptService {
       .finishAttempt(attempt.id)
       .pipe(
         tap((response) => {
-          const updatedAttempt = response.data;
+          const updatedAttempt = response.data.attempt;
 
           this.setAttempt({
             ...attempt,
@@ -62,7 +62,7 @@ export class AttemptService {
 
   submitAnswer(
     answerId: string,
-  ): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {
+  ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
 
     const attempt = this.attemptValue;
 
@@ -77,8 +77,8 @@ export class AttemptService {
       )
       .pipe(
         tap((response) => {
-          const updatedAttempt = response.data;
-
+          const updatedAttempt = response.data.attempt;
+          console.log(updatedAttempt, "hello from coming updated attempt")
           this.setAttempt({
             ...attempt,
             score: updatedAttempt.score,
@@ -98,7 +98,7 @@ export class AttemptService {
       .pipe(
         tap((response) => {
            this.setAttempt(
-            response.data.attempt,
+            response.data.attempt as Attempt,
           );
         })
       );
@@ -116,7 +116,7 @@ export class AttemptService {
     return this.attemptHttpService
       .getAttempt(attemptId).pipe(
         tap(response => {
-          this.setAttempt(response.data.attempt);
+          this.setAttempt(response.data.attempt as Attempt);
         })
       )
       ;

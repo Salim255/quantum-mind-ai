@@ -31,7 +31,7 @@
 
     <p class="attempt-result__description">
       You completed the assessment for
-      <strong>{{ attempt().topic.title }}</strong>.
+      <strong>{{ topic().title }}</strong>.
     </p>
 
   </div>
@@ -47,7 +47,7 @@
   >
 
     <span class="attempt-result__score-value">
-      {{ attempt().score | number:'1.0-0' }}%
+      {{ attempt()?.score! | number:'1.0-0' }}%
     </span>
 
     <span class="attempt-result__score-label">
@@ -69,7 +69,7 @@
     <div class="attempt-result__stat">
 
       <span class="attempt-result__stat-value">
-        {{ attempt().correct_answers }}
+        {{ attempt()?.correct_answers }}
       </span>
 
       <span class="attempt-result__stat-label">
@@ -86,7 +86,7 @@
     <div class="attempt-result__stat">
 
       <span class="attempt-result__stat-value">
-        {{ attempt().total_questions }}
+        {{ attempt()?.total_questions }}
       </span>
 
       <span class="attempt-result__stat-label">
@@ -103,7 +103,7 @@
     <div class="attempt-result__stat">
 
       <span class="attempt-result__stat-value">
-        {{ attempt().total_questions - attempt().correct_answers }}
+        {{ attempt()?.total_questions! - attempt()?.correct_answers! }}
       </span>
 
       <span class="attempt-result__stat-label">

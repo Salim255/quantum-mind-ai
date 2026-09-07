@@ -32,7 +32,7 @@ export interface AttemptUpdateScoreResponseDTO {
 }
 
 export interface AttemptResponseDTO {
-  attempt: Attempt;
+  attempt: Attempt | AttemptUpdateScoreResponseDTO;
 }
 
 

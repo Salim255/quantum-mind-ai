@@ -23,13 +23,13 @@ export class AttemptHttpService {
 
   finishAttempt(
       attemptId: string,
-    ): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {
+    ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
 
       const url =
         `${this.baseUrl}/${attemptId}/finish`;
 
       return this.http.patch<
-        ApiResponseDTO<AttemptUpdateScoreResponseDTO>
+        ApiResponseDTO<AttemptResponseDTO>
       >(
         url,
         {},
@@ -43,7 +43,7 @@ export class AttemptHttpService {
     attemptId: string,
     answerId: string,
   ): Observable<
-    ApiResponseDTO<AttemptUpdateScoreResponseDTO>
+    ApiResponseDTO<AttemptResponseDTO>
   > {
 
     const url =
@@ -56,7 +56,7 @@ export class AttemptHttpService {
 
 
     return this.http.patch<
-      ApiResponseDTO<AttemptUpdateScoreResponseDTO>
+      ApiResponseDTO<AttemptResponseDTO>
     >(
       url,
       payload,

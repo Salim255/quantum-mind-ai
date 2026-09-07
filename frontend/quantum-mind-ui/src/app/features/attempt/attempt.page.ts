@@ -5,7 +5,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Topic } from '../explore/models/topic.model';
@@ -125,7 +125,7 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   });
 
-  showResult = signal<boolean>(true);
+  showResult = signal<boolean>(false);
 
   protected readonly attemptResultModalConfig = {
 
@@ -154,7 +154,8 @@ export class AttemptPage implements OnInit, OnDestroy {
   ============================================================ */
 
   constructor(
-    private readonly route: ActivatedRoute,
+    private readonly route: Router,
+
     private attemptService: AttemptService,
   ) {}
 
@@ -165,6 +166,9 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribeToCurrentAttempt();
+    if(!this.attempt()) {
+      this.route.navigate(["/quizzes/explore"]) 
+    }
   }
 
 
@@ -257,7 +261,6 @@ export class AttemptPage implements OnInit, OnDestroy {
           if (this.hasNext()) {
 
             this.goToNextQuestion();
-
             return;
           }
           this.finishAttempt();
@@ -297,7 +300,9 @@ export class AttemptPage implements OnInit, OnDestroy {
        .finishAttempt()
        .subscribe(
         {
-          next: () => {},
+          next: () => {
+            this.showResult.set(true);
+          },
           error: () => {}
         }
        )
