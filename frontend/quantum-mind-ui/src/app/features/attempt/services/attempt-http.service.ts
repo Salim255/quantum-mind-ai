@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
-import { Attempt, AttemptResponseDTO } from '../interfaces/attempt.interface';
+import { Attempt, AttemptResponseDTO, AttemptUpdateScoreDTO, AttemptUpdateScoreResponseDTO } from '../interfaces/attempt.interface';
 import { ApiResponseDTO } from '../../../shared/interfaces/api-response.dto';
 
 
@@ -20,24 +20,33 @@ export class AttemptHttpService {
 
   constructor(private http: HttpClient) {}
 
+  // ============================================================
+  // UPDATE ATTEMPT SCORE
+  // ============================================================
 
-  /*
-   * ==========================================================
-   * CREATE ATTEMPT
-   * ==========================================================
-   *
-   * Creates a new attempt for a topic.
-   *
-   * The topic is identified by its ID and is sent
-   * as the request body.
-   *
-   * POST /attempts
-   *
-   * Body:
-   * {
-   *   topic_id: string
-   * }
-   */
+  updateAttemptScore(
+    attemptId: string,
+    answerId: string,
+  ): Observable<
+    ApiResponseDTO<AttemptUpdateScoreResponseDTO>
+  > {
+
+    const url =
+      `${this.baseUrl}/${attemptId}/score`;
+
+    const payload: AttemptUpdateScoreDTO = {
+      attempt_id: attemptId,
+      answer_id: answerId,
+    };
+
+    return this.http.patch<
+      ApiResponseDTO<AttemptUpdateScoreResponseDTO>
+    >(
+      url,
+      payload,
+    );
+  }
+
   createAttempt(
     topicId: string
   ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
