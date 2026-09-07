@@ -261,6 +261,7 @@ export class AttemptPage implements OnInit, OnDestroy {
           if (this.hasNext()) {
 
             this.goToNextQuestion();
+            this.showResult.set(true);
             return;
           }
           this.finishAttempt();

@@ -11,6 +11,7 @@ import { Attempt, AttemptQuestion } from '../../interfaces/attempt.interface';
 import { AttemptService } from '../../services/attempt.service';
 import { Subscription } from 'rxjs';
 import { Topic } from '../../../explore/models/topic.model';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -29,9 +30,12 @@ export class AttemptResultComponent implements OnInit, OnDestroy {
   readonly continue = output<void>();
 
   readonly retake = output<void>();
-  readonly backToExplore = output<void>();
+  
 
-  constructor(private attemptService: AttemptService) {}
+  constructor(
+    private route: Router,
+    private attemptService: AttemptService
+  ) {}
 
   ngOnInit(): void {
     this.subscribeToCurrentAttempt();
@@ -40,8 +44,6 @@ export class AttemptResultComponent implements OnInit, OnDestroy {
 
   private subscribeToCurrentAttempt(): void{
     this.currentAttemptSubscription = this.attemptService.getAttempt$.subscribe(attempt => {
-
-      console.log(attempt, "hello from attempt");
       this.attempt.set(attempt);
       this.topic.set(this.attempt()?.topic!);
       this.questions.set(this.topic()?.questions ?? []);
@@ -51,5 +53,10 @@ export class AttemptResultComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentAttemptSubscription?.unsubscribe();
+  }
+
+
+  backToExplore(): void{
+    this.route.navigate(['/quizzes/explore'])
   }
 }
