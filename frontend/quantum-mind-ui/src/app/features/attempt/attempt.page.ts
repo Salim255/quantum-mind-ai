@@ -264,17 +264,16 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   private finishAttempt(): void {
 
-    /*
-     * TODO:
-     *
-     * Finish the attempt through AttemptService.
-     *
-     * this.attemptService
-     *   .finishAttempt(this.attempt()!.id)
-     *   .subscribe(...)
-     *
-     * Then navigate to the result page.
-     */
+  
+    this.attemptService
+       .finishAttempt()
+       .subscribe(
+        {
+          next: () => {},
+          error: () => {}
+        }
+       )
+   
 
   }
 

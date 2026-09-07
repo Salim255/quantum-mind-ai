@@ -36,6 +36,30 @@ export class AttemptService {
   ) {}
 
 
+
+  finishAttempt(): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {
+    const attempt = this.attemptValue;
+
+    if (!attempt) {
+      throw new Error('Cannot finish attempt: no active attempt');
+    }
+
+    return this.attemptHttpService
+      .finishAttempt(attempt.id)
+      .pipe(
+        tap((response) => {
+          const updatedAttempt = response.data;
+
+          this.setAttempt({
+            ...attempt,
+            score: updatedAttempt.score,
+            correct_answers: updatedAttempt.correct_answers,
+            is_completed: updatedAttempt.is_completed,
+          });
+        }),
+      );
+  }
+
   submitAnswer(
     answerId: string,
   ): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {

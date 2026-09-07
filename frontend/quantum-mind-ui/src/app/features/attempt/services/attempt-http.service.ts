@@ -20,6 +20,21 @@ export class AttemptHttpService {
 
   constructor(private http: HttpClient) {}
 
+
+  finishAttempt(
+      attemptId: string,
+    ): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {
+
+      const url =
+        `${this.baseUrl}/${attemptId}/finish`;
+
+      return this.http.patch<
+        ApiResponseDTO<AttemptUpdateScoreResponseDTO>
+      >(
+        url,
+        {},
+      );
+  }
   // ============================================================
   // UPDATE ATTEMPT SCORE
   // ============================================================
