@@ -13,6 +13,7 @@ import { Attempt, AttemptQuestion } from './interfaces/attempt.interface';
 import { AttemptService } from './services/attempt.service';
 import { AttemptResultComponent } from './components/attempt-result/attempt-result.component';
 import { ModalVariant } from '../../shared/kits/modal/modal-config';
+import { AttemptResultService } from './components/attempt-result/services/attempt_result.service';
 
 
 @Component({
@@ -22,8 +23,10 @@ import { ModalVariant } from '../../shared/kits/modal/modal-config';
   standalone: false,
 })
 export class AttemptPage implements OnInit, OnDestroy {
+  private retakeQuizSubscription!: Subscription;
   private currentAttemptSubscription!: Subscription
   private routeSubscription?: Subscription;
+  private attemptResultSubscription?: Subscription;
 
 
   readonly attempt = signal<Attempt | null>(null);
@@ -155,7 +158,7 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   constructor(
     private readonly route: Router,
-
+    private attempt_result_service: AttemptResultService,
     private attemptService: AttemptService,
   ) {}
 
@@ -166,14 +169,34 @@ export class AttemptPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribeToCurrentAttempt();
+    this.subscribeToAttemptResult();
+    this.subscribeToRetakeQuiz();
     if(!this.attempt()) {
       this.route.navigate(["/quizzes/explore"]) 
     }
   }
 
 
+
+  private subscribeToRetakeQuiz(): void{
+    this.retakeQuizSubscription = this.attemptService.retake$.subscribe(isRetake => {
+      if (isRetake) {
+        this.currentQuestionIndex.set(0);
+      }
+    })
+  }
+  private subscribeToAttemptResult(): void{
+    this.attemptResultSubscription = this.attempt_result_service
+    .getShowResult$
+    .subscribe(status => {
+      this.showResult.set(status && (this.attempt()?.is_completed === true))
+    })
+  }
+
   private subscribeToCurrentAttempt(): void{
-    this.currentAttemptSubscription = this.attemptService.getAttempt$.subscribe(attempt => {
+    this.currentAttemptSubscription = this.attemptService
+    .getAttempt$
+    .subscribe(attempt => {
 
       this.attempt.set(attempt);
       this.questions.set(this.attempt()?.topic?.questions ?? []);
@@ -229,12 +252,12 @@ export class AttemptPage implements OnInit, OnDestroy {
   }
 
 
-  /* ============================================================
-     SUBMIT ANSWER
-     ------------------------------------------------------------
-     The actual answer submission will later be connected
-     to AttemptService.
-  ============================================================ */
+  // ============================================================
+  //  SUBMIT ANSWER
+  //  ------------------------------------------------------------
+  //  The actual answer submission will later be connected
+  //  to AttemptService.
+  // ============================================================
 
   submitAnswer(): void {
 
@@ -243,13 +266,9 @@ export class AttemptPage implements OnInit, OnDestroy {
     const answerId = this.selectedAnswerId();
 
     if (!question.id || !answerId ) {
-
       return;
-
     }
 
-
-   
     // Send the selected answer to the backend.
     //questionId: question.id,
     this.attemptService
@@ -261,7 +280,8 @@ export class AttemptPage implements OnInit, OnDestroy {
           if (this.hasNext()) {
 
             this.goToNextQuestion();
-            this.showResult.set(true);
+            this.attempt_result_service.showResult();
+            
             return;
           }
           this.finishAttempt();
@@ -271,9 +291,9 @@ export class AttemptPage implements OnInit, OnDestroy {
   }
 
 
-  /* ============================================================
-  NEXT QUESTION
-  ============================================================ */
+  // ============================================================
+  // NEXT QUESTION
+  // ============================================================
 
   private goToNextQuestion(): void {
 
@@ -313,11 +333,12 @@ export class AttemptPage implements OnInit, OnDestroy {
 
 
   /* ============================================================
-     CLEANUP
+  CLEANUP
   ============================================================ */
 
   ngOnDestroy(): void {
-
+    this.retakeQuizSubscription?.unsubscribe();
+    this.attemptResultSubscription?.unsubscribe();
     this.routeSubscription?.unsubscribe();
     this.currentAttemptSubscription.unsubscribe();
   }

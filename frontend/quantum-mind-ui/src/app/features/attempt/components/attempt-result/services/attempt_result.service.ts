@@ -5,13 +5,11 @@ import { BehaviorSubject, Observable } from "rxjs";
 export class AttemptResultService {
   private resultModalState = new BehaviorSubject<boolean>(false)
 
-
   private setAttemptResult(status: boolean){
     this.resultModalState.next(status)
   }
 
   dismissResult(){
-
     this.setAttemptResult(false)
   }
 

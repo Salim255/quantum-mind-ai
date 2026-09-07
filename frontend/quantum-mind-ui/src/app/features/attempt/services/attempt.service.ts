@@ -21,6 +21,9 @@ interface AttemptState {
   providedIn: 'root',
 })
 export class AttemptService {
+  private readonly retakeSubject = new BehaviorSubject<boolean>(false);
+
+  readonly retake$ = this.retakeSubject.asObservable();
 
   private readonly stateSubject =
     new BehaviorSubject<AttemptState>({
@@ -36,6 +39,24 @@ export class AttemptService {
   ) {}
 
 
+  retakeQuiz(
+    topicId: string
+  ): Observable<ApiResponseDTO<AttemptResponseDTO>>{
+    return this.createAttempt(topicId).pipe(
+      tap(() => {
+        // Notify the attempt page that a retake has started.
+        this.retakeSubject.next(true);
+      })
+    );
+  }
+
+  // ============================================================
+  // RESET RETAKE STATE
+  // ============================================================
+
+  resetRetakeState(): void {
+    this.retakeSubject.next(false);
+  }
 
   finishAttempt(): Observable<ApiResponseDTO<AttemptResponseDTO>> {
     const attempt = this.attemptValue;
@@ -78,7 +99,7 @@ export class AttemptService {
       .pipe(
         tap((response) => {
           const updatedAttempt = response.data.attempt;
-          console.log(updatedAttempt, "hello from coming updated attempt")
+
           this.setAttempt({
             ...attempt,
             score: updatedAttempt.score,
