@@ -75,7 +75,7 @@ class AttemptImplService(AttemptService):
                 is_completed=False,
             )
 
-            await self.attempt_repository.add(attempt)
+            await self.attempt_repository.add_attempt(attempt)
 
 
             # ============================================================

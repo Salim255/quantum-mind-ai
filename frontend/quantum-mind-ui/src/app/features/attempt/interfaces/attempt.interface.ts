@@ -1,6 +1,29 @@
 import { Topic } from "../../explore/models/topic.model";
 
 
+export interface AttemptUpdateScoreResponseDTO {
+  
+  id: string;
+
+  
+  user_id: string | null;
+
+
+  topic_id: string;
+
+
+  score: number;
+
+
+  total_questions: number;
+
+
+  correct_answers: number;
+
+
+  is_completed: boolean;
+}
+
 export interface AttemptResponseDTO {
   attempt: Attempt;
 }
