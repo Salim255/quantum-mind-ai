@@ -6,7 +6,7 @@ import {
   tap,
 } from 'rxjs';
 
-import { Attempt, AttemptResponseDTO } from '../interfaces/attempt.interface';
+import { Attempt, AttemptResponseDTO, AttemptUpdateScoreResponseDTO } from '../interfaces/attempt.interface';
 
 import { AttemptHttpService } from './attempt-http.service';
 import { ApiResponseDTO } from '../../../shared/interfaces/api-response.dto';
@@ -36,6 +36,34 @@ export class AttemptService {
   ) {}
 
 
+  updateAttemptScore(
+    answerId: string,
+  ): Observable<ApiResponseDTO<AttemptUpdateScoreResponseDTO>> {
+
+    const attempt = this.attemptValue;
+
+    if (!attempt) {
+      throw new Error('Cannot update score: no active attempt');
+    }
+
+    return this.attemptHttpService
+      .updateAttemptScore(
+        attempt.id,
+        answerId,
+      )
+      .pipe(
+        tap((response) => {
+          const updatedAttempt = response.data;
+
+          this.setAttempt({
+            ...attempt,
+            score: updatedAttempt.score,
+            correct_answers: updatedAttempt.correct_answers,
+            is_completed: updatedAttempt.is_completed,
+          });
+        }),
+      );
+  }
 
   createAttempt(
     topicId: string,
@@ -53,7 +81,10 @@ export class AttemptService {
   }
 
 
- 
+  get attemptValue(){
+    return this.stateSubject.value?.attempt ?? null
+  }
+
   getAttempt(
     attemptId: string,
   ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
