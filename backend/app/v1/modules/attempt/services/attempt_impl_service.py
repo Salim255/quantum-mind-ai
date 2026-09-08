@@ -111,17 +111,6 @@ class AttemptImplService(AttemptService):
             )
 
 
-            # ========================================================
-            # 3. REPLACE ATTEMPT QUESTIONS
-            # ========================================================
-            # The attempt itself is kept.
-            # Only its question associations are replaced.
-
-            await self.attempt_question_service.replace_questions(
-                attempt_id=attempt.id,
-                questions=questions,
-            )
-
 
             # ========================================================
             # 4. RESET ATTEMPT RESULT
@@ -148,7 +137,6 @@ class AttemptImplService(AttemptService):
             attempt = await self.attempt_repository.get_by_id_with_topic(
                 attempt.id
             )
-
 
             # ========================================================
             # 7. BUILD TOPIC DTO

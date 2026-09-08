@@ -42,7 +42,6 @@ def get_container(
     """
     return request.app.state.container
 
-
 # ============================================================
 # DATABASE SESSION DEPENDENCY
 # ============================================================
@@ -73,6 +72,77 @@ async def get_db_session(
     async for session in container.db_session.get_session():
         yield session
 
+
+
+# ============================================================
+# RETAKE ATTEMPT
+# ============================================================
+
+@attempt_router.patch(
+    "/{attempt_id}/retake",
+    response_model=ResponseDTO[AttemptResponseDTO],
+    status_code=status.HTTP_200_OK,
+    summary="Retake learning attempt",
+    description="""
+Reset an existing learning attempt for a new quiz session.
+
+The existing attempt is preserved, including its ID, while
+its result is reset and a new random set of questions is
+assigned to the attempt.
+
+The attempt ID identifies the learning attempt to retake.
+
+The business logic is delegated to AttemptService.
+""",
+    response_description="The reset learning attempt with its new questions.",
+)
+async def retake_attempt(
+    attempt_id: UUID,
+    session: Annotated[
+        AsyncSession,
+        Depends(get_db_session),
+    ],
+    container: Annotated[
+        Container,
+        Depends(get_container),
+    ],
+) -> ResponseDTO[AttemptResponseDTO]:
+    """
+    Retake an existing learning attempt.
+
+    The controller is intentionally kept thin.
+    The AttemptService handles:
+
+    - retrieving the existing attempt
+    - resetting the attempt result
+    - generating new random questions
+    - replacing the attempt questions
+    - persisting the changes
+
+    Args:
+        attempt_id:
+            Identifier of the attempt to retake.
+
+        session:
+            Active asynchronous database session.
+
+        container:
+            Application dependency container.
+
+    Returns:
+        The reset learning attempt with its new questions.
+    """
+
+    attempt_service: AttemptService = get_attempt_service(
+        session=session,
+        container=container,
+    )
+
+    attempt = await attempt_service.retake_attempt(
+        attempt_id=attempt_id,
+    )
+
+    return ResponseDTO.success(attempt)
 
 # ============================================================
 # CREATE ATTEMPT
