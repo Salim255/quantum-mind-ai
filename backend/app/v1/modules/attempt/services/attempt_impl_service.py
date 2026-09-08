@@ -43,6 +43,138 @@ class AttemptImplService(AttemptService):
 
 
     # ============================================================
+    # RETAKE ATTEMPT
+    # ============================================================
+
+    async def retake_attempt(
+        self,
+        attempt_id: UUID,
+    ) -> AttemptResponseDTO:
+        """
+        Retake an existing learning attempt.
+
+        Unlike create_attempt(), this operation does not create
+        a new Attempt entity.
+
+        The existing attempt is reset and a new random set of
+        questions is assigned to it.
+
+        The attempt result is reset:
+
+        - score -> 0
+        - correct_answers -> 0
+        - is_completed -> False
+
+        The existing attempt ID is preserved.
+
+        Args:
+            attempt_id:
+                Identifier of the existing learning attempt.
+
+        Returns:
+            The reset learning attempt with its new questions.
+        """
+
+        try:
+
+            # ========================================================
+            # 1. LOAD ATTEMPT
+            # ========================================================
+
+            attempt = await self.attempt_repository.get_by_id(
+                attempt_id
+            )
+
+            if not attempt:
+                raise ValueError(
+                    f"Attempt {attempt_id} not found"
+                )
+
+
+            # ========================================================
+            # 2. LOAD NEW RANDOM QUESTIONS
+            # ========================================================
+
+            questions = await self.question_service.get_random_questions_by_topic(
+                topic_id=attempt.topic_id,
+                limit=attempt.total_questions,
+            )
+
+
+            # ========================================================
+            # 3. REPLACE ATTEMPT QUESTIONS
+            # ========================================================
+            # The attempt itself is kept.
+            # Only its question associations are replaced.
+
+            await self.attempt_question_service.replace_questions(
+                attempt_id=attempt.id,
+                questions=questions,
+            )
+
+
+            # ========================================================
+            # 4. RESET ATTEMPT RESULT
+            # ========================================================
+
+            attempt.score = 0.0
+            attempt.correct_answers = 0
+            attempt.is_completed = False
+
+
+            # ========================================================
+            # 5. PERSIST RESET ATTEMPT
+            # ========================================================
+
+            await self.attempt_repository.update(
+                attempt
+            )
+
+
+            # ========================================================
+            # 6. LOAD ATTEMPT WITH TOPIC
+            # ========================================================
+
+            attempt = await self.attempt_repository.get_by_id_with_topic(
+                attempt.id
+            )
+
+
+            # ========================================================
+            # 7. BUILD TOPIC DTO
+            # ========================================================
+
+            topic_dto = TopicDTO.model_validate({
+                **attempt.topic.model_dump(),
+                "questions": questions,
+            })
+
+
+            # ========================================================
+            # 8. BUILD ATTEMPT DTO
+            # ========================================================
+
+            attempt_dto = AttemptDTO.model_validate({
+                **attempt.model_dump(),
+                "topic": topic_dto,
+            })
+
+
+            # ========================================================
+            # 9. RETURN SAME RESPONSE SHAPE AS CREATE
+            # ========================================================
+
+            return AttemptResponseDTO(
+                attempt=attempt_dto
+            )
+
+        except Exception:
+            logger.exception(
+                "Error retaking attempt"
+            )
+            raise
+
+    # ============================================================
     # FINISH ATTEMPT
     # ============================================================
 
