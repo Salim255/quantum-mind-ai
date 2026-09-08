@@ -17,6 +17,40 @@ class AttemptService(ABC):
 
 
     # ============================================================
+    # RETAKE / RESET ATTEMPT
+    # ============================================================
+
+    @abstractmethod
+    async def retake_attempt(
+        self,
+        attempt_id: UUID,
+    ) -> AttemptResponseDTO:
+        """
+        Reset an existing learning attempt for a retake.
+
+        The implementation is responsible for:
+
+        - retrieving the existing attempt
+        - resetting its score
+        - resetting the number of correct answers
+        - marking the attempt as incomplete
+        - resetting the attempt question state
+        - persisting the updated attempt
+        - returning the reset attempt
+
+        Args:
+            attempt_id:
+                Identifier of the learning attempt to reset.
+
+        Returns:
+            The reset learning attempt.
+        """
+
+        raise NotImplementedError(
+            "retake_attempt() must be implemented"
+        )
+
+    # ============================================================
     # FINISH ATTEMPT
     # ============================================================
 
