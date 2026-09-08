@@ -40,9 +40,9 @@ export class AttemptService {
 
 
   retakeQuiz(
-    topicId: string
+    attemptId: string
   ): Observable<ApiResponseDTO<AttemptResponseDTO>>{
-    return this.attemptHttpService.retake_attempt(topicId).pipe(
+    return this.attemptHttpService.retake_attempt(attemptId).pipe(
       tap((response) => {
         // Notify the attempt page that a retake has started.
         this.retakeSubject.next(true);

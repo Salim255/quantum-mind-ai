@@ -55,9 +55,9 @@ export class AttemptResultComponent implements OnInit, OnDestroy {
   }
 
   retakeQuiz(){
-    const topicId = this.attempt()?.topic_id;
-    if(!topicId) return;
-    this.attemptService.retakeQuiz(topicId).subscribe(
+    const attemptId = this.attempt()?.id;
+    if(!attemptId) return;
+    this.attemptService.retakeQuiz(attemptId).subscribe(
       {
         next: () => {
           this.attemptResultService.dismissResult();

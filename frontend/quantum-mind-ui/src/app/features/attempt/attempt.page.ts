@@ -182,6 +182,7 @@ export class AttemptPage implements OnInit, OnDestroy {
     this.retakeQuizSubscription = this.attemptService.retake$.subscribe(isRetake => {
       if (isRetake) {
         this.currentQuestionIndex.set(0);
+        this.selectedAnswers.set({})
       }
     })
   }
