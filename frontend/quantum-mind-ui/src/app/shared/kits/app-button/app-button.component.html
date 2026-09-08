@@ -1,0 +1,56 @@
+<button
+  class="app-button"
+  [class.app-button--primary]="variant === 'primary'"
+  [class.app-button--secondary]="variant === 'secondary'"
+  [class.app-button--ghost]="variant === 'ghost'"
+  [class.app-button--danger]="variant === 'danger'"
+  [class.app-button--small]="size === 'small'"
+  [class.app-button--medium]="size === 'medium'"
+  [class.app-button--large]="size === 'large'"
+  [class.app-button--icon-only]="iconOnly"
+  [class.app-button--full-width]="fullWidth"
+  [class.app-button--loading]="loading"
+  [type]="type"
+  [disabled]="disabled || loading"
+  [attr.aria-label]="iconOnly ? ariaLabel || label : null"
+  [attr.aria-busy]="loading"
+  (click)="onClick($event)"
+>
+  @if (loading) {
+    <span
+      class="app-button__spinner"
+      aria-hidden="true"
+    ></span>
+
+    <span
+      class="app-button__loading-text"
+      [class.app-button__loading-text--hidden]="iconOnly"
+    >
+      {{ label }}
+    </span>
+  } @else {
+    @if (icon) {
+      <span
+        class="app-button__icon app-button__icon--leading"
+        aria-hidden="true"
+      >
+        <iconify-icon [icon]="icon"></iconify-icon>
+      </span>
+    }
+
+    @if (label && !iconOnly) {
+      <span class="app-button__label">
+        {{ label }}
+      </span>
+    }
+
+    @if (iconAfter) {
+      <span
+        class="app-button__icon app-button__icon--trailing"
+        aria-hidden="true"
+      >
+        <iconify-icon [icon]="iconAfter"></iconify-icon>
+      </span>
+    }
+  }
+</button>

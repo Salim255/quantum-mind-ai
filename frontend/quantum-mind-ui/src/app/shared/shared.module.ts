@@ -8,6 +8,7 @@ import { AngularSplitModule } from "angular-split";
 import { SplitPanelComponent } from "./kits/split-panel/split-panel.component";
 import { AppOverlayComponent } from "./kits/app-overlay/app-overlay.component";
 import { ModalComponent } from "./kits/modal/ modal.component";
+import { AppButtonComponent } from "./kits/app-button/app-button.component";
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { ModalComponent } from "./kits/modal/ modal.component";
     CommonModule
   ],
   declarations: [
+    AppButtonComponent,
     ModalComponent, 
     AppOverlayComponent,
     SplitPanelComponent,
@@ -25,6 +27,7 @@ import { ModalComponent } from "./kits/modal/ modal.component";
     EquationComponent,
   ],
   exports: [
+    AppButtonComponent,
     ModalComponent,
     AppOverlayComponent,
     SplitPanelComponent,

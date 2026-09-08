@@ -1,0 +1,536 @@
+@use "../../../../styles/mixins/queries" as *;
+
+/* ============================================================
+   QUANTUM MIND
+   APP BUTTON
+   ------------------------------------------------------------
+   Reusable application button primitive.
+
+   Visual hierarchy:
+
+   primary   → strongest / main action
+   secondary → supporting action
+   ghost     → low emphasis
+   danger    → destructive action
+
+   The component consumes the global design-system tokens.
+============================================================ */
+
+
+/* ============================================================
+   BASE
+============================================================ */
+
+.app-button {
+  /* ----------------------------------------------------------
+     Button dimensions
+
+     These are component-level dimensions, not design-system
+     color/spacing/radius tokens.
+  ---------------------------------------------------------- */
+
+  --button-height: 4.4rem;
+  --button-padding-x: var(--space-4);
+  --button-gap: var(--space-2);
+  --button-icon-size: 1.8rem;
+
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+  height: var(--button-height);
+
+  padding:
+    0
+    var(--button-padding-x);
+
+  gap: var(--button-gap);
+
+  border:
+    var(--border-default);
+
+  border-radius:
+    var(--radius-button);
+
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1;
+
+  white-space: nowrap;
+  text-decoration: none;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform 120ms ease,
+    opacity 160ms ease;
+
+  -webkit-tap-highlight-color: transparent;
+
+
+  /* ==========================================================
+     ACCESSIBILITY
+  ========================================================== */
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline:
+      var(--border-medium)
+      var(--border-solid)
+      var(--color-primary-border);
+
+    outline-offset: var(--space-1);
+  }
+
+
+  /* ==========================================================
+     INTERACTION
+  ========================================================== */
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+
+  /* ==========================================================
+     PRIMARY
+     ----------------------------------------------------------
+     Main action of the interface.
+
+     This should be the visual focal point when used.
+  ========================================================== */
+
+  &--primary {
+    color:
+      var(--color-text-inverse);
+
+    background:
+      var(--color-primary);
+
+    border-color:
+      var(--color-primary);
+
+    box-shadow:
+      0 1px 2px rgb(16 24 40 / 8%),
+      0 var(--space-1) var(--space-3)
+      rgb(37 99 235 / 16%);
+
+
+    &:hover:not(:disabled) {
+      background:
+        var(--color-primary-hover);
+
+      border-color:
+        var(--color-primary-hover);
+
+      box-shadow:
+        0 2px 4px rgb(16 24 40 / 10%),
+        0 var(--space-2) var(--space-4)
+        rgb(37 99 235 / 20%);
+    }
+
+
+    &:active:not(:disabled) {
+      background:
+        var(--color-primary-active);
+
+      border-color:
+        var(--color-primary-active);
+    }
+
+
+    &:disabled {
+      color:
+        var(--color-text-inverse);
+
+      background:
+        var(--color-primary-border);
+
+      border-color:
+        var(--color-primary-border);
+
+      box-shadow: none;
+    }
+  }
+
+
+  /* ==========================================================
+     SECONDARY
+  ========================================================== */
+
+  &--secondary {
+    color:
+      var(--color-text-primary);
+
+    background:
+      var(--color-surface);
+
+    border-color:
+      var(--color-border);
+
+    box-shadow:
+      0 1px 2px rgb(16 24 40 / 5%);
+
+
+    &:hover:not(:disabled) {
+      background:
+        var(--color-surface-hover);
+
+      border-color:
+        var(--color-border-strong);
+    }
+
+
+    &:active:not(:disabled) {
+      background:
+        var(--color-surface-muted);
+    }
+
+
+    &:disabled {
+      color:
+        var(--color-text-disabled);
+
+      background:
+        var(--color-surface-muted);
+
+      border-color:
+        var(--color-border-subtle);
+
+      box-shadow: none;
+    }
+  }
+
+
+  /* ==========================================================
+     GHOST
+  ========================================================== */
+
+  &--ghost {
+    color:
+      var(--color-text-secondary);
+
+    background:
+      transparent;
+
+    border-color:
+      transparent;
+
+
+    &:hover:not(:disabled) {
+      color:
+        var(--color-text-primary);
+
+      background:
+        var(--color-surface-hover);
+    }
+
+
+    &:active:not(:disabled) {
+      background:
+        var(--color-surface-muted);
+    }
+
+
+    &:disabled {
+      color:
+        var(--color-text-disabled);
+
+      background:
+        transparent;
+    }
+  }
+
+
+  /* ==========================================================
+     DANGER
+  ========================================================== */
+
+  &--danger {
+    color:
+      var(--color-text-inverse);
+
+    background:
+      var(--color-error);
+
+    border-color:
+      var(--color-error);
+
+    box-shadow:
+      0 1px 2px rgb(16 24 40 / 8%);
+
+
+    &:hover:not(:disabled) {
+      background:
+        var(--color-error-hover);
+
+      border-color:
+        var(--color-error-hover);
+
+      box-shadow:
+        0 2px 4px rgb(16 24 40 / 10%);
+    }
+
+
+    &:active:not(:disabled) {
+      background:
+        var(--color-error-hover);
+
+      border-color:
+        var(--color-error-hover);
+    }
+
+
+    &:disabled {
+      color:
+        var(--color-text-inverse);
+
+      background:
+        var(--color-error-border);
+
+      border-color:
+        var(--color-error-border);
+
+      box-shadow: none;
+    }
+  }
+
+
+  /* ==========================================================
+     SMALL
+  ========================================================== */
+
+  &--small {
+    --button-height: 3.6rem;
+    --button-padding-x: var(--space-3);
+    --button-gap: var(--space-1);
+    --button-icon-size: 1.6rem;
+
+    font-size: 1.3rem;
+  }
+
+
+  /* ==========================================================
+     MEDIUM
+  ========================================================== */
+
+  &--medium {
+    --button-height: 4.4rem;
+    --button-padding-x: var(--space-4);
+    --button-gap: var(--space-2);
+    --button-icon-size: 1.8rem;
+
+    font-size: 1.4rem;
+  }
+
+
+  /* ==========================================================
+     LARGE
+  ========================================================== */
+
+  &--large {
+    --button-height: 5.2rem;
+    --button-padding-x: var(--space-5);
+    --button-gap: var(--space-2);
+    --button-icon-size: 2rem;
+
+    font-size: 1.5rem;
+  }
+
+
+  /* ==========================================================
+     FULL WIDTH
+  ========================================================== */
+
+  &--full-width {
+    width: 100%;
+  }
+
+
+  /* ==========================================================
+     ICON ONLY
+  ========================================================== */
+
+  &--icon-only {
+    width:
+      var(--button-height);
+
+    min-width:
+      var(--button-height);
+
+    padding:
+      0;
+
+    aspect-ratio: 1;
+  }
+
+
+  /* ==========================================================
+     CONTENT
+  ========================================================== */
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+  }
+
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width:
+      var(--button-icon-size);
+
+    height:
+      var(--button-icon-size);
+
+    flex: 0 0 auto;
+
+    line-height: 1;
+
+    iconify-icon {
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      font-size: inherit;
+    }
+  }
+
+
+  /* ==========================================================
+     LOADING
+  ========================================================== */
+
+  &--loading {
+    pointer-events: none;
+  }
+
+
+  &__spinner {
+    width:
+      var(--button-icon-size);
+
+    height:
+      var(--button-icon-size);
+
+    flex: 0 0 auto;
+
+    border:
+      var(--border-medium)
+      var(--border-solid)
+      currentColor;
+
+    border-right-color:
+      transparent;
+
+    border-radius:
+      var(--radius-circle);
+
+    animation:
+      app-button-spin 650ms linear infinite;
+  }
+
+
+  &__loading-text {
+    display: inline-flex;
+    align-items: center;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+  }
+
+
+  &__loading-text--hidden {
+    visibility: hidden;
+  }
+}
+
+
+/* ============================================================
+   LOADING ANIMATION
+============================================================ */
+
+@keyframes app-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .app-button {
+    transition: none;
+
+    &:active:not(:disabled) {
+      transform: none;
+    }
+  }
+
+
+  .app-button__spinner {
+    animation-duration: 1.5s;
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@include respond(phone-lg) {
+
+  .app-button {
+
+    &--large {
+      --button-height: 4.8rem;
+
+      font-size: 1.4rem;
+    }
+  }
+}
+
+
+@include respond(phone) {
+
+  .app-button {
+
+    &--full-width {
+      width: 100%;
+    }
+  }
+}

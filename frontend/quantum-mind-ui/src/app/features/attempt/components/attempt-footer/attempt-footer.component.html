@@ -1,21 +1,12 @@
 <footer class="attempt-footer">
 
-  <button
-    type="button"
-    class="attempt-footer__previous"
+  <app-button
+    label="Previous"
+    icon="lucide:arrow-left"
+    variant="secondary"
     [disabled]="!hasPrevious()"
-    (click)="previousQuestion()"
-  >
-    <iconify-icon
-      icon="lucide:arrow-left"
-      aria-hidden="true"
-    ></iconify-icon>
-
-    <span>
-      Previous
-    </span>
-  </button>
-
+    (clicked)="previousQuestion()"
+  />
 
   <div
     class="attempt-footer__progress"
@@ -35,7 +26,7 @@
   </div>
 
 
-  <button
+  <!-- <button
     type="button"
     class="attempt-footer__continue"
     [disabled]="!selectedAnswerId()"
@@ -53,6 +44,15 @@
       "
       aria-hidden="true"
     ></iconify-icon>
-  </button>
+  </button> -->
 
+
+  <app-button
+    [label]="hasNext() ? 'Continue' : 'Finish'"
+    [iconAfter]="hasNext() ? 'lucide:arrow-right' : 'lucide:check'"
+    variant="primary"
+    size="medium"
+    [disabled]="!selectedAnswerId()"
+    (clicked)="submitAnswer()"
+  />
 </footer>
