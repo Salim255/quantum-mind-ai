@@ -81,14 +81,24 @@ class AttemptImplService(AttemptService):
             # 1. LOAD ATTEMPT
             # ========================================================
 
-            attempt = await self.attempt_repository.get_by_id(
-                attempt_id
+
+            attempt = await self.attempt_repository.get_by_id_with_topic(
+                attempt.id
             )
 
             if not attempt:
                 raise ValueError(
                     f"Attempt {attempt_id} not found"
                 )
+
+
+            # ========================================================
+            # 5. PERSIST RESET ATTEMPT
+            # ========================================================
+
+            await self.attempt_repository.reset_attempt(
+                attempt
+            )
 
 
             # ========================================================

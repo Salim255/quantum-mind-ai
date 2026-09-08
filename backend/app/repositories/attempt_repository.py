@@ -18,7 +18,47 @@ class AttemptRepository(BaseRepository[Attempt]):
         super().__init__(session, Attempt)
 
 
-    
+    # =================
+    # RESET ATTEMPT
+    # ================
+
+    async def reset_attempt(
+        self,
+        attempt_id: UUID,
+    ) -> Attempt:
+        """
+        Reset an existing learning attempt.
+
+        The existing attempt is preserved. Only its result state
+        is reset so it can be used for a new attempt session.
+
+        The following fields are reset:
+
+        - score
+        - correct_answers
+        - is_completed
+
+        The attempt ID, user ID, topic ID, and total question count
+        remain unchanged.
+
+        Args:
+            attempt_id:
+                Identifier of the attempt to reset.
+
+        Returns:
+            The reset attempt.
+        """
+
+        attempt = await self.get_by_id(attempt_id)
+
+        attempt.score = 0.0
+        attempt.correct_answers = 0
+        attempt.is_completed = False
+
+        await self.update(attempt)
+
+        return attempt
+
     # ============================================================
     # ADD ATTEMPT
     # ============================================================
@@ -81,10 +121,7 @@ class AttemptRepository(BaseRepository[Attempt]):
 
         result = result.scalar_one_or_none()
         
-        if result:
-            print("Attempt ID:✅✅", result.id)
-            print("Topic ID: 💥💥", result.topic_id)
-            print("Loaded topic: 🛑🛑", result.topic)
+    
         return result
     
     # ============================================================
