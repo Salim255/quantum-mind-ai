@@ -8,6 +8,7 @@ import { AnswerItemComponent } from "./components/answer-item/answer-item.compon
 import { AttemptFooterComponent } from "./components/attempt-footer/attempt-footer.component";
 import { AttemptResultComponent } from "./components/attempt-result/attempt-result.component";
 import { SharedModule } from "../../shared/shared.module";
+import { AttemptResultHeaderComponent } from "./components/attempt-result-header/attempt-result-header.component";
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { SharedModule } from "../../shared/shared.module";
     AttemptRoutingModule,
   ],
   declarations: [
+    AttemptResultHeaderComponent,
     AttemptResultComponent,
     AttemptFooterComponent,
     AnswerItemComponent,

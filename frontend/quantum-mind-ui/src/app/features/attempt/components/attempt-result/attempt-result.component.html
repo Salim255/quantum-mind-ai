@@ -2,6 +2,30 @@
   class="attempt-result"
   aria-labelledby="attempt-result-title"
 >
+  <app-attempt-result-header
+    [topicTitle]="topic().title"
+  />
+
+  <app-attempt-result-score
+    [score]="attempt()?.score ?? 0"
+  />
+
+  <app-attempt-result-stats
+    [correctAnswers]="attempt()?.correct_answers ?? 0"
+    [totalQuestions]="attempt()?.total_questions ?? 0"
+  />
+
+  <app-attempt-result-actions
+    (retake)="retakeQuiz()"
+    (explore)="backToExplore()"
+  />
+</section>
+
+
+<section
+  class="attempt-result"
+  aria-labelledby="attempt-result-title"
+>
 
   <!-- ============================================================
   HEADER
