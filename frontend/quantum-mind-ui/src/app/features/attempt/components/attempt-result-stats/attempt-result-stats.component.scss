@@ -1,0 +1,80 @@
+@use "../../../../../styles/mixins/queries" as *;
+
+.attempt-result-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 52rem;
+
+  padding: var(--space-5) var(--space-6);
+
+  border: var(--border-default);
+  border-color: var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+
+  background: var(--color-surface);
+
+  &__stat {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+
+    min-width: 0;
+  }
+
+  &__value {
+    color: var(--color-text-primary);
+
+    font-size: 2.2rem;
+    font-weight: 650;
+    line-height: 1.2;
+  }
+
+  &__label {
+    margin-top: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  &__separator {
+    width: var(--border-thin);
+    height: 3.6rem;
+
+    background: var(--color-border-subtle);
+  }
+
+  @include respond(phone-lg) {
+    padding: var(--space-4);
+
+    &__value {
+      font-size: 2rem;
+    }
+
+    &__label {
+      font-size: 1.2rem;
+    }
+  }
+
+  @include respond(phone) {
+    padding: var(--space-4) var(--space-3);
+
+    &__value {
+      font-size: 1.8rem;
+    }
+
+    &__label {
+      font-size: 1.1rem;
+    }
+
+    &__separator {
+      height: 3.2rem;
+    }
+  }
+}
