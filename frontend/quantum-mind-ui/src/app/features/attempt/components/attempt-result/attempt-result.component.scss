@@ -11,10 +11,20 @@
   align-items: center;
 
   width: 100%;
+  max-width: var(--content-width-sm);
 
-  padding:
-    var(--space-10)
-    var(--page-padding-lg);
+  margin: 0 auto;
+  padding: var(--space-10) var(--page-padding-lg);
 
-  gap: var(--section-gap-md);
+  gap: var(--space-8);
+
+  @include respond(tab-port) {
+    padding: var(--space-8) var(--page-padding-md);
+    gap: var(--space-7);
+  }
+
+  @include respond(phone-lg) {
+    padding: var(--space-7) var(--page-padding-sm);
+    gap: var(--space-6);
+  }
 }
