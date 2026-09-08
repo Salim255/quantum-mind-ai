@@ -42,10 +42,13 @@ export class AttemptService {
   retakeQuiz(
     topicId: string
   ): Observable<ApiResponseDTO<AttemptResponseDTO>>{
-    return this.createAttempt(topicId).pipe(
-      tap(() => {
+    return this.attemptHttpService.retake_attempt(topicId).pipe(
+      tap((response) => {
         // Notify the attempt page that a retake has started.
         this.retakeSubject.next(true);
+        this.setAttempt(
+            response.data.attempt as Attempt,
+          );
       })
     );
   }

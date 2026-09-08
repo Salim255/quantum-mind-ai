@@ -82,8 +82,8 @@ class AttemptImplService(AttemptService):
             # ========================================================
 
 
-            attempt = await self.attempt_repository.get_by_id_with_topic(
-                attempt.id
+            attempt = await self.attempt_repository.get_by_id(
+                attempt_id
             )
 
             if not attempt:
@@ -97,7 +97,7 @@ class AttemptImplService(AttemptService):
             # ========================================================
 
             await self.attempt_repository.reset_attempt(
-                attempt
+                attempt_id
             )
 
 
@@ -108,25 +108,6 @@ class AttemptImplService(AttemptService):
             questions = await self.question_service.get_random_questions_by_topic(
                 topic_id=attempt.topic_id,
                 limit=attempt.total_questions,
-            )
-
-
-
-            # ========================================================
-            # 4. RESET ATTEMPT RESULT
-            # ========================================================
-
-            attempt.score = 0.0
-            attempt.correct_answers = 0
-            attempt.is_completed = False
-
-
-            # ========================================================
-            # 5. PERSIST RESET ATTEMPT
-            # ========================================================
-
-            await self.attempt_repository.update(
-                attempt
             )
 
 

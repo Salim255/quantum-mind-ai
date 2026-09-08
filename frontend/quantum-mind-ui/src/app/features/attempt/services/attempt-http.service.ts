@@ -21,6 +21,19 @@ export class AttemptHttpService {
   constructor(private http: HttpClient) {}
 
 
+  retake_attempt(
+    attemptId: string,
+  ):Observable<ApiResponseDTO<AttemptResponseDTO>>  {
+      const url = `${this.baseUrl}/${attemptId}/retake`;
+
+      return this.http.patch<
+        ApiResponseDTO<AttemptResponseDTO>
+      >(
+        url,
+        {},
+      );
+  }
+
   finishAttempt(
       attemptId: string,
     ): Observable<ApiResponseDTO<AttemptResponseDTO>> {
