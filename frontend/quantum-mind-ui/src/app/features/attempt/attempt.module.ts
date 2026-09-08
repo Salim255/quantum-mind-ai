@@ -10,6 +10,7 @@ import { AttemptResultComponent } from "./components/attempt-result/attempt-resu
 import { SharedModule } from "../../shared/shared.module";
 import { AttemptResultHeaderComponent } from "./components/attempt-result-header/attempt-result-header.component";
 import { AttemptResultScoreComponent } from "./components/attempt-result-score/attempt-result-score.component";
+import { AttemptResultStatsComponent } from "./components/attempt-result-stats/attempt-result-stats.component";
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { AttemptResultScoreComponent } from "./components/attempt-result-score/a
     AttemptRoutingModule,
   ],
   declarations: [
+    AttemptResultStatsComponent,
     AttemptResultScoreComponent,
     AttemptResultHeaderComponent,
     AttemptResultComponent,
