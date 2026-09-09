@@ -1,35 +1,9 @@
 <footer class="attempt-footer">
-
   <app-button
-    label="Previous"
-    icon="lucide:arrow-left"
-    variant="secondary"
-    [disabled]="!hasPrevious()"
-    (clicked)="previousQuestion()"
-  />
-
-  <div
-    class="attempt-footer__progress"
-    aria-label="Assessment progress"
-  >
-    <span class="attempt-footer__progress-current">
-      {{ questionNumber() }}
-    </span>
-
-    <span class="attempt-footer__progress-separator">
-      /
-    </span>
-
-    <span class="attempt-footer__progress-total">
-      {{ totalQuestions() }}
-    </span>
-  </div>
-
-  <app-button
-    [label]="hasNext() ? 'Continue' : 'Finish'"
+    [label]="hasNext() ? 'Submit' : 'Finish'"
     [iconAfter]="hasNext() ? 'lucide:arrow-right' : 'lucide:check'"
     variant="primary"
-    size="medium"
+    [fullWidth]="true"
     [disabled]="!selectedAnswerId()"
     (clicked)="submitAnswer()"
   />

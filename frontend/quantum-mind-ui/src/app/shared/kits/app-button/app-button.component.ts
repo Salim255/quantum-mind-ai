@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  CUSTOM_ELEMENTS_SCHEMA,
   EventEmitter,
   Input,
   Output,
@@ -11,7 +10,8 @@ type ButtonVariant =
   | 'primary'
   | 'secondary'
   | 'ghost'
-  | 'danger';
+  | 'danger'
+  | 'full';
 
 type ButtonSize =
   | 'small'
