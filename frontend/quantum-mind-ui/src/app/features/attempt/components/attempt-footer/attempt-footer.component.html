@@ -25,28 +25,6 @@
     </span>
   </div>
 
-
-  <!-- <button
-    type="button"
-    class="attempt-footer__continue"
-    [disabled]="!selectedAnswerId()"
-    (click)="submitAnswer()"
-  >
-    <span>
-      {{ hasNext() ? 'Continue' : 'Finish' }}
-    </span>
-
-    <iconify-icon
-      [icon]="
-        hasNext()
-          ? 'lucide:arrow-right'
-          : 'lucide:check'
-      "
-      aria-hidden="true"
-    ></iconify-icon>
-  </button> -->
-
-
   <app-button
     [label]="hasNext() ? 'Continue' : 'Finish'"
     [iconAfter]="hasNext() ? 'lucide:arrow-right' : 'lucide:check'"
