@@ -1,181 +1,217 @@
 @use "../../../../../styles/mixins/queries" as *;
-
-
 .question {
-  // ============================================================
-  // Layout
-  // ============================================================
-
   width: 100%;
-  max-width: var(--content-lg);
-
+  max-width: var(--content-xl);
   margin: 0 auto;
 
-  padding:
-    var(--space-9)
-    var(--page-padding-lg)
-    var(--space-8);
-
+  padding: var(--space-6) var(--page-padding-lg);
 
   // ============================================================
-  // Question header
+  // LEARNING SURFACE
+  // ============================================================
+
+  &__content {
+    padding: var(--space-6) var(--space-7);
+
+    background: var(--color-gray-2);
+    border: var(--border-default);
+    border-color: var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+  }
+
+  // ============================================================
+  // QUESTION META
   // ============================================================
 
   &__header {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
 
+    gap: var(--space-3);
     margin-bottom: var(--space-6);
   }
 
-
-  // ============================================================
-  // Question index
-  // ============================================================
-
   &__index {
-    display: flex;
-    align-items: baseline;
+    display: inline-flex;
+    align-items: center;
+
     gap: var(--space-2);
+    flex-shrink: 0;
 
-    flex: 0 0 auto;
+    font-variant-numeric: tabular-nums;
   }
-
 
   &__index-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: var(--space-7);
+    min-height: var(--space-7);
+
+    padding: 0 var(--space-2);
+
     color: var(--color-primary);
+    background: var(--color-primary-soft);
 
-    font-family: var(--font-family-mono);
-    font-size: var(--text-sm);
-    font-weight: var(--font-semibold);
-    line-height: var(--leading-none);
-    letter-spacing: var(--tracking-wide);
+    border: var(--border-default);
+    border-color: var(--color-primary-border);
+    border-radius: var(--radius-md);
+
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
   }
-
 
   &__index-label {
     color: var(--color-text-muted);
 
-    font-size: var(--text-xs);
-    font-weight: var(--font-medium);
-    line-height: var(--leading-normal);
-    letter-spacing: var(--tracking-wider);
+    font-size: 1.1rem;
+    font-weight: 650;
+    line-height: 1;
+
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
-
-
-  // ============================================================
-  // Divider
-  // ============================================================
 
   &__rule {
     flex: 1;
 
-    height: 1px;
+    height: var(--border-thin);
 
     background: var(--color-border-subtle);
   }
 
-
   // ============================================================
-  // Question content
+  // QUESTION BODY
   // ============================================================
 
-  &__content {
-    width: 100%;
+  &__body {
+    max-width: var(--content-lg);
   }
-
-
-  // ============================================================
-  // Question title
-  // ============================================================
 
   &__title {
-    max-width: var(--content-lg);
-
     margin: 0;
 
-    color: var(--color-text-secondary);
+    color: var(--color-gray-8);
 
-    font-size: var(--text-2xl);
-    font-weight: var(--font-medium);
-    line-height: var(--leading-snug);
-    letter-spacing: var(--tracking-tight);
-
-    text-wrap: pretty;
+    font-size: 2.2rem;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
   }
 
-
-  // ============================================================
-  // Instruction
-  // ============================================================
-
   &__instruction {
-    margin:
-      var(--space-4)
-      0
-      0;
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-2);
+
+    margin: var(--space-5) 0 0;
 
     color: var(--color-text-muted);
 
-    font-size: var(--text-sm);
-    font-weight: var(--font-regular);
-    line-height: var(--leading-normal);
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.5;
+
+    &::before {
+      content: '';
+
+      width: var(--space-1);
+      height: var(--space-1);
+
+      flex-shrink: 0;
+
+      background: var(--color-primary);
+      border-radius: var(--radius-circle);
+    }
   }
 
-
   // ============================================================
-  // Tablet
+  // TABLET
   // ============================================================
 
   @include respond(tab-port) {
-    padding:
-      var(--space-8)
-      var(--page-padding-md)
-      var(--space-7);
+    padding: var(--space-5) var(--page-padding-md);
+
+    &__content {
+      padding: var(--space-5) var(--space-6);
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+  }
+
+  // ============================================================
+  // LARGE PHONE
+  // ============================================================
+
+  @include respond(phone-lg) {
+    padding: var(--space-5) var(--page-padding-sm);
+
+    &__content {
+      padding: var(--space-5);
+    }
 
     &__header {
       margin-bottom: var(--space-5);
     }
 
     &__title {
-      font-size: var(--text-xl);
-    }
-  }
-
-
-  // ============================================================
-  // Large phone
-  // ============================================================
-
-  @include respond(phone-lg) {
-    padding:
-      var(--space-7)
-      var(--page-padding-sm)
-      var(--space-6);
-
-    &__header {
-      gap: var(--space-4);
-    }
-
-    &__title {
-      font-size: var(--text-lg);
-      line-height: var(--leading-snug);
+      font-size: 1.8rem;
+      line-height: 1.5;
     }
 
     &__instruction {
-      margin-top: var(--space-3);
+      margin-top: var(--space-4);
     }
   }
 
-
   // ============================================================
-  // Phone
+  // PHONE
   // ============================================================
 
   @include respond(phone) {
-    padding-right: var(--page-padding-xs);
-    padding-left: var(--page-padding-xs);
+    padding: var(--space-4) var(--page-padding-xs);
+
+    &__content {
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+    }
+
+    &__header {
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+
+    &__index {
+      gap: var(--space-1);
+    }
+
+    &__index-value {
+      min-width: var(--space-6);
+      min-height: var(--space-6);
+
+      padding: 0 var(--space-1);
+
+      font-size: 1rem;
+    }
+
+    &__index-label {
+      font-size: 1rem;
+    }
+
+    &__title {
+      font-size: 1.7rem;
+      line-height: 1.5;
+    }
+
+    &__instruction {
+      margin-top: var(--space-4);
+      font-size: 1.1rem;
+    }
   }
 }
