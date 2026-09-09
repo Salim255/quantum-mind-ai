@@ -44,4 +44,8 @@ export class AttemptHeaderComponent {
 
     return (this.questionNumber() / total) * 100;
   };
+
+
+
+  exitAttempt(){}
 }

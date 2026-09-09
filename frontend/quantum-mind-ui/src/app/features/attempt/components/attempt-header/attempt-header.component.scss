@@ -1,78 +1,83 @@
 @use "../../../../../styles/mixins/queries" as *;
 .attempt-header {
   width: 100%;
-
-  background: var(--color-surface);
-  border-bottom: var(--border-default);
-  border-color: var(--color-border-subtle);
+  max-width: var(--content-2xl);
+  margin: var(--space-6) auto 0;
+  padding: 0 var(--page-padding-lg);
 
   &__main {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
+    gap: var(--space-7);
 
-    width: 100%;
-    max-width: var(--content-xl);
-    margin: 0 auto;
+    min-height: var(--space-13);
+    padding: var(--space-5) var(--space-6);
 
-    padding: var(--space-6) var(--page-padding-lg);
-
-    gap: var(--space-10);
+    background: var(--color-surface);
+    border: var(--border-default);
+    border-color: var(--color-border);
+    border-radius: var(--radius-2xl);
   }
 
-  // ============================================================
+
+  // --------------------------------------------------
+  // EXIT
+  // --------------------------------------------------
+
+  &__exit {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    padding-right: var(--space-6);
+
+    border-right: var(--border-default);
+    border-color: var(--color-border-subtle);
+  }
+
+
+  // --------------------------------------------------
   // IDENTITY
-  // ============================================================
+  // --------------------------------------------------
 
   &__identity {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-rows: auto auto;
-    column-gap: var(--space-4);
-    row-gap: var(--space-2);
+    grid-template-columns: auto minmax(0, auto) auto;
+    align-items: center;
+    gap: var(--space-4);
 
     min-width: 0;
   }
 
   &__eyebrow {
-    grid-row: 1 / 3;
-
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
 
-    position: relative;
-
-    padding-right: var(--space-4);
+    min-height: var(--space-7);
+    padding: 0 var(--space-3);
 
     color: var(--color-primary);
-    font-size: 1.2rem;
-    font-weight: 700;
+    background: var(--color-primary-soft);
+    border: var(--border-default);
+    border-color: var(--color-primary-border);
+    border-radius: var(--radius-md);
+
+    font-size: 1rem;
+    font-weight: 750;
     line-height: 1;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-
-    // Small vertical separator creates a strong editorial rhythm.
-    &::after {
-      content: '';
-
-      position: absolute;
-      top: 50%;
-      right: 0;
-
-      width: var(--border-thin);
-      height: 3.6rem;
-
-      background: var(--color-border-subtle);
-      transform: translateY(-50%);
-    }
+    white-space: nowrap;
   }
 
   &__title {
     min-width: 0;
     margin: 0;
 
-    color: var(--color-text-primary);
-    font-size: 3rem;
+    color: var(--color-ink);
+    font-size: 2.7rem;
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: -0.025em;
@@ -81,60 +86,78 @@
   }
 
   &__category {
-    display: block;
+    display: inline-flex;
+    align-items: center;
 
-    color: var(--color-text-muted);
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.3;
+    min-height: var(--space-6);
+    padding-left: var(--space-4);
+
+    color: var(--color-text-secondary);
+
+    border-left: var(--border-default);
+    border-color: var(--color-border);
+
+    font-size: 1.15rem;
+    font-weight: 550;
+    line-height: 1.4;
+    white-space: nowrap;
   }
 
-  // ============================================================
+
+  // --------------------------------------------------
   // PROGRESS
-  // ============================================================
+  // --------------------------------------------------
 
   &__progress {
-    display: grid;
-    grid-template-columns: auto 16rem;
+    display: flex;
     align-items: center;
-    gap: var(--space-4);
+    gap: var(--space-5);
 
     flex-shrink: 0;
+
+    min-width: 24rem;
+    padding-left: var(--space-7);
+
+    border-left: var(--border-default);
+    border-color: var(--color-border);
   }
 
   &__progress-count {
     display: flex;
     align-items: baseline;
+    flex-shrink: 0;
 
-    white-space: nowrap;
+    min-width: var(--space-10);
+
     font-variant-numeric: tabular-nums;
-    line-height: 1;
+    white-space: nowrap;
   }
 
   &__progress-current {
-    color: var(--color-text-primary);
-    font-size: 2.4rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    font-size: 2.5rem;
+    font-weight: 750;
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
   &__progress-total {
     margin-left: var(--space-1);
 
     color: var(--color-text-muted);
-    font-size: 1.4rem;
-    font-weight: 500;
+    font-size: 1.2rem;
+    font-weight: 550;
+    line-height: 1;
   }
 
   &__progress-track {
-    position: relative;
+    flex: 1;
 
-    width: 16rem;
     height: var(--space-2);
 
     overflow: hidden;
 
-    background: var(--color-surface-muted);
+    background: var(--color-gray-4);
     border-radius: var(--radius-pill);
   }
 
@@ -145,89 +168,88 @@
     height: 100%;
 
     background: var(--color-primary);
-    border-radius: inherit;
+    border-radius: var(--radius-pill);
 
     transition: width 240ms ease;
   }
 
-  // ============================================================
-  // RESPONSIVE
-  // ============================================================
 
-  @include respond(tab-land) {
+  // --------------------------------------------------
+  // DESKTOP
+  // --------------------------------------------------
+
+  @include respond(desktop) {
     &__main {
-      gap: var(--space-7);
+      gap: var(--space-6);
     }
 
-    &__progress {
-      grid-template-columns: auto 12rem;
+    &__exit {
+      padding-right: var(--space-5);
+    }
+
+    &__identity {
       gap: var(--space-3);
     }
 
-    &__progress-track {
-      width: 12rem;
-    }
-  }
-
-  @include respond(tab-port) {
-    &__main {
-      grid-template-columns: 1fr;
-      gap: var(--space-5);
-
-      padding: var(--space-5) var(--page-padding-md);
+    &__title {
+      font-size: 2.5rem;
     }
 
     &__progress {
-      grid-template-columns: auto 1fr;
-      width: 100%;
-    }
-
-    &__progress-track {
-      width: 100%;
+      min-width: 22rem;
+      padding-left: var(--space-6);
     }
   }
 
-  @include respond(phone-lg) {
+
+  // --------------------------------------------------
+  // TABLET LANDSCAPE
+  // --------------------------------------------------
+
+  @include respond(tab-land) {
+    padding: 0 var(--page-padding-md);
+
     &__main {
-      padding: var(--space-5) var(--page-padding-sm);
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-5);
     }
 
     &__identity {
-      column-gap: var(--space-3);
-    }
-
-    &__eyebrow {
-      padding-right: var(--space-3);
-      font-size: 1.1rem;
-    }
-
-    &__title {
-      font-size: 2.4rem;
+      grid-template-columns: auto minmax(0, 1fr);
     }
 
     &__category {
-      font-size: 1.2rem;
+      display: none;
+    }
+
+    &__progress {
+      grid-column: 2;
+      grid-row: 2;
+
+      min-width: 0;
+      padding-left: 0;
+
+      border-left: 0;
     }
   }
 
-  @include respond(phone) {
+
+  // --------------------------------------------------
+  // TABLET PORTRAIT
+  // --------------------------------------------------
+
+  @include respond(tab-port) {
+    margin-top: var(--space-5);
+
     &__main {
-      padding: var(--space-4) var(--page-padding-xs);
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-4);
+
+      padding: var(--space-5);
     }
 
-    &__identity {
-      grid-template-columns: 1fr;
-      row-gap: var(--space-2);
-    }
-
-    &__eyebrow {
-      grid-row: auto;
-
-      padding: 0;
-
-      &::after {
-        display: none;
-      }
+    &__exit {
+      padding-right: var(--space-4);
     }
 
     &__title {
@@ -235,7 +257,68 @@
     }
 
     &__progress {
-      grid-template-columns: auto 1fr;
+      grid-column: 1 / -1;
+      grid-row: 2;
+
+      gap: var(--space-4);
+    }
+
+    &__progress-track {
+      width: auto;
+    }
+  }
+
+
+  // --------------------------------------------------
+  // LARGE PHONE
+  // --------------------------------------------------
+
+  @include respond(phone-lg) {
+    margin-top: var(--space-4);
+    padding: 0 var(--page-padding-sm);
+
+    &__main {
+      grid-template-columns: 1fr auto;
+      gap: var(--space-4);
+
+      padding: var(--space-4);
+    }
+
+    &__exit {
+      padding-right: 0;
+      border-right: 0;
+    }
+
+    &__identity {
+      grid-column: 1 / -1;
+      grid-row: 2;
+
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    &__eyebrow {
+      min-height: var(--space-6);
+      padding: 0 var(--space-2);
+      font-size: 0.95rem;
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+
+    &__progress {
+      grid-column: 2;
+      grid-row: 1;
+
+      min-width: auto;
+      padding-left: 0;
+
+      border-left: 0;
+    }
+
+    &__progress-track {
+      display: none;
     }
 
     &__progress-current {
@@ -243,9 +326,40 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    &__progress-fill {
-      transition: none;
+
+  // --------------------------------------------------
+  // PHONE
+  // --------------------------------------------------
+
+  @include respond(phone) {
+    padding: 0 var(--page-padding-xs);
+
+    &__main {
+      gap: var(--space-3);
+      padding: var(--space-4);
+      border-radius: var(--radius-xl);
+    }
+
+    &__identity {
+      gap: var(--space-2);
+    }
+
+    &__eyebrow {
+      min-height: var(--space-5);
+      padding: 0 var(--space-2);
+      font-size: 0.9rem;
+    }
+
+    &__title {
+      font-size: 1.8rem;
+    }
+
+    &__progress-current {
+      font-size: 1.8rem;
+    }
+
+    &__progress-total {
+      font-size: 1.05rem;
     }
   }
 }

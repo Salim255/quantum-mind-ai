@@ -1,6 +1,20 @@
 <header class="attempt-header">
   <div class="attempt-header__main">
 
+    <!-- Exit -->
+    <div class="attempt-header__exit">
+      <app-button
+        label="Exit quiz"
+        icon="lucide:arrow-left"
+        variant="ghost"
+        size="medium"
+        ariaLabel="Exit current quiz"
+        (clicked)="exitAttempt()"
+      />
+    </div>
+
+
+    <!-- Quiz identity -->
     <div class="attempt-header__identity">
 
       <span class="attempt-header__eyebrow">
@@ -18,6 +32,7 @@
     </div>
 
 
+    <!-- Progress -->
     <div class="attempt-header__progress">
 
       <div class="attempt-header__progress-count">
