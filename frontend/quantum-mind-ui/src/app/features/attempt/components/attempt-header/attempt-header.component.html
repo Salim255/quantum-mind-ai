@@ -1,5 +1,4 @@
 <header class="attempt-header">
-
   <div class="attempt-header__main">
 
     <div class="attempt-header__identity">
@@ -12,45 +11,24 @@
         {{ topic().title }}
       </h1>
 
-      <div class="attempt-header__meta">
-
-        <span class="attempt-header__category">
-          {{ topic().category }}
-        </span>
-
-        <span class="attempt-header__meta-separator"></span>
-
-        <span class="attempt-header__assessment">
-          Knowledge assessment
-        </span>
-
-      </div>
+      <span class="attempt-header__category">
+        {{ topic().category }}
+      </span>
 
     </div>
 
 
     <div class="attempt-header__progress">
 
-      <div class="attempt-header__progress-top">
-
-        <span class="attempt-header__progress-label">
-          Your progress
+      <div class="attempt-header__progress-count">
+        <span class="attempt-header__progress-current">
+          {{ questionNumber() }}
         </span>
 
-        <div class="attempt-header__progress-count">
-
-          <span class="attempt-header__progress-current">
-            {{ questionNumber() }}
-          </span>
-
-          <span class="attempt-header__progress-total">
-            / {{ totalQuestions() }}
-          </span>
-
-        </div>
-
+        <span class="attempt-header__progress-total">
+          / {{ totalQuestions() }}
+        </span>
       </div>
-
 
       <div
         class="attempt-header__progress-track"
@@ -62,21 +40,13 @@
           'Question ' + questionNumber() + ' of ' + totalQuestions()
         "
       >
-
         <span
           class="attempt-header__progress-fill"
           [style.width.%]="progressPercentage()"
         ></span>
-
       </div>
-
-
-      <span class="attempt-header__progress-caption">
-        Question {{ questionNumber() }} of {{ totalQuestions() }}
-      </span>
 
     </div>
 
   </div>
-
 </header>
