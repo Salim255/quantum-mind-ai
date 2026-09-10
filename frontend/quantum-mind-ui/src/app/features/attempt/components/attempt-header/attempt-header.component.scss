@@ -1,167 +1,226 @@
 @use "../../../../../styles/mixins/queries" as *;
+
 .attempt-header {
+  position: relative;
+
   width: 100%;
-  max-width: var(--content-2xl);
-  margin: var(--space-6) auto 0;
-  padding: 0 var(--page-padding-lg);
 
-  &__main {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-7);
+  background: var(--color-surface);
+  border-bottom: var(--border-default);
+  border-color: var(--color-border-subtle);
 
-    min-height: var(--space-13);
-    padding: var(--space-5) var(--space-6);
+  // Thin active-assessment indicator.
+  &::after {
+    content: '';
 
-    background: var(--color-surface);
-    border: var(--border-default);
-    border-color: var(--color-border);
-    border-radius: var(--radius-2xl);
+    position: absolute;
+    right: 0;
+    bottom: calc(var(--border-thin) * -1);
+    left: 0;
+
+    height: var(--space-1);
+
+    background: var(--color-gray-3);
   }
 
+  &__inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(24rem, 32rem);
 
-  // --------------------------------------------------
+    align-items: stretch;
+
+    width: 100%;
+    max-width: var(--content-2xl);
+
+    min-height: var(--space-11);
+
+    margin: 0 auto;
+    padding: 0 var(--page-padding-lg);
+  }
+
+  // ============================================================
   // EXIT
-  // --------------------------------------------------
+  // ============================================================
 
   &__exit {
     display: flex;
     align-items: center;
-    flex-shrink: 0;
 
-    padding-right: var(--space-6);
+    padding-right: var(--space-5);
 
     border-right: var(--border-default);
     border-color: var(--color-border-subtle);
+
+    app-button {
+      --button-padding-x: var(--space-3);
+    }
   }
 
-
-  // --------------------------------------------------
+  // ============================================================
   // IDENTITY
-  // --------------------------------------------------
+  // ============================================================
 
   &__identity {
-    display: grid;
-    grid-template-columns: auto minmax(0, auto) auto;
-    align-items: center;
-    gap: var(--space-4);
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     min-width: 0;
+
+    padding: var(--space-3) var(--space-6);
   }
 
   &__eyebrow {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: center;
 
-    min-height: var(--space-7);
-    padding: 0 var(--space-3);
+    min-width: 0;
 
-    color: var(--color-primary);
-    background: var(--color-primary-soft);
-    border: var(--border-default);
-    border-color: var(--color-primary-border);
-    border-radius: var(--radius-md);
+    gap: var(--space-2);
 
-    font-size: 1rem;
-    font-weight: 750;
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.95rem;
+    font-weight: 600;
     line-height: 1;
-    letter-spacing: 0.07em;
+
+    letter-spacing: 0.045em;
+
     text-transform: uppercase;
-    white-space: nowrap;
+  }
+
+  &__status {
+    width: var(--space-2);
+    height: var(--space-2);
+
+    flex-shrink: 0;
+
+    background: var(--color-primary);
+    border-radius: var(--radius-circle);
+  }
+
+  &__dot {
+    width: var(--space-1);
+    height: var(--space-1);
+
+    flex-shrink: 0;
+
+    background: var(--color-border-strong);
+    border-radius: var(--radius-circle);
   }
 
   &__title {
     min-width: 0;
+
     margin: 0;
-
-    color: var(--color-ink);
-    font-size: 2.7rem;
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.025em;
-
-    overflow-wrap: anywhere;
-  }
-
-  &__category {
-    display: inline-flex;
-    align-items: center;
-
-    min-height: var(--space-6);
-    padding-left: var(--space-4);
-
-    color: var(--color-text-secondary);
-
-    border-left: var(--border-default);
-    border-color: var(--color-border);
-
-    font-size: 1.15rem;
-    font-weight: 550;
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-
-  // --------------------------------------------------
-  // PROGRESS
-  // --------------------------------------------------
-
-  &__progress {
-    display: flex;
-    align-items: center;
-    gap: var(--space-5);
-
-    flex-shrink: 0;
-
-    min-width: 24rem;
-    padding-left: var(--space-7);
-
-    border-left: var(--border-default);
-    border-color: var(--color-border);
-  }
-
-  &__progress-count {
-    display: flex;
-    align-items: baseline;
-    flex-shrink: 0;
-
-    min-width: var(--space-10);
-
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  &__progress-current {
-    color: var(--color-ink);
-    font-size: 2.5rem;
-    font-weight: 750;
-    line-height: 1;
-    letter-spacing: -0.03em;
-  }
-
-  &__progress-total {
-    margin-left: var(--space-1);
-
-    color: var(--color-text-muted);
-    font-size: 1.2rem;
-    font-weight: 550;
-    line-height: 1;
-  }
-
-  &__progress-track {
-    flex: 1;
-
-    height: var(--space-2);
 
     overflow: hidden;
 
-    background: var(--color-gray-4);
+    color: var(--color-ink);
+
+    font-size: 1.9rem;
+    font-weight: 650;
+    line-height: 1.15;
+
+    letter-spacing: -0.03em;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // ============================================================
+  // PROGRESS
+  // ============================================================
+
+  &__progress {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 0;
+
+    padding: var(--space-3) 0 var(--space-3) var(--space-6);
+
+    border-left: var(--border-default);
+    border-color: var(--color-border-subtle);
+  }
+
+  &__progress-info {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: var(--space-4);
+
+    margin-bottom: var(--space-2);
+  }
+
+  &__progress-label {
+    color: var(--color-text-muted);
+
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1;
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__count {
+    display: inline-flex;
+    align-items: baseline;
+
+    gap: var(--space-1);
+
+    font-variant-numeric: tabular-nums;
+
+    strong {
+      color: var(--color-ink);
+
+      font-size: 1.55rem;
+      font-weight: 750;
+      line-height: 1;
+
+      letter-spacing: -0.035em;
+    }
+
+    span {
+      color: var(--color-text-disabled);
+
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    em {
+      color: var(--color-text-muted);
+
+      font-size: 1rem;
+      font-style: normal;
+      font-weight: 550;
+    }
+  }
+
+  // ============================================================
+  // PROGRESS LINE
+  // ============================================================
+
+  &__track {
+    position: relative;
+
+    width: 100%;
+    height: var(--space-1);
+
+    background: var(--color-gray-3);
     border-radius: var(--radius-pill);
   }
 
-  &__progress-fill {
+  &__fill {
+    position: relative;
+
     display: block;
 
     width: 0;
@@ -170,196 +229,221 @@
     background: var(--color-primary);
     border-radius: var(--radius-pill);
 
-    transition: width 240ms ease;
+    transition:
+      width 350ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  &__fill::after {
+    content: '';
 
-  // --------------------------------------------------
+    position: absolute;
+    top: 50%;
+    right: 0;
+
+    width: var(--space-2);
+    height: var(--space-2);
+
+    background: var(--color-primary);
+
+    border: var(--border-medium) solid var(--color-surface);
+    border-radius: var(--radius-circle);
+
+    transform: translate(50%, -50%);
+  }
+
+  // ============================================================
   // DESKTOP
-  // --------------------------------------------------
+  // ============================================================
 
   @include respond(desktop) {
-    &__main {
-      gap: var(--space-6);
-    }
+    &__inner {
+      grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        minmax(22rem, 29rem);
 
-    &__exit {
-      padding-right: var(--space-5);
+      padding: 0 var(--page-padding-md);
     }
 
     &__identity {
-      gap: var(--space-3);
+      padding-right: var(--space-5);
+      padding-left: var(--space-5);
+    }
+
+    &__progress {
+      padding-left: var(--space-5);
     }
 
     &__title {
-      font-size: 2.5rem;
-    }
-
-    &__progress {
-      min-width: 22rem;
-      padding-left: var(--space-6);
+      font-size: 1.8rem;
     }
   }
 
-
-  // --------------------------------------------------
-  // TABLET LANDSCAPE
-  // --------------------------------------------------
+  // ============================================================
+  // TABLET
+  // ============================================================
 
   @include respond(tab-land) {
-    padding: 0 var(--page-padding-md);
-
-    &__main {
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: var(--space-5);
-    }
-
-    &__identity {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
-
-    &__category {
-      display: none;
-    }
-
-    &__progress {
-      grid-column: 2;
-      grid-row: 2;
-
-      min-width: 0;
-      padding-left: 0;
-
-      border-left: 0;
-    }
-  }
-
-
-  // --------------------------------------------------
-  // TABLET PORTRAIT
-  // --------------------------------------------------
-
-  @include respond(tab-port) {
-    margin-top: var(--space-5);
-
-    &__main {
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: var(--space-4);
-
-      padding: var(--space-5);
+    &__inner {
+      grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        minmax(20rem, 25rem);
     }
 
     &__exit {
       padding-right: var(--space-4);
     }
 
-    &__title {
-      font-size: 2.2rem;
+    &__identity {
+      padding-right: var(--space-4);
+      padding-left: var(--space-4);
     }
 
     &__progress {
-      grid-column: 1 / -1;
-      grid-row: 2;
-
-      gap: var(--space-4);
+      padding-left: var(--space-4);
     }
 
-    &__progress-track {
-      width: auto;
+    &__title {
+      font-size: 1.65rem;
     }
   }
 
+  // ============================================================
+  // TABLET PORTRAIT
+  // ============================================================
 
-  // --------------------------------------------------
-  // LARGE PHONE
-  // --------------------------------------------------
+  @include respond(tab-port) {
+    &__inner {
+      grid-template-columns: auto minmax(0, 1fr);
 
-  @include respond(phone-lg) {
-    margin-top: var(--space-4);
-    padding: 0 var(--page-padding-sm);
-
-    &__main {
-      grid-template-columns: 1fr auto;
-      gap: var(--space-4);
-
-      padding: var(--space-4);
+      min-height: var(--space-10);
     }
 
     &__exit {
-      padding-right: 0;
-      border-right: 0;
+      padding-right: var(--space-3);
     }
 
     &__identity {
-      grid-column: 1 / -1;
-      grid-row: 2;
-
-      display: flex;
-      gap: var(--space-3);
-    }
-
-    &__eyebrow {
-      min-height: var(--space-6);
-      padding: 0 var(--space-2);
-      font-size: 0.95rem;
-    }
-
-    &__title {
-      font-size: 2rem;
+      padding: var(--space-3) var(--space-4);
     }
 
     &__progress {
-      grid-column: 2;
-      grid-row: 1;
+      grid-column: 1 / -1;
 
-      min-width: auto;
-      padding-left: 0;
+      padding:
+        var(--space-3)
+        0
+        var(--space-3);
 
+      border-top: var(--border-default);
       border-left: 0;
+      border-color: var(--color-border-subtle);
     }
 
-    &__progress-track {
-      display: none;
+    &__progress-info {
+      padding: 0 var(--space-4);
     }
 
-    &__progress-current {
-      font-size: 2rem;
-    }
-  }
-
-
-  // --------------------------------------------------
-  // PHONE
-  // --------------------------------------------------
-
-  @include respond(phone) {
-    padding: 0 var(--page-padding-xs);
-
-    &__main {
-      gap: var(--space-3);
-      padding: var(--space-4);
-      border-radius: var(--radius-xl);
-    }
-
-    &__identity {
-      gap: var(--space-2);
-    }
-
-    &__eyebrow {
-      min-height: var(--space-5);
-      padding: 0 var(--space-2);
-      font-size: 0.9rem;
+    &__track {
+      height: var(--space-1);
     }
 
     &__title {
-      font-size: 1.8rem;
+      font-size: 1.55rem;
+    }
+  }
+
+  // ============================================================
+  // PHONE
+  // ============================================================
+
+  @include respond(phone-lg) {
+    &__inner {
+      padding: 0 var(--page-padding-sm);
     }
 
-    &__progress-current {
-      font-size: 1.8rem;
+    &__eyebrow {
+      font-size: 0.82rem;
     }
 
-    &__progress-total {
-      font-size: 1.05rem;
+    &__title {
+      font-size: 1.4rem;
     }
+
+    &__progress-info {
+      padding: 0;
+    }
+
+    &__progress {
+      padding-top: var(--space-3);
+      padding-bottom: var(--space-3);
+    }
+
+    &__count {
+      strong {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  @include respond(phone) {
+    &__inner {
+      padding: 0 var(--page-padding-xs);
+    }
+
+    &__exit {
+      padding-right: var(--space-2);
+
+      app-button {
+        --button-padding-x: var(--space-2);
+      }
+    }
+
+    &__identity {
+      padding-right: var(--space-3);
+      padding-left: var(--space-3);
+    }
+
+    &__eyebrow {
+      gap: var(--space-1);
+
+      font-size: 0.75rem;
+      letter-spacing: 0.035em;
+    }
+
+    &__status {
+      width: var(--space-1);
+      height: var(--space-1);
+    }
+
+    &__title {
+      font-size: 1.3rem;
+    }
+
+    &__progress-info {
+      gap: var(--space-2);
+    }
+
+    &__progress-label {
+      font-size: 0.8rem;
+    }
+
+    &__count {
+      strong {
+        font-size: 1.3rem;
+      }
+
+      span,
+      em {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .attempt-header__fill {
+    transition: none;
   }
 }

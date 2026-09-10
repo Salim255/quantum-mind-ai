@@ -1,52 +1,50 @@
 <header class="attempt-header">
-  <div class="attempt-header__main">
+  <div class="attempt-header__inner">
 
-    <!-- Exit -->
     <div class="attempt-header__exit">
       <app-button
-        label="Exit quiz"
+        label="Exit"
         icon="lucide:arrow-left"
         variant="ghost"
-        size="medium"
+        size="small"
         ariaLabel="Exit current quiz"
         (clicked)="exitAttempt()"
       />
     </div>
 
-
-    <!-- Quiz identity -->
     <div class="attempt-header__identity">
-
-      <span class="attempt-header__eyebrow">
-        Quiz
-      </span>
+      <div class="attempt-header__eyebrow">
+        <span class="attempt-header__status"></span>
+        <span>Assessment</span>
+        <span class="attempt-header__dot"></span>
+        <span>{{ topic().category }}</span>
+      </div>
 
       <h1 class="attempt-header__title">
         {{ topic().title }}
       </h1>
-
-      <span class="attempt-header__category">
-        {{ topic().category }}
-      </span>
-
     </div>
 
-
-    <!-- Progress -->
     <div class="attempt-header__progress">
 
-      <div class="attempt-header__progress-count">
-        <span class="attempt-header__progress-current">
-          {{ questionNumber() }}
+      <div class="attempt-header__progress-info">
+        <span class="attempt-header__progress-label">
+          Progress
         </span>
 
-        <span class="attempt-header__progress-total">
-          / {{ totalQuestions() }}
+        <span class="attempt-header__count">
+          <strong>
+            {{ questionNumber() | number:'2.0' }}
+          </strong>
+          <span>/</span>
+          <em>
+            {{ totalQuestions() | number:'2.0' }}
+          </em>
         </span>
       </div>
 
       <div
-        class="attempt-header__progress-track"
+        class="attempt-header__track"
         role="progressbar"
         [attr.aria-valuenow]="questionNumber()"
         [attr.aria-valuemin]="1"
@@ -56,7 +54,7 @@
         "
       >
         <span
-          class="attempt-header__progress-fill"
+          class="attempt-header__fill"
           [style.width.%]="progressPercentage()"
         ></span>
       </div>
