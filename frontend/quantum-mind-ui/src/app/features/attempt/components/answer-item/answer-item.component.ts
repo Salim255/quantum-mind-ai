@@ -1,14 +1,10 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   input,
-  OnDestroy,
-  OnInit,
   output,
 } from '@angular/core';
 import { AttemptAnswer } from '../../interfaces/attempt.interface';
-import { AttemptService } from '../../services/attempt.service';
-import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-answer-item',
