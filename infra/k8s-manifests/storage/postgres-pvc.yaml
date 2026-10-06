@@ -1,0 +1,52 @@
+  # ----------------------------------------------------------------------------
+  # Persistent storage
+  # ----------------------------------------------------------------------------
+  #
+  # PostgreSQL stores persistent application data.
+  #
+  # The storage name is intentionally application-specific:
+  #
+  #   quantummind-postgres-data
+  #
+  # This prevents confusion with storage belonging to other applications
+  # that will run in the same K3s cluster/VPS.
+  #
+  # For example, another application could later have:
+  #
+  #   housori-postgres-data
+  #   zentrabank-postgres-data
+  #   portfolio-postgres-data
+  #
+  # Each application's storage remains clearly identifiable.
+  #
+  # volumeClaimTemplates allows the StatefulSet to automatically create the
+  # PersistentVolumeClaim associated with the PostgreSQL Pod.
+  #
+  # ----------------------------------------------------------------------------
+  volumeClaimTemplates:
+
+    - metadata:
+
+        # Application-specific PVC name.
+        #
+        # "quantummind" identifies the application.
+        # "postgres" identifies the component.
+        # "data" identifies the purpose.
+        name: postgres-data
+
+      spec:
+
+        # PostgreSQL uses one persistent volume that can be mounted
+        # for read/write access by the PostgreSQL Pod.
+        accessModes:
+          - ReadWriteOnce
+
+        # K3s local storage provisioner.
+        #
+        # The actual PostgreSQL data is stored on the VPS filesystem.
+        storageClassName: local-path
+
+        # Initial persistent storage requested for PostgreSQL.
+        resources:
+          requests:
+            storage: 10Gi

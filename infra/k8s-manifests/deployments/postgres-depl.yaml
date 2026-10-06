@@ -15,9 +15,11 @@
 #       │
 #       └── PostgreSQL Pod
 #              │
-#              └── Persistent Volume
+#              └── Persistent Volume Claim
 #                    │
-#                    └── PostgreSQL data
+#                    └── Persistent Volume
+#                          │
+#                          └── PostgreSQL data
 #
 # If the PostgreSQL Pod is recreated, Kubernetes reconnects it to its
 # persistent storage.
@@ -46,12 +48,14 @@ kind: StatefulSet
 metadata:
 
   # Name of our PostgreSQL StatefulSet.
+  #
+  # This identifies the PostgreSQL workload belonging to QuantumMind.
   name: quantummind-postgres
 
   # PostgreSQL belongs to the QuantumMind namespace.
   namespace: quantummind
 
-  # Labels help identify this workload.
+  # Labels help Kubernetes and administrators identify this workload.
   labels:
     app: quantummind
     component: postgres
@@ -61,18 +65,26 @@ metadata:
 # -----------------------------------------------------------------------------
 spec:
 
-  # Number of PostgreSQL instances.
+  # ---------------------------------------------------------------------------
+  # Number of PostgreSQL instances
+  # ---------------------------------------------------------------------------
   #
-  # We intentionally start with ONE.
+  # We intentionally start with ONE PostgreSQL instance.
+  #
+  # PostgreSQL is stateful, so simply increasing this value would NOT create
+  # a proper PostgreSQL HA cluster.
   replicas: 1
 
   # ---------------------------------------------------------------------------
   # Service name
   # ---------------------------------------------------------------------------
   #
-  # This is the governing service name used by the StatefulSet.
+  # This is the governing Service name used by the StatefulSet.
   #
-  # We will create the corresponding Kubernetes Service separately.
+  # The corresponding Kubernetes Service is managed separately in:
+  #
+  #   services/postgres.yaml
+  #
   serviceName: quantummind-postgres
 
   # ---------------------------------------------------------------------------
@@ -80,6 +92,11 @@ spec:
   # ---------------------------------------------------------------------------
   #
   # The StatefulSet manages Pods matching these labels.
+  #
+  # These labels must match the labels defined in:
+  #
+  #   spec.template.metadata.labels
+  #
   selector:
     matchLabels:
       app: quantummind
@@ -88,11 +105,16 @@ spec:
   # ---------------------------------------------------------------------------
   # Pod template
   # ---------------------------------------------------------------------------
+  #
+  # This section defines the PostgreSQL Pod that the StatefulSet creates.
+  #
   template:
 
     metadata:
 
       # Labels applied to the PostgreSQL Pod.
+      #
+      # The Service uses these labels to find the PostgreSQL Pod.
       labels:
         app: quantummind
         component: postgres
@@ -132,6 +154,7 @@ spec:
           # The Kubernetes Service provides internal communication between
           # FastAPI and PostgreSQL.
           ports:
+
             - name: postgres
               containerPort: 5432
               protocol: TCP
@@ -140,7 +163,7 @@ spec:
           # PostgreSQL configuration from Kubernetes Secret
           # -------------------------------------------------------------------
           #
-          # PostgreSQL needs three important environment variables:
+          # PostgreSQL requires these environment variables:
           #
           #   POSTGRES_DB
           #   POSTGRES_USER
@@ -150,24 +173,33 @@ spec:
           #
           #   quantummind-database-secret
           #
-          # Keeping credentials outside this StatefulSet means we do not
-          # need to place the actual password in this workload manifest.
+          # Keeping credentials in a Secret means the actual password does
+          # not need to be stored in this StatefulSet manifest.
           #
-          # The Secret is injected into the PostgreSQL container as
-          # environment variables.
+          # Kubernetes injects the Secret values into the PostgreSQL
+          # container as environment variables.
           envFrom:
 
             - secretRef:
                 name: quantummind-database-secret
 
           # -------------------------------------------------------------------
-          # PostgreSQL storage
+          # PostgreSQL persistent storage
           # -------------------------------------------------------------------
           #
-          # PostgreSQL stores its database files here.
+          # PostgreSQL stores its database files under:
           #
-          # This directory is backed by the PersistentVolumeClaim created
-          # by the volumeClaimTemplates section below.
+          #   /var/lib/postgresql/data
+          #
+          # This directory is backed by the PersistentVolumeClaim created by
+          # the volumeClaimTemplates section below.
+          #
+          # IMPORTANT:
+          #
+          # The "name" here MUST match:
+          #
+          #   volumeClaimTemplates.metadata.name
+          #
           volumeMounts:
 
             - name: postgres-data
@@ -181,8 +213,15 @@ spec:
           #
           # These are conservative starting values.
           #
-          # We can tune them after measuring actual PostgreSQL usage.
+          # requests:
+          #   Minimum resources Kubernetes reserves for the container.
+          #
+          # limits:
+          #   Maximum resources the container is allowed to consume.
+          #
+          # We can tune these later after measuring actual PostgreSQL usage.
           resources:
+
             requests:
               cpu: "100m"
               memory: "256Mi"
@@ -195,42 +234,109 @@ spec:
   # Persistent storage
   # ----------------------------------------------------------------------------
   #
-  # StatefulSet automatically creates a PersistentVolumeClaim for the
-  # PostgreSQL Pod.
+  # PostgreSQL data must survive Pod restarts and Pod recreation.
   #
-  # With:
+  # A container's writable filesystem is not the correct place to keep
+  # production database data.
   #
-  #   replicas: 1
+  # StatefulSet's volumeClaimTemplates allows Kubernetes to automatically
+  # create a PersistentVolumeClaim for the PostgreSQL Pod.
   #
-  # Kubernetes creates one PVC for the PostgreSQL instance.
+  # Architecture:
   #
-  # The PVC keeps PostgreSQL data independent from the lifecycle of the Pod.
+  #   StatefulSet
+  #       │
+  #       └── quantummind-postgres-0
+  #                    │
+  #                    ▼
+  #          quantummind-postgres-data
+  #                    │
+  #                    ▼
+  #              PersistentVolume
+  #                    │
+  #                    ▼
+  #                 10 GiB
+  #
+  # Because replicas is currently 1, Kubernetes creates one PVC.
+  #
+  # IMPORTANT:
+  #
+  # The name is intentionally application-specific:
+  #
+  #   quantummind-postgres-data
+  #
+  # This makes it easy to distinguish QuantumMind storage from storage
+  # belonging to other applications on the same VPS/K3s cluster.
+  #
+  # Examples for future applications could be:
+  #
+  #   housori-postgres-data
+  #   zentrabank-postgres-data
+  #   portfolio-postgres-data
   #
   # ----------------------------------------------------------------------------
   volumeClaimTemplates:
 
     - metadata:
 
-        # Name referenced by:
+        # ----------------------------------------------------------------------
+        # PersistentVolumeClaim name
+        # ----------------------------------------------------------------------
         #
-        #   volumeMounts.name
+        # "quantummind" identifies the application.
+        # "postgres" identifies the database component.
+        # "data" identifies the purpose of the storage.
         #
+        # This name MUST match the volumeMount name above.
         name: postgres-data
 
       spec:
 
-        # We need one volume that can be mounted for read/write.
+        # ----------------------------------------------------------------------
+        # Access mode
+        # ----------------------------------------------------------------------
+        #
+        # ReadWriteOnce (RWO) means the volume can be mounted for read/write
+        # access by a Pod on one Kubernetes node.
+        #
+        # This matches our current architecture:
+        #
+        #   one VPS
+        #   one K3s node
+        #   one PostgreSQL Pod
+        #
         accessModes:
           - ReadWriteOnce
 
-        # K3s currently provides the local-path StorageClass.
+        # ----------------------------------------------------------------------
+        # Storage class
+        # ----------------------------------------------------------------------
         #
-        # This stores the data locally on our VPS.
+        # K3s provides the "local-path" StorageClass.
+        #
+        # It provisions storage from the local filesystem of our VPS.
+        #
+        # This is appropriate for our current single-node architecture.
+        #
+        # IMPORTANT:
+        #
+        # Local storage is NOT replicated storage.
+        #
+        # If the VPS itself is lost, the local database storage is also
+        # at risk. Therefore PostgreSQL backups will be important later.
+        #
         storageClassName: local-path
 
+        # ----------------------------------------------------------------------
+        # Requested storage capacity
+        # ----------------------------------------------------------------------
+        #
         # PostgreSQL starts with 10 GiB of persistent storage.
         #
-        # We can increase this later if necessary.
+        # We can increase the storage later if the database grows and the
+        # StorageClass/filesystem supports volume expansion.
+        #
         resources:
+
           requests:
             storage: 10Gi

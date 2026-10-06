@@ -1,5 +1,4 @@
 export const environment = {
   production: true,
-  //apiBaseUrl: 'http://localhost:8080/api/v1' // Replace with actual production API URL
-  apiBaseUrl:"https://api.zentrabank.salimcode.site/api/v1"
+  apiBaseUrl: '/api/v1'
 };
