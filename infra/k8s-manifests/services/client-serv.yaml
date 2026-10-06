@@ -1,0 +1,114 @@
+# -----------------------------------------------------------------------------
+# QuantumMind - Angular Client Service
+# -----------------------------------------------------------------------------
+#
+# PURPOSE
+# -------
+# This Service provides a stable internal network endpoint for the
+# QuantumMind Angular frontend.
+#
+# The Angular application runs inside a Kubernetes Pod. Pods are not given
+# permanent IP addresses, so other Kubernetes components should not depend
+# directly on a Pod IP.
+#
+# Instead, this Service provides a stable address:
+#
+#     quantummind-client:80
+#
+# Kubernetes DNS resolves that name to this Service.
+#
+# IMPORTANT
+# ---------
+# This Service uses ClusterIP.
+#
+# Therefore the Angular application is NOT directly exposed through:
+#
+#   - a public VPS port
+#   - NodePort
+#   - LoadBalancer
+#
+# External traffic will be handled later by our Ingress / nginx architecture.
+# -----------------------------------------------------------------------------
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  # ---------------------------------------------------------------------------
+  # Service name
+  # ---------------------------------------------------------------------------
+  #
+  # Kubernetes creates an internal DNS record for this Service.
+  #
+  # From another Pod in the "quantummind" namespace, the frontend can be
+  # reached using:
+  #
+  #     http://quantummind-client
+  #
+  # The explicit port is 80.
+  name: quantummind-client
+
+  # Keep the frontend Service inside the QuantumMind namespace.
+  namespace: quantummind
+
+  labels:
+    # Identifies the application.
+    app: quantummind
+
+    # Identifies this component as the Angular client.
+    component: client
+
+spec:
+  # ---------------------------------------------------------------------------
+  # Service type
+  # ---------------------------------------------------------------------------
+  #
+  # ClusterIP creates an internal Kubernetes Service.
+  #
+  # Traffic flow will eventually look like:
+  #
+  #     Ingress / nginx
+  #            |
+  #            v
+  #     quantummind-client:80
+  #            |
+  #            v
+  #     Angular Pod
+  #
+  # The frontend therefore doesn't need its own public VPS port.
+  type: ClusterIP
+
+  # ---------------------------------------------------------------------------
+  # HTTP port
+  # ---------------------------------------------------------------------------
+  #
+  # Our Angular production container is expected to serve its built static
+  # files through nginx on port 80.
+  #
+  # "port" is the port exposed by the Kubernetes Service.
+  #
+  # "targetPort" is the port on the Angular container.
+  # ---------------------------------------------------------------------------
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+
+  # ---------------------------------------------------------------------------
+  # Pod selector
+  # ---------------------------------------------------------------------------
+  #
+  # Kubernetes uses these labels to determine which Pods belong behind this
+  # Service.
+  #
+  # These labels MUST match deployments/client.yaml:
+  #
+  #     app: quantummind
+  #     component: client
+  #
+  # If they don't match, the Service will have no endpoints.
+  # ---------------------------------------------------------------------------
+  selector:
+    app: quantummind
+    component: client
