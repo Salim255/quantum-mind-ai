@@ -1,0 +1,240 @@
+# -----------------------------------------------------------------------------
+# QuantumMind - PostgreSQL StatefulSet
+# -----------------------------------------------------------------------------
+#
+# PostgreSQL is the relational database used by QuantumMind.
+#
+# Unlike FastAPI or Angular, PostgreSQL stores application data that must
+# survive a Pod restart.
+#
+# Therefore we use a StatefulSet instead of a normal Deployment.
+#
+# Architecture:
+#
+#   StatefulSet
+#       │
+#       └── PostgreSQL Pod
+#              │
+#              └── Persistent Volume
+#                    │
+#                    └── PostgreSQL data
+#
+# If the PostgreSQL Pod is recreated, Kubernetes reconnects it to its
+# persistent storage.
+#
+# IMPORTANT:
+#
+# This is NOT a high-availability PostgreSQL cluster.
+#
+# We are intentionally starting with ONE PostgreSQL instance because our
+# current K3s cluster has one physical worker/VPS.
+#
+# Later, PostgreSQL HA would require proper database replication and
+# failover architecture. Simply setting replicas: 2 would NOT be enough.
+#
+# -----------------------------------------------------------------------------
+
+# StatefulSets are part of the apps/v1 Kubernetes API.
+apiVersion: apps/v1
+
+# We are creating a StatefulSet because PostgreSQL is stateful.
+kind: StatefulSet
+
+# -----------------------------------------------------------------------------
+# Resource metadata
+# -----------------------------------------------------------------------------
+metadata:
+
+  # Name of our PostgreSQL StatefulSet.
+  name: quantummind-postgres
+
+  # PostgreSQL belongs to the QuantumMind namespace.
+  namespace: quantummind
+
+  # Labels help identify this workload.
+  labels:
+    app: quantummind
+    component: postgres
+
+# -----------------------------------------------------------------------------
+# StatefulSet specification
+# -----------------------------------------------------------------------------
+spec:
+
+  # Number of PostgreSQL instances.
+  #
+  # We intentionally start with ONE.
+  replicas: 1
+
+  # ---------------------------------------------------------------------------
+  # Service name
+  # ---------------------------------------------------------------------------
+  #
+  # This is the governing service name used by the StatefulSet.
+  #
+  # We will create the corresponding Kubernetes Service separately.
+  serviceName: quantummind-postgres
+
+  # ---------------------------------------------------------------------------
+  # Pod selector
+  # ---------------------------------------------------------------------------
+  #
+  # The StatefulSet manages Pods matching these labels.
+  selector:
+    matchLabels:
+      app: quantummind
+      component: postgres
+
+  # ---------------------------------------------------------------------------
+  # Pod template
+  # ---------------------------------------------------------------------------
+  template:
+
+    metadata:
+
+      # Labels applied to the PostgreSQL Pod.
+      labels:
+        app: quantummind
+        component: postgres
+
+    spec:
+
+      # -----------------------------------------------------------------------
+      # PostgreSQL container
+      # -----------------------------------------------------------------------
+      containers:
+
+        - name: postgres
+
+          # -------------------------------------------------------------------
+          # PostgreSQL container image
+          # -------------------------------------------------------------------
+          #
+          # The official PostgreSQL image supports ARM64, which is important
+          # because our K3s worker is an ARM64 machine.
+          #
+          # We pin the major version instead of using "latest".
+          #
+          # Pinning the version makes deployments more predictable.
+          image: postgres:16
+
+          # Pull the image only when it isn't already available locally.
+          imagePullPolicy: IfNotPresent
+
+          # -------------------------------------------------------------------
+          # PostgreSQL network port
+          # -------------------------------------------------------------------
+          #
+          # PostgreSQL listens on TCP port 5432 inside the container.
+          #
+          # This does NOT expose PostgreSQL publicly.
+          #
+          # The Kubernetes Service we create later will provide internal
+          # communication from the FastAPI application to PostgreSQL.
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+
+          # -------------------------------------------------------------------
+          # PostgreSQL configuration
+          # -------------------------------------------------------------------
+          #
+          # IMPORTANT:
+          #
+          # These values are temporary placeholders.
+          #
+          # We should NOT commit a real production password to Git.
+          #
+          # Later we will create a Kubernetes Secret and reference it here.
+          env:
+
+            # PostgreSQL database user.
+            - name: POSTGRES_USER
+              value: quantummind
+
+            # PostgreSQL database name.
+            - name: POSTGRES_DB
+              value: quantummind
+
+            # Temporary placeholder password.
+            #
+            # Replace this with a Kubernetes Secret before production use.
+            - name: POSTGRES_PASSWORD
+              value: "CHANGE_ME"
+
+          # -------------------------------------------------------------------
+          # PostgreSQL storage
+          # -------------------------------------------------------------------
+          #
+          # PostgreSQL stores its database files here.
+          #
+          # This directory will be backed by a PersistentVolumeClaim created
+          # by the volumeClaimTemplates section below.
+          volumeMounts:
+
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+
+          # -------------------------------------------------------------------
+          # Resource requests and limits
+          # -------------------------------------------------------------------
+          #
+          # Our VPS already runs other production workloads.
+          #
+          # These are conservative starting values.
+          #
+          # We can tune them after measuring actual PostgreSQL usage.
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "768Mi"
+
+  # ----------------------------------------------------------------------------
+  # Persistent storage
+  # ----------------------------------------------------------------------------
+  #
+  # StatefulSet can automatically create a PersistentVolumeClaim for each Pod.
+  #
+  # With:
+  #
+  #   replicas: 1
+  #
+  # Kubernetes creates:
+  #
+  #   postgres-data-quantummind-postgres-0
+  #
+  # The exact PVC name is generated from the StatefulSet and volume template.
+  #
+  # ----------------------------------------------------------------------------
+  volumeClaimTemplates:
+
+    - metadata:
+
+        # Name referenced by:
+        #
+        #   volumeMounts.name
+        #
+        name: postgres-data
+
+      spec:
+
+        # We need one volume that can be mounted for read/write.
+        accessModes:
+          - ReadWriteOnce
+
+        # K3s currently provides the local-path StorageClass.
+        #
+        # This stores the data locally on our VPS.
+        storageClassName: local-path
+
+        # PostgreSQL starts with 10 GiB of persistent storage.
+        #
+        # We can increase this later if necessary.
+        resources:
+          requests:
+            storage: 10Gi
