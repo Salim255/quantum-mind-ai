@@ -1,0 +1,249 @@
+# -----------------------------------------------------------------------------
+# QuantumMind - Qdrant StatefulSet
+# -----------------------------------------------------------------------------
+#
+# Qdrant is the vector database used by QuantumMind.
+#
+# Qdrant stores persistent vector data, collections, and indexes.
+#
+# Because this data must survive Pod restarts, we use a StatefulSet instead
+# of a normal Deployment.
+#
+# Architecture:
+#
+#   K3s cluster
+#       │
+#       └── quantummind namespace
+#               │
+#               └── Qdrant StatefulSet
+#                       │
+#                       └── Qdrant Pod
+#                               │
+#                               └── PersistentVolumeClaim
+#                                       │
+#                                       └── VPS disk
+#
+# We start with ONE Qdrant instance.
+#
+# -----------------------------------------------------------------------------
+
+# StatefulSet resources use the apps/v1 API.
+apiVersion: apps/v1
+
+# Qdrant is stateful, so we use a StatefulSet.
+kind: StatefulSet
+
+# -----------------------------------------------------------------------------
+# Resource metadata
+# -----------------------------------------------------------------------------
+metadata:
+
+  # Name of the Qdrant StatefulSet.
+  name: quantummind-qdrant
+
+  # Run Qdrant inside the QuantumMind namespace.
+  namespace: quantummind
+
+  # Labels identify this workload.
+  labels:
+    app: quantummind
+    component: qdrant
+
+# -----------------------------------------------------------------------------
+# StatefulSet specification
+# -----------------------------------------------------------------------------
+spec:
+
+  # We start with one Qdrant instance.
+  replicas: 1
+
+  # Name of the Kubernetes Service associated with this StatefulSet.
+  #
+  # We will create this Service separately.
+  serviceName: quantummind-qdrant
+
+  # ---------------------------------------------------------------------------
+  # Pod selector
+  # ---------------------------------------------------------------------------
+  #
+  # The StatefulSet manages Pods matching these labels.
+  #
+  # These MUST match the labels in the Pod template below.
+  #
+  selector:
+    matchLabels:
+      app: quantummind
+      component: qdrant
+
+  # ---------------------------------------------------------------------------
+  # Pod template
+  # ---------------------------------------------------------------------------
+  #
+  # This describes the Pod that Kubernetes will create.
+  #
+  template:
+
+    metadata:
+
+      # Labels attached to the Qdrant Pod.
+      #
+      # The Qdrant Service will use these labels to find this Pod.
+      labels:
+        app: quantummind
+        component: qdrant
+
+    spec:
+
+      # -----------------------------------------------------------------------
+      # Qdrant container
+      # -----------------------------------------------------------------------
+      containers:
+
+        - name: qdrant
+
+          # -------------------------------------------------------------------
+          # Qdrant container image
+          # -------------------------------------------------------------------
+          #
+          # Qdrant provides an official container image.
+          #
+          # Qdrant supports ARM64, which is required by our ARM64 VPS.
+          #
+          # We use a fixed version instead of "latest" so that an unexpected
+          # image update cannot silently change our production environment.
+          image: qdrant/qdrant:v1.15.5
+
+          # Only pull the image if it isn't already present on the node.
+          imagePullPolicy: IfNotPresent
+
+          # -------------------------------------------------------------------
+          # Qdrant network ports
+          # -------------------------------------------------------------------
+          #
+          # IMPORTANT:
+          #
+          # There must be only ONE "ports:" key here.
+          #
+          # Qdrant provides two useful network interfaces:
+          #
+          #   6333 -> REST/HTTP API
+          #   6334 -> gRPC API
+          #
+          # These ports are only declared inside the Pod.
+          #
+          # They are NOT exposed directly to the public Internet.
+          #
+          ports:
+
+            # -----------------------------------------------------------------
+            # Qdrant REST API
+            # -----------------------------------------------------------------
+            - name: http
+              containerPort: 6333
+              protocol: TCP
+
+            # -----------------------------------------------------------------
+            # Qdrant gRPC API
+            # -----------------------------------------------------------------
+            - name: grpc
+              containerPort: 6334
+              protocol: TCP
+
+          # -------------------------------------------------------------------
+          # Persistent storage
+          # -------------------------------------------------------------------
+          #
+          # Qdrant stores its data under:
+          #
+          #   /qdrant/storage
+          #
+          # We mount our persistent volume at this location.
+          volumeMounts:
+
+            - name: qdrant-data
+              mountPath: /qdrant/storage
+
+          # -------------------------------------------------------------------
+          # Resource requests and limits
+          # -------------------------------------------------------------------
+          #
+          # Our VPS already runs several production workloads.
+          #
+          # Therefore we start with conservative resource values.
+          #
+          # We can adjust these later after monitoring actual usage.
+          resources:
+
+            # Minimum resources Kubernetes should reserve for the Pod.
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+
+            # Maximum resources this container is allowed to consume.
+            limits:
+              cpu: "500m"
+              memory: "768Mi"
+
+  # ----------------------------------------------------------------------------
+  # PersistentVolumeClaim template
+  # ----------------------------------------------------------------------------
+  #
+  # StatefulSet creates a PersistentVolumeClaim for each Pod.
+  #
+  # With replicas: 1, we get one persistent volume for Qdrant.
+  #
+  # Data flow:
+  #
+  #   Qdrant
+  #      │
+  #      ▼
+  #   /qdrant/storage
+  #      │
+  #      ▼
+  #   PVC
+  #      │
+  #      ▼
+  #   local-path StorageClass
+  #      │
+  #      ▼
+  #   VPS disk
+  #
+  volumeClaimTemplates:
+
+    - metadata:
+
+        # This name is referenced by volumeMounts above.
+        name: qdrant-data
+
+      spec:
+
+        # ---------------------------------------------------------------------
+        # Access mode
+        # ---------------------------------------------------------------------
+        #
+        # ReadWriteOnce means this volume can be mounted for read/write by
+        # workloads on one Kubernetes node.
+        #
+        # This is appropriate for our current single-node K3s cluster.
+        accessModes:
+          - ReadWriteOnce
+
+        # ---------------------------------------------------------------------
+        # Storage class
+        # ---------------------------------------------------------------------
+        #
+        # K3s provides the "local-path" StorageClass.
+        #
+        # This stores Qdrant data locally on our VPS.
+        storageClassName: local-path
+
+        # ---------------------------------------------------------------------
+        # Requested storage
+        # ---------------------------------------------------------------------
+        #
+        # We start with 10 GiB of persistent storage.
+        #
+        # We can increase this later if the vector database grows.
+        resources:
+          requests:
+            storage: 10Gi
