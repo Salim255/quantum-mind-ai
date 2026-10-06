@@ -1,0 +1,194 @@
+# -----------------------------------------------------------------------------
+# QuantumMind - FastAPI Server Deployment
+# -----------------------------------------------------------------------------
+#
+# This Deployment tells Kubernetes how to run the QuantumMind backend.
+#
+# The backend is a FastAPI application.
+#
+# Kubernetes architecture:
+#
+#   Deployment
+#       │
+#       └── Pod
+#            └── FastAPI container
+#
+# We start with ONE replica because this is our first deployment.
+#
+# Later, we can safely increase this to:
+#
+#   replicas: 2
+#
+# which would give us two FastAPI Pods.
+#
+# IMPORTANT:
+# Multiple replicas on our current single VPS do NOT create additional
+# worker machines. Both Pods would initially run on the same Kubernetes node.
+#
+# -----------------------------------------------------------------------------
+
+# "apps/v1" is the Kubernetes API version used by Deployments.
+apiVersion: apps/v1
+
+# We are creating a Deployment.
+kind: Deployment
+
+# -----------------------------------------------------------------------------
+# Deployment metadata
+# -----------------------------------------------------------------------------
+metadata:
+
+  # Name used to identify this Deployment inside Kubernetes.
+  name: quantummind-server
+
+  # Put this Deployment inside our QuantumMind namespace.
+  namespace: quantummind
+
+  # Labels help us identify and organize resources.
+  labels:
+    app: quantummind
+    component: server
+
+# -----------------------------------------------------------------------------
+# Deployment specification
+# -----------------------------------------------------------------------------
+spec:
+
+  # Number of Pods Kubernetes should maintain.
+  #
+  # We intentionally start with ONE Pod.
+  #
+  # Later:
+  #   replicas: 2
+  #
+  # can be used for application-level redundancy and scaling.
+  replicas: 1
+
+  # ---------------------------------------------------------------------------
+  # Selector
+  # ---------------------------------------------------------------------------
+  #
+  # The Deployment uses this selector to determine which Pods belong to it.
+  #
+  # This MUST match the labels defined under:
+  #
+  #   spec.template.metadata.labels
+  #
+  selector:
+    matchLabels:
+      app: quantummind
+      component: server
+
+  # ---------------------------------------------------------------------------
+  # Pod template
+  # ---------------------------------------------------------------------------
+  #
+  # Everything below "template" describes the Pods that this Deployment
+  # creates.
+  #
+  template:
+
+    metadata:
+
+      # These labels are attached to every FastAPI Pod.
+      #
+      # Services will later use these labels to find the correct Pods.
+      labels:
+        app: quantummind
+        component: server
+
+    spec:
+
+      # -----------------------------------------------------------------------
+      # Container definition
+      # -----------------------------------------------------------------------
+      containers:
+
+        # Name of the container inside the Pod.
+        - name: server
+
+          # -------------------------------------------------------------------
+          # Docker/OCI image
+          # -------------------------------------------------------------------
+          #
+          # PLACEHOLDER:
+          #
+          # Replace this with the real ARM64-compatible QuantumMind image
+          # once we build and push it to our container registry.
+          #
+          # Example:
+          #
+          #   image: ghcr.io/your-user/quantummind-server:latest
+          #
+          image: YOUR_REGISTRY/quantummind-server:latest
+
+          # -------------------------------------------------------------------
+          # Image pull policy
+          # -------------------------------------------------------------------
+          #
+          # "IfNotPresent" means:
+          #
+          #   - If the image already exists on the node, use it.
+          #   - Otherwise, pull it from the registry.
+          #
+          # This avoids unnecessarily downloading the same image repeatedly.
+          imagePullPolicy: IfNotPresent
+
+          # -------------------------------------------------------------------
+          # Container port
+          # -------------------------------------------------------------------
+          #
+          # This documents the port on which FastAPI listens inside the
+          # container.
+          #
+          # IMPORTANT:
+          # This does NOT expose the application to the Internet.
+          #
+          # A Kubernetes Service will later provide stable networking to
+          # this container.
+          #
+          # We are assuming FastAPI listens on port 8000, which is the
+          # conventional port we intend to use for this application.
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+
+          # -------------------------------------------------------------------
+          # Resource requests and limits
+          # -------------------------------------------------------------------
+          #
+          # Our VPS has limited RAM and CPU because it is already running
+          # several production Docker workloads.
+          #
+          # Requests tell Kubernetes the minimum resources the Pod needs.
+          #
+          # Limits prevent this container from consuming unlimited resources.
+          #
+          # These are intentionally conservative starting values.
+          #
+          # We can adjust them after measuring the real application's usage.
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          # -------------------------------------------------------------------
+          # Health checks
+          # -------------------------------------------------------------------
+          #
+          # We are NOT adding liveness/readiness probes yet because we don't
+          # know the exact health endpoint implemented by your FastAPI app.
+          #
+          # Once we confirm the application exposes something such as:
+          #
+          #   GET /health
+          #
+          # we should add proper probes.
+          #
+          # This is important because Kubernetes can then automatically know
+          # whether the application is ready to receive traffic.

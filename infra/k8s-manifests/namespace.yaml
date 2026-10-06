@@ -1,0 +1,52 @@
+# -----------------------------------------------------------------------------
+# QuantumMind Kubernetes Namespace
+# -----------------------------------------------------------------------------
+#
+# A Namespace provides a logical boundary inside our Kubernetes cluster.
+#
+# All QuantumMind resources such as:
+#   - Deployments
+#   - Services
+#   - Pods
+#   - ConfigMaps
+#   - Secrets
+#   - PersistentVolumeClaims
+#
+# will live inside this namespace.
+#
+# This does NOT create a new server or worker node.
+# It is simply a logical separation inside our existing K3s cluster.
+#
+# Cluster architecture:
+#
+#   K3s cluster
+#   └── kundul-prod-server
+#       ├── kube-system
+#       ├── housori
+#       ├── zentrabank
+#       ├── portfolio
+#       ├── tasks-manager
+#       ├── geo-game
+#       └── quantummind   <-- this namespace
+#
+# -----------------------------------------------------------------------------
+
+# "v1" is the stable/core Kubernetes API version.
+apiVersion: v1
+
+# We are creating a Kubernetes Namespace resource.
+kind: Namespace
+
+# -----------------------------------------------------------------------------
+# Resource metadata
+# -----------------------------------------------------------------------------
+metadata:
+
+  # The name of the namespace.
+  #
+  # We will reference this namespace from our other Kubernetes manifests:
+  #
+  #   namespace: quantummind
+  #
+  # This name should remain stable because other resources will depend on it.
+  name: quantummind
