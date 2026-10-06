@@ -1,0 +1,153 @@
+# -----------------------------------------------------------------------------
+# QuantumMind - Qdrant Service
+# -----------------------------------------------------------------------------
+#
+# This Service provides a stable network address for the Qdrant Pod.
+#
+# Pods are not reliable network endpoints:
+#
+#   - Pods can be restarted.
+#   - Pods can be recreated.
+#   - Pod IP addresses can change.
+#
+# A Kubernetes Service solves this problem by providing a stable DNS name.
+#
+# Our FastAPI application will eventually communicate with Qdrant through:
+#
+#   http://quantummind-qdrant:6333
+#
+# instead of connecting directly to a Pod IP address.
+#
+# -----------------------------------------------------------------------------
+#
+# Architecture:
+#
+#   FastAPI Pod
+#       │
+#       │ HTTP :6333
+#       ▼
+#   quantummind-qdrant Service
+#       │
+#       ▼
+#   Qdrant Pod
+#
+# -----------------------------------------------------------------------------
+
+# Services are part of the core Kubernetes API.
+apiVersion: v1
+
+# We are creating a Kubernetes Service.
+kind: Service
+
+# -----------------------------------------------------------------------------
+# Service metadata
+# -----------------------------------------------------------------------------
+metadata:
+
+  # Stable DNS name for Qdrant inside the Kubernetes namespace.
+  #
+  # Because this Service is inside the "quantummind" namespace, other
+  # workloads in the same namespace can reach it using:
+  #
+  #   quantummind-qdrant
+  #
+  # Or explicitly:
+  #
+  #   quantummind-qdrant.quantummind.svc.cluster.local
+  #
+  name: quantummind-qdrant
+
+  # Put the Service inside the QuantumMind namespace.
+  namespace: quantummind
+
+  # Labels identify this Service as part of QuantumMind.
+  labels:
+    app: quantummind
+    component: qdrant
+
+# -----------------------------------------------------------------------------
+# Service specification
+# -----------------------------------------------------------------------------
+spec:
+
+  # ---------------------------------------------------------------------------
+  # Service type
+  # ---------------------------------------------------------------------------
+  #
+  # ClusterIP creates an internal Kubernetes IP address.
+  #
+  # This means Qdrant is NOT exposed directly to the Internet.
+  #
+  # That is exactly what we want:
+  #
+  #   Internet
+  #       X
+  #
+  #   FastAPI
+  #       │
+  #       ▼
+  #   Qdrant
+  #
+  type: ClusterIP
+
+  # ---------------------------------------------------------------------------
+  # Port configuration
+  # ---------------------------------------------------------------------------
+  #
+  # The Service exposes Qdrant's HTTP API internally on port 6333.
+  #
+  ports:
+
+    # Name of the HTTP port.
+    - name: http
+
+      # Port exposed by the Kubernetes Service.
+      port: 6333
+
+      # Port on the Qdrant container receiving the traffic.
+      targetPort: 6333
+
+      # Qdrant HTTP API uses TCP.
+      protocol: TCP
+
+    # -------------------------------------------------------------------------
+    # gRPC port
+    # -------------------------------------------------------------------------
+    #
+    # We also expose Qdrant's gRPC API internally.
+    #
+    # This does NOT expose it publicly.
+    #
+    - name: grpc
+
+      # Port exposed by the Service.
+      port: 6334
+
+      # Port on the Qdrant container receiving the traffic.
+      targetPort: 6334
+
+      # gRPC uses TCP.
+      protocol: TCP
+
+  # ---------------------------------------------------------------------------
+  # Pod selector
+  # ---------------------------------------------------------------------------
+  #
+  # This is one of the most important parts of a Kubernetes Service.
+  #
+  # The Service looks for Pods with these labels:
+  #
+  #   app: quantummind
+  #   component: qdrant
+  #
+  # Those are exactly the labels we placed on the Qdrant StatefulSet Pod.
+  #
+  # Therefore:
+  #
+  #   Service
+  #      │
+  #      └── finds Qdrant Pod
+  #
+  selector:
+    app: quantummind
+    component: qdrant
