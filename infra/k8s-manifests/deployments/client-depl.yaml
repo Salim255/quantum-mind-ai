@@ -1,0 +1,145 @@
+# -----------------------------------------------------------------------------
+# QuantumMind - Angular Client Deployment
+# -----------------------------------------------------------------------------
+#
+# This Deployment runs the QuantumMind frontend.
+#
+# The Angular application will normally be built into static files and served
+# by an HTTP server such as Nginx.
+#
+# Kubernetes architecture:
+#
+#   Deployment
+#       │
+#       └── Pod
+#            └── Angular/Nginx container
+#
+# We start with ONE replica.
+#
+# Later, when the application is stable, we can increase this to:
+#
+#   replicas: 2
+#
+# -----------------------------------------------------------------------------
+
+# "apps/v1" is the Kubernetes API version used by Deployments.
+apiVersion: apps/v1
+
+# We are creating a Kubernetes Deployment.
+kind: Deployment
+
+# -----------------------------------------------------------------------------
+# Deployment metadata
+# -----------------------------------------------------------------------------
+metadata:
+
+  # Name used to identify this Deployment.
+  name: quantummind-client
+
+  # Run this Deployment inside the QuantumMind namespace.
+  namespace: quantummind
+
+  # Labels identify this workload.
+  labels:
+    app: quantummind
+    component: client
+
+# -----------------------------------------------------------------------------
+# Deployment specification
+# -----------------------------------------------------------------------------
+spec:
+
+  # Start with one Angular frontend Pod.
+  #
+  # We can increase this later after testing:
+  #
+  #   replicas: 2
+  #
+  replicas: 1
+
+  # ---------------------------------------------------------------------------
+  # Selector
+  # ---------------------------------------------------------------------------
+  #
+  # The Deployment manages Pods matching these labels.
+  #
+  # These labels MUST match the labels in:
+  #
+  #   spec.template.metadata.labels
+  #
+  selector:
+    matchLabels:
+      app: quantummind
+      component: client
+
+  # ---------------------------------------------------------------------------
+  # Pod template
+  # ---------------------------------------------------------------------------
+  template:
+
+    metadata:
+
+      # Labels attached to every Angular Pod.
+      labels:
+        app: quantummind
+        component: client
+
+    spec:
+
+      # -----------------------------------------------------------------------
+      # Container definition
+      # -----------------------------------------------------------------------
+      containers:
+
+        # Name of the frontend container.
+        - name: client
+
+          # -------------------------------------------------------------------
+          # Docker/OCI image
+          # -------------------------------------------------------------------
+          #
+          # PLACEHOLDER:
+          #
+          # Replace this with the actual ARM64-compatible QuantumMind Angular
+          # image once we build it.
+          #
+          # Example:
+          #
+          #   image: ghcr.io/your-user/quantummind-client:latest
+          #
+          image: YOUR_REGISTRY/quantummind-client:latest
+
+          # Only pull the image if it isn't already present on the node.
+          imagePullPolicy: IfNotPresent
+
+          # -------------------------------------------------------------------
+          # Container port
+          # -------------------------------------------------------------------
+          #
+          # Angular's production container will normally serve the compiled
+          # application through Nginx on port 80.
+          #
+          # This is the internal container port.
+          #
+          # It does NOT expose port 80 directly on the VPS.
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+          # -------------------------------------------------------------------
+          # Resource requests and limits
+          # -------------------------------------------------------------------
+          #
+          # The Angular/Nginx container should be relatively lightweight.
+          #
+          # We still define limits so that a problem cannot unexpectedly
+          # consume a large amount of the VPS's available memory.
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
