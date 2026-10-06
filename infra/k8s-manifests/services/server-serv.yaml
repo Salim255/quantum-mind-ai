@@ -1,103 +1,35 @@
-# -----------------------------------------------------------------------------
-# QuantumMind - FastAPI Server Service
-# -----------------------------------------------------------------------------
-#
-# PURPOSE
-# -------
-# This Service provides a stable internal network endpoint for the
-# QuantumMind FastAPI backend.
-#
-# Kubernetes Pods can be recreated and their IP addresses can change.
-# The Service gives the application a stable DNS name instead.
-#
-# Other Pods inside the cluster can reach FastAPI using:
-#
-#     http://quantummind-server:8000
-#
-# Kubernetes DNS resolves "quantummind-server" to this Service.
-#
-# IMPORTANT
-# ---------
-# This Service does NOT expose FastAPI directly to the Internet.
-#
-# It uses ClusterIP, meaning traffic stays inside the Kubernetes cluster.
-#
-# External access will be handled later through our Ingress/nginx strategy.
-# -----------------------------------------------------------------------------
-
 apiVersion: v1
 kind: Service
 
 metadata:
-  # Stable DNS name for the FastAPI backend.
-  #
-  # Kubernetes automatically creates DNS records for Services.
-  #
-  # Inside the "quantummind" namespace, applications can simply use:
-  #
-  #     http://quantummind-server:8000
+  # Stable Kubernetes name used by other Pods to reach FastAPI.
   name: quantummind-server
 
-  # Keep the backend inside the QuantumMind namespace.
+  # Keep the API inside the QuantumMind namespace.
   namespace: quantummind
 
-  labels:
-    # Identifies the application this Service belongs to.
-    app: quantummind
-
-    # Identifies this particular application component.
-    component: server
-
 spec:
-  # ---------------------------------------------------------------------------
-  # Service type
-  # ---------------------------------------------------------------------------
-  #
-  # ClusterIP means:
-  #
-  #   Pod -> Service -> FastAPI Pod
-  #
-  # The Service is reachable from inside the Kubernetes cluster but is not
-  # directly exposed on a VPS port or public IP.
-  #
-  # This keeps the backend private by default.
-  type: ClusterIP
+  # NodePort exposes the Service on the Kubernetes node.
+  # We are using this temporarily so the host nginx can reach it.
+  type: NodePort
 
-  # ---------------------------------------------------------------------------
-  # FastAPI network port
-  # ---------------------------------------------------------------------------
-  #
-  # "port" is the port exposed by this Kubernetes Service.
-  #
-  # "targetPort" is the port where the FastAPI container listens.
-  #
-  # Our FastAPI Deployment is configured to listen on port 8000.
-  # ---------------------------------------------------------------------------
-  ports:
-    - name: http
-      port: 8000
-      targetPort: 8000
-      protocol: TCP
-
-  # ---------------------------------------------------------------------------
-  # Pod selector
-  # ---------------------------------------------------------------------------
-  #
-  # Kubernetes uses these labels to find the FastAPI Pods that should receive
-  # traffic for this Service.
-  #
-  # These MUST match the labels defined in:
-  #
-  #     deployments/server.yaml
-  #
-  # Specifically:
-  #
-  #     app: quantummind
-  #     component: server
-  #
-  # If the labels don't match, the Service will exist but won't have any
-  # backend endpoints.
-  # ---------------------------------------------------------------------------
+  # IMPORTANT:
+  # These selectors must match the labels on the FastAPI Deployment.
   selector:
     app: quantummind
     component: server
+
+  ports:
+    - name: http
+
+      # Port exposed by the Kubernetes Service.
+      port: 8000
+
+      # Port exposed by the FastAPI container.
+      targetPort: 8000
+
+      protocol: TCP
+
+      # Port exposed on the VPS/node.
+      # Host nginx will eventually proxy /api/ to this port.
+      nodePort: 31800
