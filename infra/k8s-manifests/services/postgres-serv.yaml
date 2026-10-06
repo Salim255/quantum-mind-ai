@@ -1,0 +1,108 @@
+# -----------------------------------------------------------------------------
+# QuantumMind - PostgreSQL Service
+# -----------------------------------------------------------------------------
+#
+# PURPOSE
+# -------
+# This Service provides a stable internal network endpoint for PostgreSQL.
+#
+# Kubernetes Pods are temporary:
+#   - A Pod can be recreated.
+#   - A Pod can receive a different IP address.
+#   - A StatefulSet can move through Pod restarts.
+#
+# We therefore do NOT make the FastAPI application connect directly to a Pod IP.
+#
+# Instead, FastAPI connects to:
+#
+#     quantummind-postgres:5432
+#
+# Kubernetes DNS resolves that name to this Service.
+#
+# IMPORTANT
+# ---------
+# This is a ClusterIP Service.
+#
+# That means PostgreSQL is reachable only from inside the Kubernetes cluster.
+# It is NOT exposed through:
+#   - the Internet
+#   - the host's public IP
+#   - nginx
+#   - an Ingress
+#
+# This is exactly what we want for a database.
+# -----------------------------------------------------------------------------
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  # Stable Kubernetes name used by other workloads.
+  #
+  # FastAPI will eventually use something like:
+  #
+  #   postgresql://quantummind:...@quantummind-postgres:5432/quantummind
+  #
+  # instead of using a Pod IP.
+  name: quantummind-postgres
+
+  # Keep the database isolated inside the QuantumMind namespace.
+  namespace: quantummind
+
+  labels:
+    # Application this Service belongs to.
+    app: quantummind
+
+    # Identifies this component as PostgreSQL.
+    component: postgres
+
+spec:
+  # ---------------------------------------------------------------------------
+  # Service type
+  # ---------------------------------------------------------------------------
+  #
+  # ClusterIP is the default Kubernetes Service type.
+  #
+  # It creates an internal virtual IP that is reachable from Pods inside
+  # the Kubernetes cluster.
+  #
+  # We deliberately do NOT use:
+  #
+  #   NodePort
+  #   LoadBalancer
+  #
+  # because PostgreSQL should not be publicly exposed.
+  type: ClusterIP
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL port
+  # ---------------------------------------------------------------------------
+  #
+  # "port" is the port exposed by the Kubernetes Service.
+  #
+  # "targetPort" is the port on the PostgreSQL container.
+  #
+  # PostgreSQL listens on TCP port 5432 by default.
+  # ---------------------------------------------------------------------------
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
+
+  # ---------------------------------------------------------------------------
+  # Pod selector
+  # ---------------------------------------------------------------------------
+  #
+  # The Service sends traffic to Pods matching ALL of these labels.
+  #
+  # These labels must match the labels used by the PostgreSQL StatefulSet.
+  #
+  # This is how Kubernetes knows which PostgreSQL Pod should receive
+  # connections sent to:
+  #
+  #   quantummind-postgres:5432
+  # ---------------------------------------------------------------------------
+  selector:
+    app: quantummind
+    component: postgres
