@@ -12,7 +12,6 @@ from app.v1.modules.topic.service.topic_impl_service import TopicImplService
 # ============================================================
 # CONTAINER DEPENDENCY
 # ============================================================
-
 def get_container(
     request: Request
 ) -> Container:
