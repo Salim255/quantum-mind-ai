@@ -139,4 +139,7 @@ docker-compose.override.yml
 *.env
 
 backend/**/*.png
-infra/k8s-manifests/configs/quantummind-secret.yaml
+infra/k8s-manifests/configs/client-secret.yaml
+infra/k8s-manifests/configs/server-secret.yaml
+infra/k8s-manifests/configs/qdrant-secret.yaml
+infra/k8s-manifests/configs/database-secret.yaml

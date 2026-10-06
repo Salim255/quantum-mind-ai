@@ -129,39 +129,36 @@ spec:
           #
           # This does NOT expose PostgreSQL publicly.
           #
-          # The Kubernetes Service we create later will provide internal
-          # communication from the FastAPI application to PostgreSQL.
+          # The Kubernetes Service provides internal communication between
+          # FastAPI and PostgreSQL.
           ports:
             - name: postgres
               containerPort: 5432
               protocol: TCP
 
           # -------------------------------------------------------------------
-          # PostgreSQL configuration
+          # PostgreSQL configuration from Kubernetes Secret
           # -------------------------------------------------------------------
           #
-          # IMPORTANT:
+          # PostgreSQL needs three important environment variables:
           #
-          # These values are temporary placeholders.
+          #   POSTGRES_DB
+          #   POSTGRES_USER
+          #   POSTGRES_PASSWORD
           #
-          # We should NOT commit a real production password to Git.
+          # These values are stored in:
           #
-          # Later we will create a Kubernetes Secret and reference it here.
-          env:
+          #   quantummind-database-secret
+          #
+          # Keeping credentials outside this StatefulSet means we do not
+          # need to place the actual password in this workload manifest.
+          #
+          # The Secret is injected into the PostgreSQL container as
+          # environment variables.
+          envFrom:
 
-            # PostgreSQL database user.
-            - name: POSTGRES_USER
-              value: quantummind
-
-            # PostgreSQL database name.
-            - name: POSTGRES_DB
-              value: quantummind
-
-            # Temporary placeholder password.
-            #
-            # Replace this with a Kubernetes Secret before production use.
-            - name: POSTGRES_PASSWORD
-              value: "CHANGE_ME"
+            - secretRef:
+                name: quantummind-database-secret
 
           # -------------------------------------------------------------------
           # PostgreSQL storage
@@ -169,7 +166,7 @@ spec:
           #
           # PostgreSQL stores its database files here.
           #
-          # This directory will be backed by a PersistentVolumeClaim created
+          # This directory is backed by the PersistentVolumeClaim created
           # by the volumeClaimTemplates section below.
           volumeMounts:
 
@@ -198,17 +195,16 @@ spec:
   # Persistent storage
   # ----------------------------------------------------------------------------
   #
-  # StatefulSet can automatically create a PersistentVolumeClaim for each Pod.
+  # StatefulSet automatically creates a PersistentVolumeClaim for the
+  # PostgreSQL Pod.
   #
   # With:
   #
   #   replicas: 1
   #
-  # Kubernetes creates:
+  # Kubernetes creates one PVC for the PostgreSQL instance.
   #
-  #   postgres-data-quantummind-postgres-0
-  #
-  # The exact PVC name is generated from the StatefulSet and volume template.
+  # The PVC keeps PostgreSQL data independent from the lifecycle of the Pod.
   #
   # ----------------------------------------------------------------------------
   volumeClaimTemplates:

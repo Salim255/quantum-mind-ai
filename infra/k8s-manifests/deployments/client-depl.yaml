@@ -107,7 +107,7 @@ spec:
           #
           #   image: ghcr.io/your-user/quantummind-client:latest
           #
-          image: YOUR_REGISTRY/quantummind-client:latest
+          image: crawan/quantum-mind-client:latest
 
           # Only pull the image if it isn't already present on the node.
           imagePullPolicy: IfNotPresent

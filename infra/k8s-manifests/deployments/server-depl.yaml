@@ -120,7 +120,7 @@ spec:
           #
           #   image: ghcr.io/your-user/quantummind-server:latest
           #
-          image: YOUR_REGISTRY/quantummind-server:latest
+          image:  crawan/quantum-mind-api:latest
 
           # -------------------------------------------------------------------
           # Image pull policy
@@ -154,6 +154,18 @@ spec:
               containerPort: 8000
               protocol: TCP
 
+
+          # -------------------------------------------------------------------
+          # Environment configuration
+          # -------------------------------------------------------------------
+          #
+          # Import every variable from the QuantumMind backend Secret.
+          #
+          # This means the application can read values using normal
+          # environment-variable access.
+          envFrom:
+            - secretRef:
+                name: quantummind-server-secret
           # -------------------------------------------------------------------
           # Resource requests and limits
           # -------------------------------------------------------------------
@@ -171,11 +183,11 @@ spec:
           resources:
             requests:
               cpu: "100m"
-              memory: "256Mi"
+              memory: "512Mi"
 
             limits:
               cpu: "500m"
-              memory: "512Mi"
+              memory: "1Gi"
 
           # -------------------------------------------------------------------
           # Health checks
