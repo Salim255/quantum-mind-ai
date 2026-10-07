@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 def setup_cors(app: FastAPI):
     origins: list = [
         "http://localhost:4200",
+        "https://quantummind.salimcode.site", # Production frontend
     ]
     app.add_middleware(
        CORSMiddleware,
