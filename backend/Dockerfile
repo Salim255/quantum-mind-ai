@@ -122,4 +122,19 @@ EXPOSE 8000
 # - 0.0.0.0 → allows external access (important in Docker)
 # - 8000 → port inside container
 #
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000",   "--proxy-headers"]
+# Start FastAPI with Uvicorn.
+#
+# nginx terminates HTTPS and sends X-Forwarded-Proto: https.
+#
+# Kubernetes networking makes the request appear to Uvicorn
+# as coming from 10.42.0.1.
+#
+# --proxy-headers
+#   Enables support for X-Forwarded-* headers.
+#
+# --forwarded-allow-ips
+#   Explicitly tells Uvicorn which proxy IP is trusted.
+#
+# We intentionally trust only the Kubernetes proxy address
+# observed in the backend logs, rather than trusting every IP.
+CMD [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "10.42.0.1"]
