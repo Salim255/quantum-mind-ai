@@ -17,10 +17,14 @@ pipeline {
         BACKEND_IMAGE  = "crawan/quantum-mind-api"
         FRONTEND_IMAGE = "crawan/quantum-mind-client"
 
-        // Every Jenkins build gets a unique image tag.
+        // Every Jenkins build gets a unique version number.
+        //
         // Example:
-        //   Build #42
-        //   crawan/quantum-mind-api:42
+        //   Jenkins build #23
+        //
+        // produces:
+        //   crawan/quantum-mind-api:23
+        //   crawan/quantum-mind-client:23
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
@@ -50,10 +54,12 @@ pipeline {
         stage('Build Backend Image') {
             steps {
 
-                // Build the FastAPI Docker image.
+                // Build the FastAPI backend image.
                 //
-                // The resulting image is tagged with the Jenkins
-                // build number so every build is uniquely identifiable.
+                // We first create the immutable versioned tag.
+                //
+                // Example:
+                //   crawan/quantum-mind-api:23
                 sh """
                     docker build \
                         -t ${BACKEND_IMAGE}:${IMAGE_TAG} \
@@ -71,8 +77,8 @@ pipeline {
 
                 // Build the Angular production image.
                 //
-                // Again, use the Jenkins build number rather than
-                // relying on the mutable "latest" tag.
+                // Example:
+                //   crawan/quantum-mind-client:23
                 sh """
                     docker build \
                         -t ${FRONTEND_IMAGE}:${IMAGE_TAG} \
@@ -88,8 +94,13 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
 
-                // Docker Hub credentials are stored securely
-                // inside Jenkins Credentials.
+                // Docker Hub credentials are stored in Jenkins
+                // Credentials using the ID:
+                //
+                //   dockerhub-creds
+                //
+                // The password is never written directly into
+                // this Jenkinsfile.
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'dockerhub-creds',
@@ -110,34 +121,67 @@ pipeline {
 
 
         // =======================================================
-        // 5. PUSH BACKEND IMAGE
+        // 5. CREATE LATEST TAGS
         // =======================================================
-        stage('Push Backend Image') {
+        stage('Tag Images as Latest') {
             steps {
 
-                // Push only the immutable Jenkins build tag.
+                // The versioned image already exists locally.
+                //
+                // Now create the "latest" tag pointing to the
+                // exact same image.
                 //
                 // Example:
-                // crawan/quantum-mind-api:42
+                //
+                //   quantum-mind-api:23
+                //             ↓
+                //          latest
+                //
+                // Both tags point to the same image.
                 sh """
-                    docker push ${BACKEND_IMAGE}:${IMAGE_TAG}
+                    docker tag \
+                        ${BACKEND_IMAGE}:${IMAGE_TAG} \
+                        ${BACKEND_IMAGE}:latest
+
+                    docker tag \
+                        ${FRONTEND_IMAGE}:${IMAGE_TAG} \
+                        ${FRONTEND_IMAGE}:latest
                 """
             }
         }
 
 
         // =======================================================
-        // 6. PUSH FRONTEND IMAGE
+        // 6. PUSH BACKEND IMAGE
+        // =======================================================
+        stage('Push Backend Image') {
+            steps {
+
+                // Push BOTH backend tags:
+                //
+                //   crawan/quantum-mind-api:23
+                //   crawan/quantum-mind-api:latest
+                sh """
+                    docker push ${BACKEND_IMAGE}:${IMAGE_TAG}
+                    docker push ${BACKEND_IMAGE}:latest
+                """
+            }
+        }
+
+
+        // =======================================================
+        // 7. PUSH FRONTEND IMAGE
         // =======================================================
         stage('Push Frontend Image') {
             steps {
 
-                // Push only the immutable Jenkins build tag.
+                // Push BOTH frontend tags:
                 //
-                // Example:
-                // crawan/quantum-mind-client:42
+                //   crawan/quantum-mind-client:23
+                //   crawan/quantum-mind-client:latest
                 sh """
                     docker push ${FRONTEND_IMAGE}:${IMAGE_TAG}
+                    docker push ${FRONTEND_IMAGE}:latest
                 """
             }
         }
@@ -151,16 +195,18 @@ pipeline {
 
         success {
             echo """
-            🚀 Quantum Mind images built and pushed successfully.
+🚀 Quantum Mind images built and pushed successfully.
 
-            Backend:
-              ${BACKEND_IMAGE}:${IMAGE_TAG}
+Backend:
+  ${BACKEND_IMAGE}:${IMAGE_TAG}
+  ${BACKEND_IMAGE}:latest
 
-            Frontend:
-              ${FRONTEND_IMAGE}:${IMAGE_TAG}
+Frontend:
+  ${FRONTEND_IMAGE}:${IMAGE_TAG}
+  ${FRONTEND_IMAGE}:latest
 
-            Kubernetes rollout is currently MANUAL.
-            """
+Kubernetes rollout is currently MANUAL.
+"""
         }
 
         failure {
@@ -168,8 +214,11 @@ pipeline {
         }
 
         always {
+
             // Remove unused Docker resources from the Jenkins host
-            // after the build to avoid filling the VPS disk.
+            // after the build to prevent the VPS disk from filling up.
+            //
+            // This does not remove images currently used by containers.
             sh 'docker system prune -af || true'
         }
     }
