@@ -3,8 +3,6 @@ pipeline {
     // ===========================================================
     // JENKINS AGENT
     // ===========================================================
-    // Run this pipeline on the available Jenkins executor.
-    // ===========================================================
     agent any
 
 
@@ -17,14 +15,7 @@ pipeline {
         BACKEND_IMAGE  = "crawan/quantum-mind-api"
         FRONTEND_IMAGE = "crawan/quantum-mind-client"
 
-        // Every Jenkins build gets a unique version number.
-        //
-        // Example:
-        //   Jenkins build #23
-        //
-        // produces:
-        //   crawan/quantum-mind-api:23
-        //   crawan/quantum-mind-client:23
+        // Unique image version for this Jenkins build
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
@@ -34,15 +25,11 @@ pipeline {
     // ===========================================================
     stages {
 
-
         // =======================================================
         // 1. CHECKOUT SOURCE CODE
         // =======================================================
         stage('Checkout Code') {
             steps {
-
-                // Jenkins checks out the Git commit that triggered
-                // this build.
                 checkout scm
             }
         }
@@ -52,14 +39,15 @@ pipeline {
         // 2. BUILD BACKEND IMAGE
         // =======================================================
         stage('Build Backend Image') {
-            steps {
 
-                // Build the FastAPI backend image.
-                //
-                // We first create the immutable versioned tag.
-                //
-                // Example:
-                //   crawan/quantum-mind-api:23
+            // Only run this stage when backend files changed.
+            when {
+                changeset "backend/**"
+            }
+
+            steps {
+                echo "Backend changes detected. Building backend image..."
+
                 sh """
                     docker build \
                         -t ${BACKEND_IMAGE}:${IMAGE_TAG} \
@@ -73,12 +61,15 @@ pipeline {
         // 3. BUILD FRONTEND IMAGE
         // =======================================================
         stage('Build Frontend Image') {
-            steps {
 
-                // Build the Angular production image.
-                //
-                // Example:
-                //   crawan/quantum-mind-client:23
+            // Only run this stage when frontend files changed.
+            when {
+                changeset "frontend/quantum-mind-ui/**"
+            }
+
+            steps {
+                echo "Frontend changes detected. Building frontend image..."
+
                 sh """
                     docker build \
                         -t ${FRONTEND_IMAGE}:${IMAGE_TAG} \
@@ -92,15 +83,16 @@ pipeline {
         // 4. LOGIN TO DOCKER HUB
         // =======================================================
         stage('Login to Docker Hub') {
-            steps {
 
-                // Docker Hub credentials are stored in Jenkins
-                // Credentials using the ID:
-                //
-                //   dockerhub-creds
-                //
-                // The password is never written directly into
-                // this Jenkinsfile.
+            // Login only when at least one application changed.
+            when {
+                anyOf {
+                    changeset "backend/**"
+                    changeset "frontend/quantum-mind-ui/**"
+                }
+            }
+
+            steps {
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'dockerhub-creds',
@@ -121,28 +113,35 @@ pipeline {
 
 
         // =======================================================
-        // 5. CREATE LATEST TAGS
+        // 5. TAG BACKEND AS LATEST
         // =======================================================
-        stage('Tag Images as Latest') {
-            steps {
+        stage('Tag Backend Latest') {
 
-                // The versioned image already exists locally.
-                //
-                // Now create the "latest" tag pointing to the
-                // exact same image.
-                //
-                // Example:
-                //
-                //   quantum-mind-api:23
-                //             ↓
-                //          latest
-                //
-                // Both tags point to the same image.
+            when {
+                changeset "backend/**"
+            }
+
+            steps {
                 sh """
                     docker tag \
                         ${BACKEND_IMAGE}:${IMAGE_TAG} \
                         ${BACKEND_IMAGE}:latest
+                """
+            }
+        }
 
+
+        // =======================================================
+        // 6. TAG FRONTEND AS LATEST
+        // =======================================================
+        stage('Tag Frontend Latest') {
+
+            when {
+                changeset "frontend/quantum-mind-ui/**"
+            }
+
+            steps {
+                sh """
                     docker tag \
                         ${FRONTEND_IMAGE}:${IMAGE_TAG} \
                         ${FRONTEND_IMAGE}:latest
@@ -152,15 +151,15 @@ pipeline {
 
 
         // =======================================================
-        // 6. PUSH BACKEND IMAGE
+        // 7. PUSH BACKEND
         // =======================================================
         stage('Push Backend Image') {
-            steps {
 
-                // Push BOTH backend tags:
-                //
-                //   crawan/quantum-mind-api:23
-                //   crawan/quantum-mind-api:latest
+            when {
+                changeset "backend/**"
+            }
+
+            steps {
                 sh """
                     docker push ${BACKEND_IMAGE}:${IMAGE_TAG}
                     docker push ${BACKEND_IMAGE}:latest
@@ -170,15 +169,15 @@ pipeline {
 
 
         // =======================================================
-        // 7. PUSH FRONTEND IMAGE
+        // 8. PUSH FRONTEND
         // =======================================================
         stage('Push Frontend Image') {
-            steps {
 
-                // Push BOTH frontend tags:
-                //
-                //   crawan/quantum-mind-client:23
-                //   crawan/quantum-mind-client:latest
+            when {
+                changeset "frontend/quantum-mind-ui/**"
+            }
+
+            steps {
                 sh """
                     docker push ${FRONTEND_IMAGE}:${IMAGE_TAG}
                     docker push ${FRONTEND_IMAGE}:latest
@@ -195,18 +194,16 @@ pipeline {
 
         success {
             echo """
-🚀 Quantum Mind images built and pushed successfully.
+            🚀 Quantum Mind image pipeline completed successfully.
 
-Backend:
-  ${BACKEND_IMAGE}:${IMAGE_TAG}
-  ${BACKEND_IMAGE}:latest
+            Build:
+                #${BUILD_NUMBER}
 
-Frontend:
-  ${FRONTEND_IMAGE}:${IMAGE_TAG}
-  ${FRONTEND_IMAGE}:latest
+            Only images corresponding to changed application code were built
+            and pushed.
 
-Kubernetes rollout is currently MANUAL.
-"""
+            Kubernetes rollout remains MANUAL.
+            """
         }
 
         failure {
@@ -215,10 +212,8 @@ Kubernetes rollout is currently MANUAL.
 
         always {
 
-            // Remove unused Docker resources from the Jenkins host
-            // after the build to prevent the VPS disk from filling up.
-            //
-            // This does not remove images currently used by containers.
+            // Remove unused Docker resources so the VPS does not
+            // continuously accumulate build layers and stopped data.
             sh 'docker system prune -af || true'
         }
     }
