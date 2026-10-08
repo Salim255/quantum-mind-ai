@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { SidebarToggleService } from "../../dashboard/services/sidebar-toggle.service";
 
 @Component({
   selector: "app-progress.page",
@@ -7,7 +8,7 @@ import { Component } from "@angular/core";
   standalone: false
 })
 
-export class ProgressPage {
+export class ProgressPage implements OnInit {
   /* Progress
 
   For tracking growth.
@@ -23,4 +24,13 @@ export class ProgressPage {
   ├── Achievements
   ├── Learning History
   └── Recommendations */
+
+  constructor(
+    private sidebarToggleService: SidebarToggleService
+  ) {}
+
+  ngOnInit(): void {
+    // Initialize progress tracking logic here
+    this.sidebarToggleService.setCollapsed(false); // Ensure sidebar is expanded for progress page
+  }
 }

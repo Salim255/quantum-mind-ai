@@ -30,6 +30,8 @@ export class AsideLayoutComponent {
     this.subscribeToSidebarToggle();
   }
 
+
+
   subscribeToSidebarToggle(){
     this.sidebarToggleSubscription = this.sidebarToggleService
     .collapsed$.subscribe(stat => {
@@ -38,6 +40,7 @@ export class AsideLayoutComponent {
   }
 
   subscribeToCurrentPageNav(): void{
+
     this.currentPageNavSubscription = this.asideNavService
     .getCurrentPageNav$.subscribe((value: NavItem | null) => {
       if(!value) {
@@ -80,7 +83,7 @@ export class AsideLayoutComponent {
   }
 
   ngOnDestroy() {
-     this.sidebarToggleSubscription?.unsubscribe();
+    this.sidebarToggleSubscription?.unsubscribe();
     this.currentPageNavSubscription?.unsubscribe()
   }
 }

@@ -30,9 +30,6 @@
   padding:
     var(--space-5);
 
-  box-sizing:
-    border-box;
-
   border:
     var(--border-thin)
     solid
@@ -47,6 +44,8 @@
   transition:
     border-color var(--motion-fast),
     background var(--motion-fast);
+
+
 }
 
 
@@ -80,9 +79,10 @@
 
 .progress-achievement-card--locked {
 
-  opacity:
-    .62;
+  opacity: .62;
+
 }
+
 
 
 .progress-achievement-card--locked:hover {

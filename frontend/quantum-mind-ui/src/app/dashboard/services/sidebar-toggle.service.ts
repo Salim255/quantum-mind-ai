@@ -29,6 +29,10 @@ export class SidebarToggleService {
     this.collapsed = !this.collapsed;
   }
 
+  setCollapsed(value: boolean): void {
+    this.collapsed = value;
+  }
+
   private getInitialCollapsedState(): boolean {
     const savedState = localStorage.getItem(this.storageKey);
 

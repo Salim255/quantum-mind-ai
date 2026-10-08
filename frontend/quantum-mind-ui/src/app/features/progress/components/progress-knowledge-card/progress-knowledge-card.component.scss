@@ -23,9 +23,6 @@
   padding:
     var(--space-6);
 
-  box-sizing:
-    border-box;
-
   border:
     var(--border-thin)
     solid
@@ -283,15 +280,4 @@
 }
 
 
-/* ============================================================
-   PHONE
-   ------------------------------------------------------------
-   Preserve the card structure.
-   Only allow tighter geometry when necessary.
-============================================================ */
 
-@include respond(phone) {
-
-
-
-}

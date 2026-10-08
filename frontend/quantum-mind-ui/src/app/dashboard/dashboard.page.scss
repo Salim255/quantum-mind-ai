@@ -106,6 +106,7 @@
     background: transparent;
     pointer-events: none;
 
+    z-index: 1;
     &--active {
       grid-column: 4 / -1;
       width: 100%;
