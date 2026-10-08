@@ -14,7 +14,7 @@ export class SpinQubitsPage implements OnInit, AfterViewInit {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
-
+  private sectionsChangesSubscription!: Subscription;
   private spinQuTopicsSubscription!: Subscription;
 
   spinQuTopic = signal<TopicWithSectionsDTO | null>(null);
@@ -39,6 +39,10 @@ export class SpinQubitsPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.observeSections();
+
+    this.sectionsChangesSubscription = this.sections.changes.subscribe(() => {
+      this.observeSections();
+    });
   }
 
 
@@ -56,7 +60,6 @@ export class SpinQubitsPage implements OnInit, AfterViewInit {
           entry => entry.isIntersecting
         );
 
-        console.log(visibleEntry, "hello");
         if (!visibleEntry) {
           return;
         }
@@ -83,5 +86,6 @@ export class SpinQubitsPage implements OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.spinQuTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
+    this.sectionsChangesSubscription?.unsubscribe();
   }
 }

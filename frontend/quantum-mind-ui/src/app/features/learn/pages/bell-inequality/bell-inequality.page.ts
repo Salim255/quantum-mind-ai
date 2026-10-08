@@ -15,6 +15,7 @@ export class BellInequalityPage implements OnInit, AfterViewInit {
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
   private bellTopicsSubscription!: Subscription;
+  private sectionsChangesSubscription!: Subscription;
 
   bellTopic = signal<TopicWithSectionsDTO | null>(null);
 
@@ -36,6 +37,12 @@ export class BellInequalityPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.observeSections();
+
+    // To survived the refresh of the sections list when the content changes,
+    // we subscribe to the changes of the QueryList
+    this.sectionsChangesSubscription = this.sections.changes.subscribe(() => {
+      this.observeSections();
+    });
   }
 
   subscribeToLearnTopics(){
@@ -79,5 +86,7 @@ export class BellInequalityPage implements OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.observer?.disconnect();
     this.bellTopicsSubscription?.unsubscribe();
+    this.observer?.disconnect();
+    this.sectionsChangesSubscription?.unsubscribe();
   }
 }

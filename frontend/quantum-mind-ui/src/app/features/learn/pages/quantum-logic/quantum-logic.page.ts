@@ -14,7 +14,7 @@ export class QuantumLogicPage implements AfterViewInit{
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
-
+  private sectionsChangesSubscription!: Subscription;
   private quantumLogicTopicsSubscription!: Subscription;
 
   quantumLogicTopic = signal<TopicWithSectionsDTO | null>(null);
@@ -39,6 +39,10 @@ export class QuantumLogicPage implements AfterViewInit{
 
   ngAfterViewInit(): void {
     this.observeSections();
+
+    this.sectionsChangesSubscription = this.sections.changes.subscribe(() => {
+      this.observeSections();
+    });
   }
 
   subscribeToLearnTopics(){
@@ -83,5 +87,6 @@ export class QuantumLogicPage implements AfterViewInit{
   ngOnDestroy(): void {
     this.quantumLogicTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
+    this.sectionsChangesSubscription?.unsubscribe();
   }
 }

@@ -17,7 +17,7 @@ export class AsideLayoutComponent {
   private currentPageNavSubscription!: Subscription;
   private sidebarToggleSubscription!: Subscription;
   showSecondaryNav = signal<boolean>(false);
-  
+
   constructor(
     private sidebarToggleService: SidebarToggleService,
     private router: Router,
@@ -65,7 +65,7 @@ export class AsideLayoutComponent {
     this.showSecondaryNav.set(hasSecond);
   }
 
-  
+
 
   listenToRouter(): void {
      this.router.events.pipe(

@@ -14,7 +14,7 @@ export class QuantumAlgosPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
-
+  private sectionsChangesSubscription!: Subscription;
 
   private quantumAlgosTopicsSubscription!: Subscription;
 
@@ -40,6 +40,9 @@ export class QuantumAlgosPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.observeSections();
+     this.sectionsChangesSubscription = this.sections.changes.subscribe(() => {
+      this.observeSections();
+    });
   }
 
 
@@ -85,5 +88,6 @@ export class QuantumAlgosPage implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.quantumAlgosTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
+    this.sectionsChangesSubscription?.unsubscribe();
   }
 }

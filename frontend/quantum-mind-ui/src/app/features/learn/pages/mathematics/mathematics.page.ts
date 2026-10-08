@@ -17,6 +17,7 @@ export class MathematicsPage implements OnInit, AfterViewInit {
   private observer?: IntersectionObserver;
 
   private mathsTopicsSubscription!: Subscription;
+  private sectionsChangesSubscription!: Subscription;
 
   mathsTopic = signal<TopicWithSectionsDTO | null>(null);
 
@@ -38,6 +39,12 @@ export class MathematicsPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.observeSections();
+
+    // To survived the refresh of the sections list when the content changes,
+    // we subscribe to the changes of the QueryList
+    this.sectionsChangesSubscription = this.sections.changes.subscribe(() => {
+      this.observeSections();
+    });
   }
 
   subscribeToLearnTopics(){
@@ -92,6 +99,7 @@ export class MathematicsPage implements OnInit, AfterViewInit {
 
   ngOnDestroy(): void {
     this.mathsTopicsSubscription?.unsubscribe();
+    this.sectionsChangesSubscription?.unsubscribe();
     this.observer?.disconnect();
   }
 }

@@ -14,7 +14,7 @@ export class SpinPage  implements AfterViewInit, OnInit, OnDestroy {
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
-
+  private sectionsChangesSubscription!: Subscription;
   private spinTopicsSubscription!: Subscription;
 
   spanTopic = signal<TopicWithSectionsDTO | null>(null);
@@ -48,6 +48,10 @@ export class SpinPage  implements AfterViewInit, OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.observeSections();
+
+    this.sectionsChangesSubscription = this.sections.changes.subscribe(() => {
+      this.observeSections();
+    });
   }
 
   subscribeToLearnTopics(){
@@ -92,5 +96,6 @@ export class SpinPage  implements AfterViewInit, OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.spinTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
+    this.sectionsChangesSubscription?.unsubscribe();
   }
 }

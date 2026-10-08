@@ -14,7 +14,7 @@ export class QuantumImpactPage implements AfterViewInit, OnInit, OnDestroy{
   @ViewChildren('pageSection')
   private sections!: QueryList<ElementRef<HTMLElement>>;
   private observer?: IntersectionObserver;
-
+  private sectionsChangesSubscription!: Subscription;
 
   private quantumImpactTopicsSubscription!: Subscription;
 
@@ -41,6 +41,10 @@ export class QuantumImpactPage implements AfterViewInit, OnInit, OnDestroy{
 
   ngAfterViewInit(): void {
     this.observeSections();
+
+    this.sectionsChangesSubscription = this.sections.changes.subscribe(() => {
+      this.observeSections();
+    });
   }
 
   subscribeToLearnTopics(){
@@ -85,5 +89,6 @@ export class QuantumImpactPage implements AfterViewInit, OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.quantumImpactTopicsSubscription?.unsubscribe();
     this.observer?.disconnect();
+    this.sectionsChangesSubscription?.unsubscribe();
   }
 }

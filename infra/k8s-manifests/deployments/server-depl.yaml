@@ -126,13 +126,19 @@ spec:
           # Image pull policy
           # -------------------------------------------------------------------
           #
-          # "IfNotPresent" means:
+          # "Always" makes Kubernetes check the registry whenever a new Pod
+          # starts.
           #
-          #   - If the image already exists on the node, use it.
-          #   - Otherwise, pull it from the registry.
+          # This is important because Jenkins updates the mutable "latest" tag
+          # after every successful build.
           #
-          # This avoids unnecessarily downloading the same image repeatedly.
-          imagePullPolicy: IfNotPresent
+          # Example:
+          #
+          #   Jenkins build 23 → :latest → image A
+          #   Jenkins build 24 → :latest → image B
+          #
+          # When the Pod restarts, Kubernetes pulls the current :latest image.
+          imagePullPolicy: Always
 
           # -------------------------------------------------------------------
           # Container port
