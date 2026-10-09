@@ -3,85 +3,34 @@
   class="explore-topic"
   (click)="openAttempt()"
 >
-
-  <!-- ==========================================================
-       INDEX
-  =========================================================== -->
-
-  <span
-    class="explore-topic__index"
-    aria-hidden="true"
-  >
+  <span class="explore-topic__index" aria-hidden="true">
     {{ index() }}
   </span>
 
-
-  <!-- ==========================================================
-       CONTENT
-  =========================================================== -->
-
   <span class="explore-topic__content">
-
     <span class="explore-topic__title">
       {{ exploreTopic()?.topic?.title }}
     </span>
 
-    <span class="explore-topic__description">
-      {{ exploreTopic()?.topic?.description }}
-    </span>
 
   </span>
 
-
-  <!-- ==========================================================
-       ACTION
-  =========================================================== -->
-
-  <span
-    class="explore-topic__action"
-    aria-hidden="true"
-  >
-
+  <span class="explore-topic__action" aria-hidden="true">
     @if (!exploreTopic().latestAttempt) {
-
       <span class="explore-topic__action-label">
         Take the quiz
       </span>
-
-      <span class="explore-topic__action-icon">
-        <iconify-icon
-          icon="lucide:arrow-right"
-        ></iconify-icon>
-      </span>
-
-    } @else if (
-      !exploreTopic().latestAttempt?.is_completed
-    ) {
-
+      <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+    } @else if (!exploreTopic().latestAttempt?.is_completed) {
       <span class="explore-topic__action-label">
         Resume quiz
       </span>
-
-      <span class="explore-topic__action-icon">
-        <iconify-icon
-          icon="lucide:play"
-        ></iconify-icon>
-      </span>
-
+      <iconify-icon icon="lucide:play"></iconify-icon>
     } @else {
-
       <span class="explore-topic__action-label">
         Retake quiz
       </span>
-
-      <span class="explore-topic__action-icon">
-        <iconify-icon
-          icon="lucide:rotate-ccw"
-        ></iconify-icon>
-      </span>
-
+      <iconify-icon icon="lucide:rotate-ccw"></iconify-icon>
     }
-
   </span>
-
 </button>

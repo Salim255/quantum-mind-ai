@@ -1,62 +1,25 @@
 @use "../../../../../styles/mixins/queries" as *;
 
-
-/* ============================================================
-   PRACTICE OVERVIEW SNAPSHOT
-   ------------------------------------------------------------
-   Primary practice metrics.
-
-   Direction:
-   - consistent with progress snapshot
-   - structured
-   - spacious
-   - responsive through layout changes only
-============================================================ */
-
 .practice-overview-snapshot {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap:
-    var(--component-gap-md);
-
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4rem;
   width: 100%;
-
-  margin-bottom:
-    var(--section-gap-xl);
+  height: 100%;
+  margin-bottom: var(--section-gap-xl);
 }
 
-
-/* ============================================================
-   TABLET
-   ------------------------------------------------------------
-   Three metrics become two columns.
-============================================================ */
-
+/* Tablet */
 @include respond(tab-land) {
-
   .practice-overview-snapshot {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
-
-/* ============================================================
-   PHONE
-   ------------------------------------------------------------
-   One metric per row.
-============================================================ */
-
+/* Phone */
 @include respond(tab-port) {
-
   .practice-overview-snapshot {
-    grid-template-columns:
-      minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    margin-bottom: var(--section-gap-lg);
   }
-
 }

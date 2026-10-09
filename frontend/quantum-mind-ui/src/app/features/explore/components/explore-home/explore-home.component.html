@@ -3,20 +3,16 @@
   <app-explore-header />
 
   <section class="explore-home__topics">
-
     @for (
-      data of topics();
-      track data?.topic?.title;
+      data of topics().filter(topic => topic.topic?.display_order !== 5);
+      track data.topic?.title;
       let index = $index
     ) {
-
       <app-explore-topic
         [exploreTopic]="data"
         [index]="index + 1"
       />
-
     }
-
   </section>
 
 </div>

@@ -39,7 +39,7 @@
 
   color:
     var(--color-gray-10);
-  
+
   gap: var(--space-10);
 }
 
@@ -127,8 +127,7 @@
 
   align-items: stretch;
 
-  gap:
-    var(--component-gap-md);
+  gap: var(--space-8);
 
   width: 100%;
   min-width: 0;

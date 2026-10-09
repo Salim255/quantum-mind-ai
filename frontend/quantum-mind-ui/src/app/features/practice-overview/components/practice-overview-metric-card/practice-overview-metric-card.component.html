@@ -1,78 +1,46 @@
 <article class="practice-overview-metric-card">
-
-  <!-- ==================================================
-       TOP
-  ================================================== -->
-
-  <div class="practice-overview-metric-card__top">
-
+  <header class="practice-overview-metric-card__header">
     <span
       class="practice-overview-metric-card__icon"
       aria-hidden="true"
     >
-      <iconify-icon
-        [icon]="icon()"
-      ></iconify-icon>
+      <iconify-icon [icon]="icon()"></iconify-icon>
     </span>
 
     <span class="practice-overview-metric-card__label">
       {{ label() }}
     </span>
+  </header>
 
+  <div class="practice-overview-metric-card__body">
+    <div class="practice-overview-metric-card__value">
+      {{ value() }}
+    </div>
+
+    <p class="practice-overview-metric-card__description">
+      {{ description() }}
+    </p>
   </div>
 
+  <footer class="practice-overview-metric-card__footer">
+    @if (actionLabel() && actionRoute()) {
+      <a
+        class="practice-overview-metric-card__action"
+        [routerLink]="actionRoute()"
+      >
+        <span>{{ actionLabel() }}</span>
 
-  <!-- ==================================================
-       VALUE
-  ================================================== -->
+        <iconify-icon
+          icon="lucide:arrow-right"
+          aria-hidden="true"
+        ></iconify-icon>
+      </a>
+    }
 
-  <div class="practice-overview-metric-card__value">
-    {{ value() }}
-  </div>
-
-
-  <!-- ==================================================
-       DESCRIPTION
-  ================================================== -->
-
-  <p class="practice-overview-metric-card__description">
-    {{ description() }}
-  </p>
-
-
-  <!-- ==================================================
-       ACTION
-  ================================================== -->
-
-  @if (actionLabel() && actionRoute()) {
-
-    <a
-      class="practice-overview-metric-card__action"
-      [routerLink]="actionRoute()"
-    >
-
-      {{ actionLabel() }}
-
-      <iconify-icon
-        icon="lucide:arrow-right"
-        aria-hidden="true"
-      ></iconify-icon>
-
-    </a>
-
-  }
-
-
-  <!-- ==================================================
-       CONTEXT
-  ================================================== -->
-
-  @if (context()) {
-
-    <span class="practice-overview-metric-card__context">
-      {{ context() }}
-    </span>
-
-  }
-
+    @if (context()) {
+      <span class="practice-overview-metric-card__context">
+        {{ context() }}
+      </span>
+    }
+  </footer>
 </article>

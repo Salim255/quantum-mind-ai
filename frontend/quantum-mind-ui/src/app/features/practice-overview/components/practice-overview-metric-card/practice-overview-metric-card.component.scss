@@ -1,284 +1,164 @@
-/* ============================================================
-   PRACTICE OVERVIEW METRIC CARD
-   ------------------------------------------------------------
-   Snapshot metric surface.
-
-   Direction:
-   - consistent with progress metric
-   - soft
-   - spacious
-   - restrained
-   - information-first
-============================================================ */
+@use "../../../../../styles/mixins/queries" as *;
 
 .practice-overview-metric-card {
-
   display: flex;
-
   flex-direction: column;
+  align-items: stretch;
 
   min-width: 0;
+  min-height: 0;
+  height: 100%;
 
-  min-height:
-    12rem;
+  padding: var(--space-6);
+  box-sizing: border-box;
 
-  padding:
-    var(--space-6);
-
-  box-sizing:
-    border-box;
-
-  border:
-    var(--border-thin)
-    solid
-    var(--color-border-subtle);
-
-  border-radius:
-    var(--radius-panel);
-
-  background:
-    var(--color-surface);
+  background: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border-subtle);
+  border-radius: var(--radius-panel);
 
   transition:
     border-color var(--transition-fast),
-    background var(--transition-fast);
-}
+    background-color var(--transition-fast);
 
+
+    cursor: pointer;
+}
 
 .practice-overview-metric-card:hover {
-
-  border-color:
-    var(--color-border);
-
-  background:
-    var(--color-surface-subtle);
+  border-color: var(--color-border);
 }
 
+/* Header */
 
-/* ============================================================
-   TOP
-============================================================ */
-
-.practice-overview-metric-card__top {
-
+.practice-overview-metric-card__header {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
-  gap:
-    var(--space-4);
+  gap: var(--space-3);
 
   min-width: 0;
 }
-
-
-/* ============================================================
-   ICON
-============================================================ */
 
 .practice-overview-metric-card__icon {
-
   display: grid;
-
   place-items: center;
+  flex: 0 0 2.5rem;
+  color: var(--color-gray-7);
 
-  flex-shrink: 0;
-
-  width:
-    var(--space-8);
-
-  height:
-    var(--space-8);
-
-  border:
-    var(--border-thin)
-    solid
-    var(--color-border-subtle);
-
-  border-radius:
-    var(--radius-md);
-
-  background:
-    var(--color-surface-subtle);
-
-  color:
-    var(--color-gray-7);
-
-  font-size:
-    var(--text-body-md-size);
+  font-size: var(--text-body-lg-size);
 }
-
-
-/* ============================================================
-   LABEL
-============================================================ */
 
 .practice-overview-metric-card__label {
-
   min-width: 0;
 
-  color:
-    var(--color-gray-6);
-
-  font-size:
-    var(--text-label-sm-size);
-
-  font-weight:
-    var(--text-label-md-weight);
-
-  line-height:
-    var(--text-label-sm-line);
-
-  letter-spacing:
-    .04em;
-
-  text-align:
-    right;
+  color: var(--color-gray-8);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-md-weight);
+  line-height: var(--text-label-sm-line);
+  letter-spacing: 0.055em;
+  text-align: right;
+  text-transform: uppercase;
 }
 
+/* Metric body */
 
-/* ============================================================
-   VALUE
-============================================================ */
+.practice-overview-metric-card__body {
+  margin-top: var(--space-6);
 
-.practice-overview-metric-card__value {
-
+  display: flex;
+  flex-direction: column;
   margin: auto;
 
-  color:
-    var(--color-gray-10);
-
-  font-size:
-    var(--text-display-sm-size);
-
-  font-weight:
-    var(--text-heading-sm-weight);
-
-  line-height:
-    1;
-
-  letter-spacing:
-    -.02em;
-
-  font-variant-numeric:
-    tabular-nums;
-  
+  padding: var( --space-6) 0;
 }
 
-
-/* ============================================================
-   DESCRIPTION
-============================================================ */
+.practice-overview-metric-card__value {
+  color: var(--color-gray-9);
+  font-size: var(--text-display-sm-size);
+  font-weight: var(--font-regular);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  margin: auto;
+}
 
 .practice-overview-metric-card__description {
+  max-width: 26rem;
+  margin: var(--space-2) 0 0;
 
-  max-width:
-    24rem;
-
-  margin:
-    var(--component-gap-sm)
-    auto
-    auto;
-
-  color:
-    var(--color-gray-6);
-
-  font-size:
-    var(--text-body-sm-size);
-
-  font-weight:
-    var(--text-body-sm-weight);
-
-  line-height:
-    var(--text-body-sm-line);
+  color: var(--color-gray-6);
+  font-size: var(--text-body-sm-size);
+  font-weight: var(--text-body-sm-weight);
+  line-height: var(--text-body-sm-line);
+  text-wrap: pretty;
 }
 
+/* Footer */
 
-/* ============================================================
-   ACTION
-============================================================ */
+.practice-overview-metric-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  min-width: 0;
+  margin-top: auto;
+  padding-top: var(--space-5);
+}
 
 .practice-overview-metric-card__action {
-
   display: inline-flex;
-
   align-items: center;
+  gap: var(--space-2);
 
-  gap:
-    var(--space-2);
+  min-width: 0;
+  color: var(--color-gray-7);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-md-weight);
+  line-height: var(--text-label-sm-line);
+  text-decoration: none;
 
-  align-self: flex-end;
-
-  margin-top:
-    var(--component-gap-lg);
-
-  color:
-    var(--color-gray-7);
-
-  font-size:
-    var(--text-label-sm-size);
-
-  font-weight:
-    var(--text-label-md-weight);
-
-  line-height:
-    1;
-
-  text-decoration:
-    none;
-
-  transition:
-    color var(--transition-fast);
+  transition: color var(--transition-fast);
 }
-
-
-.practice-overview-metric-card__action iconify-icon {
-
-  font-size:
-    var(--text-body-md-size);
-
-  transition:
-    transform var(--transition-fast);
-}
-
 
 .practice-overview-metric-card__action:hover {
-
-  color:
-    var(--color-primary);
+  color: var(--color-primary);
 }
 
+.practice-overview-metric-card__action iconify-icon {
+  flex: 0 0 auto;
+  font-size: var(--text-body-md-size);
+
+  transition: transform var(--transition-fast);
+}
 
 .practice-overview-metric-card__action:hover iconify-icon {
-
-  transform:
-    translateX(var(--space-1));
+  transform: translateX(var(--space-1));
 }
 
-
-/* ============================================================
-   CONTEXT
-============================================================ */
+.practice-overview-metric-card__action:focus-visible {
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
 
 .practice-overview-metric-card__context {
+  color: var(--color-gray-5);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-sm-weight);
+  line-height: var(--text-label-sm-line);
+  text-align: right;
+}
 
-  display: block;
+/* Responsive layout */
 
-  margin-top:
-    var(--component-gap-lg);
+@media (max-width: 30rem) {
+  .practice-overview-metric-card {
+    min-height: 12rem;
+    padding: var(--space-5);
+  }
 
-  color:
-    var(--color-gray-5);
-
-  font-size:
-    var(--text-label-sm-size);
-
-  font-weight:
-    var(--text-label-sm-weight);
-
-  line-height:
-    var(--text-label-sm-line);
-  align-self: flex-end;
+  .practice-overview-metric-card__body {
+    margin-top: var(--space-5);
+  }
 }

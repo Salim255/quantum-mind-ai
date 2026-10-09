@@ -1,356 +1,191 @@
 @use "../../../../../styles/mixins/queries" as *;
 
-
 /* ============================================================
    EXPLORE TOPIC
-   ------------------------------------------------------------
-   Topic catalogue item.
-
-   Direction:
-   - clean
-   - editorial
-   - spacious
-   - premium
-   - restrained
-   - subtle interaction
-   - strong content hierarchy
 ============================================================ */
 
 .explore-topic {
-
-  position: relative;
-
   display: grid;
-
-  grid-template-columns:
-    auto
-    minmax(0, 1fr)
-    auto;
-
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
   align-items: center;
+  gap: var(--space-5);
 
   width: 100%;
   min-width: 0;
-
-  padding:
-    var(--space-6)
-    var(--space-6);
-
-  border: 1px solid var(--color-gray-2);
-  border-radius: var(--radius-lg);
-
-  background: var(--color-white);
-
+  min-height: 5.25rem;
+  padding: var(--space-5) var(--space-6);
   box-sizing: border-box;
 
   color: inherit;
-
   text-align: left;
+  background: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border-subtle);
+  border-radius: var(--radius-panel);
 
   cursor: pointer;
 
   transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease,
-    background-color 160ms ease;
-
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
 
   /* ==========================================================
      INDEX
   ========================================================== */
 
   &__index {
+    display: grid;
+    place-items: center;
 
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    width: var(--space-10);
-    height: var(--space-10);
-
-    margin-right: var(--space-5);
-
-    flex-shrink: 0;
-
-    border-radius: var(--radius-md);
-
-    background: var(--color-gray-1);
+    width: 2.5rem;
+    height: 2.5rem;
 
     color: var(--color-gray-6);
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-md);
 
     font-size: var(--text-label-sm-size);
-    font-weight: var(--font-semibold);
+    font-weight: var(--text-label-md-weight);
     line-height: 1;
-
-    letter-spacing: .04em;
-
-    transition:
-      background-color 160ms ease,
-      color 160ms ease;
+    font-variant-numeric: tabular-nums;
   }
-
 
   /* ==========================================================
      CONTENT
   ========================================================== */
 
   &__content {
-
-    display: flex;
-    flex-direction: column;
-
+    display: block;
     min-width: 0;
-
   }
-
 
   &__title {
+    display: block;
 
-    overflow: hidden;
-
-    color: var(--color-gray-9);
-
-    font-size: var(--text-body-lg-size);
-    font-weight: var(--font-semibold);
+    color: var(--color-gray-8);
+    font-size: var(--text-body-md-size);
+    font-weight: var(--font-medium);
     line-height: var(--text-body-lg-line);
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
 
-    transition: color 160ms ease;
+    transition: color var(--transition-fast);
   }
-
-
-  &__description {
-
-    max-width: var(--content-md);
-
-    margin-top: var(--space-2);
-
-    overflow: hidden;
-
-    color: var(--color-gray-6);
-
-    font-size: var(--text-body-md-size);
-    font-weight: var(--text-body-md-weight);
-    line-height: var(--text-body-md-line);
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
 
   /* ==========================================================
      ACTION
   ========================================================== */
 
   &__action {
-
     display: inline-flex;
-
     align-items: center;
-
+    justify-content: flex-end;
     gap: var(--space-2);
 
-    margin-left: var(--space-6);
-
     flex-shrink: 0;
+    margin-left: var(--space-3);
 
     color: var(--color-gray-6);
-
     font-size: var(--text-label-md-size);
     font-weight: var(--text-label-md-weight);
     line-height: var(--text-label-md-line);
 
     white-space: nowrap;
 
-    transition:
-      color 160ms ease,
-      transform 160ms ease;
+    transition: color var(--transition-fast);
   }
 
+  &__action-label {
+    transition: color var(--transition-fast);
+  }
 
-  &__action-icon {
-
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    width: var(--space-8);
-    height: var(--space-8);
-
-    border: 1px solid var(--color-gray-2);
-    border-radius: var(--radius-circle);
-
-    background: var(--color-gray-1);
-
-    color: var(--color-gray-7);
+  &__action iconify-icon {
+    display: block;
+    flex-shrink: 0;
 
     font-size: 1rem;
 
-    transition:
-      border-color 160ms ease,
-      background-color 160ms ease,
-      color 160ms ease,
-      transform 160ms ease;
+    transition: transform var(--transition-fast);
   }
-
 
   /* ==========================================================
      HOVER
   ========================================================== */
 
   &:hover {
-
-    border-color: var(--color-gray-3);
-
-    background: var(--color-gray-1);
-
-    box-shadow:
-      0 var(--space-2) var(--space-6)
-      rgb(0 0 0 / 4%);
-
-    transform: translateY(-1px);
-
-
-    .explore-topic__index {
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--color-primary),
-          var(--color-info)
-        );
-
-      color: var(--color-white);
-    }
-
-
-    .explore-topic__title {
-
-      color: var(--color-gray-10);
-    }
-
-
-    .explore-topic__action {
-
-      color: var(--color-primary);
-
-      transform: translateX(2px);
-    }
-
-
-    .explore-topic__action-icon {
-
-      border-color: var(--color-primary);
-
-      background: var(--color-primary);
-
-      color: var(--color-white);
-
-      transform: translateX(1px);
-    }
-
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
   }
 
+  &:hover &__title {
+    color: var(--color-gray-10);
+  }
+
+  &:hover &__action {
+    color: var(--color-primary);
+  }
+
+  &:hover &__action iconify-icon {
+    transform: translateX(var(--space-1));
+  }
 
   /* ==========================================================
      FOCUS
   ========================================================== */
 
   &:focus-visible {
-
-    outline: none;
-
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
     border-color: var(--color-primary);
-
-    box-shadow:
-      0 0 0 3px
-      rgb(75 92 255 / 14%);
   }
-
 
   /* ==========================================================
      ACTIVE
   ========================================================== */
 
   &:active {
-
-    transform: translateY(0);
-
-    box-shadow: none;
-
+    background: var(--color-surface-subtle);
   }
-
 }
 
-
 /* ============================================================
-   RESPONSIVE
+   TABLET
 ============================================================ */
 
 @include respond(tab-port) {
-
   .explore-topic {
-
-    padding:
-      var(--space-5)
-      var(--space-5);
-
+    gap: var(--space-4);
+    padding: var(--space-5);
   }
-
 }
 
+/* ============================================================
+   PHONE
+============================================================ */
 
 @include respond(phone) {
-
   .explore-topic {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: var(--space-3);
 
-    grid-template-columns:
-      auto
-      minmax(0, 1fr);
-
-    align-items: start;
-
-    padding:
-      var(--space-5);
-
-    &__index {
-
-      width: var(--space-9);
-      height: var(--space-9);
-
-      margin-right: var(--space-4);
-    }
-
-
-    &__title {
-
-      white-space: normal;
-    }
-
-
-    &__description {
-
-      margin-top: var(--space-1);
-
-      white-space: normal;
-    }
-
-
-    &__action {
-
-      grid-column: 2;
-
-      margin-top: var(--space-4);
-      margin-left: 0;
-
-      justify-self: start;
-    }
-
+    min-height: 4.5rem;
+    padding: var(--space-4);
   }
 
+  .explore-topic__index {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .explore-topic__content {
+    align-self: center;
+  }
+
+  .explore-topic__action {
+    grid-column: 2;
+    justify-content: flex-start;
+
+    margin: 0;
+    padding-top: var(--space-1);
+  }
 }

@@ -181,6 +181,13 @@ a {
 }
 
 
+h2,h1 {
+    --tw-font-weight: var(--font-medium);
+    font-weight: var(--font-medium);
+    --tw-tracking: var(--tracking-normal);
+    letter-spacing: var(--tracking-normal);
+}
+
 /* ============================================================
    REDUCED MOTION
 ============================================================ */
