@@ -62,7 +62,7 @@ export class ConversationHttpService {
         signal: controller.signal
       })
       .then(async response => {
-    
+
         // If no streaming body → cannot stream
         if (!response.body) {
           observer.error(new Error('No response body'));
@@ -125,7 +125,6 @@ export class ConversationHttpService {
           }
 
         } catch (err) {
-          console.log("error", err)
           observer.error(err);
         }
 

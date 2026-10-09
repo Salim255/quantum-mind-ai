@@ -26,7 +26,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     .getConversation.subscribe((conversation: Conversation | null) => {
       this.conversation = conversation;
       this.messages.set(this.conversation?.getMessages()?? []);
-      console.log(this.conversation, this.messages());
+
     })
   }
 

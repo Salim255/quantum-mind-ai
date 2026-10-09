@@ -34,7 +34,7 @@ export class ExploreTopicComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.exploreTopic())  
+    console.log('')
   }
 
   get actionLabel(): string {
@@ -86,7 +86,6 @@ export class ExploreTopicComponent implements OnInit {
       .createAttempt(topicId)
       .subscribe({
         next:response => {
-          console.log(response);
           this.navigateToAttempt(
             response?.data?.attempt?.id,
           );

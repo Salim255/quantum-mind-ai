@@ -35,7 +35,6 @@ export class ExploreService {
       .getTopics()
       .subscribe({
         next: response => {
-          console.log(response);
           this.setTopics(
             response.data.quizzes
 

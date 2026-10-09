@@ -34,7 +34,7 @@ export class PageContentAsideComponent implements OnInit {
     .getCurrentSectionId$
     .subscribe(
       id => {
-        console.log('[Aside] current section id:', id);
+
         if(id) {
           this.activeSection.set(id);
         }

@@ -12,7 +12,7 @@ export class App {
   answer = signal('42');
   userQuestion = "";
   constructor() {
-    console.log('App component initialized');
+
   }
   ask(){}
 }

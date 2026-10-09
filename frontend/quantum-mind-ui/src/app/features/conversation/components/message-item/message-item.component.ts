@@ -44,7 +44,7 @@ export class MessageItemComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes) {
-      console.log(this.message);
+     
     }
   }
 
