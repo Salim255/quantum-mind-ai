@@ -13,6 +13,7 @@ import { ProgressAchievementsComponent } from "./components/progress-achievement
 import { ProgressAchievementCardComponent } from "./components/progress-achievement-card/progress-achievement-card.component";
 import { ProgressRankingComponent } from "./components/progress-ranking/progress-ranking.component";
 import { ProgressNextComponent } from "./components/progress-next/progress-next.component";
+import { ProgressSnapshotCardComponent } from "./components/progress-snapshot-card/progress-snapshot-card.component";
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { ProgressNextComponent } from "./components/progress-next/progress-next.
     ProgressRoutingModule,
   ],
   declarations: [
+    ProgressSnapshotCardComponent,
     ProgressNextComponent,
     ProgressRankingComponent,
     ProgressAchievementCardComponent,

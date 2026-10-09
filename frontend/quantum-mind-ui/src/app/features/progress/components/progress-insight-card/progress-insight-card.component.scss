@@ -29,7 +29,8 @@
     var(--space-5);
 
   min-width: 0;
-
+  min-height: 0;
+  height: 100%;
   padding:
     var(--space-6);
 
@@ -120,26 +121,6 @@
   place-items: center;
 
   flex-shrink: 0;
-
-  width:
-    var(--space-10);
-
-  height:
-    var(--space-10);
-
-  box-sizing:
-    border-box;
-
-  border:
-    var(--border-thin)
-    solid
-    var(--color-border-subtle);
-
-  border-radius:
-    var(--radius-md);
-
-  background:
-    var(--color-surface);
 
   color:
     var(--color-gray-7);

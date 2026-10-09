@@ -37,6 +37,7 @@
   transition:
     border-color var(--motion-fast),
     background var(--motion-fast);
+
 }
 
 
@@ -98,23 +99,6 @@
 
   flex-shrink: 0;
 
-  width:
-    var(--space-10);
-
-  height:
-    var(--space-10);
-
-  border:
-    var(--border-thin)
-    solid
-    var(--color-border-subtle);
-
-  border-radius:
-    var(--radius-md);
-
-  background:
-    var(--color-surface-subtle);
-
   color:
     var(--color-gray-7);
 
@@ -161,7 +145,7 @@
   margin: 0;
 
   color:
-    var(--color-gray-9);
+    var(--color-gray-8);
 
   font-size:
     var(--text-body-md-size);
@@ -245,8 +229,7 @@
 
   overflow: hidden;
 
-  border-radius:
-    var(--radius-full);
+  border-radius: 2rem;
 
   background:
     var(--color-gray-3);

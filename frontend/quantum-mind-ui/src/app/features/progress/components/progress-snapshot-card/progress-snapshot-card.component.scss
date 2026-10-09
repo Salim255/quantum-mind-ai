@@ -1,0 +1,138 @@
+/* ============================================================
+   PROGRESS SNAPSHOT CARD
+   ------------------------------------------------------------
+   Individual learning metric.
+============================================================ */
+
+.progress-snapshot-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+
+  padding: var(--space-4);
+  gap: var(--space-4);
+
+  box-sizing: border-box;
+
+  border: var(--border-thin) solid var(--color-border-subtle);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+
+  cursor: pointer;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.progress-snapshot-card:hover {
+  border-color: var(--color-border);
+  background: var(--color-surface-subtle);
+}
+
+/* ============================================================
+   PRIMARY METRIC
+============================================================ */
+
+.progress-snapshot-card--featured {
+  border-color: var(--color-primary-border);
+  background: var(--color-primary-soft);
+}
+
+.progress-snapshot-card--featured:hover {
+  border-color: var(--color-primary-border);
+  background: var(--color-primary-soft);
+}
+
+/* ============================================================
+   CARD TOP
+============================================================ */
+
+.progress-snapshot-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* ============================================================
+   LABEL
+============================================================ */
+
+.progress-snapshot-card__label {
+  min-width: 0;
+
+  color: var(--color-gray-6);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-md-weight);
+  line-height: var(--text-label-sm-line);
+
+  text-wrap: balance;
+}
+
+/* ============================================================
+   ICON
+============================================================ */
+
+.progress-snapshot-card__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  color: var(--color-gray-7);
+
+  font-size: var(--text-body-md-size);
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast);
+
+}
+
+.progress-snapshot-card--featured
+.progress-snapshot-card__icon {
+  border-color: var(--color-primary-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   VALUE
+============================================================ */
+
+.progress-snapshot-card__value {
+  margin: auto ;
+
+    color: var(--color-gray-9);
+    font-size: var(--text-display-sm-size);
+    font-weight: var(--font-regular);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+
+  font-variant-numeric: tabular-nums;
+
+}
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.progress-snapshot-card__description {
+  max-width: 24rem;
+  margin: var(--component-gap-sm) 0 0;
+
+  color: var(--color-gray-6);
+  font-size: var(--text-body-sm-size);
+  font-weight: var(--text-body-sm-weight);
+  line-height: var(--text-body-sm-line);
+
+  text-wrap: pretty;
+}

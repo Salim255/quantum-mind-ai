@@ -1,0 +1,22 @@
+<article
+  class="progress-snapshot-card"
+  [class.progress-snapshot-card--featured]="featured()"
+>
+  <div class="progress-snapshot-card__top">
+    <span class="progress-snapshot-card__label">
+      {{ label() }}
+    </span>
+
+    <span class="progress-snapshot-card__icon" aria-hidden="true">
+      <iconify-icon [icon]="icon()"></iconify-icon>
+    </span>
+  </div>
+
+  <div class="progress-snapshot-card__value">
+    {{ value() }}
+  </div>
+
+  <p class="progress-snapshot-card__description">
+    {{ description() }}
+  </p>
+</article>
